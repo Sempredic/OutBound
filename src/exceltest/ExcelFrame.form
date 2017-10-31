@@ -67,12 +67,18 @@
               </Group>
               <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="jScrollPane2" min="-2" max="-2" attributes="0"/>
                   <Group type="102" attributes="0">
                       <Component id="tablePanel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="dTableList" pref="218" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="dTableList" min="-2" pref="218" max="-2" attributes="0"/>
+                          <Group type="102" alignment="1" attributes="0">
+                              <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="73" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
                   </Group>
-                  <Component id="jScrollPane2" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -85,11 +91,13 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="53" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="dTableList" max="32767" attributes="0"/>
-                          <Component id="tablePanel" pref="246" max="32767" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Component id="dTableList" pref="246" max="32767" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="tablePanel" pref="0" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="jScrollPane2" min="-2" pref="123" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="106" max="-2" attributes="0"/>
@@ -105,7 +113,10 @@
                   </Group>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
-              <Component id="button1" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="button1" alignment="1" min="-2" max="-2" attributes="0"/>
+                  <Component id="jScrollPane2" alignment="1" min="-2" pref="123" max="-2" attributes="0"/>
+              </Group>
               <EmptySpace min="-2" pref="46" max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -166,7 +177,7 @@
     </Container>
     <Component class="javax.swing.JButton" name="button1">
       <Properties>
-        <Property name="text" type="java.lang.String" value="jButton1"/>
+        <Property name="text" type="java.lang.String" value="SnapShot"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="button1ActionPerformed"/>
@@ -204,6 +215,14 @@
       </SubComponents>
     </Container>
     <Component class="java.awt.List" name="dTableList">
+      <Properties>
+        <Property name="multipleMode" type="boolean" value="true"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="jButton1">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Export"/>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>

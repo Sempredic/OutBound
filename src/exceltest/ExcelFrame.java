@@ -93,6 +93,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         mTable = new javax.swing.JTable();
         dTableList = new java.awt.List();
+        jButton1 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
@@ -136,7 +137,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     tablePanel.setViewportView(theTable);
     theTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
-    button1.setText("jButton1");
+    button1.setText("SnapShot");
     button1.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
             button1ActionPerformed(evt);
@@ -158,6 +159,10 @@ public class ExcelFrame extends javax.swing.JFrame {
     mTable.setModel(new javax.swing.table.DefaultTableModel(multiDataTable,
         multiColumn));
 jScrollPane2.setViewportView(mTable);
+
+dTableList.setMultipleMode(true);
+
+jButton1.setText("Export");
 
 jMenu1.setText("File");
 jMenuBar1.add(jMenu1);
@@ -191,11 +196,15 @@ layout.setHorizontalGroup(
                     .addComponent(jToggleButton1))))
         .addGap(35, 35, 35)
         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(tablePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(dTableList, javax.swing.GroupLayout.DEFAULT_SIZE, 218, Short.MAX_VALUE))
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(dTableList, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jButton1)
+                        .addGap(73, 73, 73)))))
         .addContainerGap())
     );
     layout.setVerticalGroup(
@@ -205,10 +214,11 @@ layout.setHorizontalGroup(
                 .addGroup(layout.createSequentialGroup()
                     .addGap(53, 53, 53)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(dTableList, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(tablePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE))
-                    .addGap(18, 18, 18)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(dTableList, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
+                            .addGap(18, 18, 18)
+                            .addComponent(jButton1))
+                        .addComponent(tablePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
                 .addGroup(layout.createSequentialGroup()
                     .addGap(106, 106, 106)
                     .addComponent(techField)
@@ -221,7 +231,9 @@ layout.setHorizontalGroup(
                     .addGap(18, 18, 18)
                     .addComponent(jToggleButton1)))
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(button1)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(button1, javax.swing.GroupLayout.Alignment.TRAILING)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGap(46, 46, 46))
     );
 
@@ -527,6 +539,7 @@ layout.setHorizontalGroup(
     private java.awt.List dTableList;
     private javax.swing.JTextField devFieldName;
     private javax.swing.JLabel deviceField;
+    private javax.swing.JButton jButton1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
