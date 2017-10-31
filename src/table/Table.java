@@ -17,8 +17,10 @@ public class Table{
     
     ArrayList<String> tRosterNames;
     ArrayList<String> tRosterTechNum;
+    HashMap<Integer,String[][]> dataTableList;
     HashMap<String,String> roster;
     int ID;
+    int dataTableID;
     String[][] table;
     Object[][] dataTable;
     String[] columnTable;
@@ -27,8 +29,10 @@ public class Table{
     Table(int ID,HashMap<String,String> roster){
         this.ID = ID;
         this.roster = roster;
+        dataTableID=0;
         tRosterNames = new ArrayList<String>();
         tRosterTechNum = new ArrayList<String>(); 
+        dataTableList = new HashMap<Integer,String[][]>();
         System.out.println("Table Object Created ID: " + ID);
         
         setRosterNames();
@@ -101,19 +105,28 @@ public class Table{
        
     }
     
-    public void updateTable(DefaultTableModel tModel){
+    public int updateTable(DefaultTableModel tModel){
         int numCol = tModel.getColumnCount();
         int numRow = tModel.getRowCount();
         this.table = new String[numRow][numCol];
+        dataTableID++;
         
         for(int i=0;i<numRow;i++){
             for(int j=0;j<numCol;j++){
                 table[i][j] = tModel.getValueAt(i, j).toString();
-                System.out.print(table[i][j] + " ");
+                //System.out.print(table[i][j] + " ");
             }
-            System.out.println();
+            //System.out.println();
             
         } 
+        
+        dataTableList.put(dataTableID, table);
+        
+        return dataTableID;
+    }
+    
+    public String[][] getDataTableFromList(int dataTableID){
+        return dataTableList.get(dataTableID);
     }
     
 }

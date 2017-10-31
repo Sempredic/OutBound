@@ -33,6 +33,7 @@ public class main {
         tManager.addTable();
         
         ExcelFrame frame = new ExcelFrame(tManager.getTable(0));
+        //jFrame frame = new jFrame(tManager.getTable(0));
         
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {

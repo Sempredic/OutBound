@@ -10,6 +10,7 @@ import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.AbstractButton;
+import javax.swing.JOptionPane;
 import javax.swing.table.*;
 import table.Table;
 
@@ -26,28 +27,51 @@ public class ExcelFrame extends javax.swing.JFrame {
      */
     
     Table curTable;
+    Table multiTable;
     final int DEFAULT_INC = 6;
     KeyboardFocusManager manager;
     AbstractButton abstractButton;
     boolean multiSelected;
     DefaultTableModel tableModel;
+    DefaultTableModel mTableModel;
     HashMap<String,Integer> multiMap;
     static int multiCounter;
+    String[] multiColumn;
+    Object[][] multiDataTable;
+    
+    
     
     public ExcelFrame(Table table){
         
+        
         this.curTable = table; 
         multiCounter = 0;
+        initMultiTable();
         initComponents();
         tableModel = (DefaultTableModel)theTable.getModel();
+        mTableModel = (DefaultTableModel)mTable.getModel();
         multiMap = new HashMap<String,Integer>();
-        
+    }
+    
+    private void initMultiTable(){
+        multiColumn = new String [] {
+                "Device Type","Amount"};
+        multiDataTable = new Object[][]{
+            {"Dev1",0},
+            {"Dev2",0},
+            {"Dev3",0}         
+        };
     }
     
     DefaultTableModel getModel(){
         
         return tableModel;
-}
+    }
+    
+    DefaultTableModel getMultiModel(){
+        
+        return mTableModel;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -66,8 +90,12 @@ public class ExcelFrame extends javax.swing.JFrame {
         theTable = new javax.swing.JTable();
         button1 = new javax.swing.JButton();
         jToggleButton1 = new javax.swing.JToggleButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextPane1 = new javax.swing.JTextPane();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        mTable = new javax.swing.JTable();
+        dTableList = new java.awt.List();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -77,6 +105,7 @@ public class ExcelFrame extends javax.swing.JFrame {
             }
         });
 
+        devFieldName.setEnabled(false);
         devFieldName.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 devFieldNameFocusGained(evt);
@@ -103,7 +132,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         theTable.setModel(new javax.swing.table.DefaultTableModel(curTable.getDataTable(),
             curTable.getcolumnTable())
     );
-    theTable.setColumnSelectionAllowed(true);
+    theTable.setColumnSelectionAllowed(false);
     tablePanel.setViewportView(theTable);
     theTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
@@ -126,61 +155,74 @@ public class ExcelFrame extends javax.swing.JFrame {
         }
     });
 
-    jScrollPane1.setViewportView(jTextPane1);
+    mTable.setModel(new javax.swing.table.DefaultTableModel(multiDataTable,
+        multiColumn));
+jScrollPane2.setViewportView(mTable);
 
-    javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-    getContentPane().setLayout(layout);
-    layout.setHorizontalGroup(
-        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGroup(layout.createSequentialGroup()
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(59, 59, 59)
-                            .addComponent(techField))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(55, 55, 55)
-                            .addComponent(deviceField))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(21, 21, 21)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(devFieldName, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(techFieldName, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(31, 31, 31)
-                            .addComponent(jToggleButton1)))
-                    .addGap(35, 35, 35)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(tablePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(342, 342, 342)
-                    .addComponent(button1)))
-            .addContainerGap(238, Short.MAX_VALUE))
+jMenu1.setText("File");
+jMenuBar1.add(jMenu1);
+
+jMenu2.setText("Edit");
+jMenuBar1.add(jMenu2);
+
+setJMenuBar(jMenuBar1);
+
+javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+getContentPane().setLayout(layout);
+layout.setHorizontalGroup(
+    layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+    .addGroup(layout.createSequentialGroup()
+        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(59, 59, 59)
+                .addComponent(techField))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(55, 55, 55)
+                .addComponent(deviceField))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(devFieldName, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(techFieldName, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(31, 31, 31)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(button1)
+                    .addComponent(jToggleButton1))))
+        .addGap(35, 35, 35)
+        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(tablePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(dTableList, javax.swing.GroupLayout.DEFAULT_SIZE, 218, Short.MAX_VALUE))
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        .addContainerGap())
     );
     layout.setVerticalGroup(
         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(layout.createSequentialGroup()
-            .addGap(106, 106, 106)
-            .addComponent(techField)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-            .addComponent(techFieldName, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addGap(18, 18, 18)
-            .addComponent(deviceField)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-            .addComponent(devFieldName, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addGap(18, 18, 18)
-            .addComponent(jToggleButton1)
-            .addGap(69, 201, Short.MAX_VALUE))
-        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-            .addGap(53, 53, 53)
-            .addComponent(tablePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(53, 53, 53)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(dTableList, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(tablePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE))
+                    .addGap(18, 18, 18)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(106, 106, 106)
+                    .addComponent(techField)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(techFieldName, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(18, 18, 18)
+                    .addComponent(deviceField)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(devFieldName, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(18, 18, 18)
+                    .addComponent(jToggleButton1)))
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(button1)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addGap(38, 38, 38))
+            .addGap(46, 46, 46))
     );
 
     pack();
@@ -194,8 +236,20 @@ public class ExcelFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         int keyCode = evt.getKeyCode();
         if(keyCode == KeyEvent.VK_ENTER){
-            manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
-            manager.focusNextComponent();
+            if(curTable.getRosterNum().contains(techFieldName.getText())){
+                devFieldName.setEnabled(true);
+                techFieldName.setEditable(false);
+                manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+                manager.focusNextComponent();
+            }else{
+                //custom title, no icon
+                JOptionPane.showMessageDialog(this,
+                    "Tech Number Not Found",
+                    "Error",
+                    JOptionPane.PLAIN_MESSAGE);
+                techFieldName.setText("");
+            }  
+            
         }
     }//GEN-LAST:event_techFieldNameKeyPressed
 
@@ -208,23 +262,51 @@ public class ExcelFrame extends javax.swing.JFrame {
         int keyCode = evt.getKeyCode();
         
         if(keyCode == KeyEvent.VK_ENTER && !multiSelected){
-            toTable();
-            manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
-            manager.focusPreviousComponent();
-            techFieldName.setText("");
-        }else if(keyCode == KeyEvent.VK_ENTER && multiSelected){
-            if(!devFieldName.getText().equals("")){
-                toMulti();
-            }else{
+            if(tableModel.findColumn(devFieldName.getText())!=-1){
+                toTable();
                 commitMTable();
-            }  
+                techFieldName.setEditable(true);
+                manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+                manager.focusPreviousComponent();
+                techFieldName.setText("");
+                devFieldName.setEnabled(false);
+            }else{
+                //custom title, no icon
+                JOptionPane.showMessageDialog(this,
+                    "Device Type Not Found",
+                    "Error",
+                    JOptionPane.PLAIN_MESSAGE);
+                devFieldName.setText("");
+            }
+            
+            
+        }else if(keyCode == KeyEvent.VK_ENTER && multiSelected){
+            if(tableModel.findColumn(devFieldName.getText())!=-1){
+                if(!devFieldName.getText().equals("")){
+                    toMulti();
+                }else{
+                    commitMTable();
+                    techFieldName.setEditable(true);
+                    manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+                    manager.focusPreviousComponent();
+                    techFieldName.setText("");
+                    devFieldName.setEnabled(false);
+                }  
+            }else{
+                //custom title, no icon
+                JOptionPane.showMessageDialog(this,
+                    "Device Type Not Found",
+                    "Error",
+                    JOptionPane.PLAIN_MESSAGE);
+                devFieldName.setText("");
+            }
         }   
     }//GEN-LAST:event_devFieldNameKeyPressed
 
     private void button1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button1ActionPerformed
         // TODO add your handling code here:
         
-        curTable.updateTable(getModel());
+        dTableList.add("Hour " + Integer.toString(curTable.updateTable(getModel())));
         
     }//GEN-LAST:event_button1ActionPerformed
 
@@ -257,7 +339,20 @@ public class ExcelFrame extends javax.swing.JFrame {
         }else{
             int currentVal = multiMap.get(device);
             multiMap.replace(device, currentVal+1);
-        }  
+        } 
+        
+        if(!multiMap.isEmpty()){
+            for(Map.Entry<String,Integer> entry:multiMap.entrySet()){
+
+                String dev = entry.getKey();          
+                int value = entry.getValue();   
+                int col = 1;
+                int row = getRow(mTableModel,dev);
+
+                setMultiTableValues(value,row,col);
+            }
+        }
+        
     }
     
     private void commitMTable(){
@@ -279,8 +374,12 @@ public class ExcelFrame extends javax.swing.JFrame {
             }
         }
         
+        for(int i=0;i<multiDataTable.length;i++){
+            setMultiTableValues(0,i,1);
+        }
+        
         multiMap.clear();
-                
+            
     }
     
     private void toTable(){
@@ -305,6 +404,12 @@ public class ExcelFrame extends javax.swing.JFrame {
         updateTotalTech(tableModel);
     }
     
+    private void setMultiTableValues(int val, int row, int col){
+        
+        mTableModel.setValueAt(val, row, col);    
+   
+    }
+    
     private void updateTotalDev(DefaultTableModel model){
         String[] devNames = {"Dev1","Dev2","Dev3","Dev4"};
         
@@ -323,7 +428,7 @@ public class ExcelFrame extends javax.swing.JFrame {
             }
             
             model.setValueAt(sum, devRow, col);
-    
+            
         }
     }
     
@@ -410,6 +515,7 @@ public class ExcelFrame extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(ExcelFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        
 
         /* Create and display the form */
         
@@ -418,11 +524,15 @@ public class ExcelFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton button1;
+    private java.awt.List dTableList;
     private javax.swing.JTextField devFieldName;
     private javax.swing.JLabel deviceField;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextPane jTextPane1;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JToggleButton jToggleButton1;
+    private javax.swing.JTable mTable;
     private javax.swing.JScrollPane tablePanel;
     private javax.swing.JLabel techField;
     private javax.swing.JTextField techFieldName;
