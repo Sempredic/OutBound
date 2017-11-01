@@ -14,6 +14,18 @@ import javax.swing.JOptionPane;
 import javax.swing.table.*;
 import table.Table;
 
+import java.io.FileOutputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 
 
 /**
@@ -26,7 +38,7 @@ public class ExcelFrame extends javax.swing.JFrame {
      * Creates new form ExcelFrame
      */
     
-    Table curTable;
+    static Table curTable;
     Table multiTable;
     final int DEFAULT_INC = 6;
     KeyboardFocusManager manager;
@@ -38,6 +50,11 @@ public class ExcelFrame extends javax.swing.JFrame {
     static int multiCounter;
     String[] multiColumn;
     Object[][] multiDataTable;
+    static XSSFWorkbook workbook;
+    static CellStyle style;
+    static XSSFSheet sheet;
+    private DateFormat sdf;
+    Date date;
     
     
     
@@ -51,6 +68,13 @@ public class ExcelFrame extends javax.swing.JFrame {
         tableModel = (DefaultTableModel)theTable.getModel();
         mTableModel = (DefaultTableModel)mTable.getModel();
         multiMap = new HashMap<String,Integer>();
+        //Create Workbook and Sheet
+        workbook = new XSSFWorkbook();
+        sheet = workbook.createSheet("Outbound Production");
+        style = workbook.createCellStyle();
+        sdf = new SimpleDateFormat("MM'_'dd'_'yyyy");
+        date = new Date();
+        
     }
     
     private void initMultiTable(){
@@ -88,12 +112,13 @@ public class ExcelFrame extends javax.swing.JFrame {
         deviceField = new javax.swing.JLabel();
         tablePanel = new javax.swing.JScrollPane();
         theTable = new javax.swing.JTable();
-        button1 = new javax.swing.JButton();
+        snapShotButton = new javax.swing.JButton();
         jToggleButton1 = new javax.swing.JToggleButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         mTable = new javax.swing.JTable();
         dTableList = new java.awt.List();
-        jButton1 = new javax.swing.JButton();
+        exportButton = new javax.swing.JButton();
+        hourLabel = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
@@ -137,10 +162,10 @@ public class ExcelFrame extends javax.swing.JFrame {
     tablePanel.setViewportView(theTable);
     theTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
-    button1.setText("SnapShot");
-    button1.addActionListener(new java.awt.event.ActionListener() {
+    snapShotButton.setText("SnapShot");
+    snapShotButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
-            button1ActionPerformed(evt);
+            snapShotButtonActionPerformed(evt);
         }
     });
 
@@ -162,62 +187,74 @@ jScrollPane2.setViewportView(mTable);
 
 dTableList.setMultipleMode(true);
 
-jButton1.setText("Export");
+exportButton.setText("Export");
+exportButton.addActionListener(new java.awt.event.ActionListener() {
+    public void actionPerformed(java.awt.event.ActionEvent evt) {
+        exportButtonActionPerformed(evt);
+    }
+    });
 
-jMenu1.setText("File");
-jMenuBar1.add(jMenu1);
+    hourLabel.setText("Hour");
 
-jMenu2.setText("Edit");
-jMenuBar1.add(jMenu2);
+    jMenu1.setText("File");
+    jMenuBar1.add(jMenu1);
 
-setJMenuBar(jMenuBar1);
+    jMenu2.setText("Edit");
+    jMenuBar1.add(jMenu2);
 
-javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-getContentPane().setLayout(layout);
-layout.setHorizontalGroup(
-    layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-    .addGroup(layout.createSequentialGroup()
-        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(59, 59, 59)
-                .addComponent(techField))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(55, 55, 55)
-                .addComponent(deviceField))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(devFieldName, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(techFieldName, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(31, 31, 31)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(button1)
-                    .addComponent(jToggleButton1))))
-        .addGap(35, 35, 35)
-        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(tablePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(dTableList, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addGap(73, 73, 73)))))
-        .addContainerGap())
+    setJMenuBar(jMenuBar1);
+
+    javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+    getContentPane().setLayout(layout);
+    layout.setHorizontalGroup(
+        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(layout.createSequentialGroup()
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(59, 59, 59)
+                    .addComponent(techField))
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(55, 55, 55)
+                    .addComponent(deviceField))
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(21, 21, 21)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(devFieldName, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(techFieldName, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(31, 31, 31)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(snapShotButton)
+                        .addComponent(jToggleButton1))))
+            .addGap(35, 35, 35)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createSequentialGroup()
+                    .addComponent(tablePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(dTableList, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addComponent(exportButton)
+                            .addGap(73, 73, 73)))))
+            .addContainerGap())
+        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addComponent(hourLabel)
+            .addGap(102, 102, 102))
     );
     layout.setVerticalGroup(
         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(layout.createSequentialGroup()
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                    .addGap(53, 53, 53)
+                    .addGap(29, 29, 29)
+                    .addComponent(hourLabel)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addGroup(layout.createSequentialGroup()
                             .addComponent(dTableList, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
                             .addGap(18, 18, 18)
-                            .addComponent(jButton1))
+                            .addComponent(exportButton))
                         .addComponent(tablePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
                 .addGroup(layout.createSequentialGroup()
                     .addGap(106, 106, 106)
@@ -232,7 +269,7 @@ layout.setHorizontalGroup(
                     .addComponent(jToggleButton1)))
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(button1, javax.swing.GroupLayout.Alignment.TRAILING)
+                .addComponent(snapShotButton, javax.swing.GroupLayout.Alignment.TRAILING)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGap(46, 46, 46))
     );
@@ -315,12 +352,12 @@ layout.setHorizontalGroup(
         }   
     }//GEN-LAST:event_devFieldNameKeyPressed
 
-    private void button1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button1ActionPerformed
+    private void snapShotButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_snapShotButtonActionPerformed
         // TODO add your handling code here:
         
-        dTableList.add("Hour " + Integer.toString(curTable.updateTable(getModel())));
+        dTableList.add(Integer.toString(curTable.updateTable(getModel())));
         
-    }//GEN-LAST:event_button1ActionPerformed
+    }//GEN-LAST:event_snapShotButtonActionPerformed
 
     private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
         // TODO add your handling code here:
@@ -340,6 +377,58 @@ layout.setHorizontalGroup(
     
                 
     }//GEN-LAST:event_devFieldNameFocusGained
+
+    private void exportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportButtonActionPerformed
+        // TODO add your handling code here:
+        makeTables(dTableList.getSelectedItems());
+        
+        //OUTPUT
+        try (FileOutputStream outputStream = new FileOutputStream("OutBoundProd " + String.valueOf(sdf.format(date)) + ".xlsx")) {
+            workbook.write(outputStream);
+            outputStream.close();
+            System.out.println("Written successully");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+}
+    }//GEN-LAST:event_exportButtonActionPerformed
+    
+    public static void makeTables(String[] selectedList){
+        int counter = 0;
+        int colNum = 1;
+        int rowNum = 1;
+        ArrayList<String[][]>list = new ArrayList<String[][]>();
+        
+        for(String item:selectedList){
+            System.out.println(item);
+            list.add(curTable.getDataTableFromList(Integer.parseInt(item)));
+        }
+        
+        Iterator<String[][]> it = list.iterator();
+    
+        
+        while(it.hasNext()){
+            for(String[] tableRow:it.next()){
+                
+                Row row = sheet.createRow(rowNum++);
+                
+                for(String tCell:tableRow){
+                   
+                    Cell cell = row.createCell(colNum++);
+
+                    cell.setCellValue(tCell);
+                    //cell.setCellStyle(style);
+                    //cellBorderBlack(style);
+                    //cellFillBlue(style);
+                    cell.setCellStyle(style);
+                    
+                }
+                
+                colNum=1;              
+            }
+            rowNum++;
+        }
+        
+    }
     
     private void toMulti(){
 
@@ -535,17 +624,18 @@ layout.setHorizontalGroup(
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton button1;
     private java.awt.List dTableList;
     private javax.swing.JTextField devFieldName;
     private javax.swing.JLabel deviceField;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton exportButton;
+    private javax.swing.JLabel hourLabel;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JTable mTable;
+    private javax.swing.JButton snapShotButton;
     private javax.swing.JScrollPane tablePanel;
     private javax.swing.JLabel techField;
     private javax.swing.JTextField techFieldName;
