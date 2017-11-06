@@ -83,7 +83,8 @@ public class ExcelFrame extends javax.swing.JFrame {
         multiDataTable = new Object[][]{
             {"Dev1",0},
             {"Dev2",0},
-            {"Dev3",0}         
+            {"Dev3",0},
+            {"Dev4",0}
         };
     }
     
@@ -330,19 +331,22 @@ exportButton.addActionListener(new java.awt.event.ActionListener() {
             
             
         }else if(keyCode == KeyEvent.VK_ENTER && multiSelected){
-            if(tableModel.findColumn(devFieldName.getText())!=-1){
-                if(!devFieldName.getText().equals("")){
-                    toMulti();
-                }else{
-                    commitMTable();
-                    techFieldName.setEditable(true);
-                    manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
-                    manager.focusPreviousComponent();
-                    techFieldName.setText("");
-                    devFieldName.setEnabled(false);
-                }  
+            if(devFieldName.getText().equals("")&&!multiMap.isEmpty()){
+                //toMulti();
+                commitMTable();
+                techFieldName.setEditable(true);
+                manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+                manager.focusPreviousComponent();
+                techFieldName.setText("");
+                devFieldName.setEnabled(false);
+            }
+             else if(tableModel.findColumn(devFieldName.getText())!=-1){
+                toMulti();
+                
+                   
             }else{
                 //custom title, no icon
+                System.out.println(multiMap.isEmpty());
                 JOptionPane.showMessageDialog(this,
                     "Device Type Not Found",
                     "Error",
