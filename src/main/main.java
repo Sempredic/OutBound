@@ -5,9 +5,8 @@
  */
 package main;
 
-import exceltest.ExcelFrame;
-import java.util.LinkedHashMap;
-import table.TableManager;
+import exceltest.mainFrame;
+import exceltest.sceneManager;
 
 /**
  *
@@ -16,7 +15,7 @@ import table.TableManager;
 public class main {
     
     public static void main(String args[]){
-        
+        /*
         LinkedHashMap<String,String> rosterList = new LinkedHashMap<String,String>();
         
         
@@ -39,6 +38,16 @@ public class main {
             public void run() {
                 frame.setVisible(true);
             }
-});
+        });
+        */
+        sceneManager scene = new sceneManager();
+        mainFrame frame = new mainFrame(scene.getManager());
+        
+        scene.getManager().setMainFrame(frame);
+        
+        scene.getManager().runMainFrame();
+        
+        
+        
     }
 }
