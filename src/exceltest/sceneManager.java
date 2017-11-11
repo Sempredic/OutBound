@@ -6,18 +6,19 @@
 package exceltest;
 
 import java.util.LinkedHashMap;
+import javax.swing.JFrame;
 import table.TableManager;
 
 /**
  *
  * @author 311015
  */
-public class sceneManager{
+public class sceneManager implements Runnable{
     
     
-    LinkedHashMap<String,String> rosterList;
+    static LinkedHashMap<String,String> rosterList;
         
-    TableManager tManager;
+    static TableManager tManager;
     mainFrame mFrame;
     ExcelFrame exFrame;
     
@@ -25,10 +26,10 @@ public class sceneManager{
         
     
     public sceneManager(){
-        
+        rosterList = new LinkedHashMap<String,String>();
     }
     
-    public sceneManager getManager(){
+    public static sceneManager getManager(){
         if (instance == null) {
          instance = new sceneManager();
       }
@@ -36,13 +37,18 @@ public class sceneManager{
         return instance;
     }
     
-    public void setExcelFrame(){
-        this.exFrame = new ExcelFrame(tManager.getTable(0));
-        this.exFrame = exFrame;
+    public void run(){
+        
     }
     
-    public void setRoster(LinkedHashMap<String,String> rosterList){
-        this.rosterList = rosterList;
+    public void setExcelFrame(){
+        exFrame = new ExcelFrame(tManager.getTable(0));
+        
+    }
+    
+    public static void setRoster(LinkedHashMap<String,String> rosterList){
+        
+        sceneManager.rosterList = rosterList;
         
     }
     
@@ -50,23 +56,42 @@ public class sceneManager{
         this.mFrame = mFrame;
     }
     
-    public void runExcelFrame(){
+    public void runFrame(JFrame frame){
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                exFrame.setVisible(true);
-               
+                JFrame nFrame = new JFrame();
+                nFrame = frame;
+                frame.setVisible(true);
+                
             }
         });
+    }
+    
+    public static void prepExcelFrame(){
+        
+        
+        //setRoster(rosterList);
+        sceneManager.getManager().setTable();
+        sceneManager.getManager().setExcelFrame();
+        //sceneManager.getManager().runExcelFrame();
     }
     
     public void runMainFrame(){
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+                
                 mFrame.setVisible(true);
+             
             }
+           
         });
+        
+        
     }
     
+    public mainFrame getMainFrame(){
+        return mFrame;
+    }
     public void setTable(){
         tManager = new TableManager(rosterList);
         //add hour table with pre chosen roster
@@ -74,8 +99,8 @@ public class sceneManager{
         
     }
     
-    public void displayRoster(){
-        System.out.println(rosterList);
+    public static void displayRoster(){
+        System.out.println(sceneManager.rosterList);
     }
    
     

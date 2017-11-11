@@ -5,8 +5,16 @@
  */
 package exceltest;
 
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
+import java.awt.KeyboardFocusManager;
+import java.awt.event.KeyEvent;
 import java.util.LinkedHashMap;
-import table.TableManager;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 /**
  *
@@ -18,12 +26,27 @@ public class mainFrame extends javax.swing.JFrame {
      * Creates new form mainFrame
      */
     LinkedHashMap<String,String> rosterList;
+    LinkedHashMap<String,String> existingRosterList;
     sceneManager manager;
+    boolean done;
+    JTextField techNumber;
+    KeyboardFocusManager focusManager;
+    JTextField techName;
     
-    public mainFrame(sceneManager scene) {
+    public mainFrame() {
         initComponents();
-        this.manager = scene;
+        manager = sceneManager.getManager();
         rosterList = new LinkedHashMap<String,String>();
+        existingRosterList = new LinkedHashMap<String,String>();
+        done = false;
+        techNumber = new JTextField("");
+        techName = new JTextField("");
+        
+        techNumber.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                techNumberKeyPressed(evt);
+            }
+        });
     }
 
     /**
@@ -61,6 +84,8 @@ public class mainFrame extends javax.swing.JFrame {
                 createTechButtonActionPerformed(evt);
             }
         });
+
+        existingList.setMultipleMode(true);
 
         doneButton.setText("Done");
         doneButton.setPreferredSize(new java.awt.Dimension(57, 15));
@@ -137,38 +162,67 @@ public class mainFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void addTechButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addTechButtonActionPerformed
-        // TODO add your handling code here:
-        finalRosterList.add("2273");
-        finalRosterList.add("2200");        
-        finalRosterList.add("2211");       
-        finalRosterList.add("2255");
-                
-                
-        
+
+        for(String tech:existingList.getSelectedItems()){
+            if(!rosterList.containsKey(tech)){
+                finalRosterList.add(tech);
+                rosterList.put(tech, existingRosterList.get(tech));
+            }
+        }
     }//GEN-LAST:event_addTechButtonActionPerformed
 
+    private void techNumberKeyPressed(java.awt.event.KeyEvent evt){
+        int keyCode = evt.getKeyCode();
+        if(keyCode == KeyEvent.VK_ENTER){
+            
+            focusManager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+            focusManager.focusPreviousComponent();
+        }
+    }
     private void createTechButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createTechButtonActionPerformed
         // TODO add your handling code here:
+               
+        JPanel p = new JPanel(new BorderLayout(5,5));
+
+        JPanel labels = new JPanel(new GridLayout(0,1,2,2));
+        labels.add(new JLabel("Tech Number", SwingConstants.RIGHT));
+        labels.add(new JLabel("Tech Name", SwingConstants.RIGHT));
+        p.add(labels, BorderLayout.WEST);
+
+        JPanel controls = new JPanel(new GridLayout(0,1,2,2));
+
+        controls.add(techNumber);
+        controls.add(techName);
+        p.add(controls, BorderLayout.CENTER);
+
+        int option = JOptionPane.showConfirmDialog(this, p, "Add Tech", JOptionPane.PLAIN_MESSAGE);
+
+        if (option == JOptionPane.OK_OPTION) {
+            existingList.add(techNumber.getText());
+            existingRosterList.put(techNumber.getText(),techName.getText());
+            techNumber.setText("");
+            techName.setText("");
+        }
     }//GEN-LAST:event_createTechButtonActionPerformed
 
     private void doneButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_doneButtonActionPerformed
         // TODO add your handling code here:
-        
-        
-        rosterList.put("2277", "A");   
-        rosterList.put("2273", "B");
-        rosterList.put("1234", "C");
-        rosterList.put("0000", "DICK MAN");
- 
-        manager.getManager().setRoster(rosterList);
-        manager.getManager().setTable();
-        manager.getManager().setExcelFrame();
-        
-        
+        sceneManager.setRoster(rosterList);
+        //sceneManager.getManager().prepExcelFrame();
+        sceneManager.displayRoster();
+        //sceneManager.prepExcelFrame();
     }//GEN-LAST:event_doneButtonActionPerformed
 
     public LinkedHashMap<String,String> getRosterList(){
         return rosterList;
+    }
+    
+     public boolean getSceneStatus(){
+        return done;
+    }
+     
+    public void setSceneStatus(){
+        this.done = false;
     }
     private void remTechButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_remTechButtonActionPerformed
         // TODO add your handling code here:
@@ -202,9 +256,7 @@ public class mainFrame extends javax.swing.JFrame {
         }
         //</editor-fold>
 
-        /* Create and display the form */
-         
-
+     
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

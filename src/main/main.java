@@ -40,13 +40,23 @@ public class main {
             }
         });
         */
+        //sceneManager scene = new sceneManager();
+        
+        mainFrame frame = new mainFrame();
+        mainFrame frame2 = new mainFrame();
         sceneManager scene = new sceneManager();
-        mainFrame frame = new mainFrame(scene.getManager());
+        scene = sceneManager.getManager();
+        scene.setMainFrame(frame);
+        scene.getMainFrame().setVisible(true);
         
-        scene.getManager().setMainFrame(frame);
+        //scene.runMainFrame();
         
-        scene.getManager().runMainFrame();
+        //scene.setTable();
+        //scene.setExcelFrame();
         
+        //sceneManager.getManager().runMainFrame();
+        //scene.prepExcelFrame();
+        //scene.runExcelFrame();
         
         
     }

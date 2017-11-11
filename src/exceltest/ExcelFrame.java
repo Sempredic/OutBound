@@ -55,6 +55,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     static XSSFSheet sheet;
     private DateFormat sdf;
     Date date;
+    boolean done;
     
     
     
@@ -74,7 +75,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         style = workbook.createCellStyle();
         sdf = new SimpleDateFormat("MM'_'dd'_'yyyy");
         date = new Date();
-        
+        done = false;
     }
     
     private void initMultiTable(){
@@ -594,6 +595,8 @@ exportButton.addActionListener(new java.awt.event.ActionListener() {
         
         return tbModel;
     }
+    
+   
     /**
      * @param args the command line arguments
      */
