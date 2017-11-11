@@ -113,6 +113,9 @@
       </Properties>
     </Component>
     <Component class="java.awt.List" name="finalRosterList">
+      <Properties>
+        <Property name="multipleMode" type="boolean" value="true"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="doneButton">
       <Properties>

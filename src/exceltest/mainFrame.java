@@ -87,6 +87,8 @@ public class mainFrame extends javax.swing.JFrame {
 
         existingList.setMultipleMode(true);
 
+        finalRosterList.setMultipleMode(true);
+
         doneButton.setText("Done");
         doneButton.setPreferredSize(new java.awt.Dimension(57, 15));
         doneButton.addActionListener(new java.awt.event.ActionListener() {
@@ -210,7 +212,7 @@ public class mainFrame extends javax.swing.JFrame {
         sceneManager.setRoster(rosterList);
         //sceneManager.getManager().prepExcelFrame();
         sceneManager.displayRoster();
-        //sceneManager.prepExcelFrame();
+        sceneManager.prepExcelFrame();
     }//GEN-LAST:event_doneButtonActionPerformed
 
     public LinkedHashMap<String,String> getRosterList(){

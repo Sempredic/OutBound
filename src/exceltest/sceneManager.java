@@ -73,7 +73,7 @@ public class sceneManager implements Runnable{
         //setRoster(rosterList);
         sceneManager.getManager().setTable();
         sceneManager.getManager().setExcelFrame();
-        //sceneManager.getManager().runExcelFrame();
+        sceneManager.getManager().runFrame(sceneManager.getManager().exFrame);
     }
     
     public void runMainFrame(){
