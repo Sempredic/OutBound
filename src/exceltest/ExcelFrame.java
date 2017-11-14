@@ -56,6 +56,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     private DateFormat sdf;
     Date date;
     boolean done;
+    String[] devNames;
     
     
     
@@ -76,16 +77,19 @@ public class ExcelFrame extends javax.swing.JFrame {
         sdf = new SimpleDateFormat("MM'_'dd'_'yyyy");
         date = new Date();
         done = false;
+        
     }
     
     private void initMultiTable(){
         multiColumn = new String [] {
                 "Device Type","Amount"};
         multiDataTable = new Object[][]{
-            {"Dev1",0},
-            {"Dev2",0},
-            {"Dev3",0},
-            {"Dev4",0}
+            {"Classic",0},
+            {"Nano",0},
+            {"Shuffle",0},
+            {"Touch",0},
+            {"Pad",0},
+            {"Phone",0}
         };
     }
     
@@ -210,6 +214,9 @@ exportButton.addActionListener(new java.awt.event.ActionListener() {
     getContentPane().setLayout(layout);
     layout.setHorizontalGroup(
         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addComponent(hourLabel)
+            .addGap(102, 102, 102))
         .addGroup(layout.createSequentialGroup()
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
@@ -228,21 +235,19 @@ exportButton.addActionListener(new java.awt.event.ActionListener() {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(snapShotButton)
                         .addComponent(jToggleButton1))))
-            .addGap(35, 35, 35)
+            .addGap(18, 18, 18)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 561, Short.MAX_VALUE)
+                .addComponent(tablePanel))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createSequentialGroup()
-                    .addComponent(tablePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(exportButton)
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createSequentialGroup()
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(dTableList, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addComponent(exportButton)
-                            .addGap(75, 75, 75)))))
-            .addContainerGap())
-        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-            .addComponent(hourLabel)
-            .addGap(102, 102, 102))
+                    .addComponent(dTableList, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(21, Short.MAX_VALUE))))
     );
     layout.setVerticalGroup(
         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -518,7 +523,7 @@ exportButton.addActionListener(new java.awt.event.ActionListener() {
     }
     
     private void updateTotalDev(DefaultTableModel model){
-        String[] devNames = {"Dev1","Dev2","Dev3","Dev4"};
+        String[] devNames = {"Classic","Nano","Shuffle","Touch","Pad","Phone"};
         
         int col =0;
         int devRow =0;
@@ -540,7 +545,7 @@ exportButton.addActionListener(new java.awt.event.ActionListener() {
     }
     
     private void updateTotalTech(DefaultTableModel model){
-        String[] devNames = {"Dev1","Dev2","Dev3","Dev4"};    
+        String[] devNames = {"Classic","Nano","Shuffle","Touch","Pad","Phone"};   
         int totCol,sum,value;
         int tttSum = 0;
 

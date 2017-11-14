@@ -51,7 +51,7 @@ public class Table{
     
     private void initTableData(){
         columnTable = new String [] {
-                "Tech #","Name","Dev1", "Dev2", "Dev3", "Dev4", "Tech Total"
+                "Tech #","Name","Classic", "Nano", "Shuffle", "Touch","Pad","Phone", "Tech Total"
             };
         dataTable = new Object[tRosterTechNum.size()+1][columnTable.length];
         

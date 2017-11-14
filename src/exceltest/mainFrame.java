@@ -215,8 +215,6 @@ public class mainFrame extends javax.swing.JFrame {
     private void doneButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_doneButtonActionPerformed
         // TODO add your handling code here:
         sceneManager.setRoster(rosterList);
-        //sceneManager.getManager().prepExcelFrame();
-        sceneManager.displayRoster();
         sceneManager.prepExcelFrame();
         dispose();
     }//GEN-LAST:event_doneButtonActionPerformed
