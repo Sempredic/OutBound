@@ -79,14 +79,9 @@ public class sceneManager implements Runnable{
     public void runMainFrame(){
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                
                 mFrame.setVisible(true);
-             
             }
-           
-        });
-        
-        
+        });  
     }
     
     public mainFrame getMainFrame(){

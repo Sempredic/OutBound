@@ -15,49 +15,9 @@ import exceltest.sceneManager;
 public class main {
     
     public static void main(String args[]){
-        /*
-        LinkedHashMap<String,String> rosterList = new LinkedHashMap<String,String>();
-        
-        
-        rosterList.put("2277", "A");   
-        rosterList.put("2273", "B");
-        rosterList.put("1234", "C");
-        rosterList.put("0000", "DICK MAN");
-        
-        
- 
-        
-        TableManager tManager = new TableManager(rosterList);
-        //add hour table with pre chosen roster
-        tManager.addTable();
-        
-        ExcelFrame frame = new ExcelFrame(tManager.getTable(0));
-        //jFrame frame = new jFrame(tManager.getTable(0));
-        
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                frame.setVisible(true);
-            }
-        });
-        */
-        //sceneManager scene = new sceneManager();
         
         mainFrame frame = new mainFrame();
-        mainFrame frame2 = new mainFrame();
-        sceneManager scene = new sceneManager();
-        scene = sceneManager.getManager();
-        scene.setMainFrame(frame);
-        scene.getMainFrame().setVisible(true);
-        
-        //scene.runMainFrame();
-        
-        //scene.setTable();
-        //scene.setExcelFrame();
-        
-        //sceneManager.getManager().runMainFrame();
-        //scene.prepExcelFrame();
-        //scene.runExcelFrame();
-        
-        
+        frame.run();
+  
     }
 }

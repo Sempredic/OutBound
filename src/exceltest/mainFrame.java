@@ -10,11 +10,13 @@ import java.awt.GridLayout;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
 import java.util.LinkedHashMap;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -47,6 +49,8 @@ public class mainFrame extends javax.swing.JFrame {
                 techNumberKeyPressed(evt);
             }
         });
+        
+       
     }
 
     /**
@@ -161,6 +165,7 @@ public class mainFrame extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void addTechButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addTechButtonActionPerformed
@@ -213,6 +218,7 @@ public class mainFrame extends javax.swing.JFrame {
         //sceneManager.getManager().prepExcelFrame();
         sceneManager.displayRoster();
         sceneManager.prepExcelFrame();
+        dispose();
     }//GEN-LAST:event_doneButtonActionPerformed
 
     public LinkedHashMap<String,String> getRosterList(){
@@ -233,8 +239,18 @@ public class mainFrame extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
+    public void run(){
+           java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                             
+                new mainFrame().setVisible(true);
+                
+            }
+        }); 
+
+    }
     
-    public static void main(String args[]) {
+    public static void main(String args[]){ 
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -257,7 +273,7 @@ public class mainFrame extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(mainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+           
      
     }
 
