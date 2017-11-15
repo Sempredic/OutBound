@@ -10,13 +10,12 @@ import java.awt.GridLayout;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
 import java.util.LinkedHashMap;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
+import table.Table;
 
 /**
  *
@@ -29,7 +28,6 @@ public class mainFrame extends javax.swing.JFrame {
      */
     LinkedHashMap<String,String> rosterList;
     LinkedHashMap<String,String> existingRosterList;
-    sceneManager manager;
     boolean done;
     JTextField techNumber;
     KeyboardFocusManager focusManager;
@@ -37,7 +35,7 @@ public class mainFrame extends javax.swing.JFrame {
     
     public mainFrame() {
         initComponents();
-        manager = sceneManager.getManager();
+
         rosterList = new LinkedHashMap<String,String>();
         existingRosterList = new LinkedHashMap<String,String>();
         done = false;
@@ -119,11 +117,11 @@ public class mainFrame extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(existingList, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 92, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 111, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(addTechButton, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(remTechButton, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(50, 50, 50)
+                    .addComponent(addTechButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(remTechButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(41, 41, 41)
                 .addComponent(finalRosterList, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -133,8 +131,8 @@ public class mainFrame extends javax.swing.JFrame {
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(57, 57, 57))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(54, 54, 54)
-                .addComponent(createTechButton, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(43, 43, 43)
+                .addComponent(createTechButton, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(doneButton, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(48, 48, 48))
@@ -202,7 +200,7 @@ public class mainFrame extends javax.swing.JFrame {
         controls.add(techName);
         p.add(controls, BorderLayout.CENTER);
 
-        int option = JOptionPane.showConfirmDialog(this, p, "Add Tech", JOptionPane.PLAIN_MESSAGE);
+        int option = JOptionPane.showConfirmDialog(this, p, "Create Tech", JOptionPane.PLAIN_MESSAGE);
 
         if (option == JOptionPane.OK_OPTION) {
             existingList.add(techNumber.getText());
@@ -214,11 +212,20 @@ public class mainFrame extends javax.swing.JFrame {
 
     private void doneButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_doneButtonActionPerformed
         // TODO add your handling code here:
-        sceneManager.setRoster(rosterList);
-        sceneManager.prepExcelFrame();
+        setRoster(rosterList);
+        prepExcelFrame();
         dispose();
     }//GEN-LAST:event_doneButtonActionPerformed
 
+    private void prepExcelFrame(){
+        Table newTable = new Table(rosterList);
+        ExcelFrame newExcelFrame = new ExcelFrame(newTable);
+        runExcel(newExcelFrame);
+    }
+    private void setRoster(LinkedHashMap<String,String> rosterList){
+        this.rosterList = rosterList;
+    }
+    
     public LinkedHashMap<String,String> getRosterList(){
         return rosterList;
     }
@@ -232,6 +239,10 @@ public class mainFrame extends javax.swing.JFrame {
     }
     private void remTechButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_remTechButtonActionPerformed
         // TODO add your handling code here:
+        for(String tech:finalRosterList.getSelectedItems()){
+            finalRosterList.remove(tech);
+            rosterList.remove(tech);
+        }
     }//GEN-LAST:event_remTechButtonActionPerformed
 
     /**
@@ -242,6 +253,17 @@ public class mainFrame extends javax.swing.JFrame {
             public void run() {
                              
                 new mainFrame().setVisible(true);
+                
+            }
+        }); 
+
+    }
+    
+    private void runExcel(ExcelFrame frame){
+           java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                             
+                frame.setVisible(true);
                 
             }
         }); 

@@ -19,21 +19,19 @@ public class Table{
     ArrayList<String> tRosterTechNum;
     HashMap<Integer,String[][]> dataTableList;
     HashMap<String,String> roster;
-    int ID;
     int dataTableID;
     String[][] table;
     Object[][] dataTable;
     String[] columnTable;
     
     
-    Table(int ID,HashMap<String,String> roster){
-        this.ID = ID;
+    public Table(HashMap<String,String> roster){
         this.roster = roster;
         dataTableID=0;
         tRosterNames = new ArrayList<String>();
         tRosterTechNum = new ArrayList<String>(); 
         dataTableList = new HashMap<Integer,String[][]>();
-        System.out.println("Table Object Created ID: " + ID);
+        System.out.println("Table Object Created");
         
         setRosterNames();
         setRosterTechNum();
