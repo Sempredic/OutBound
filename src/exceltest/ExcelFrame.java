@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.Iterator;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -413,6 +414,7 @@ exportButton.addActionListener(new java.awt.event.ActionListener() {
         int colNum = 1;
         int rowNum = 1;
         ArrayList<String[][]>list = new ArrayList<String[][]>();
+        String[] devNames = {"Tech","Name","Classic","Nano","Shuffle","Touch","Pad","Phone","Tech Total"};   
         
         for(String item:selectedList){
             System.out.println(item);
@@ -423,6 +425,19 @@ exportButton.addActionListener(new java.awt.event.ActionListener() {
     
         
         while(it.hasNext()){
+            
+            Row header = sheet.createRow(rowNum++);
+            
+            for(int col = 0;col<devNames.length;col++){
+                Cell headerCell = header.createCell(colNum++);
+                headerCell.setCellValue(devNames[col]);    
+                cellBorderBlack(style);
+                cellFillBlue(style);
+                headerCell.setCellStyle(style);
+            }
+            
+            colNum = 1;
+                    
             for(String[] tableRow:it.next()){
                 
                 Row row = sheet.createRow(rowNum++);
@@ -433,17 +448,15 @@ exportButton.addActionListener(new java.awt.event.ActionListener() {
 
                     cell.setCellValue(tCell);
                     //cell.setCellStyle(style);
-                    //cellBorderBlack(style);
-                    //cellFillBlue(style);
+                    cellBorderBlack(style);
+                    cellFillBlue(style);
                     cell.setCellStyle(style);
                     
                 }
-                
                 colNum=1;              
             }
             rowNum++;
-        }
-        
+        }   
     }
     
     private void toMulti(){
@@ -607,6 +620,24 @@ exportButton.addActionListener(new java.awt.event.ActionListener() {
         return tbModel;
     }
     
+    public static void cellFillBlue(CellStyle style) {
+        style.setFillForegroundColor(IndexedColors.AQUA.getIndex());
+        style.setFillPattern(CellStyle.SOLID_FOREGROUND);
+
+    }
+
+    public static void cellBorderBlack(CellStyle style) {
+
+        style.setBorderBottom(CellStyle.BORDER_THIN);
+        style.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+        style.setBorderLeft(CellStyle.BORDER_THIN);
+        style.setLeftBorderColor(IndexedColors.BLACK.getIndex());
+        style.setBorderRight(CellStyle.BORDER_THIN);
+        style.setRightBorderColor(IndexedColors.BLACK.getIndex());
+        style.setBorderTop(CellStyle.BORDER_THIN);
+        style.setTopBorderColor(IndexedColors.BLACK.getIndex());
+
+    }
    
     /**
      * @param args the command line arguments
