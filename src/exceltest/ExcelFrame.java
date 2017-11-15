@@ -161,10 +161,15 @@ public class ExcelFrame extends javax.swing.JFrame {
 
         deviceField.setText("Device");
 
+        theTable.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
         theTable.setModel(new javax.swing.table.DefaultTableModel(curTable.getDataTable(),
             curTable.getcolumnTable())
     );
     theTable.setColumnSelectionAllowed(false);
+    theTable.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+    theTable.setEnabled(false);
+    theTable.setGridColor(new java.awt.Color(0, 0, 0));
+    theTable.setRowSelectionAllowed(false);
     tablePanel.setViewportView(theTable);
     theTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
