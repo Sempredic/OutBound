@@ -22,8 +22,11 @@ import java.util.Date;
 import java.util.Iterator;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.CellUtil;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -53,6 +56,8 @@ public class ExcelFrame extends javax.swing.JFrame {
     Object[][] multiDataTable;
     static XSSFWorkbook workbook;
     static CellStyle style;
+    static CellStyle headStyle;
+    static CellStyle titleStyle;
     static XSSFSheet sheet;
     private DateFormat sdf;
     Date date;
@@ -75,6 +80,8 @@ public class ExcelFrame extends javax.swing.JFrame {
         workbook = new XSSFWorkbook();
         sheet = workbook.createSheet("Outbound Production");
         style = workbook.createCellStyle();
+        headStyle = workbook.createCellStyle();
+        titleStyle = workbook.createCellStyle();
         sdf = new SimpleDateFormat("MM'_'dd'_'yyyy");
         date = new Date();
         done = false;
@@ -422,20 +429,34 @@ exportButton.addActionListener(new java.awt.event.ActionListener() {
         }
         
         Iterator<String[][]> it = list.iterator();
-    
-        
+
         while(it.hasNext()){
+            
+            CellRangeAddress range = new CellRangeAddress(
+                    rowNum,rowNum,colNum,devNames.length);
+            sheet.addMergedRegion(range);
+            
+            // Creates the cell
+            Row title = sheet.createRow(rowNum);
+            Cell titleCell = title.createCell(colNum);
+            titleCell.setCellValue("FUCK");
+
+            // Sets the allignment to the created cell
+            CellUtil.setAlignment(titleCell, workbook, CellStyle.ALIGN_CENTER);
+       
+            rowNum++;
             
             Row header = sheet.createRow(rowNum++);
             
             for(int col = 0;col<devNames.length;col++){
                 Cell headerCell = header.createCell(colNum++);
-                headerCell.setCellValue(devNames[col]);    
-                cellBorderBlack(style);
-                cellFillBlue(style);
-                headerCell.setCellStyle(style);
+                headerCell.setCellValue(devNames[col]);  
+                headStyle.setAlignment(HorizontalAlignment.CENTER);
+                cellBorderBlack(headStyle);
+                cellFillBlue(headStyle);
+                headerCell.setCellStyle(headStyle);
             }
-            
+              
             colNum = 1;
                     
             for(String[] tableRow:it.next()){
@@ -623,6 +644,13 @@ exportButton.addActionListener(new java.awt.event.ActionListener() {
     public static void cellFillBlue(CellStyle style) {
         style.setFillForegroundColor(IndexedColors.AQUA.getIndex());
         style.setFillPattern(CellStyle.SOLID_FOREGROUND);
+
+    }
+    
+    public static void cellFillBlack(CellStyle style) {
+        style.setFillForegroundColor(IndexedColors.AQUA.getIndex());
+        style.setFillPattern(CellStyle.SOLID_FOREGROUND);
+   
 
     }
 
