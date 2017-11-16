@@ -491,8 +491,7 @@ exportButton.addActionListener(new java.awt.event.ActionListener() {
                 curCell=0;
             }
             rowNum++;
-            
-  
+
             sheet.autoSizeColumn(2);
         }   
 
