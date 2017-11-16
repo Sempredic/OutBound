@@ -421,7 +421,7 @@ exportButton.addActionListener(new java.awt.event.ActionListener() {
         int counter = 0;
         int colNum = 1;
         int rowNum = 1;
-        int autoSizeCol= 0;
+        int curCell = 0;
         ArrayList<String[][]>list = new ArrayList<String[][]>();
         String[] devNames = {"Tech","Name","Classic","Nano","Shuffle","Touch","Pad","Phone","Tech Total"};  
         
@@ -473,22 +473,25 @@ exportButton.addActionListener(new java.awt.event.ActionListener() {
                 Row row = sheet.createRow(rowNum++);
                 
                 for(String tCell:tableRow){
-                   
+                    curCell++;
                     Cell cell = row.createCell(colNum++);
                     cell.setCellValue(tCell);
                     
-                    if(it.hasNext() == false){
-                        
+                    if(tableRow[0].equals("Total Dev") && (curCell == tableRow.length)){
+                        setTotalDevCell(cell);
+                    }else{
+                        cellBorderBlack(style);
+                        cellFillLGrey(style);
+                        setStyleFontBold(style);
+                        cell.setCellStyle(style); 
                     }
-                    cellBorderBlack(style);
-                    cellFillLGrey(style);
-                    setStyleFontBold(style);
-                    cell.setCellStyle(style);
-                    
+ 
                 }
-                colNum=1;              
+                colNum=1;   
+                curCell=0;
             }
             rowNum++;
+            
   
             sheet.autoSizeColumn(2);
         }   
@@ -674,6 +677,14 @@ exportButton.addActionListener(new java.awt.event.ActionListener() {
         style.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
         style.setFillPattern(CellStyle.SOLID_FOREGROUND);
 
+    }
+    
+    public static void setTotalDevCell(Cell cell) {
+        CellStyle style = workbook.createCellStyle();
+        style.setFillForegroundColor(IndexedColors.GREY_50_PERCENT.getIndex());
+        style.setFillPattern(CellStyle.SOLID_FOREGROUND);
+        setStyleFontWhite(style);
+        cell.setCellStyle(style);
     }
     
     public static void cellFillBlack(CellStyle style) {
