@@ -401,9 +401,12 @@ exportButton.addActionListener(new java.awt.event.ActionListener() {
     private void exportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportButtonActionPerformed
         // TODO add your handling code here:
         makeTables(dTableList.getSelectedItems());
+        StringBuilder location = new StringBuilder("C:\\Users\\Public\\OutBoundProd_");
+        location.append(String.valueOf(sdf.format(date)));
+        location.append(".xlsx");
         
         //OUTPUT
-        try (FileOutputStream outputStream = new FileOutputStream("OutBoundProd " + String.valueOf(sdf.format(date)) + ".xlsx")) {
+        try (FileOutputStream outputStream = new FileOutputStream(location.toString())){
             workbook.write(outputStream);
             outputStream.close();
             JOptionPane.showMessageDialog(this,"File Created","Written Successfully", JOptionPane.WARNING_MESSAGE);
