@@ -20,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
@@ -27,6 +28,7 @@ import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.CellUtil;
+import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -76,12 +78,6 @@ public class ExcelFrame extends javax.swing.JFrame {
         tableModel = (DefaultTableModel)theTable.getModel();
         mTableModel = (DefaultTableModel)mTable.getModel();
         multiMap = new HashMap<String,Integer>();
-        //Create Workbook and Sheet
-        workbook = new XSSFWorkbook();
-        sheet = workbook.createSheet("Outbound Production");
-        style = workbook.createCellStyle();
-        headStyle = workbook.createCellStyle();
-        titleStyle = workbook.createCellStyle();
         sdf = new SimpleDateFormat("MM'_'dd'_'yyyy");
         date = new Date();
         done = false;
@@ -410,18 +406,25 @@ exportButton.addActionListener(new java.awt.event.ActionListener() {
         try (FileOutputStream outputStream = new FileOutputStream("OutBoundProd " + String.valueOf(sdf.format(date)) + ".xlsx")) {
             workbook.write(outputStream);
             outputStream.close();
-            System.out.println("Written successully");
+            JOptionPane.showMessageDialog(this,"File Created","Written Successfully", JOptionPane.WARNING_MESSAGE);
         } catch (Exception e) {
             System.out.println(e.getMessage());
 }
     }//GEN-LAST:event_exportButtonActionPerformed
     
     public static void makeTables(String[] selectedList){
+        workbook = new XSSFWorkbook();
+        sheet = workbook.createSheet("Outbound Production");
+        style = workbook.createCellStyle();
+        headStyle = workbook.createCellStyle();
+        titleStyle = workbook.createCellStyle();
         int counter = 0;
         int colNum = 1;
         int rowNum = 1;
+        int autoSizeCol= 0;
         ArrayList<String[][]>list = new ArrayList<String[][]>();
-        String[] devNames = {"Tech","Name","Classic","Nano","Shuffle","Touch","Pad","Phone","Tech Total"};   
+        String[] devNames = {"Tech","Name","Classic","Nano","Shuffle","Touch","Pad","Phone","Tech Total"};  
+        
         
         for(String item:selectedList){
             System.out.println(item);
@@ -439,22 +442,28 @@ exportButton.addActionListener(new java.awt.event.ActionListener() {
             // Creates the cell
             Row title = sheet.createRow(rowNum);
             Cell titleCell = title.createCell(colNum);
-            titleCell.setCellValue("FUCK");
-
-            // Sets the allignment to the created cell
+            titleCell.setCellValue("HOUR");
+            setStyleFontWhite(titleStyle);
+            cellFillBlack(titleStyle);
+            
+            titleCell.setCellStyle(titleStyle);
+            
             CellUtil.setAlignment(titleCell, workbook, CellStyle.ALIGN_CENTER);
-       
+            
             rowNum++;
             
             Row header = sheet.createRow(rowNum++);
             
             for(int col = 0;col<devNames.length;col++){
+                
                 Cell headerCell = header.createCell(colNum++);
                 headerCell.setCellValue(devNames[col]);  
                 headStyle.setAlignment(HorizontalAlignment.CENTER);
                 cellBorderBlack(headStyle);
-                cellFillBlue(headStyle);
+                cellFillHGrey(headStyle);
+                setStyleFontWhite(headStyle);
                 headerCell.setCellStyle(headStyle);
+                
             }
               
             colNum = 1;
@@ -466,18 +475,24 @@ exportButton.addActionListener(new java.awt.event.ActionListener() {
                 for(String tCell:tableRow){
                    
                     Cell cell = row.createCell(colNum++);
-
                     cell.setCellValue(tCell);
-                    //cell.setCellStyle(style);
+                    
+                    if(it.hasNext() == false){
+                        
+                    }
                     cellBorderBlack(style);
-                    cellFillBlue(style);
+                    cellFillLGrey(style);
+                    setStyleFontBold(style);
                     cell.setCellStyle(style);
                     
                 }
                 colNum=1;              
             }
             rowNum++;
+  
+            sheet.autoSizeColumn(2);
         }   
+
     }
     
     private void toMulti(){
@@ -641,14 +656,35 @@ exportButton.addActionListener(new java.awt.event.ActionListener() {
         return tbModel;
     }
     
-    public static void cellFillBlue(CellStyle style) {
-        style.setFillForegroundColor(IndexedColors.AQUA.getIndex());
+    public static void setStyleFontWhite(CellStyle style) {
+        XSSFFont font = workbook.createFont();
+        font.setColor(HSSFColor.WHITE.index);
+        style.setFont(font);
+
+    }
+    
+    public static void setStyleFontBold(CellStyle style) {
+        XSSFFont font = workbook.createFont();
+        font.setBold(true);
+        style.setFont(font);
+
+    }
+    
+    public static void cellFillLGrey(CellStyle style) {
+        style.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
         style.setFillPattern(CellStyle.SOLID_FOREGROUND);
 
     }
     
     public static void cellFillBlack(CellStyle style) {
-        style.setFillForegroundColor(IndexedColors.AQUA.getIndex());
+        style.setFillForegroundColor(IndexedColors.BLACK.getIndex());
+        style.setFillPattern(CellStyle.SOLID_FOREGROUND);
+   
+
+    }
+    
+     public static void cellFillHGrey(CellStyle style) {
+        style.setFillForegroundColor(IndexedColors.GREY_50_PERCENT.getIndex());
         style.setFillPattern(CellStyle.SOLID_FOREGROUND);
    
 
