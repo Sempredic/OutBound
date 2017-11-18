@@ -40,6 +40,11 @@ public class Table{
         
     }
     
+    public void addToRoster(String techNumber,String techName){
+        tRosterNames.add(techName);
+        tRosterTechNum.add(techNumber);
+    }
+    
     public Object[][] getDataTable(){
         return dataTable;
     }

@@ -5,6 +5,8 @@
  */
 package exceltest;
 
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
@@ -20,6 +22,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -65,6 +71,8 @@ public class ExcelFrame extends javax.swing.JFrame {
     Date date;
     boolean done;
     String[] devNames;
+    JTextField techName;
+    JTextField techNumber;
     
     
     
@@ -81,6 +89,8 @@ public class ExcelFrame extends javax.swing.JFrame {
         sdf = new SimpleDateFormat("MM'_'dd'_'yyyy");
         date = new Date();
         done = false;
+        techNumber = new JTextField("");
+        techName = new JTextField("");
         
     }
     
@@ -131,6 +141,8 @@ public class ExcelFrame extends javax.swing.JFrame {
         hourLabel = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
+        saveMenuItem = new javax.swing.JMenuItem();
+        addMenuItem = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -212,6 +224,23 @@ exportButton.addActionListener(new java.awt.event.ActionListener() {
     hourLabel.setText("Hour");
 
     jMenu1.setText("File");
+
+    saveMenuItem.setText("Save ");
+    jMenu1.add(saveMenuItem);
+
+    addMenuItem.setText("Add New Tech");
+    addMenuItem.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseClicked(java.awt.event.MouseEvent evt) {
+            addMenuItemMouseClicked(evt);
+        }
+    });
+    addMenuItem.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            addMenuItemActionPerformed(evt);
+        }
+    });
+    jMenu1.add(addMenuItem);
+
     jMenuBar1.add(jMenu1);
 
     jMenu2.setText("Edit");
@@ -414,6 +443,46 @@ exportButton.addActionListener(new java.awt.event.ActionListener() {
             System.out.println(e.getMessage());
 }
     }//GEN-LAST:event_exportButtonActionPerformed
+
+    private void addMenuItemMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addMenuItemMouseClicked
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_addMenuItemMouseClicked
+
+    private void addMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMenuItemActionPerformed
+        // TODO add your handling code here:
+        String[] newTechRow = new String [9];
+        JPanel p = new JPanel(new BorderLayout(5,5));
+
+        JPanel labels = new JPanel(new GridLayout(0,1,2,2));
+        labels.add(new JLabel("Tech Number", SwingConstants.RIGHT));
+        labels.add(new JLabel("Tech Name", SwingConstants.RIGHT));
+        p.add(labels, BorderLayout.WEST);
+
+        JPanel controls = new JPanel(new GridLayout(0,1,2,2));
+
+        controls.add(techNumber);
+        controls.add(techName);
+        p.add(controls, BorderLayout.CENTER);
+
+        int option = JOptionPane.showConfirmDialog(this, p, "Create Tech", JOptionPane.PLAIN_MESSAGE);
+
+        if (option == JOptionPane.OK_OPTION) {
+            for(int i=0;i<newTechRow.length;i++){
+                newTechRow[i] = "0";
+            }
+            newTechRow[0] = techNumber.getText();
+            newTechRow[1] = techName.getText();
+            tableModel.insertRow(0,newTechRow);
+            curTable.addToRoster(techNumber.getText(), techName.getText());
+            techNumber.setText("");
+            techName.setText("");
+        }
+        
+        
+               
+        
+    }//GEN-LAST:event_addMenuItemActionPerformed
     
     public static void makeTables(String[] selectedList){
         workbook = new XSSFWorkbook();
@@ -750,6 +819,7 @@ exportButton.addActionListener(new java.awt.event.ActionListener() {
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem addMenuItem;
     private java.awt.List dTableList;
     private javax.swing.JTextField devFieldName;
     private javax.swing.JLabel deviceField;
@@ -761,6 +831,7 @@ exportButton.addActionListener(new java.awt.event.ActionListener() {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JTable mTable;
+    private javax.swing.JMenuItem saveMenuItem;
     private javax.swing.JButton snapShotButton;
     private javax.swing.JScrollPane tablePanel;
     private javax.swing.JLabel techField;
