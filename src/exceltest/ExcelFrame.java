@@ -144,8 +144,12 @@ public class ExcelFrame extends javax.swing.JFrame {
         saveMenuItem = new javax.swing.JMenuItem();
         addMenuItem = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         techFieldName.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -244,7 +248,18 @@ exportButton.addActionListener(new java.awt.event.ActionListener() {
     jMenuBar1.add(jMenu1);
 
     jMenu2.setText("Edit");
+
+    jMenuItem2.setText("Undo");
+    jMenu2.add(jMenuItem2);
+
     jMenuBar1.add(jMenu2);
+
+    jMenu3.setText("Tools");
+
+    jMenuItem1.setText("Options...");
+    jMenu3.add(jMenuItem1);
+
+    jMenuBar1.add(jMenu3);
 
     setJMenuBar(jMenuBar1);
 
@@ -312,7 +327,7 @@ exportButton.addActionListener(new java.awt.event.ActionListener() {
                     .addComponent(devFieldName, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(18, 18, 18)
                     .addComponent(jToggleButton1)))
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(snapShotButton, javax.swing.GroupLayout.Alignment.TRAILING)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -468,20 +483,23 @@ exportButton.addActionListener(new java.awt.event.ActionListener() {
         int option = JOptionPane.showConfirmDialog(this, p, "Create Tech", JOptionPane.PLAIN_MESSAGE);
 
         if (option == JOptionPane.OK_OPTION) {
-            for(int i=0;i<newTechRow.length;i++){
+            if(!curTable.getRosterNum().contains(techNumber.getText())){
+                for(int i=0;i<newTechRow.length;i++){
                 newTechRow[i] = "0";
+                }
+                newTechRow[0] = techNumber.getText();
+                newTechRow[1] = techName.getText();
+                tableModel.insertRow(0,newTechRow);
+                curTable.addToRoster(techNumber.getText(), techName.getText());
+                techNumber.setText("");
+                techName.setText("");
+            }else{
+                JOptionPane.showMessageDialog(this,"Tech Already Exists","Try Again", JOptionPane.WARNING_MESSAGE);
+                techNumber.setText("");
+                techName.setText("");
             }
-            newTechRow[0] = techNumber.getText();
-            newTechRow[1] = techName.getText();
-            tableModel.insertRow(0,newTechRow);
-            curTable.addToRoster(techNumber.getText(), techName.getText());
-            techNumber.setText("");
-            techName.setText("");
         }
-        
-        
-               
-        
+   
     }//GEN-LAST:event_addMenuItemActionPerformed
     
     public static void makeTables(String[] selectedList){
@@ -827,7 +845,10 @@ exportButton.addActionListener(new java.awt.event.ActionListener() {
     private javax.swing.JLabel hourLabel;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JTable mTable;

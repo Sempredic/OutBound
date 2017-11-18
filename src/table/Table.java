@@ -31,7 +31,7 @@ public class Table{
         tRosterNames = new ArrayList<String>();
         tRosterTechNum = new ArrayList<String>(); 
         dataTableList = new HashMap<Integer,String[][]>();
-        System.out.println("Table Object Created");
+        //System.out.println("Table Object Created");
         
         setRosterNames();
         setRosterTechNum();
@@ -77,9 +77,9 @@ public class Table{
                        dataTable[row][col] = "0";
                    } 
                 }
-                System.out.print(dataTable[row][col]+" ");
+                //System.out.print(dataTable[row][col]+" ");
             }
-            System.out.println();
+            //System.out.println();
         }
     }
     

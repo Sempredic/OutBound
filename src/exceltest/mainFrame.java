@@ -71,6 +71,7 @@ public class mainFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(680, 515));
+        setResizable(false);
         setSize(new java.awt.Dimension(700, 515));
 
         addTechButton.setText("Add Tech --->");
@@ -186,6 +187,7 @@ public class mainFrame extends javax.swing.JFrame {
     }
     private void createTechButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createTechButtonActionPerformed
         // TODO add your handling code here:
+        
                
         JPanel p = new JPanel(new BorderLayout(5,5));
 
@@ -203,10 +205,17 @@ public class mainFrame extends javax.swing.JFrame {
         int option = JOptionPane.showConfirmDialog(this, p, "Create Tech", JOptionPane.PLAIN_MESSAGE);
 
         if (option == JOptionPane.OK_OPTION) {
-            existingList.add(techNumber.getText());
-            existingRosterList.put(techNumber.getText(),techName.getText());
-            techNumber.setText("");
-            techName.setText("");
+            if(!existingRosterList.containsKey(techNumber.getText())){
+                existingList.add(techNumber.getText());
+                existingRosterList.put(techNumber.getText(),techName.getText());
+                techNumber.setText("");
+                techName.setText("");
+            }else{
+                JOptionPane.showMessageDialog(this,"Try Again","Tech Already Exists", JOptionPane.WARNING_MESSAGE);
+                techNumber.setText("");
+                techName.setText("");
+            }
+            
         }
     }//GEN-LAST:event_createTechButtonActionPerformed
 
