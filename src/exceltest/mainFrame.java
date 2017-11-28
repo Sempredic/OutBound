@@ -297,23 +297,23 @@ public class mainFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         JPopupMenu rightMenu = new JPopupMenu();
         
-        JMenuItem item = new JMenuItem("Test1");
+        JMenuItem item = new JMenuItem("ListItem");
         item.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Menu item Test1");
+                System.out.println("Delete");
             }
         });
         
         rightMenu.add(item);
         rightMenu.pack();
         
-        
-        if ( SwingUtilities.isRightMouseButton(evt) )
-        {
-            rightMenu.show(item, evt.getX(),evt.getY());
-            System.out.println(existingList.getComponentAt(evt.getPoint()));
-           
+        if(existingList.getSelectedItems().length!=0){
+            if ( SwingUtilities.isRightMouseButton(evt) ){
+                rightMenu.show(evt.getComponent(), existingList.getComponentAt(evt.getPoint()).getWidth(),evt.getY());
+                System.out.println(existingList.getComponentAt(evt.getPoint()));
+            }
         }
+
     }//GEN-LAST:event_existingListMousePressed
     private void initExistingTechList(){
         
