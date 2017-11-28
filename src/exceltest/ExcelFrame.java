@@ -27,8 +27,10 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
@@ -58,10 +60,13 @@ public class ExcelFrame extends javax.swing.JFrame {
     boolean multiSelected;
     DefaultTableModel tableModel;
     DefaultTableModel mTableModel;
+    DefaultTableModel infoTableModel;
     HashMap<String,Integer> multiMap;
     static int multiCounter;
     String[] multiColumn;
     Object[][] multiDataTable;
+    String[] infoColumn;
+    Object[][] infoDataTable;
     static XSSFWorkbook workbook;
     static CellStyle style;
     static CellStyle headStyle;
@@ -77,14 +82,14 @@ public class ExcelFrame extends javax.swing.JFrame {
     
     
     public ExcelFrame(Table table){
-        
-        
+ 
         this.curTable = table; 
         multiCounter = 0;
         initMultiTable();
         initComponents();
         tableModel = (DefaultTableModel)theTable.getModel();
         mTableModel = (DefaultTableModel)mTable.getModel();
+        infoTableModel = (DefaultTableModel)infoTable.getModel();
         multiMap = new HashMap<String,Integer>();
         sdf = new SimpleDateFormat("MM'_'dd'_'yyyy");
         date = new Date();
@@ -105,6 +110,11 @@ public class ExcelFrame extends javax.swing.JFrame {
             {"Pad",0},
             {"Phone",0}
         };
+    }
+    
+    private void initInfoTable(){
+       
+        
     }
     
     DefaultTableModel getModel(){
@@ -130,14 +140,18 @@ public class ExcelFrame extends javax.swing.JFrame {
         devFieldName = new javax.swing.JTextField();
         techField = new javax.swing.JLabel();
         deviceField = new javax.swing.JLabel();
-        tablePanel = new javax.swing.JScrollPane();
-        theTable = new javax.swing.JTable();
         snapShotButton = new javax.swing.JButton();
         jToggleButton1 = new javax.swing.JToggleButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         mTable = new javax.swing.JTable();
         dTableList = new java.awt.List();
         exportButton = new javax.swing.JButton();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        tablePanel = new javax.swing.JScrollPane();
+        theTable = new javax.swing.JTable();
+        jPanel1 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        infoTable = new javax.swing.JTable();
         hourLabel = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
@@ -181,9 +195,41 @@ public class ExcelFrame extends javax.swing.JFrame {
 
         deviceField.setText("Device");
 
-        theTable.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
-        theTable.setModel(new javax.swing.table.DefaultTableModel(curTable.getDataTable(),
-            curTable.getcolumnTable())
+        snapShotButton.setText("SnapShot");
+        snapShotButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                snapShotButtonActionPerformed(evt);
+            }
+        });
+
+        jToggleButton1.setText("Multi Scan");
+        jToggleButton1.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jToggleButton1StateChanged(evt);
+            }
+        });
+        jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleButton1ActionPerformed(evt);
+            }
+        });
+
+        mTable.setModel(new javax.swing.table.DefaultTableModel(multiDataTable,
+            multiColumn));
+    jScrollPane2.setViewportView(mTable);
+
+    dTableList.setMultipleMode(true);
+
+    exportButton.setText("Export");
+    exportButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            exportButtonActionPerformed(evt);
+        }
+    });
+
+    theTable.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+    theTable.setModel(new javax.swing.table.DefaultTableModel(curTable.getDataTable(),
+        curTable.getcolumnTable())
     );
     theTable.setColumnSelectionAllowed(false);
     theTable.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -193,37 +239,29 @@ public class ExcelFrame extends javax.swing.JFrame {
     tablePanel.setViewportView(theTable);
     theTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
-    snapShotButton.setText("SnapShot");
-    snapShotButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            snapShotButtonActionPerformed(evt);
-        }
-    });
+    jTabbedPane1.addTab("Scan", tablePanel);
 
-    jToggleButton1.setText("Multi Scan");
-    jToggleButton1.addChangeListener(new javax.swing.event.ChangeListener() {
-        public void stateChanged(javax.swing.event.ChangeEvent evt) {
-            jToggleButton1StateChanged(evt);
-        }
-    });
-    jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jToggleButton1ActionPerformed(evt);
-        }
-    });
+    infoTable.setModel(theTable.getModel());
+    jScrollPane1.setViewportView(infoTable);
 
-    mTable.setModel(new javax.swing.table.DefaultTableModel(multiDataTable,
-        multiColumn));
-jScrollPane2.setViewportView(mTable);
+    javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+    jPanel1.setLayout(jPanel1Layout);
+    jPanel1Layout.setHorizontalGroup(
+        jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(jPanel1Layout.createSequentialGroup()
+            .addContainerGap()
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addContainerGap(277, Short.MAX_VALUE))
+    );
+    jPanel1Layout.setVerticalGroup(
+        jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(jPanel1Layout.createSequentialGroup()
+            .addContainerGap()
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 404, Short.MAX_VALUE)
+            .addContainerGap())
+    );
 
-dTableList.setMultipleMode(true);
-
-exportButton.setText("Export");
-exportButton.addActionListener(new java.awt.event.ActionListener() {
-    public void actionPerformed(java.awt.event.ActionEvent evt) {
-        exportButtonActionPerformed(evt);
-    }
-    });
+    jTabbedPane1.addTab("tab2", jPanel1);
 
     hourLabel.setText("Hour");
 
@@ -267,9 +305,6 @@ exportButton.addActionListener(new java.awt.event.ActionListener() {
     getContentPane().setLayout(layout);
     layout.setHorizontalGroup(
         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-            .addComponent(hourLabel)
-            .addGap(102, 102, 102))
         .addGroup(layout.createSequentialGroup()
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
@@ -289,33 +324,28 @@ exportButton.addActionListener(new java.awt.event.ActionListener() {
                         .addComponent(snapShotButton)
                         .addComponent(jToggleButton1))))
             .addGap(18, 18, 18)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 561, Short.MAX_VALUE)
-                .addComponent(tablePanel))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(exportButton)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGroup(layout.createSequentialGroup()
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(dTableList, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(21, Short.MAX_VALUE))))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 561, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTabbedPane1))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(exportButton)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(dTableList, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addGap(94, 94, 94)
+                    .addComponent(hourLabel)
+                    .addGap(102, 102, 102))))
     );
     layout.setVerticalGroup(
         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(layout.createSequentialGroup()
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(29, 29, 29)
-                    .addComponent(hourLabel)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addComponent(dTableList, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(exportButton))
-                        .addComponent(tablePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 358, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGroup(layout.createSequentialGroup()
                     .addGap(106, 106, 106)
                     .addComponent(techField)
@@ -326,8 +356,18 @@ exportButton.addActionListener(new java.awt.event.ActionListener() {
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                     .addComponent(devFieldName, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(18, 18, 18)
-                    .addComponent(jToggleButton1)))
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                    .addComponent(jToggleButton1))
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(29, 29, 29)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 454, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(hourLabel)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(dTableList, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(exportButton)))))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(snapShotButton, javax.swing.GroupLayout.Alignment.TRAILING)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -479,24 +519,48 @@ exportButton.addActionListener(new java.awt.event.ActionListener() {
         controls.add(techNumber);
         controls.add(techName);
         p.add(controls, BorderLayout.CENTER);
+        
+        
 
         int option = JOptionPane.showConfirmDialog(this, p, "Create Tech", JOptionPane.PLAIN_MESSAGE);
 
         if (option == JOptionPane.OK_OPTION) {
-            if(!curTable.getRosterNum().contains(techNumber.getText())){
-                for(int i=0;i<newTechRow.length;i++){
-                newTechRow[i] = "0";
-                }
-                newTechRow[0] = techNumber.getText();
-                newTechRow[1] = techName.getText();
-                tableModel.insertRow(0,newTechRow);
-                curTable.addToRoster(techNumber.getText(), techName.getText());
-                techNumber.setText("");
-                techName.setText("");
+            
+            if(techNumber.getText().length()==4){
+                if(techName.getText().length()<=10){
+                    if(!curTable.getRosterNum().contains(techNumber.getText())){
+                        for(int i=0;i<newTechRow.length;i++){
+                            newTechRow[i] = "0";
+                        }
+                        
+                        newTechRow[0] = techNumber.getText(); 
+                        
+                        if(techName.getText().length()==0){
+                            curTable.addToRoster(techNumber.getText(),"**");
+                            newTechRow[1] = "**";
+                        }else{
+                          
+                            curTable.addToRoster(techNumber.getText(),techName.getText());
+                            newTechRow[1] = techName.getText();
+                        }
+                        
+                        tableModel.insertRow(0,newTechRow);
+                        techNumber.setText("");
+                        techName.setText("");
+                    }else{
+                        JOptionPane.showMessageDialog(this,"Tech Already Exists","Try Again", JOptionPane.WARNING_MESSAGE);
+                        techNumber.setText("");
+                        techName.setText("");
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(this,"Tech Name Exceeds [10]Char Max","Try Again", JOptionPane.WARNING_MESSAGE);
+                    techNumber.setText("");
+                    techName.setText("");
+                }  
             }else{
-                JOptionPane.showMessageDialog(this,"Tech Already Exists","Try Again", JOptionPane.WARNING_MESSAGE);
-                techNumber.setText("");
-                techName.setText("");
+                JOptionPane.showMessageDialog(this,"Tech must be 4 characters","Try Again", JOptionPane.WARNING_MESSAGE);
+                    techNumber.setText("");
+                    techName.setText("");
             }
         }
    
@@ -538,7 +602,7 @@ exportButton.addActionListener(new java.awt.event.ActionListener() {
             
             titleCell.setCellStyle(titleStyle);
             
-            CellUtil.setAlignment(titleCell, workbook, CellStyle.ALIGN_CENTER);
+            CellUtil.setAlignment(titleCell,HorizontalAlignment.CENTER);
             
             rowNum++;
             
@@ -764,41 +828,41 @@ exportButton.addActionListener(new java.awt.event.ActionListener() {
     
     public static void cellFillLGrey(CellStyle style) {
         style.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
-        style.setFillPattern(CellStyle.SOLID_FOREGROUND);
+        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
     }
     
     public static void setTotalDevCell(Cell cell) {
         CellStyle style = workbook.createCellStyle();
         style.setFillForegroundColor(IndexedColors.GREY_50_PERCENT.getIndex());
-        style.setFillPattern(CellStyle.SOLID_FOREGROUND);
+        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         setStyleFontWhite(style);
         cell.setCellStyle(style);
     }
     
     public static void cellFillBlack(CellStyle style) {
         style.setFillForegroundColor(IndexedColors.BLACK.getIndex());
-        style.setFillPattern(CellStyle.SOLID_FOREGROUND);
+        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
    
 
     }
     
      public static void cellFillHGrey(CellStyle style) {
         style.setFillForegroundColor(IndexedColors.GREY_50_PERCENT.getIndex());
-        style.setFillPattern(CellStyle.SOLID_FOREGROUND);
+        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
    
 
     }
 
     public static void cellBorderBlack(CellStyle style) {
 
-        style.setBorderBottom(CellStyle.BORDER_THIN);
+        style.setBorderBottom(BorderStyle.THIN);
         style.setBottomBorderColor(IndexedColors.BLACK.getIndex());
-        style.setBorderLeft(CellStyle.BORDER_THIN);
+        style.setBorderLeft(BorderStyle.THIN);
         style.setLeftBorderColor(IndexedColors.BLACK.getIndex());
-        style.setBorderRight(CellStyle.BORDER_THIN);
+        style.setBorderRight(BorderStyle.THIN);
         style.setRightBorderColor(IndexedColors.BLACK.getIndex());
-        style.setBorderTop(CellStyle.BORDER_THIN);
+        style.setBorderTop(BorderStyle.THIN);
         style.setTopBorderColor(IndexedColors.BLACK.getIndex());
 
     }
@@ -843,13 +907,17 @@ exportButton.addActionListener(new java.awt.event.ActionListener() {
     private javax.swing.JLabel deviceField;
     private javax.swing.JButton exportButton;
     private javax.swing.JLabel hourLabel;
+    private javax.swing.JTable infoTable;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JTable mTable;
     private javax.swing.JMenuItem saveMenuItem;

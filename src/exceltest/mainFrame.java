@@ -8,13 +8,21 @@ package exceltest;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.KeyboardFocusManager;
-import java.awt.event.KeyEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.LinkedHashMap;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import table.Table;
 
 /**
@@ -26,29 +34,22 @@ public class mainFrame extends javax.swing.JFrame {
     /**
      * Creates new form mainFrame
      */
-    LinkedHashMap<String,String> rosterList;
-    LinkedHashMap<String,String> existingRosterList;
+    protected LinkedHashMap<String,String> rosterList;
+    protected LinkedHashMap<String,String> existingRosterList;
     boolean done;
     JTextField techNumber;
     KeyboardFocusManager focusManager;
     JTextField techName;
+  
     
     public mainFrame() {
         initComponents();
-
         rosterList = new LinkedHashMap<String,String>();
         existingRosterList = new LinkedHashMap<String,String>();
         done = false;
         techNumber = new JTextField("");
         techName = new JTextField("");
-        
-        techNumber.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                techNumberKeyPressed(evt);
-            }
-        });
-        
-       
+        initExistingTechList();
     }
 
     /**
@@ -68,6 +69,7 @@ public class mainFrame extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         remTechButton = new javax.swing.JButton();
+        jMenuBar1 = new javax.swing.JMenuBar();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(680, 515));
@@ -89,6 +91,11 @@ public class mainFrame extends javax.swing.JFrame {
         });
 
         existingList.setMultipleMode(true);
+        existingList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                existingListMousePressed(evt);
+            }
+        });
 
         finalRosterList.setMultipleMode(true);
 
@@ -110,6 +117,7 @@ public class mainFrame extends javax.swing.JFrame {
                 remTechButtonActionPerformed(evt);
             }
         });
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -160,7 +168,7 @@ public class mainFrame extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(doneButton, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(createTechButton, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(62, Short.MAX_VALUE))
+                .addContainerGap(60, Short.MAX_VALUE))
         );
 
         pack();
@@ -177,18 +185,10 @@ public class mainFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_addTechButtonActionPerformed
 
-    private void techNumberKeyPressed(java.awt.event.KeyEvent evt){
-        int keyCode = evt.getKeyCode();
-        if(keyCode == KeyEvent.VK_ENTER){
-            
-            focusManager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
-            focusManager.focusPreviousComponent();
-        }
-    }
+
     private void createTechButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createTechButtonActionPerformed
         // TODO add your handling code here:
-        
-               
+     
         JPanel p = new JPanel(new BorderLayout(5,5));
 
         JPanel labels = new JPanel(new GridLayout(0,1,2,2));
@@ -197,7 +197,7 @@ public class mainFrame extends javax.swing.JFrame {
         p.add(labels, BorderLayout.WEST);
 
         JPanel controls = new JPanel(new GridLayout(0,1,2,2));
-
+        techNumber.requestFocusInWindow();
         controls.add(techNumber);
         controls.add(techName);
         p.add(controls, BorderLayout.CENTER);
@@ -205,27 +205,66 @@ public class mainFrame extends javax.swing.JFrame {
         int option = JOptionPane.showConfirmDialog(this, p, "Create Tech", JOptionPane.PLAIN_MESSAGE);
 
         if (option == JOptionPane.OK_OPTION) {
-            if(!existingRosterList.containsKey(techNumber.getText())){
-                existingList.add(techNumber.getText());
-                existingRosterList.put(techNumber.getText(),techName.getText());
-                techNumber.setText("");
-                techName.setText("");
-            }else{
-                JOptionPane.showMessageDialog(this,"Try Again","Tech Already Exists", JOptionPane.WARNING_MESSAGE);
-                techNumber.setText("");
-                techName.setText("");
-            }
             
+            if(techNumber.getText().length()==4){
+                if(techName.getText().length()<=10){
+                    if(!existingRosterList.containsKey(techNumber.getText())){
+                        existingList.add(techNumber.getText());
+                        if(techName.getText().length()==0){
+                            existingRosterList.put(techNumber.getText(),"**");
+                        }else{
+                            
+                            existingRosterList.put(techNumber.getText(),techName.getText());
+                        }
+                        
+                        techNumber.setText("");
+                        techName.setText("");
+                    }else{
+                        JOptionPane.showMessageDialog(this,"Tech Already Exists","Try Again", JOptionPane.WARNING_MESSAGE);
+                        techNumber.setText("");
+                        techName.setText("");
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(this,"Tech Name Exceeds [10]Char Max","Try Again", JOptionPane.WARNING_MESSAGE);
+                    techNumber.setText("");
+                    techName.setText("");
+                }  
+            }else{
+                JOptionPane.showMessageDialog(this,"Tech must be 4 characters","Try Again", JOptionPane.WARNING_MESSAGE);
+                    techNumber.setText("");
+                    techName.setText("");
+            }    
         }
     }//GEN-LAST:event_createTechButtonActionPerformed
 
     private void doneButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_doneButtonActionPerformed
         // TODO add your handling code here:
+        writeToFileSave();
         setRoster(rosterList);
         prepExcelFrame();
         dispose();
     }//GEN-LAST:event_doneButtonActionPerformed
 
+    private void writeToFileSave(){
+        String tName = new String();
+        
+        try{
+            PrintWriter writer = new PrintWriter("roster.txt", "UTF-8");
+            for(String tNumber:existingList.getItems()){
+                if(existingRosterList.containsKey(tNumber)){
+                    tName = existingRosterList.get(tNumber);
+                }
+                writer.println(tNumber + " " + tName);
+            }
+            
+            writer.close();
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+            
+        
+    }
+    
     private void prepExcelFrame(){
         Table newTable = new Table(rosterList);
         ExcelFrame newExcelFrame = new ExcelFrame(newTable);
@@ -254,6 +293,51 @@ public class mainFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_remTechButtonActionPerformed
 
+    private void existingListMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_existingListMousePressed
+        // TODO add your handling code here:
+        JPopupMenu rightMenu = new JPopupMenu();
+        
+        JMenuItem item = new JMenuItem("Test1");
+        item.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Menu item Test1");
+            }
+        });
+        
+        rightMenu.add(item);
+        rightMenu.pack();
+        
+        
+        if ( SwingUtilities.isRightMouseButton(evt) )
+        {
+            rightMenu.show(item, evt.getX(),evt.getY());
+            System.out.println(existingList.getComponentAt(evt.getPoint()));
+           
+        }
+    }//GEN-LAST:event_existingListMousePressed
+    private void initExistingTechList(){
+        
+        try{
+            File tmpDir = new File("roster.txt");
+            boolean exists = tmpDir.exists();
+            
+            if(exists == false){
+                writeToFileSave();
+            }
+            
+            for(String name:Files.readAllLines(Paths.get("roster.txt"))){
+                String[] li = {" "," "};
+                li = name.split(" ");
+                
+                if(!existingRosterList.containsKey(li[0])){
+                   existingRosterList.put(li[0],li[1]);
+                   existingList.add(li[0]); 
+                }
+            }
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
     /**
      * @param args the command line arguments
      */
@@ -269,11 +353,10 @@ public class mainFrame extends javax.swing.JFrame {
     }
     
     private void runExcel(ExcelFrame frame){
+        
            java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                             
+            public void run() {             
                 frame.setVisible(true);
-                
             }
         }); 
 
@@ -310,10 +393,11 @@ public class mainFrame extends javax.swing.JFrame {
     private javax.swing.JButton addTechButton;
     private javax.swing.JButton createTechButton;
     private javax.swing.JButton doneButton;
-    private java.awt.List existingList;
+    protected java.awt.List existingList;
     private java.awt.List finalRosterList;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JButton remTechButton;
     // End of variables declaration//GEN-END:variables
 }
