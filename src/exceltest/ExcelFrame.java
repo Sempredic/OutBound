@@ -78,6 +78,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     String[] devNames;
     JTextField techName;
     JTextField techNumber;
+    optionsFrame oFrame;
     
     
     
@@ -96,6 +97,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         done = false;
         techNumber = new JTextField("");
         techName = new JTextField("");
+        oFrame = new optionsFrame();
         
     }
     
@@ -157,10 +159,8 @@ public class ExcelFrame extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         saveMenuItem = new javax.swing.JMenuItem();
         addMenuItem = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
-        jMenuItem2 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        optionsMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -285,17 +285,15 @@ public class ExcelFrame extends javax.swing.JFrame {
 
     jMenuBar1.add(jMenu1);
 
-    jMenu2.setText("Edit");
-
-    jMenuItem2.setText("Undo");
-    jMenu2.add(jMenuItem2);
-
-    jMenuBar1.add(jMenu2);
-
     jMenu3.setText("Tools");
 
-    jMenuItem1.setText("Options...");
-    jMenu3.add(jMenuItem1);
+    optionsMenuItem.setText("Options...");
+    optionsMenuItem.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            optionsMenuItemActionPerformed(evt);
+        }
+    });
+    jMenu3.add(optionsMenuItem);
 
     jMenuBar1.add(jMenu3);
 
@@ -565,6 +563,11 @@ public class ExcelFrame extends javax.swing.JFrame {
         }
    
     }//GEN-LAST:event_addMenuItemActionPerformed
+
+    private void optionsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optionsMenuItemActionPerformed
+        // TODO add your handling code here:
+        oFrame.setVisible(true);
+    }//GEN-LAST:event_optionsMenuItemActionPerformed
     
     public static void makeTables(String[] selectedList){
         workbook = new XSSFWorkbook();
@@ -577,7 +580,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         int rowNum = 1;
         int curCell = 0;
         ArrayList<String[][]>list = new ArrayList<String[][]>();
-        String[] devNames = {"Tech","Name","Classic","Nano","Shuffle","Touch","Pad","Phone","Tech Total"};  
+        String[] devNames = {"Tech","Name","Classic","Nano","Shuffle","Touch","Pad","Phone","     Tech Total    "};  
         
         
         for(String item:selectedList){
@@ -647,6 +650,7 @@ public class ExcelFrame extends javax.swing.JFrame {
             rowNum++;
 
             sheet.autoSizeColumn(2);
+            sheet.autoSizeColumn(9);
         }   
 
     }
@@ -909,17 +913,15 @@ public class ExcelFrame extends javax.swing.JFrame {
     private javax.swing.JLabel hourLabel;
     private javax.swing.JTable infoTable;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JTable mTable;
+    private javax.swing.JMenuItem optionsMenuItem;
     private javax.swing.JMenuItem saveMenuItem;
     private javax.swing.JButton snapShotButton;
     private javax.swing.JScrollPane tablePanel;

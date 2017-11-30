@@ -234,7 +234,6 @@ public class mainFrame extends javax.swing.JFrame {
                         if(techName.getText().length()==0){
                             existingRosterList.put(techNumber.getText(),"**");
                         }else{
-                            
                             existingRosterList.put(techNumber.getText(),techName.getText());
                         }
                         
@@ -282,8 +281,7 @@ public class mainFrame extends javax.swing.JFrame {
         }catch(Exception e){
             System.out.println(e.getMessage());
         }
-            
-        
+   
     }
     
     private void prepExcelFrame(){
