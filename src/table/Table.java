@@ -5,7 +5,10 @@
  */
 package table;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import javax.swing.table.DefaultTableModel;
 
@@ -17,20 +20,24 @@ public class Table{
     
     ArrayList<String> tRosterNames;
     ArrayList<String> tRosterTechNum;
-    HashMap<Integer,String[][]> dataTableList;
+    HashMap<String,String[][]> dataTableList;
     HashMap<String,String> roster;
-    int dataTableID;
+    String dataTableID;
     String[][] table;
     Object[][] dataTable;
     String[] columnTable;
+    Date tableDate;
+    DateFormat hour;
+    
     
     
     public Table(HashMap<String,String> roster){
         this.roster = roster;
-        dataTableID=0;
+        dataTableID=" ";
         tRosterNames = new ArrayList<String>();
         tRosterTechNum = new ArrayList<String>(); 
-        dataTableList = new HashMap<Integer,String[][]>();
+        dataTableList = new HashMap<String,String[][]>();
+        
         //System.out.println("Table Object Created");
         
         setRosterNames();
@@ -108,11 +115,13 @@ public class Table{
        
     }
     
-    public int updateTable(DefaultTableModel tModel){
+    public String updateTable(DefaultTableModel tModel){
         int numCol = tModel.getColumnCount();
         int numRow = tModel.getRowCount();
         this.table = new String[numRow][numCol];
-        dataTableID++;
+        hour = new SimpleDateFormat("hh:mm aa");
+        tableDate = new Date();
+        dataTableID = hour.format(tableDate);
         
         for(int i=0;i<numRow;i++){
             for(int j=0;j<numCol;j++){
@@ -128,7 +137,7 @@ public class Table{
         return dataTableID;
     }
     
-    public String[][] getDataTableFromList(int dataTableID){
+    public String[][] getDataTableFromList(String dataTableID){
         return dataTableList.get(dataTableID);
     }
     

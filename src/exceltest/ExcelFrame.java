@@ -19,9 +19,9 @@ import table.Table;
 import java.io.FileOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.Set;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -456,7 +456,8 @@ public class ExcelFrame extends javax.swing.JFrame {
     private void snapShotButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_snapShotButtonActionPerformed
         // TODO add your handling code here:
         
-        dTableList.add(Integer.toString(curTable.updateTable(getModel())));
+        dTableList.add(curTable.updateTable(getModel()));
+        
         if(oFrame.chechState()==true){
             clearTable();
         }
@@ -589,28 +590,33 @@ public class ExcelFrame extends javax.swing.JFrame {
         oFrame.setVisible(true);
     }//GEN-LAST:event_optionsMenuItemActionPerformed
     
-    public static void makeTables(String[] selectedList){
+    public void makeTables(String[] selectedList){
         workbook = new XSSFWorkbook();
         sheet = workbook.createSheet("Outbound Production");
         style = workbook.createCellStyle();
         headStyle = workbook.createCellStyle();
         titleStyle = workbook.createCellStyle();
+        //String hr = String.valueOf(hour.format(tableDate));
         int counter = 0;
         int colNum = 1;
         int rowNum = 1;
         int curCell = 0;
-        ArrayList<String[][]>list = new ArrayList<String[][]>();
+        HashMap<String,String[][]>list = new HashMap<String,String[][]>();
         String[] devNames = {"Tech","Name","Classic","Nano","Shuffle","Touch","Pad","Phone","     Tech Total    "};  
         
         
         for(String item:selectedList){
-            System.out.println(item);
-            list.add(curTable.getDataTableFromList(Integer.parseInt(item)));
+            //System.out.println(item);
+            list.put(item,curTable.getDataTableFromList(item));
         }
-        
-        Iterator<String[][]> it = list.iterator();
+        //Create set from HashMap
+        Set hashSet = list.entrySet();
+        //Create Iterator from the Set
+        Iterator it = hashSet.iterator();
 
         while(it.hasNext()){
+            
+            Map.Entry me = (Map.Entry)it.next();
             
             CellRangeAddress range = new CellRangeAddress(
                     rowNum,rowNum,colNum,devNames.length);
@@ -619,7 +625,7 @@ public class ExcelFrame extends javax.swing.JFrame {
             // Creates the cell
             Row title = sheet.createRow(rowNum);
             Cell titleCell = title.createCell(colNum);
-            titleCell.setCellValue("HOUR");
+            titleCell.setCellValue("HOUR " + me.getKey());
             setStyleFontWhite(titleStyle);
             cellFillBlack(titleStyle);
             
@@ -645,7 +651,7 @@ public class ExcelFrame extends javax.swing.JFrame {
               
             colNum = 1;
                     
-            for(String[] tableRow:it.next()){
+            for(String[] tableRow:(String[][])me.getValue()){
                 
                 Row row = sheet.createRow(rowNum++);
                 
