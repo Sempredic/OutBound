@@ -231,7 +231,6 @@ public class ExcelFrame extends javax.swing.JFrame {
     theTable.setModel(new javax.swing.table.DefaultTableModel(curTable.getDataTable(),
         curTable.getcolumnTable())
     );
-    theTable.setColumnSelectionAllowed(false);
     theTable.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     theTable.setEnabled(false);
     theTable.setGridColor(new java.awt.Color(0, 0, 0));
@@ -458,9 +457,30 @@ public class ExcelFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         
         dTableList.add(Integer.toString(curTable.updateTable(getModel())));
+        if(oFrame.chechState()==true){
+            clearTable();
+        }
+        
+        
         
     }//GEN-LAST:event_snapShotButtonActionPerformed
 
+    private void clearTable(){
+        String[] devices = {"Classic","Nano","Shuffle","Touch","Pad","Phone"}; 
+        
+        for(String curDevice:devices){
+            for(String tech:curTable.getRosterNum()){
+                int col = getCol(tableModel,curDevice);
+                int row = getRow(tableModel,tech);
+            
+                setTableValues(0,row,col);
+            }
+                
+        }
+        
+        
+    }
+    
     private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
         // TODO add your handling code here:
         abstractButton = (AbstractButton) evt.getSource();
@@ -494,7 +514,7 @@ public class ExcelFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this,"File Created","Written Successfully", JOptionPane.WARNING_MESSAGE);
         } catch (Exception e) {
             System.out.println(e.getMessage());
-}
+        }
     }//GEN-LAST:event_exportButtonActionPerformed
 
     private void addMenuItemMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addMenuItemMouseClicked

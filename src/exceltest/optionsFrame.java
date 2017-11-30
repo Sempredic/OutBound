@@ -17,6 +17,14 @@ public class optionsFrame extends javax.swing.JFrame {
     public optionsFrame() {
         initComponents();
     }
+    
+    public boolean chechState(){
+        boolean state;
+        
+        state = wipeCheckBox.isSelected();
+        
+        return state;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
