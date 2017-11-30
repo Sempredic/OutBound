@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -20,7 +21,7 @@ public class Table{
     
     ArrayList<String> tRosterNames;
     ArrayList<String> tRosterTechNum;
-    HashMap<String,String[][]> dataTableList;
+    LinkedHashMap<String,String[][]> dataTableList;
     HashMap<String,String> roster;
     String dataTableID;
     String[][] table;
@@ -36,7 +37,7 @@ public class Table{
         dataTableID=" ";
         tRosterNames = new ArrayList<String>();
         tRosterTechNum = new ArrayList<String>(); 
-        dataTableList = new HashMap<String,String[][]>();
+        dataTableList = new LinkedHashMap<String,String[][]>();
         
         //System.out.println("Table Object Created");
         
