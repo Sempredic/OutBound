@@ -38,14 +38,10 @@ public class Table{
         tRosterNames = new ArrayList<String>();
         tRosterTechNum = new ArrayList<String>(); 
         dataTableList = new LinkedHashMap<String,String[][]>();
-        
-        //System.out.println("Table Object Created");
-        
+
         setRosterNames();
         setRosterTechNum();
-        
-        initTableData();
-        
+        initTableData(); 
     }
     
     public void addToRoster(String techNumber,String techName){
@@ -116,6 +112,15 @@ public class Table{
        
     }
     
+    public boolean checkDTExists(String timeID){
+        if(dataTableList.containsKey(timeID)){
+            
+            return true;
+        }else{
+            return false;
+        }
+    }
+    
     public String updateTable(DefaultTableModel tModel){
         int numCol = tModel.getColumnCount();
         int numRow = tModel.getRowCount();
@@ -127,10 +132,7 @@ public class Table{
         for(int i=0;i<numRow;i++){
             for(int j=0;j<numCol;j++){
                 table[i][j] = tModel.getValueAt(i, j).toString();
-                //System.out.print(table[i][j] + " ");
             }
-            //System.out.println();
-            
         } 
         
         dataTableList.put(dataTableID, table);

@@ -455,15 +455,24 @@ public class ExcelFrame extends javax.swing.JFrame {
 
     private void snapShotButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_snapShotButtonActionPerformed
         // TODO add your handling code here:
+        DateFormat hour = new SimpleDateFormat("hh:mm aa");
+        Date tableDate = new Date();
+        String timeID = hour.format(tableDate);
         
-        dTableList.add(curTable.updateTable(getModel()));
+        if(!curTable.checkDTExists(timeID)){
+            dTableList.add(curTable.updateTable(getModel()));
         
-        if(oFrame.chechState()==true){
-            clearTable();
+            if(oFrame.chechState()==true){
+                clearTable();
+            }
+        }else{
+            JOptionPane.showMessageDialog(this,
+                    "Current Time Already Exists",
+                    "Error",
+                    JOptionPane.PLAIN_MESSAGE);
         }
         
-        
-        
+   
     }//GEN-LAST:event_snapShotButtonActionPerformed
 
     private void clearTable(){
