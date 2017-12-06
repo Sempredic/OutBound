@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.Stack;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -61,6 +62,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     DefaultTableModel tableModel;
     DefaultTableModel mTableModel;
     DefaultTableModel infoTableModel;
+    DefaultTableModel blankModel;
     HashMap<String,Integer> multiMap;
     static int multiCounter;
     String[] multiColumn;
@@ -79,6 +81,8 @@ public class ExcelFrame extends javax.swing.JFrame {
     JTextField techName;
     JTextField techNumber;
     optionsFrame oFrame;
+    String lastHour;
+    Stack listStack;
     
     
     
@@ -89,6 +93,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         initMultiTable();
         initComponents();
         tableModel = (DefaultTableModel)theTable.getModel();
+        blankModel = (DefaultTableModel)theTable.getModel();
         mTableModel = (DefaultTableModel)mTable.getModel();
         infoTableModel = (DefaultTableModel)infoTable.getModel();
         multiMap = new HashMap<String,Integer>();
@@ -98,6 +103,8 @@ public class ExcelFrame extends javax.swing.JFrame {
         techNumber = new JTextField("");
         techName = new JTextField("");
         oFrame = new optionsFrame();
+        lastHour = " ";
+        listStack = new Stack();
         
     }
     
@@ -114,8 +121,8 @@ public class ExcelFrame extends javax.swing.JFrame {
         };
     }
     
-    private void initInfoTable(){
-       
+    private void initBlankTable(){
+ 
         
     }
     
@@ -158,9 +165,9 @@ public class ExcelFrame extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         saveMenuItem = new javax.swing.JMenuItem();
-        addMenuItem = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         optionsMenuItem = new javax.swing.JMenuItem();
+        addMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -231,6 +238,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     theTable.setModel(new javax.swing.table.DefaultTableModel(curTable.getDataTable(),
         curTable.getcolumnTable())
     );
+    theTable.setColumnSelectionAllowed(true);
     theTable.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     theTable.setEnabled(false);
     theTable.setGridColor(new java.awt.Color(0, 0, 0));
@@ -269,19 +277,6 @@ public class ExcelFrame extends javax.swing.JFrame {
     saveMenuItem.setText("Save ");
     jMenu1.add(saveMenuItem);
 
-    addMenuItem.setText("Add New Tech");
-    addMenuItem.addMouseListener(new java.awt.event.MouseAdapter() {
-        public void mouseClicked(java.awt.event.MouseEvent evt) {
-            addMenuItemMouseClicked(evt);
-        }
-    });
-    addMenuItem.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            addMenuItemActionPerformed(evt);
-        }
-    });
-    jMenu1.add(addMenuItem);
-
     jMenuBar1.add(jMenu1);
 
     jMenu3.setText("Tools");
@@ -293,6 +288,19 @@ public class ExcelFrame extends javax.swing.JFrame {
         }
     });
     jMenu3.add(optionsMenuItem);
+
+    addMenuItem.setText("Add New Tech");
+    addMenuItem.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseClicked(java.awt.event.MouseEvent evt) {
+            addMenuItemMouseClicked(evt);
+        }
+    });
+    addMenuItem.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            addMenuItemActionPerformed(evt);
+        }
+    });
+    jMenu3.add(addMenuItem);
 
     jMenuBar1.add(jMenu3);
 
@@ -365,9 +373,9 @@ public class ExcelFrame extends javax.swing.JFrame {
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(exportButton)))))
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(snapShotButton, javax.swing.GroupLayout.Alignment.TRAILING)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGap(16, 16, 16)
+            .addComponent(snapShotButton)
             .addGap(46, 46, 46))
     );
 
@@ -460,19 +468,23 @@ public class ExcelFrame extends javax.swing.JFrame {
         String timeID = hour.format(tableDate);
         
         if(!curTable.checkDTExists(timeID)){
-            dTableList.add(curTable.updateTable(getModel()));
-        
-            if(oFrame.chechState()==true){
-                clearTable();
+  
+            if(!oFrame.chechState()==true){
+                dTableList.add(curTable.updateTable(getModel()));
+            }else{  
+                if(!curTable.isDTListEmpty()){
+                    dTableList.add(curTable.updateTable(getModel(),
+                        curTable.getDataTableFromList(lastHour)));
+                }       
             }
+            
+            lastHour = timeID;
         }else{
             JOptionPane.showMessageDialog(this,
                     "Current Time Already Exists",
                     "Error",
                     JOptionPane.PLAIN_MESSAGE);
         }
-        
-   
     }//GEN-LAST:event_snapShotButtonActionPerformed
 
     private void clearTable(){
@@ -480,15 +492,13 @@ public class ExcelFrame extends javax.swing.JFrame {
         
         for(String curDevice:devices){
             for(String tech:curTable.getRosterNum()){
-                int col = getCol(tableModel,curDevice);
-                int row = getRow(tableModel,tech);
+                int col = getCol(blankModel,curDevice);
+                int row = getRow(blankModel,tech);
             
-                setTableValues(0,row,col);
+                blankModel.setValueAt(0, row, col);  
             }
                 
-        }
-        
-        
+        }   
     }
     
     private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed

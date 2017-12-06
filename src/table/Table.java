@@ -27,6 +27,7 @@ public class Table{
     String[][] table;
     Object[][] dataTable;
     String[] columnTable;
+    String[] blankTable;
     Date tableDate;
     DateFormat hour;
     
@@ -35,6 +36,7 @@ public class Table{
     public Table(HashMap<String,String> roster){
         this.roster = roster;
         dataTableID=" ";
+       
         tRosterNames = new ArrayList<String>();
         tRosterTechNum = new ArrayList<String>(); 
         dataTableList = new LinkedHashMap<String,String[][]>();
@@ -56,9 +58,14 @@ public class Table{
         return columnTable;
     }
     
+    public boolean isDTListEmpty(){
+        return dataTableList.isEmpty();
+    }
+    
     private void initTableData(){
         columnTable = new String [] {
-                "Tech #","Name","Classic", "Nano", "Shuffle", "Touch","Pad","Phone", "Tech Total"
+                "Tech #","Name","Classic", "Nano", "Shuffle", "Touch","Pad",
+                    "Phone", "Tech Total"
             };
         dataTable = new Object[tRosterTechNum.size()+1][columnTable.length];
         
@@ -114,7 +121,6 @@ public class Table{
     
     public boolean checkDTExists(String timeID){
         if(dataTableList.containsKey(timeID)){
-            
             return true;
         }else{
             return false;
@@ -139,6 +145,57 @@ public class Table{
         
         return dataTableID;
     }
+    
+    public String[][] toStringArray(DefaultTableModel tModel){
+        int numCol = tModel.getColumnCount();
+        int numRow = tModel.getRowCount();
+        String[][] newTable = new String[numCol][numRow];
+        
+        for(int i=0;i<numRow;i++){
+            for(int j=0;j<numCol;j++){
+                newTable[i][j] = tModel.getValueAt(i, j).toString();
+            }
+        }
+        
+        return newTable;
+        
+    }
+    
+    public String updateTable(String[][]tModel,String[][]bModel ){
+        int numCol = tModel.length;
+        int numRow = tModel[].length;
+        this.table = new String[numRow][numCol];
+        hour = new SimpleDateFormat("hh:mm aa");
+        tableDate = new Date();
+        dataTableID = hour.format(tableDate);
+        
+        for(int i=0;i<numRow;i++){
+            for(int j=0;j<numCol;j++){
+                table[i][j] = tModel.getValueAt(i, j).toString();
+            }
+        }
+        
+        for(int i=0;i<numRow;i++){
+            for(int j=2;j<numCol;j++){
+                String v1 = tModel.getValueAt(i, j).toString();
+                int v2 = Integer.valueOf(bModel[i][j]);
+                int value = (Integer.valueOf(v1))-v2;
+                table[i][j] = String.valueOf(value);    
+            } 
+        } 
+        
+        for(int i=0;i<numRow;i++){
+            for(int j=0;j<numCol;j++){
+                System.out.print(table[i][j]+ " ");
+            }
+            System.out.println();
+        }
+        
+        dataTableList.put(dataTableID, table);
+        
+        return dataTableID;
+    }
+   
     
     public String[][] getDataTableFromList(String dataTableID){
         return dataTableList.get(dataTableID);
