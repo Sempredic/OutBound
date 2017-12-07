@@ -172,8 +172,8 @@ public class ExcelFrame extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         saveMenuItem = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
-        optionsMenuItem = new javax.swing.JMenuItem();
         addMenuItem = new javax.swing.JMenuItem();
+        optionsMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(204, 204, 204));
@@ -288,14 +288,6 @@ public class ExcelFrame extends javax.swing.JFrame {
 
     jMenu3.setText("Tools");
 
-    optionsMenuItem.setText("Options...");
-    optionsMenuItem.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            optionsMenuItemActionPerformed(evt);
-        }
-    });
-    jMenu3.add(optionsMenuItem);
-
     addMenuItem.setText("Add New Tech");
     addMenuItem.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -308,6 +300,14 @@ public class ExcelFrame extends javax.swing.JFrame {
         }
     });
     jMenu3.add(addMenuItem);
+
+    optionsMenuItem.setText("Options...");
+    optionsMenuItem.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            optionsMenuItemActionPerformed(evt);
+        }
+    });
+    jMenu3.add(optionsMenuItem);
 
     jMenuBar1.add(jMenu3);
 
@@ -433,10 +433,18 @@ public class ExcelFrame extends javax.swing.JFrame {
                 manager.focusPreviousComponent();
                 techFieldName.setText("");
                 devFieldName.setEnabled(false);
+            }else if(devFieldName.getText().toUpperCase().equals("CLEAR")){
+                manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+                manager.focusPreviousComponent();
+                techFieldName.setEditable(true);
+                techFieldName.setText("");
+                devFieldName.setEnabled(false);
+                devFieldName.setText("");
             }else{
                 //custom title, no icon
+                JLabel center = new JLabel("Device Type Not Found",JLabel.CENTER);
                 JOptionPane.showMessageDialog(this,
-                    "Device Type Not Found",
+                    center,
                     "Error",
                     JOptionPane.PLAIN_MESSAGE);
                 devFieldName.setText("");
