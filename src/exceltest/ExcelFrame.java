@@ -122,12 +122,7 @@ public class ExcelFrame extends javax.swing.JFrame {
             {"Phone",0}
         };
     }
-    
-    private void initBlankTable(){
- 
-        
-    }
-    
+
     DefaultTableModel getModel(){
         
         return tableModel;
@@ -530,6 +525,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     private void exportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportButtonActionPerformed
         // TODO add your handling code here:
         makeTables(dTableList.getSelectedItems());
+        makeProdTable(getModel());
         StringBuilder location = new StringBuilder("C:\\Users\\Public\\OutBoundProd_");
         location.append(String.valueOf(sdf.format(date)));
         location.append(".xlsx");
@@ -620,7 +616,6 @@ public class ExcelFrame extends javax.swing.JFrame {
     public void makeTables(String[] selectedList){
         workbook = new XSSFWorkbook();
         sheet = workbook.createSheet("Prod Tables");
-        sheet2 = workbook.createSheet("Outbound Prod");
         style = workbook.createCellStyle();
         headStyle = workbook.createCellStyle();
         titleStyle = workbook.createCellStyle();
@@ -707,6 +702,76 @@ public class ExcelFrame extends javax.swing.JFrame {
             sheet.autoSizeColumn(9);
         }   
 
+    }
+    
+    public void makeProdTable(DefaultTableModel curModel){
+        sheet2 = workbook.createSheet("Outbound Prod");
+        int colNum = 1;
+        int rowNum = 1;
+        int curCell = 0;
+        
+        String[] devNames = {"Tech","Name","Classic","Nano","Shuffle","Touch","Pad","Phone","     Tech Total    "};  
+        
+        CellRangeAddress range = new CellRangeAddress(
+                    rowNum,rowNum,colNum,devNames.length);
+            sheet2.addMergedRegion(range);
+            
+            // Creates the cell
+            Row title = sheet2.createRow(rowNum);
+            Cell titleCell = title.createCell(colNum);
+            titleCell.setCellValue("OUTBOUND PRODUCTION");
+            setStyleFontWhite(titleStyle);
+            cellFillBlack(titleStyle);
+            
+            titleCell.setCellStyle(titleStyle);
+            
+            CellUtil.setAlignment(titleCell,HorizontalAlignment.CENTER);
+            
+            rowNum++;
+            
+            Row header = sheet2.createRow(rowNum++);
+            
+            for(int col = 0;col<devNames.length;col++){
+                
+                Cell headerCell = header.createCell(colNum++);
+                headerCell.setCellValue(devNames[col]);  
+                headStyle.setAlignment(HorizontalAlignment.CENTER);
+                cellBorderBlack(headStyle);
+                cellFillHGrey(headStyle);
+                setStyleFontWhite(headStyle);
+                headerCell.setCellStyle(headStyle);
+                
+            }
+              
+            colNum = 1;
+            
+            for(String[] tableRow:curTable.toStringArray(curModel)){
+                
+                Row row = sheet2.createRow(rowNum++);
+                
+                for(String tCell:tableRow){
+                    curCell++;
+                    Cell cell = row.createCell(colNum++);
+                    cell.setCellValue(tCell);
+                    
+                    if(tableRow[0].equals("Total Dev") && (curCell == tableRow.length)){
+                        setTotalDevCell(cell);
+                    }else{
+                        cellBorderBlack(style);
+                        cellFillLGrey(style);
+                        setStyleFontBold(style);
+                        cell.setCellStyle(style); 
+                    }
+ 
+                }
+                colNum=1;   
+                curCell=0;
+            }
+            rowNum++;
+
+            sheet2.autoSizeColumn(2);
+            sheet2.autoSizeColumn(9);
+                    
     }
     
     private void toMulti(){
