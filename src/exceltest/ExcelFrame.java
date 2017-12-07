@@ -107,7 +107,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         oFrame = new optionsFrame();
         lastHour = " ";
         listStack = new Stack();
-        
+        initTableStyle();
     }
     
     private void initMultiTable(){
@@ -121,6 +121,15 @@ public class ExcelFrame extends javax.swing.JFrame {
             {"Pad",0},
             {"Phone",0}
         };
+    }
+    
+    void initTableStyle(){
+        DefaultTableCellRenderer centerRender = new DefaultTableCellRenderer();
+        centerRender.setHorizontalAlignment(JLabel.CENTER);
+        
+         for(int x=0;x<theTable.getColumnCount();x++){
+            theTable.getColumnModel().getColumn(x).setCellRenderer(centerRender);
+        }
     }
 
     DefaultTableModel getModel(){
@@ -470,11 +479,6 @@ public class ExcelFrame extends javax.swing.JFrame {
             
             if(!curTable.checkDTExists(timeID)){
   
-//                if(!oFrame.chechState()){
-//                    dTableList.add(curTable.updateTable(getModel()));
-//                }else{  
-//                    dTableList.add(curTable.updateTableViaList(getModel(),dTableList.getItems()));
-//                }
                 dTableList.add(curTable.updateTableViaList(getModel(),dTableList.getItems()));
       
             }else{
@@ -490,20 +494,6 @@ public class ExcelFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_snapShotButtonActionPerformed
 
-    private void clearTable(){
-        String[] devices = {"Classic","Nano","Shuffle","Touch","Pad","Phone"}; 
-        
-        for(String curDevice:devices){
-            for(String tech:curTable.getRosterNum()){
-                int col = getCol(blankModel,curDevice);
-                int row = getRow(blankModel,tech);
-            
-                blankModel.setValueAt(0, row, col);  
-            }
-                
-        }   
-    }
-    
     private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
         // TODO add your handling code here:
         abstractButton = (AbstractButton) evt.getSource();

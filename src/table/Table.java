@@ -203,13 +203,6 @@ public class Table{
             } 
         } 
         
-        for(int i=0;i<numRow;i++){
-            for(int j=0;j<numCol;j++){
-                System.out.print(table[i][j]+ " ");
-            }
-            System.out.println();
-        }
-        
         dataTableList.put(dataTableID, table);
         
         return dataTableID;
