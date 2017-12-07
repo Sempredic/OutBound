@@ -71,8 +71,8 @@ public class mainFrame extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         remTechButton = new javax.swing.JButton();
         delTechButton = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        selectAllButton = new javax.swing.JButton();
+        deSelectButton = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         jMenuBar1 = new javax.swing.JMenuBar();
 
@@ -130,9 +130,19 @@ public class mainFrame extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("Select All");
+        selectAllButton.setText("Select All");
+        selectAllButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectAllButtonActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("DeSelect All");
+        deSelectButton.setText("DeSelect All");
+        deSelectButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deSelectButtonActionPerformed(evt);
+            }
+        });
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -150,9 +160,9 @@ public class mainFrame extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(existingList, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(selectAllButton, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(deSelectButton, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 106, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -196,8 +206,8 @@ public class mainFrame extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(doneButton, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton2)
-                            .addComponent(jButton1))
+                            .addComponent(deSelectButton)
+                            .addComponent(selectAllButton))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(10, 10, 10)
@@ -342,6 +352,20 @@ public class mainFrame extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_delTechButtonActionPerformed
+
+    private void selectAllButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectAllButtonActionPerformed
+        // TODO add your handling code here:
+        for(int i = 0;i<existingList.getItemCount();i++){
+            existingList.select(i);
+        }
+    }//GEN-LAST:event_selectAllButtonActionPerformed
+
+    private void deSelectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deSelectButtonActionPerformed
+        // TODO add your handling code here:
+        for(int i = 0;i<existingList.getItemCount();i++){
+            existingList.deselect(i);
+        }
+    }//GEN-LAST:event_deSelectButtonActionPerformed
     private void initExistingTechList(){
         
         try{
@@ -419,16 +443,16 @@ public class mainFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addTechButton;
     private javax.swing.JButton createTechButton;
+    private javax.swing.JButton deSelectButton;
     private javax.swing.JButton delTechButton;
     private javax.swing.JButton doneButton;
     protected java.awt.List existingList;
     private java.awt.List finalRosterList;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JButton remTechButton;
+    private javax.swing.JButton selectAllButton;
     // End of variables declaration//GEN-END:variables
 }
