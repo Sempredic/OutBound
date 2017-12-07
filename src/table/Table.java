@@ -5,6 +5,7 @@
  */
 package table;
 
+import java.awt.List;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -149,7 +150,7 @@ public class Table{
     public String[][] toStringArray(DefaultTableModel tModel){
         int numCol = tModel.getColumnCount();
         int numRow = tModel.getRowCount();
-        String[][] newTable = new String[numCol][numRow];
+        String[][] newTable = new String[numRow][numCol];
         
         for(int i=0;i<numRow;i++){
             for(int j=0;j<numCol;j++){
@@ -161,25 +162,45 @@ public class Table{
         
     }
     
-    public String updateTable(String[][]tModel,String[][]bModel ){
-        int numCol = tModel.length;
-        int numRow = tModel[].length;
+    public String updateTableViaList(DefaultTableModel tModel,String[] timeList){
+        int numCol = tModel.getColumnCount();
+        int numRow = tModel.getRowCount();
+        
+        Integer[][] tempTable = new Integer[numRow][numCol];
         this.table = new String[numRow][numCol];
+        
         hour = new SimpleDateFormat("hh:mm aa");
         tableDate = new Date();
         dataTableID = hour.format(tableDate);
         
+        
+        
         for(int i=0;i<numRow;i++){
             for(int j=0;j<numCol;j++){
                 table[i][j] = tModel.getValueAt(i, j).toString();
+                tempTable[i][j] = 0;
             }
         }
         
+        for(String time:timeList){
+            String[][]newTable = new String[numRow][numCol];
+            
+            newTable = getDataTableFromList(time);
+            
+            for(int i=0;i<numRow;i++){
+                for(int j=2;j<numCol;j++){
+                    tempTable[i][j] += Integer.valueOf(newTable[i][j]);
+                }
+            }
+        }
+        
+        
+        
         for(int i=0;i<numRow;i++){
             for(int j=2;j<numCol;j++){
-                String v1 = tModel.getValueAt(i, j).toString();
-                int v2 = Integer.valueOf(bModel[i][j]);
-                int value = (Integer.valueOf(v1))-v2;
+                int v1 = Integer.valueOf(table[i][j]);
+                int v2 = tempTable[i][j];
+                int value = v1-v2;
                 table[i][j] = String.valueOf(value);    
             } 
         } 

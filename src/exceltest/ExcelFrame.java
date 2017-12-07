@@ -467,23 +467,25 @@ public class ExcelFrame extends javax.swing.JFrame {
         Date tableDate = new Date();
         String timeID = hour.format(tableDate);
         
-        if(!curTable.checkDTExists(timeID)){
-  
-            if(!oFrame.chechState()==true){
-                dTableList.add(curTable.updateTable(getModel()));
-            }else{  
-                if(!curTable.isDTListEmpty()){
-                    dTableList.add(curTable.updateTable(getModel(),
-                        curTable.getDataTableFromList(lastHour)));
-                }       
-            }
+        if(!curTable.isDTListEmpty()){
             
-            lastHour = timeID;
+            if(!curTable.checkDTExists(timeID)){
+  
+                if(!oFrame.chechState()){
+                    dTableList.add(curTable.updateTable(getModel()));
+                }else{  
+                    dTableList.add(curTable.updateTableViaList(getModel(),dTableList.getItems()));
+                }
+      
+            }else{
+                JOptionPane.showMessageDialog(this,
+                        "Current Time Already Exists",
+                        "Error",
+                        JOptionPane.PLAIN_MESSAGE);
+            }   
         }else{
-            JOptionPane.showMessageDialog(this,
-                    "Current Time Already Exists",
-                    "Error",
-                    JOptionPane.PLAIN_MESSAGE);
+            dTableList.add(curTable.updateTable(getModel()));
+           
         }
     }//GEN-LAST:event_snapShotButtonActionPerformed
 
