@@ -193,9 +193,7 @@ public class Table{
                 }
             }
         }
-        
-        
-        
+
         for(int i=0;i<numRow;i++){
             for(int j=2;j<numCol;j++){
                 int v1 = Integer.valueOf(table[i][j]);

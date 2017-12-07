@@ -21,6 +21,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Set;
 import java.util.Stack;
 import javax.swing.JLabel;
@@ -74,6 +75,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     static CellStyle headStyle;
     static CellStyle titleStyle;
     static XSSFSheet sheet;
+    static XSSFSheet sheet2;
     private DateFormat sdf;
     Date date;
     boolean done;
@@ -170,6 +172,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         addMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(204, 204, 204));
         setResizable(false);
 
         techFieldName.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -398,8 +401,9 @@ public class ExcelFrame extends javax.swing.JFrame {
                 manager.focusNextComponent();
             }else{
                 //custom title, no icon
+                JLabel center = new JLabel("Tech Number Not Found",JLabel.CENTER);
                 JOptionPane.showMessageDialog(this,
-                    "Tech Number Not Found",
+                    center,
                     "Error",
                     JOptionPane.PLAIN_MESSAGE);
                 techFieldName.setText("");
@@ -478,8 +482,9 @@ public class ExcelFrame extends javax.swing.JFrame {
                 }
       
             }else{
+                JLabel center = new JLabel("Current Time Already Exists",JLabel.CENTER);
                 JOptionPane.showMessageDialog(this,
-                        "Current Time Already Exists",
+                        center,
                         "Error",
                         JOptionPane.PLAIN_MESSAGE);
             }   
@@ -533,6 +538,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         try (FileOutputStream outputStream = new FileOutputStream(location.toString())){
             workbook.write(outputStream);
             outputStream.close();
+            
             JOptionPane.showMessageDialog(this,"File Created","Written Successfully", JOptionPane.WARNING_MESSAGE);
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -613,7 +619,8 @@ public class ExcelFrame extends javax.swing.JFrame {
     
     public void makeTables(String[] selectedList){
         workbook = new XSSFWorkbook();
-        sheet = workbook.createSheet("Outbound Production");
+        sheet = workbook.createSheet("Prod Tables");
+        sheet2 = workbook.createSheet("Outbound Prod");
         style = workbook.createCellStyle();
         headStyle = workbook.createCellStyle();
         titleStyle = workbook.createCellStyle();
@@ -622,7 +629,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         int colNum = 1;
         int rowNum = 1;
         int curCell = 0;
-        HashMap<String,String[][]>list = new HashMap<String,String[][]>();
+        LinkedHashMap<String,String[][]>list = new LinkedHashMap<String,String[][]>();
         String[] devNames = {"Tech","Name","Classic","Nano","Shuffle","Touch","Pad","Phone","     Tech Total    "};  
         
         
