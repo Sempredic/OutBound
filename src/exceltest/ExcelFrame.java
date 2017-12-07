@@ -470,11 +470,12 @@ public class ExcelFrame extends javax.swing.JFrame {
             
             if(!curTable.checkDTExists(timeID)){
   
-                if(!oFrame.chechState()){
-                    dTableList.add(curTable.updateTable(getModel()));
-                }else{  
-                    dTableList.add(curTable.updateTableViaList(getModel(),dTableList.getItems()));
-                }
+//                if(!oFrame.chechState()){
+//                    dTableList.add(curTable.updateTable(getModel()));
+//                }else{  
+//                    dTableList.add(curTable.updateTableViaList(getModel(),dTableList.getItems()));
+//                }
+                dTableList.add(curTable.updateTableViaList(getModel(),dTableList.getItems()));
       
             }else{
                 JLabel center = new JLabel("Current Time Already Exists",JLabel.CENTER);
