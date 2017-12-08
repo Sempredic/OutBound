@@ -7,7 +7,6 @@ package exceltest;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
@@ -87,19 +86,21 @@ public class ExcelFrame extends javax.swing.JFrame {
     optionsFrame oFrame;
     String lastHour;
     Stack listStack;
+    infoTable infoTable;
     
     
     
     public ExcelFrame(Table table){
  
+        infoTable = new infoTable();
+        infoTableModel = infoTable.getModel();
         this.curTable = table; 
         multiCounter = 0;
         initMultiTable();
-        initComponents();
+        initComponents(); 
         tableModel = (DefaultTableModel)theTable.getModel();
         blankModel = (DefaultTableModel)theTable.getModel();
         mTableModel = (DefaultTableModel)mTable.getModel();
-        infoTableModel = (DefaultTableModel)infoTable.getModel();
         multiMap = new HashMap<String,Integer>();
         sdf = new SimpleDateFormat("MM'_'dd'_'yyyy");
         date = new Date();
@@ -123,8 +124,6 @@ public class ExcelFrame extends javax.swing.JFrame {
             {"Pad",0},
             {"Phone",0}
         };
-        
-     
     }
     
     void initTableStyle(){
@@ -132,7 +131,6 @@ public class ExcelFrame extends javax.swing.JFrame {
         DefaultTableCellRenderer colRender = new DefaultTableCellRenderer();
         DefaultTableCellRenderer colRenderer = new DefaultTableCellRenderer();
         colRenderer.setHorizontalAlignment(JLabel.CENTER);
-        
 
         colRender.setBackground(Color.DARK_GRAY);
         colRender.setHorizontalAlignment(JLabel.CENTER);
@@ -185,7 +183,8 @@ public class ExcelFrame extends javax.swing.JFrame {
         theTable = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        infoTable = new javax.swing.JTable();
+        exInfoTable = new javax.swing.JTable();
+        jButton1 = new javax.swing.JButton();
         hourLabel = new javax.swing.JLabel();
         multiScanLabel = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -282,27 +281,31 @@ public class ExcelFrame extends javax.swing.JFrame {
 
     jTabbedPane1.addTab("Scan", tablePanel);
 
-    infoTable.setModel(theTable.getModel());
-    jScrollPane1.setViewportView(infoTable);
+    exInfoTable.setModel(infoTableModel);
+    jScrollPane1.setViewportView(exInfoTable);
+
+    jButton1.setText("jButton1");
 
     javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
     jPanel1.setLayout(jPanel1Layout);
     jPanel1Layout.setHorizontalGroup(
         jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(jPanel1Layout.createSequentialGroup()
-            .addContainerGap()
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addContainerGap(317, Short.MAX_VALUE))
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 402, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
+            .addComponent(jButton1)
+            .addGap(58, 58, 58))
     );
     jPanel1Layout.setVerticalGroup(
         jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(jPanel1Layout.createSequentialGroup()
-            .addContainerGap()
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 404, Short.MAX_VALUE)
-            .addContainerGap())
+            .addGap(73, 73, 73)
+            .addComponent(jButton1)
+            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 426, Short.MAX_VALUE)
     );
 
-    jTabbedPane1.addTab("tab2", jPanel1);
+    jTabbedPane1.addTab("Info", jPanel1);
 
     hourLabel.setText("Hour");
 
@@ -1065,9 +1068,10 @@ public class ExcelFrame extends javax.swing.JFrame {
     private java.awt.List dTableList;
     private javax.swing.JTextField devFieldName;
     private javax.swing.JLabel deviceField;
+    private javax.swing.JTable exInfoTable;
     private javax.swing.JButton exportButton;
     private javax.swing.JLabel hourLabel;
-    private javax.swing.JTable infoTable;
+    private javax.swing.JButton jButton1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
