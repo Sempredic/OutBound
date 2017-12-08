@@ -123,11 +123,16 @@ public class ExcelFrame extends javax.swing.JFrame {
             {"Pad",0},
             {"Phone",0}
         };
+        
+     
     }
     
     void initTableStyle(){
         DefaultTableCellRenderer centerRender = new DefaultTableCellRenderer();
         DefaultTableCellRenderer colRender = new DefaultTableCellRenderer();
+        DefaultTableCellRenderer colRenderer = new DefaultTableCellRenderer();
+        colRenderer.setHorizontalAlignment(JLabel.CENTER);
+        
 
         colRender.setBackground(Color.DARK_GRAY);
         colRender.setHorizontalAlignment(JLabel.CENTER);
@@ -137,6 +142,10 @@ public class ExcelFrame extends javax.swing.JFrame {
 
          for(int x=0;x<theTable.getColumnCount();x++){
             theTable.getColumnModel().getColumn(x).setCellRenderer(centerRender);
+        }
+         
+        for(int i = 0;i<mTable.getColumnCount();i++){
+            mTable.getColumnModel().getColumn(i).setCellRenderer(colRenderer);
         }
 
          theTable.getColumn("Tech Total").setCellRenderer(colRender);
@@ -178,6 +187,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         infoTable = new javax.swing.JTable();
         hourLabel = new javax.swing.JLabel();
+        multiScanLabel = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         saveMenuItem = new javax.swing.JMenuItem();
@@ -238,8 +248,15 @@ public class ExcelFrame extends javax.swing.JFrame {
             }
         });
 
+        mTable.setBackground(new java.awt.Color(51, 51, 51));
+        mTable.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(153, 153, 153)));
+        mTable.setFont(new java.awt.Font("Courier New", 1, 12)); // NOI18N
+        mTable.setForeground(new java.awt.Color(255, 255, 255));
         mTable.setModel(new javax.swing.table.DefaultTableModel(multiDataTable,
             multiColumn));
+    mTable.setGridColor(new java.awt.Color(255, 255, 255));
+    mTable.setRowSelectionAllowed(false);
+    mTable.setShowHorizontalLines(false);
     jScrollPane2.setViewportView(mTable);
 
     dTableList.setMultipleMode(true);
@@ -275,7 +292,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         .addGroup(jPanel1Layout.createSequentialGroup()
             .addContainerGap()
             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addContainerGap(307, Short.MAX_VALUE))
+            .addContainerGap(317, Short.MAX_VALUE))
     );
     jPanel1Layout.setVerticalGroup(
         jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -288,6 +305,10 @@ public class ExcelFrame extends javax.swing.JFrame {
     jTabbedPane1.addTab("tab2", jPanel1);
 
     hourLabel.setText("Hour");
+
+    multiScanLabel.setBackground(new java.awt.Color(204, 204, 204));
+    multiScanLabel.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+    multiScanLabel.setText("MULTI SCAN COUNTER");
 
     jMenu1.setText("File");
 
@@ -359,7 +380,11 @@ public class ExcelFrame extends javax.swing.JFrame {
                 .addGroup(layout.createSequentialGroup()
                     .addGap(91, 91, 91)
                     .addComponent(exportButton)))
-            .addContainerGap(31, Short.MAX_VALUE))
+            .addContainerGap(21, Short.MAX_VALUE))
+        .addGroup(layout.createSequentialGroup()
+            .addGap(379, 379, 379)
+            .addComponent(multiScanLabel)
+            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
     );
     layout.setVerticalGroup(
         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -386,11 +411,17 @@ public class ExcelFrame extends javax.swing.JFrame {
                             .addComponent(dTableList, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(exportButton)))))
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addGap(16, 16, 16)
-            .addComponent(snapShotButton)
-            .addGap(46, 46, 46))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addComponent(multiScanLabel)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(snapShotButton)
+                    .addGap(46, 46, 46))
+                .addGroup(layout.createSequentialGroup()
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(63, Short.MAX_VALUE))))
     );
 
     pack();
@@ -1046,6 +1077,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JTable mTable;
+    private javax.swing.JLabel multiScanLabel;
     private javax.swing.JMenuItem optionsMenuItem;
     private javax.swing.JMenuItem saveMenuItem;
     private javax.swing.JButton snapShotButton;
