@@ -6,6 +6,8 @@
 package exceltest;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
@@ -125,11 +127,19 @@ public class ExcelFrame extends javax.swing.JFrame {
     
     void initTableStyle(){
         DefaultTableCellRenderer centerRender = new DefaultTableCellRenderer();
-        centerRender.setHorizontalAlignment(JLabel.CENTER);
+        DefaultTableCellRenderer colRender = new DefaultTableCellRenderer();
+
+        colRender.setBackground(Color.DARK_GRAY);
+        colRender.setHorizontalAlignment(JLabel.CENTER);
+        colRender.setForeground(Color.WHITE);
         
+        centerRender.setHorizontalAlignment(JLabel.CENTER);
+
          for(int x=0;x<theTable.getColumnCount();x++){
             theTable.getColumnModel().getColumn(x).setCellRenderer(centerRender);
         }
+
+         theTable.getColumn("Tech Total").setCellRenderer(colRender);
     }
 
     DefaultTableModel getModel(){
@@ -241,7 +251,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         }
     });
 
-    theTable.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+    theTable.setFont(new java.awt.Font("SansSerif", 1, 13)); // NOI18N
     theTable.setModel(new javax.swing.table.DefaultTableModel(curTable.getDataTable(),
         curTable.getcolumnTable())
     );
@@ -265,7 +275,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         .addGroup(jPanel1Layout.createSequentialGroup()
             .addContainerGap()
             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addContainerGap(277, Short.MAX_VALUE))
+            .addContainerGap(307, Short.MAX_VALUE))
     );
     jPanel1Layout.setVerticalGroup(
         jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -337,22 +347,19 @@ public class ExcelFrame extends javax.swing.JFrame {
                         .addComponent(jToggleButton1))))
             .addGap(18, 18, 18)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 561, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane2)
                 .addComponent(jTabbedPane1))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(exportButton)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(dTableList, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addGap(94, 94, 94)
-                    .addComponent(hourLabel)
-                    .addGap(102, 102, 102))))
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(31, 31, 31)
+                    .addComponent(dTableList, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(111, 111, 111)
+                    .addComponent(hourLabel))
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(91, 91, 91)
+                    .addComponent(exportButton)))
+            .addContainerGap(31, Short.MAX_VALUE))
     );
     layout.setVerticalGroup(
         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
