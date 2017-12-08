@@ -37,13 +37,15 @@ public class infoTable extends javax.swing.JPanel {
                 "Tech#","Name","Avg/Hr","Quota","EOD Est"};
         
         dataTable = new Object[table.getRosterNum().size()][column.length];
-        
 
         for(int i=0;i<table.getRosterNum().size();i++){
             dataTable[i][0]= table.getRosterNum().get(i);
             dataTable[i][1]= table.getRosterNames().get(i); 
         }
-
+   
+    }
+    
+    public void update(){
         
     }
     

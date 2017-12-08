@@ -91,10 +91,9 @@ public class ExcelFrame extends javax.swing.JFrame {
     
     
     public ExcelFrame(Table table){
- 
-        infoTable = new infoTable(table);
-        infoTableModel = infoTable.getModel();
         this.curTable = table; 
+        infoTable = new infoTable(curTable);
+        infoTableModel = infoTable.getModel();
         multiCounter = 0;
         initMultiTable();
         initComponents(); 
