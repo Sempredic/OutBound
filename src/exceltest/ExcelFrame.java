@@ -92,7 +92,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     
     public ExcelFrame(Table table){
  
-        infoTable = new infoTable();
+        infoTable = new infoTable(table);
         infoTableModel = infoTable.getModel();
         this.curTable = table; 
         multiCounter = 0;

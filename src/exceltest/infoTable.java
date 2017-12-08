@@ -6,7 +6,7 @@
 package exceltest;
 
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
+import table.Table;
 
 /**
  *
@@ -20,24 +20,31 @@ public class infoTable extends javax.swing.JPanel {
     String [] column;
     Object[][]dataTable;
     DefaultTableModel infoTableModel;
+    DefaultTableModel thisTableModel;
     
-    public infoTable() {
-        initModel();
+    public infoTable(Table table) {
+        initModel(table);
         initComponents();
         infoTableModel = (DefaultTableModel)infoTable.getModel();
     }
     
-    public void initModel(){
+    public void setSourceModel(DefaultTableModel thisTableModel){
+        this.thisTableModel = thisTableModel;
+    }
+    
+    public void initModel(Table table){
         column = new String [] {
                 "Tech#","Name","Avg/Hr","Quota","EOD Est"};
-        dataTable = new Object[][]{
-            {"Classic",0},
-            {"Nano",0},
-            {"Shuffle",0},
-            {"Touch",0},
-            {"Pad",0},
-            {"Phone",0}
-        };
+        
+        dataTable = new Object[table.getRosterNum().size()][column.length];
+        
+
+        for(int i=0;i<table.getRosterNum().size();i++){
+            dataTable[i][0]= table.getRosterNum().get(i);
+            dataTable[i][1]= table.getRosterNames().get(i); 
+        }
+
+        
     }
     
     public DefaultTableModel getModel(){
