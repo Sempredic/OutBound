@@ -183,13 +183,17 @@ public class Table{
         }
         
         for(String time:timeList){
-            String[][]newTable = new String[numRow][numCol];
+            int curRow = getDataTableFromList(time).length;
+            int curCol = getDataTableFromList(time)[0].length;
+            int offSet = numRow-curRow;
+            
+            String[][]newTable = new String[curRow][curCol];
             
             newTable = getDataTableFromList(time);
             
-            for(int i=0;i<numRow;i++){
-                for(int j=2;j<numCol;j++){
-                    tempTable[i][j] += Integer.valueOf(newTable[i][j]);
+            for(int i=0;i<curRow;i++){
+                for(int j=2;j<curCol;j++){
+                    tempTable[i+offSet][j] += Integer.valueOf(newTable[i][j]);
                 }
             }
         }

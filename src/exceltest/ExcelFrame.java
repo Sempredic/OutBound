@@ -86,14 +86,12 @@ public class ExcelFrame extends javax.swing.JFrame {
     optionsFrame oFrame;
     String lastHour;
     Stack listStack;
-    infoTable infoTable;
+
     
     
     
     public ExcelFrame(Table table){
         this.curTable = table; 
-        infoTable = new infoTable(curTable);
-        infoTableModel = infoTable.getModel();
         multiCounter = 0;
         initMultiTable();
         initComponents(); 
@@ -181,8 +179,6 @@ public class ExcelFrame extends javax.swing.JFrame {
         tablePanel = new javax.swing.JScrollPane();
         theTable = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        exInfoTable = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
         hourLabel = new javax.swing.JLabel();
         multiScanLabel = new javax.swing.JLabel();
@@ -280,9 +276,6 @@ public class ExcelFrame extends javax.swing.JFrame {
 
     jTabbedPane1.addTab("Scan", tablePanel);
 
-    exInfoTable.setModel(infoTableModel);
-    jScrollPane1.setViewportView(exInfoTable);
-
     jButton1.setText("jButton1");
 
     javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -290,8 +283,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     jPanel1Layout.setHorizontalGroup(
         jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(jPanel1Layout.createSequentialGroup()
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 402, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
+            .addContainerGap(465, Short.MAX_VALUE)
             .addComponent(jButton1)
             .addGap(58, 58, 58))
     );
@@ -300,8 +292,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         .addGroup(jPanel1Layout.createSequentialGroup()
             .addGap(73, 73, 73)
             .addComponent(jButton1)
-            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 426, Short.MAX_VALUE)
+            .addContainerGap(330, Short.MAX_VALUE))
     );
 
     jTabbedPane1.addTab("Info", jPanel1);
@@ -1067,7 +1058,6 @@ public class ExcelFrame extends javax.swing.JFrame {
     private java.awt.List dTableList;
     private javax.swing.JTextField devFieldName;
     private javax.swing.JLabel deviceField;
-    private javax.swing.JTable exInfoTable;
     private javax.swing.JButton exportButton;
     private javax.swing.JLabel hourLabel;
     private javax.swing.JButton jButton1;
@@ -1075,7 +1065,6 @@ public class ExcelFrame extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JToggleButton jToggleButton1;
