@@ -92,7 +92,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     
     public ExcelFrame(Table table){
         this.curTable = table; 
-        multiCounter = 0;
+        
         initMultiTable();
         initInfoTable();
         initComponents(); 
@@ -109,6 +109,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         oFrame = new optionsFrame();
         lastHour = " ";
         listStack = new Stack();
+        
         initTableStyle();
     }
     
@@ -143,7 +144,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         }   
     }
     
-    void initTableStyle(){
+    private void initTableStyle(){
         DefaultTableCellRenderer centerRender = new DefaultTableCellRenderer();
         DefaultTableCellRenderer colRender = new DefaultTableCellRenderer();
         DefaultTableCellRenderer colRenderer = new DefaultTableCellRenderer();
@@ -199,9 +200,10 @@ public class ExcelFrame extends javax.swing.JFrame {
         tablePanel = new javax.swing.JScrollPane();
         theTable = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        quotaButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         infoTable = new javax.swing.JTable();
+        quotaTextField = new javax.swing.JTextField();
         hourLabel = new javax.swing.JLabel();
         multiScanLabel = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -298,7 +300,12 @@ public class ExcelFrame extends javax.swing.JFrame {
 
     jTabbedPane1.addTab("Scan", tablePanel);
 
-    jButton1.setText("jButton1");
+    quotaButton.setText("Confirm");
+    quotaButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            quotaButtonActionPerformed(evt);
+        }
+    });
 
     infoTable.setModel(new javax.swing.table.DefaultTableModel(infoDataTable,infoColumn));
     jScrollPane1.setViewportView(infoTable);
@@ -311,14 +318,18 @@ public class ExcelFrame extends javax.swing.JFrame {
             .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 411, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGap(47, 47, 47)
-            .addComponent(jButton1)
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addComponent(quotaButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(quotaTextField))
             .addGap(58, 58, 58))
     );
     jPanel1Layout.setVerticalGroup(
         jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(jPanel1Layout.createSequentialGroup()
-            .addGap(73, 73, 73)
-            .addComponent(jButton1)
+            .addGap(42, 42, 42)
+            .addComponent(quotaTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addComponent(quotaButton)
             .addContainerGap(330, Short.MAX_VALUE))
         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
             .addContainerGap()
@@ -393,7 +404,7 @@ public class ExcelFrame extends javax.swing.JFrame {
             .addGap(18, 18, 18)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(jScrollPane2)
-                .addComponent(jTabbedPane1))
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 602, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(31, 31, 31)
@@ -404,7 +415,7 @@ public class ExcelFrame extends javax.swing.JFrame {
                 .addGroup(layout.createSequentialGroup()
                     .addGap(69, 69, 69)
                     .addComponent(hourLabel)))
-            .addContainerGap(24, Short.MAX_VALUE))
+            .addContainerGap(26, Short.MAX_VALUE))
         .addGroup(layout.createSequentialGroup()
             .addGap(379, 379, 379)
             .addComponent(multiScanLabel)
@@ -670,7 +681,48 @@ public class ExcelFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         oFrame.setVisible(true);
     }//GEN-LAST:event_optionsMenuItemActionPerformed
+
+    private void quotaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quotaButtonActionPerformed
+        // TODO add your handling code here:
+        int col,row=0;
+        String quota = quotaTextField.getText();
+        
+        if(isInteger(quota)){
+            
+            col = getCol(getInfoModel(),"Quota");
+            
+            if(quota.length()<=4){
+                for(String tech:curTable.getRosterNum()){
+                    row = getRow(getInfoModel(),tech);
+                    getInfoModel().setValueAt(quota, row, col);
+                }
+            }else{
+                JOptionPane.showMessageDialog(this,"Quota Exceeds [4]Char Max","Try Again", JOptionPane.WARNING_MESSAGE);
+                quotaTextField.setText("");
+            }
+        
+        }else{
+            JOptionPane.showMessageDialog(this,"Not An Integer","Try Again", JOptionPane.WARNING_MESSAGE);
+            quotaTextField.setText("");
+        }
+        
+        
+    }//GEN-LAST:event_quotaButtonActionPerformed
     
+    private static boolean isInteger(String s) {
+        try { 
+            Integer.parseInt(s); 
+        } catch(NumberFormatException e) { 
+            return false; 
+        } catch(NullPointerException e) {
+            return false;
+        }
+        // only got here if we didn't return false
+        return true;
+    }
+    private DefaultTableModel getInfoModel(){
+        return (DefaultTableModel)infoTable.getModel();
+    }
     public void makeTables(String[] selectedList){
         workbook = new XSSFWorkbook();
         sheet = workbook.createSheet("Prod Tables");
@@ -1088,8 +1140,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     private javax.swing.JLabel deviceField;
     private javax.swing.JButton exportButton;
     private javax.swing.JLabel hourLabel;
-    private javax.swing.JTable infoTable;
-    private javax.swing.JButton jButton1;
+    public javax.swing.JTable infoTable;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
@@ -1101,6 +1152,8 @@ public class ExcelFrame extends javax.swing.JFrame {
     private javax.swing.JTable mTable;
     private javax.swing.JLabel multiScanLabel;
     private javax.swing.JMenuItem optionsMenuItem;
+    private javax.swing.JButton quotaButton;
+    private javax.swing.JTextField quotaTextField;
     private javax.swing.JMenuItem saveMenuItem;
     private javax.swing.JButton snapShotButton;
     private javax.swing.JScrollPane tablePanel;
