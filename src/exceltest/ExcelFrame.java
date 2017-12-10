@@ -94,7 +94,9 @@ public class ExcelFrame extends javax.swing.JFrame {
         this.curTable = table; 
         multiCounter = 0;
         initMultiTable();
+        initInfoTable();
         initComponents(); 
+     
         tableModel = (DefaultTableModel)theTable.getModel();
         blankModel = (DefaultTableModel)theTable.getModel();
         mTableModel = (DefaultTableModel)mTable.getModel();
@@ -121,6 +123,24 @@ public class ExcelFrame extends javax.swing.JFrame {
             {"Pad",0},
             {"Phone",0}
         };
+    }
+    
+    private void initInfoTable(){
+        int rosterSize = curTable.getRosterNum().size();
+
+        infoColumn = new String [] {
+                "Tech#","Name","Quota","Avg/Hr","EOD Est"};
+        infoDataTable = new Object[rosterSize][infoColumn.length];
+        
+        for(int i=0;i<infoDataTable.length;i++){
+            for(int j=0;j<infoDataTable[0].length;j++){
+                infoDataTable[i][j]= "";  
+            }
+        }
+        for(int i=0;i<infoDataTable.length;i++){
+            infoDataTable[i][0]= curTable.getRosterNum().get(i);
+            infoDataTable[i][1]= curTable.getRosterNames().get(i);
+        }   
     }
     
     void initTableStyle(){
@@ -180,6 +200,8 @@ public class ExcelFrame extends javax.swing.JFrame {
         theTable = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        infoTable = new javax.swing.JTable();
         hourLabel = new javax.swing.JLabel();
         multiScanLabel = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -278,12 +300,17 @@ public class ExcelFrame extends javax.swing.JFrame {
 
     jButton1.setText("jButton1");
 
+    infoTable.setModel(new javax.swing.table.DefaultTableModel(infoDataTable,infoColumn));
+    jScrollPane1.setViewportView(infoTable);
+
     javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
     jPanel1.setLayout(jPanel1Layout);
     jPanel1Layout.setHorizontalGroup(
         jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(jPanel1Layout.createSequentialGroup()
-            .addContainerGap(465, Short.MAX_VALUE)
+            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 411, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGap(47, 47, 47)
             .addComponent(jButton1)
             .addGap(58, 58, 58))
     );
@@ -293,6 +320,10 @@ public class ExcelFrame extends javax.swing.JFrame {
             .addGap(73, 73, 73)
             .addComponent(jButton1)
             .addContainerGap(330, Short.MAX_VALUE))
+        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            .addContainerGap()
+            .addComponent(jScrollPane1)
+            .addContainerGap())
     );
 
     jTabbedPane1.addTab("Info", jPanel1);
@@ -356,9 +387,9 @@ public class ExcelFrame extends javax.swing.JFrame {
                         .addComponent(techFieldName, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGroup(layout.createSequentialGroup()
                     .addGap(31, 31, 31)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(snapShotButton)
-                        .addComponent(jToggleButton1))))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jToggleButton1)
+                        .addComponent(snapShotButton))))
             .addGap(18, 18, 18)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(jScrollPane2)
@@ -366,14 +397,14 @@ public class ExcelFrame extends javax.swing.JFrame {
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(31, 31, 31)
-                    .addComponent(dTableList, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(dTableList, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(layout.createSequentialGroup()
-                    .addGap(111, 111, 111)
-                    .addComponent(hourLabel))
+                    .addGap(52, 52, 52)
+                    .addComponent(exportButton))
                 .addGroup(layout.createSequentialGroup()
-                    .addGap(91, 91, 91)
-                    .addComponent(exportButton)))
-            .addContainerGap(21, Short.MAX_VALUE))
+                    .addGap(69, 69, 69)
+                    .addComponent(hourLabel)))
+            .addContainerGap(24, Short.MAX_VALUE))
         .addGroup(layout.createSequentialGroup()
             .addGap(379, 379, 379)
             .addComponent(multiScanLabel)
@@ -405,16 +436,13 @@ public class ExcelFrame extends javax.swing.JFrame {
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(exportButton)))))
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(multiScanLabel)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                 .addGroup(layout.createSequentialGroup()
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(snapShotButton)
-                    .addGap(46, 46, 46))
-                .addGroup(layout.createSequentialGroup()
+                    .addComponent(multiScanLabel)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(63, Short.MAX_VALUE))))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(snapShotButton))
+            .addContainerGap(63, Short.MAX_VALUE))
     );
 
     pack();
@@ -1060,11 +1088,13 @@ public class ExcelFrame extends javax.swing.JFrame {
     private javax.swing.JLabel deviceField;
     private javax.swing.JButton exportButton;
     private javax.swing.JLabel hourLabel;
+    private javax.swing.JTable infoTable;
     private javax.swing.JButton jButton1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JToggleButton jToggleButton1;
