@@ -204,6 +204,9 @@ public class ExcelFrame extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         infoTable = new javax.swing.JTable();
         quotaTextField = new javax.swing.JTextField();
+        eQuotaLabel = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        quotaLabel = new javax.swing.JLabel();
         hourLabel = new javax.swing.JLabel();
         multiScanLabel = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -272,11 +275,15 @@ public class ExcelFrame extends javax.swing.JFrame {
         mTable.setForeground(new java.awt.Color(255, 255, 255));
         mTable.setModel(new javax.swing.table.DefaultTableModel(multiDataTable,
             multiColumn));
+    mTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+    mTable.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+    mTable.setEnabled(false);
     mTable.setGridColor(new java.awt.Color(255, 255, 255));
-    mTable.setRowSelectionAllowed(false);
     mTable.setShowHorizontalLines(false);
     jScrollPane2.setViewportView(mTable);
 
+    dTableList.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+    dTableList.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
     dTableList.setMultipleMode(true);
 
     exportButton.setText("Export");
@@ -308,7 +315,18 @@ public class ExcelFrame extends javax.swing.JFrame {
     });
 
     infoTable.setModel(new javax.swing.table.DefaultTableModel(infoDataTable,infoColumn));
+    infoTable.setEnabled(false);
     jScrollPane1.setViewportView(infoTable);
+
+    eQuotaLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+    eQuotaLabel.setText("Enter Quota");
+
+    jLabel1.setText("Current Quota");
+
+    quotaLabel.setBackground(new java.awt.Color(255, 255, 255));
+    quotaLabel.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+    quotaLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+    quotaLabel.setText("0");
 
     javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
     jPanel1.setLayout(jPanel1Layout);
@@ -319,27 +337,37 @@ public class ExcelFrame extends javax.swing.JFrame {
             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 411, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGap(47, 47, 47)
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                .addComponent(quotaButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(quotaTextField))
-            .addGap(58, 58, 58))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(quotaButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(quotaTextField)
+                    .addComponent(eQuotaLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(quotaLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGap(62, 62, 62))
     );
     jPanel1Layout.setVerticalGroup(
         jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(jPanel1Layout.createSequentialGroup()
-            .addGap(42, 42, 42)
-            .addComponent(quotaTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-            .addComponent(quotaButton)
-            .addContainerGap(330, Short.MAX_VALUE))
-        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
             .addContainerGap()
-            .addComponent(jScrollPane1)
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addComponent(jLabel1)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(quotaLabel)
+                    .addGap(78, 78, 78)
+                    .addComponent(eQuotaLabel)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(quotaTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(18, 18, 18)
+                    .addComponent(quotaButton)
+                    .addGap(0, 0, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 404, Short.MAX_VALUE))
             .addContainerGap())
     );
 
     jTabbedPane1.addTab("Info", jPanel1);
 
-    hourLabel.setText("Hour");
+    hourLabel.setText("Select Hour");
 
     multiScanLabel.setBackground(new java.awt.Color(204, 204, 204));
     multiScanLabel.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
@@ -404,18 +432,21 @@ public class ExcelFrame extends javax.swing.JFrame {
             .addGap(18, 18, 18)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(jScrollPane2)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 602, Short.MAX_VALUE))
+                .addComponent(jTabbedPane1))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                    .addGap(31, 31, 31)
-                    .addComponent(dTableList, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(52, 52, 52)
-                    .addComponent(exportButton))
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(69, 69, 69)
-                    .addComponent(hourLabel)))
-            .addContainerGap(26, Short.MAX_VALUE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(31, 31, 31)
+                            .addComponent(dTableList, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(52, 52, 52)
+                            .addComponent(exportButton)))
+                    .addContainerGap(26, Short.MAX_VALUE))
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(hourLabel)
+                    .addGap(45, 45, 45))))
         .addGroup(layout.createSequentialGroup()
             .addGap(379, 379, 379)
             .addComponent(multiScanLabel)
@@ -667,7 +698,7 @@ public class ExcelFrame extends javax.swing.JFrame {
                         }
                         
                         for(int i=0;i<newInfoRow.length;i++){
-                            newInfoRow[i] = "";
+                            newInfoRow[i] = "0";
                         }
                         
                         newTechRow[0] = techNumber.getText();
@@ -683,6 +714,8 @@ public class ExcelFrame extends javax.swing.JFrame {
                             newTechRow[1] = techName.getText();
                             newInfoRow[1] = techName.getText();
                         }
+                        
+                        newInfoRow[getCol(getInfoModel(),"Quota")]=quotaLabel.getText();
                         
                         tableModel.insertRow(0,newTechRow);
                         getInfoModel().insertRow(0, newInfoRow);
@@ -722,6 +755,9 @@ public class ExcelFrame extends javax.swing.JFrame {
             col = getCol(getInfoModel(),"Quota");
             
             if(quota.length()<=4){
+                
+                quotaLabel.setText(quota);
+                
                 for(String tech:curTable.getRosterNum()){
                     row = getRow(getInfoModel(),tech);
                     getInfoModel().setValueAt(quota, row, col);
@@ -1169,9 +1205,11 @@ public class ExcelFrame extends javax.swing.JFrame {
     private java.awt.List dTableList;
     private javax.swing.JTextField devFieldName;
     private javax.swing.JLabel deviceField;
+    private javax.swing.JLabel eQuotaLabel;
     private javax.swing.JButton exportButton;
     private javax.swing.JLabel hourLabel;
     public javax.swing.JTable infoTable;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
@@ -1184,6 +1222,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     private javax.swing.JLabel multiScanLabel;
     private javax.swing.JMenuItem optionsMenuItem;
     private javax.swing.JButton quotaButton;
+    private javax.swing.JLabel quotaLabel;
     private javax.swing.JTextField quotaTextField;
     private javax.swing.JMenuItem saveMenuItem;
     private javax.swing.JButton snapShotButton;

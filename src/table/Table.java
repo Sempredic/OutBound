@@ -237,7 +237,6 @@ public class Table{
     }
     
     public HashMap<String,String> getTechAvgList(){
-        System.out.println(techAvgList);
         return techAvgList;
     }
     
