@@ -20,6 +20,7 @@ import table.Table;
 import java.io.FileOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -89,7 +90,6 @@ public class ExcelFrame extends javax.swing.JFrame {
 
     
     
-    
     public ExcelFrame(Table table){
         this.curTable = table; 
         
@@ -109,6 +109,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         oFrame = new optionsFrame();
         lastHour = " ";
         listStack = new Stack();
+        
         
         initTableStyle();
     }
@@ -570,6 +571,8 @@ public class ExcelFrame extends javax.swing.JFrame {
             dTableList.add(curTable.updateTable(getModel()));
            
         }
+        
+        curTable.getTechAvgList();
     }//GEN-LAST:event_snapShotButtonActionPerformed
 
     private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
@@ -618,6 +621,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     private void addMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMenuItemActionPerformed
         // TODO add your handling code here:
         String[] newTechRow = new String [9];
+        String[] newInfoRow = new String[getInfoModel().getColumnCount()];
         JPanel p = new JPanel(new BorderLayout(5,5));
 
         JPanel labels = new JPanel(new GridLayout(0,1,2,2));
@@ -631,8 +635,6 @@ public class ExcelFrame extends javax.swing.JFrame {
         controls.add(techName);
         p.add(controls, BorderLayout.CENTER);
         
-        
-
         int option = JOptionPane.showConfirmDialog(this, p, "Create Tech", JOptionPane.PLAIN_MESSAGE);
 
         if (option == JOptionPane.OK_OPTION) {
@@ -644,18 +646,26 @@ public class ExcelFrame extends javax.swing.JFrame {
                             newTechRow[i] = "0";
                         }
                         
-                        newTechRow[0] = techNumber.getText(); 
+                        for(int i=0;i<newInfoRow.length;i++){
+                            newInfoRow[i] = "";
+                        }
+                        
+                        newTechRow[0] = techNumber.getText();
+                        newInfoRow[0] = techNumber.getText();
                         
                         if(techName.getText().length()==0){
                             curTable.addToRoster(techNumber.getText(),"**");
                             newTechRow[1] = "**";
+                            newInfoRow[1] = "**";
                         }else{
                           
                             curTable.addToRoster(techNumber.getText(),techName.getText());
                             newTechRow[1] = techName.getText();
+                            newInfoRow[1] = techName.getText();
                         }
                         
                         tableModel.insertRow(0,newTechRow);
+                        getInfoModel().insertRow(0, newInfoRow);
                         techNumber.setText("");
                         techName.setText("");
                     }else{
@@ -695,6 +705,7 @@ public class ExcelFrame extends javax.swing.JFrame {
                 for(String tech:curTable.getRosterNum()){
                     row = getRow(getInfoModel(),tech);
                     getInfoModel().setValueAt(quota, row, col);
+                    quotaTextField.setText("");
                 }
             }else{
                 JOptionPane.showMessageDialog(this,"Quota Exceeds [4]Char Max","Try Again", JOptionPane.WARNING_MESSAGE);
@@ -709,7 +720,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         
     }//GEN-LAST:event_quotaButtonActionPerformed
     
-    private static boolean isInteger(String s) {
+    private boolean isInteger(String s) {
         try { 
             Integer.parseInt(s); 
         } catch(NumberFormatException e) { 

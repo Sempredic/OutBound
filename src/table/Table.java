@@ -12,7 +12,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import javax.swing.table.DefaultTableModel;
+
 
 /**
  *
@@ -31,9 +33,9 @@ public class Table{
     String[] blankTable;
     Date tableDate;
     DateFormat hour;
-    
-    
-    
+    Map<String,String>techAvgList;
+
+
     public Table(HashMap<String,String> roster){
         this.roster = roster;
         dataTableID=" ";
@@ -41,6 +43,7 @@ public class Table{
         tRosterNames = new ArrayList<String>();
         tRosterTechNum = new ArrayList<String>(); 
         dataTableList = new LinkedHashMap<String,String[][]>();
+        techAvgList= new HashMap<>();
 
         setRosterNames();
         setRosterTechNum();
@@ -163,6 +166,7 @@ public class Table{
     }
     
     public String updateTableViaList(DefaultTableModel tModel,String[] timeList){
+        Map<String,String> tempMap = new HashMap<String,String>();
         int numCol = tModel.getColumnCount();
         int numRow = tModel.getRowCount();
         
@@ -172,9 +176,7 @@ public class Table{
         hour = new SimpleDateFormat("hh:mm aa");
         tableDate = new Date();
         dataTableID = hour.format(tableDate);
-        
-        
-        
+         
         for(int i=0;i<numRow;i++){
             for(int j=0;j<numCol;j++){
                 table[i][j] = tModel.getValueAt(i, j).toString();
@@ -207,9 +209,39 @@ public class Table{
             } 
         } 
         
+        for(String tech:getRosterNum()){
+            int row = getTechRow(tech);
+            int col = tModel.findColumn("Tech Total");
+            String value = table[row][col];
+
+            if(!techAvgList.containsKey(tech)){
+                techAvgList.put(tech, value);
+            }else{
+                int newVal = Integer.valueOf(techAvgList.get(tech)) + Integer.valueOf(value);
+                techAvgList.replace(tech, String.valueOf(newVal));
+            }
+        }
+
         dataTableList.put(dataTableID, table);
+   
         
         return dataTableID;
+    }
+    
+    public void getTechAvgList(){
+        System.out.println(techAvgList);
+    }
+    
+    private int getTechRow(String tech){
+        int result = 0;
+        
+        for(int i=0;i<table.length;i++){
+            if(table[i][0].equals(tech)){
+                result = i;
+            }
+        }
+        
+        return result;
     }
    
     
