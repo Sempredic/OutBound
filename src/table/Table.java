@@ -33,7 +33,7 @@ public class Table{
     String[] blankTable;
     Date tableDate;
     DateFormat hour;
-    Map<String,String>techAvgList;
+    HashMap<String,String>techAvgList;
 
 
     public Table(HashMap<String,String> roster){
@@ -147,6 +147,8 @@ public class Table{
         
         dataTableList.put(dataTableID, table);
         
+        updateTechAvgList(tModel);
+        
         return dataTableID;
     }
     
@@ -166,7 +168,7 @@ public class Table{
     }
     
     public String updateTableViaList(DefaultTableModel tModel,String[] timeList){
-        Map<String,String> tempMap = new HashMap<String,String>();
+
         int numCol = tModel.getColumnCount();
         int numRow = tModel.getRowCount();
         
@@ -209,6 +211,17 @@ public class Table{
             } 
         } 
         
+        
+
+        dataTableList.put(dataTableID, table);
+   
+        updateTechAvgList(tModel);
+        
+        return dataTableID;
+    }
+    
+    private void updateTechAvgList(DefaultTableModel tModel){
+        
         for(String tech:getRosterNum()){
             int row = getTechRow(tech);
             int col = tModel.findColumn("Tech Total");
@@ -221,15 +234,11 @@ public class Table{
                 techAvgList.replace(tech, String.valueOf(newVal));
             }
         }
-
-        dataTableList.put(dataTableID, table);
-   
-        
-        return dataTableID;
     }
     
-    public void getTechAvgList(){
+    public HashMap<String,String> getTechAvgList(){
         System.out.println(techAvgList);
+        return techAvgList;
     }
     
     private int getTechRow(String tech){

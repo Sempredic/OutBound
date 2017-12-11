@@ -20,7 +20,6 @@ import table.Table;
 import java.io.FileOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -569,12 +568,26 @@ public class ExcelFrame extends javax.swing.JFrame {
             }   
         }else{
             dTableList.add(curTable.updateTable(getModel()));
-           
         }
         
-        curTable.getTechAvgList();
+        updateInfoTable();
     }//GEN-LAST:event_snapShotButtonActionPerformed
 
+    private void updateInfoTable(){
+        String newVal = "";
+        int row = 0;
+        int col = 0;
+        int value = 0;
+        
+        for(Map.Entry<String,String> entry:curTable.getTechAvgList().entrySet()){
+            row = getRow(getInfoModel(),entry.getKey());
+            col = getInfoModel().findColumn("Avg/Hr");
+            value = Integer.valueOf(entry.getValue())/dTableList.getItemCount();
+            getInfoModel().setValueAt(value,row,col);
+        }
+        
+    }
+    
     private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
         // TODO add your handling code here:
         abstractButton = (AbstractButton) evt.getSource();
