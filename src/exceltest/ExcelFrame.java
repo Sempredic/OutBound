@@ -574,16 +574,23 @@ public class ExcelFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_snapShotButtonActionPerformed
 
     private void updateInfoTable(){
-        String newVal = "";
+        
         int row = 0;
         int col = 0;
         int value = 0;
+        int eodValue =0;
+        int estCol = 0;
+        
+        col = getInfoModel().findColumn("Avg/Hr");
+        estCol = getInfoModel().findColumn("EOD Est");
         
         for(Map.Entry<String,String> entry:curTable.getTechAvgList().entrySet()){
             row = getRow(getInfoModel(),entry.getKey());
-            col = getInfoModel().findColumn("Avg/Hr");
             value = Integer.valueOf(entry.getValue())/dTableList.getItemCount();
+            eodValue = value*10;
+            
             getInfoModel().setValueAt(value,row,col);
+            getInfoModel().setValueAt(eodValue,row,estCol);
         }
         
     }
