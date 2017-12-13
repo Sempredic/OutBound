@@ -94,6 +94,7 @@ public class mainFrame extends javax.swing.JFrame {
             }
         });
 
+        existingList.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         existingList.setMultipleMode(true);
         existingList.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
@@ -101,6 +102,7 @@ public class mainFrame extends javax.swing.JFrame {
             }
         });
 
+        finalRosterList.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         finalRosterList.setMultipleMode(true);
 
         doneButton.setText("Done");

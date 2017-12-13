@@ -135,7 +135,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         
         for(int i=0;i<infoDataTable.length;i++){
             for(int j=0;j<infoDataTable[0].length;j++){
-                infoDataTable[i][j]= "";  
+                infoDataTable[i][j]= "0";  
             }
         }
         for(int i=0;i<infoDataTable.length;i++){
@@ -307,6 +307,8 @@ public class ExcelFrame extends javax.swing.JFrame {
 
     jTabbedPane1.addTab("Scan", tablePanel);
 
+    jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+
     quotaButton.setText("Confirm");
     quotaButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -314,6 +316,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         }
     });
 
+    infoTable.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
     infoTable.setModel(new javax.swing.table.DefaultTableModel(infoDataTable,infoColumn));
     infoTable.setEnabled(false);
     jScrollPane1.setViewportView(infoTable);
@@ -337,10 +340,9 @@ public class ExcelFrame extends javax.swing.JFrame {
             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 411, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGap(47, 47, 47)
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(quotaButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(quotaTextField)
-                    .addComponent(eQuotaLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(quotaButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(quotaTextField)
+                .addComponent(eQuotaLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(quotaLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGap(62, 62, 62))
@@ -367,7 +369,8 @@ public class ExcelFrame extends javax.swing.JFrame {
 
     jTabbedPane1.addTab("Info", jPanel1);
 
-    hourLabel.setText("Select Hour");
+    hourLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+    hourLabel.setText("Select Hour(s)");
 
     multiScanLabel.setBackground(new java.awt.Color(204, 204, 204));
     multiScanLabel.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
@@ -446,7 +449,7 @@ public class ExcelFrame extends javax.swing.JFrame {
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(hourLabel)
-                    .addGap(45, 45, 45))))
+                    .addGap(38, 38, 38))))
         .addGroup(layout.createSequentialGroup()
             .addGap(379, 379, 379)
             .addComponent(multiScanLabel)
