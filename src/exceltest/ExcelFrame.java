@@ -652,7 +652,8 @@ public class ExcelFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         makeTables(dTableList.getSelectedItems());
         makeProdTable(getModel());
-        StringBuilder location = new StringBuilder("C:\\Users\\Public\\OutBoundProd_");
+        //StringBuilder location = new StringBuilder("C:\\Users\\Public\\OutBoundProd_");
+        StringBuilder location = new StringBuilder("OutBoundProd_");
         location.append(String.valueOf(sdf.format(date)));
         location.append(".xlsx");
         
