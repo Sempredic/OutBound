@@ -271,7 +271,7 @@ public class ExcelFrame extends javax.swing.JFrame {
 
         mTable.setBackground(new java.awt.Color(51, 51, 51));
         mTable.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(153, 153, 153)));
-        mTable.setFont(new java.awt.Font("Courier New", 1, 12)); // NOI18N
+        mTable.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
         mTable.setForeground(new java.awt.Color(255, 255, 255));
         mTable.setModel(new javax.swing.table.DefaultTableModel(multiDataTable,
             multiColumn));
@@ -663,7 +663,8 @@ public class ExcelFrame extends javax.swing.JFrame {
             
             JOptionPane.showMessageDialog(this,"File Created","Written Successfully", JOptionPane.WARNING_MESSAGE);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            //System.out.println(e.getMessage());
+            JOptionPane.showMessageDialog(this,"Did Not Write Successfully","Try Again", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_exportButtonActionPerformed
 
