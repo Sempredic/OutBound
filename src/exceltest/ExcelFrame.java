@@ -577,8 +577,12 @@ public class ExcelFrame extends javax.swing.JFrame {
             }else if(tableModel.findColumn(devFieldName.getText())!=-1){
                 toMulti();
             }else if(devFieldName.getText().toUpperCase().equals("CLEAR")){
-                //multiMap.clear();
-                //toMulti();
+                
+                for(int i=0;i<multiDataTable.length;i++){
+                    setMultiTableValues(0,i,1);
+                }
+        
+                multiMap.clear();
                 manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
                 manager.focusPreviousComponent();
                 techFieldName.setEditable(true);
@@ -668,22 +672,37 @@ public class ExcelFrame extends javax.swing.JFrame {
 
     private void exportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportButtonActionPerformed
         // TODO add your handling code here:
-        makeTables(dTableList.getSelectedItems());
-        makeProdTable(getModel());
-        //StringBuilder location = new StringBuilder("C:\\Users\\Public\\OutBoundProd_");
-        StringBuilder location = new StringBuilder("OutBoundProd_");
-        location.append(String.valueOf(sdf.format(date)));
-        location.append(".xlsx");
+        Object[] options = {"Yes",
+                    "No"};
+        int n = JOptionPane.showOptionDialog(this,
+            "Export Selected Time(s)?",
+            "Continue",
+            JOptionPane.YES_NO_CANCEL_OPTION,
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            options,
+            options[1]);
         
-        //OUTPUT
-        try (FileOutputStream outputStream = new FileOutputStream(location.toString())){
-            workbook.write(outputStream);
-            outputStream.close();
-            
-            JOptionPane.showMessageDialog(this,"File Created","Written Successfully", JOptionPane.WARNING_MESSAGE);
-        } catch (Exception e) {
-            //System.out.println(e.getMessage());
-            JOptionPane.showMessageDialog(this,"Did Not Write Successfully","Try Again", JOptionPane.WARNING_MESSAGE);
+        if(n == JOptionPane.YES_OPTION){
+        /////////////////////////////////////////////////////////////////////////////////////    
+        
+            makeTables(dTableList.getSelectedItems());
+            makeProdTable(getModel());
+            //StringBuilder location = new StringBuilder("C:\\Users\\Public\\OutBoundProd_");
+            StringBuilder location = new StringBuilder("OutBoundProd_");
+            location.append(String.valueOf(sdf.format(date)));
+            location.append(".xlsx");
+
+            //OUTPUT
+            try (FileOutputStream outputStream = new FileOutputStream(location.toString())){
+                workbook.write(outputStream);
+                outputStream.close();
+
+                JOptionPane.showMessageDialog(this,"File Created","Written Successfully", JOptionPane.WARNING_MESSAGE);
+            } catch (Exception e) {
+                //System.out.println(e.getMessage());
+                JOptionPane.showMessageDialog(this,"Did Not Write Successfully","Try Again", JOptionPane.WARNING_MESSAGE);
+            }
         }
     }//GEN-LAST:event_exportButtonActionPerformed
 
