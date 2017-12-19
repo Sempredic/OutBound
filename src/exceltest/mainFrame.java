@@ -301,6 +301,7 @@ public class mainFrame extends javax.swing.JFrame {
         
         try{
             PrintWriter writer = new PrintWriter("roster.txt", "UTF-8");
+            
             for(String tNumber:existingList.getItems()){
                 if(existingRosterList.containsKey(tNumber)){
                     tName = existingRosterList.get(tNumber);

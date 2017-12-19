@@ -18,13 +18,18 @@ import javax.swing.table.*;
 import table.Table;
 
 import java.io.FileOutputStream;
+import java.nio.file.Files;
+import static java.nio.file.Files.list;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Set;
 import java.util.Stack;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -378,7 +383,12 @@ public class ExcelFrame extends javax.swing.JFrame {
 
     jMenu1.setText("File");
 
-    saveMenuItem.setText("Save ");
+    saveMenuItem.setText("Load Auto-Save");
+    saveMenuItem.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            saveMenuItemActionPerformed(evt);
+        }
+    });
     jMenu1.add(saveMenuItem);
 
     jMenuBar1.add(jMenu1);
@@ -564,11 +574,17 @@ public class ExcelFrame extends javax.swing.JFrame {
                 manager.focusPreviousComponent();
                 techFieldName.setText("");
                 devFieldName.setEnabled(false);
-            }
-             else if(tableModel.findColumn(devFieldName.getText())!=-1){
+            }else if(tableModel.findColumn(devFieldName.getText())!=-1){
                 toMulti();
-                
-                   
+            }else if(devFieldName.getText().toUpperCase().equals("CLEAR")){
+                //multiMap.clear();
+                //toMulti();
+                manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+                manager.focusPreviousComponent();
+                techFieldName.setEditable(true);
+                techFieldName.setText("");
+                devFieldName.setEnabled(false);
+                devFieldName.setText("");    
             }else{
                 //custom title, no icon
                 System.out.println(multiMap.isEmpty());
@@ -590,8 +606,9 @@ public class ExcelFrame extends javax.swing.JFrame {
         if(!curTable.isDTListEmpty()){
             
             if(!curTable.checkDTExists(timeID)){
-  
+                
                 dTableList.add(curTable.updateTableViaList(getModel(),dTableList.getItems()));
+                curTable.writeSaveTable();
       
             }else{
                 JLabel center = new JLabel("Current Time Already Exists",JLabel.CENTER);
@@ -605,6 +622,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         }
         
         updateInfoTable();
+        
     }//GEN-LAST:event_snapShotButtonActionPerformed
 
     private void updateInfoTable(){
@@ -780,6 +798,79 @@ public class ExcelFrame extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_quotaButtonActionPerformed
+
+    private void saveMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveMenuItemActionPerformed
+        // TODO add your handling code here:
+        //
+        Object[] options = {"Yes",
+                    "No"};
+        int n = JOptionPane.showOptionDialog(this,
+            "Load Last Auto-Save?",
+            "Continue",
+            JOptionPane.YES_NO_CANCEL_OPTION,
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            options,
+            options[1]);
+        
+        if(n == JOptionPane.YES_OPTION){
+            if(curTable.getRosterNum().size()==0){
+                updateTableFromSave();
+                updateTotalDev(tableModel);
+                updateTotalTech(tableModel);
+            }else{
+                JLabel center = new JLabel("Table Already Populated",JLabel.CENTER);
+                JOptionPane.showMessageDialog(this,
+                    center,
+                    "Error",
+                    JOptionPane.PLAIN_MESSAGE);
+            }
+                  
+            
+        }
+    
+    }//GEN-LAST:event_saveMenuItemActionPerformed
+    
+    private void updateTableFromSave(){
+        try{
+            
+            ArrayList<String> saveList = (ArrayList)Files.readAllLines(Paths.get("save.txt"));
+            int rows= Integer.valueOf(saveList.remove(0));
+            String[] newInfoRow = new String[getInfoModel().getColumnCount()];
+            String[][] saveTable = new String[rows][9];
+            int counter = 0;
+            String tech="";
+            String name="";
+            
+            for(int i=0;i<newInfoRow.length;i++){
+                newInfoRow[i] = "0";
+            }
+            
+            for(int i=0;i<rows;i++){
+                for(int j=0;j<9;j++){
+                    if(j==0){
+                        tech = saveList.get(counter).trim();
+                        newInfoRow[0]=tech;
+                    }else if(j==1){
+                        name = saveList.get(counter).trim();
+                        newInfoRow[1]=name;
+                    }
+                    saveTable[i][j] = saveList.get(counter).trim();
+                    counter++;
+                }
+                curTable.addToRoster(tech, name);
+                getInfoModel().insertRow(0, newInfoRow);
+            }
+            
+            for(String[]row:saveTable){
+                tableModel.insertRow(0, row);
+            }
+  
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+
+        }
+    }
     
     private boolean isInteger(String s) {
         try { 

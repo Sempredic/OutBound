@@ -6,6 +6,7 @@
 package table;
 
 import java.awt.List;
+import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -30,7 +32,7 @@ public class Table{
     String[][] table;
     Object[][] dataTable;
     String[] columnTable;
-    String[] blankTable;
+    String[][] saveTable;
     Date tableDate;
     DateFormat hour;
     HashMap<String,String>techAvgList;
@@ -48,6 +50,7 @@ public class Table{
         setRosterNames();
         setRosterTechNum();
         initTableData(); 
+        saveTable = table;
     }
     
     public void addToRoster(String techNumber,String techName){
@@ -146,6 +149,7 @@ public class Table{
         } 
         
         dataTableList.put(dataTableID, table);
+        this.saveTable = table;
         
         updateTechAvgList(tModel);
         
@@ -174,6 +178,7 @@ public class Table{
         
         Integer[][] tempTable = new Integer[numRow][numCol];
         this.table = new String[numRow][numCol];
+        String[][] dummyTable = new String[numRow][numCol];
         
         hour = new SimpleDateFormat("hh:mm aa");
         tableDate = new Date();
@@ -183,8 +188,11 @@ public class Table{
             for(int j=0;j<numCol;j++){
                 table[i][j] = tModel.getValueAt(i, j).toString();
                 tempTable[i][j] = 0;
+                dummyTable[i][j] = tModel.getValueAt(i, j).toString();
             }
         }
+        
+        this.saveTable = dummyTable;
         
         for(String time:timeList){
             int curRow = getDataTableFromList(time).length;
@@ -214,13 +222,13 @@ public class Table{
         
 
         dataTableList.put(dataTableID, table);
-   
+        
         updateTechAvgList(tModel);
         
         return dataTableID;
     }
     
-    private void updateTechAvgList(DefaultTableModel tModel){
+    public void updateTechAvgList(DefaultTableModel tModel){
         
         for(String tech:getRosterNum()){
             int row = getTechRow(tech);
@@ -255,6 +263,30 @@ public class Table{
     
     public String[][] getDataTableFromList(String dataTableID){
         return dataTableList.get(dataTableID);
+    }
+    
+    public void writeSaveTable(){
+        //String tName = new String();
+        
+        try{
+            PrintWriter writer = new PrintWriter("save.txt", "UTF-8");
+            writer.println((saveTable.length-1));
+            
+            for(int i=0;i<saveTable.length;i++){
+                for(int j=0;j<saveTable[0].length;j++){
+                    //System.out.print(saveTable[i][j]);
+                     writer.println(saveTable[i][j]+" ");
+                }
+            }
+            
+            writer.close();
+        }catch(Exception e){
+            //System.out.println(e.getMessage());
+            JOptionPane.showMessageDialog(null,
+                    "Save Error",
+                    "Error",
+                    JOptionPane.PLAIN_MESSAGE);
+        }
     }
     
 }
