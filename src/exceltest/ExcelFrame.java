@@ -93,7 +93,8 @@ public class ExcelFrame extends javax.swing.JFrame {
     Stack listStack;
     int inQuota;
     String[] lastAction;
-    HashMap<String,String[]> lastActionMap;
+    HashMap<Integer,String[]> lastActionMap;
+    int actionMapID;
 
     
     
@@ -118,7 +119,8 @@ public class ExcelFrame extends javax.swing.JFrame {
         listStack = new Stack();
         inQuota = 0;
         lastAction = new String[3];
-        lastActionMap = new HashMap<String,String[]>();
+        lastActionMap = new HashMap<Integer,String[]>();
+        actionMapID = 0;
         
         
         initTableStyle();
@@ -911,14 +913,25 @@ public class ExcelFrame extends javax.swing.JFrame {
             
             for(int i=0;i<lastAction.length;i++){
                 lastAction[i] = null;
-            }    
+            }
+            
+            if(!lastActionMap.isEmpty()){
+                undoLastActionMap();
+            }
         }else if(!lastActionMap.isEmpty()){
             
-            for(Map.Entry<String,String[]> entry:lastActionMap.entrySet()){
+            undoLastActionMap();
+        }
+
+    }//GEN-LAST:event_undoMenuItemActionPerformed
+    
+    private void undoLastActionMap(){
+        for(Map.Entry<Integer,String[]> entry:lastActionMap.entrySet()){
                 
-                String tech = entry.getKey();
+                //
                 String device = entry.getValue()[0];
                 int value = Integer.valueOf(entry.getValue()[1]);
+                String tech = entry.getValue()[2];
 
                 int col = getCol(tableModel, device);
                 int row = getRow(tableModel, tech);
@@ -928,11 +941,8 @@ public class ExcelFrame extends javax.swing.JFrame {
             }
             
             lastActionMap.clear();
-        }
-        
-        
-
-    }//GEN-LAST:event_undoMenuItemActionPerformed
+            actionMapID=0;
+    }
     
     private void updateTableFromSave(){
         try{
@@ -1193,8 +1203,9 @@ public class ExcelFrame extends javax.swing.JFrame {
                 int newValue = oldValue + value;
                 
                 setTableValues(newValue,row,col);  
+                calculateUndo(techFieldName.getText(),device,String.valueOf(value));
             }
-            calculateUndo(techFieldName.getText(),multiMap);
+            
         }
         
         for(int i=0;i<multiDataTable.length;i++){
@@ -1240,19 +1251,20 @@ public class ExcelFrame extends javax.swing.JFrame {
         System.out.println();
     }
     
-    private void calculateUndo(String tech,HashMap<String,Integer> map){
-        int lastValue =0;
-        //HashMap<String,String[]> temp = new HashMap<String,String[]>(); 
+    private void calculateUndo(String t,String dev,String val){
         
-        for(Map.Entry<String,Integer> entry:map.entrySet()){
-               
-            String device = entry.getKey();
-            String value = entry.getValue().toString();
-            String[] t = new String[2];
-            t[0]= device;
-            t[1]=value;
-            lastActionMap.put(tech,t);
-        }
+  
+        String device = dev;
+        String value = val;
+        String tech = t;
+        String[] ar = new String[3];
+        ar[0]= device;
+        ar[1]=value;
+        ar[2]=tech;
+        lastActionMap.put(actionMapID,ar);
+
+
+        actionMapID++;
     
         System.out.println(lastActionMap);
     }
