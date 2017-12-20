@@ -92,6 +92,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     String lastHour;
     Stack listStack;
     int inQuota;
+    LinkedHashMap<String,Integer> lastAction;
 
     
     
@@ -115,6 +116,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         lastHour = " ";
         listStack = new Stack();
         inQuota = 0;
+        lastAction = new LinkedHashMap<String,Integer>();
         
         
         initTableStyle();
@@ -216,6 +218,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         quotaLabel = new javax.swing.JLabel();
         hourLabel = new javax.swing.JLabel();
         multiScanLabel = new javax.swing.JLabel();
+        multiLable = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         saveMenuItem = new javax.swing.JMenuItem();
@@ -265,6 +268,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         });
 
         jToggleButton1.setText("Multi Scan");
+        jToggleButton1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jToggleButton1.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 jToggleButton1StateChanged(evt);
@@ -383,6 +387,9 @@ public class ExcelFrame extends javax.swing.JFrame {
     multiScanLabel.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
     multiScanLabel.setText("MULTI SCAN COUNTER");
 
+    multiLable.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+    multiLable.setText("OFF");
+
     jMenu1.setText("File");
 
     saveMenuItem.setText("Load Auto-Save");
@@ -428,60 +435,64 @@ public class ExcelFrame extends javax.swing.JFrame {
         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(layout.createSequentialGroup()
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(38, 38, 38)
+                        .addComponent(techFieldName, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(devFieldName, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGroup(layout.createSequentialGroup()
-                    .addGap(59, 59, 59)
-                    .addComponent(techField))
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(55, 55, 55)
+                    .addGap(74, 74, 74)
                     .addComponent(deviceField))
                 .addGroup(layout.createSequentialGroup()
-                    .addGap(21, 21, 21)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(devFieldName, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(techFieldName, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGap(78, 78, 78)
+                    .addComponent(techField))
                 .addGroup(layout.createSequentialGroup()
-                    .addGap(31, 31, 31)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jToggleButton1)
-                        .addComponent(snapShotButton))))
+                    .addGap(120, 120, 120)
+                    .addComponent(multiLable, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(51, 51, 51)
+                    .addComponent(snapShotButton)))
             .addGap(18, 18, 18)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE)
+                .addComponent(jScrollPane2))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jScrollPane2)
-                .addComponent(jTabbedPane1))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(31, 31, 31)
-                            .addComponent(dTableList, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(52, 52, 52)
-                            .addComponent(exportButton)))
-                    .addContainerGap(26, Short.MAX_VALUE))
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(dTableList, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(29, 29, 29))
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addComponent(exportButton)
+                    .addGap(45, 45, 45))
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                     .addComponent(hourLabel)
-                    .addGap(38, 38, 38))))
-        .addGroup(layout.createSequentialGroup()
-            .addGap(379, 379, 379)
+                    .addGap(47, 47, 47))))
+        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(multiScanLabel)
-            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGap(408, 408, 408))
     );
     layout.setVerticalGroup(
         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(layout.createSequentialGroup()
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                    .addGap(106, 106, 106)
+                    .addGap(111, 111, 111)
                     .addComponent(techField)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(techFieldName, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(18, 18, 18)
                     .addComponent(deviceField)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(devFieldName, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(18, 18, 18)
-                    .addComponent(jToggleButton1))
+                    .addGap(23, 23, 23)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(multiLable)
+                        .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGroup(layout.createSequentialGroup()
                     .addGap(29, 29, 29)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -493,11 +504,10 @@ public class ExcelFrame extends javax.swing.JFrame {
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(exportButton)))))
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addComponent(multiScanLabel)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                .addGroup(layout.createSequentialGroup()
-                    .addComponent(multiScanLabel)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addComponent(snapShotButton))
             .addContainerGap(63, Short.MAX_VALUE))
     );
@@ -658,7 +668,11 @@ public class ExcelFrame extends javax.swing.JFrame {
         abstractButton = (AbstractButton) evt.getSource();
         multiSelected = abstractButton.getModel().isSelected();
         
-        
+        if(multiSelected){
+            multiLable.setText("ON");         
+        }else{
+            multiLable.setText("OFF");
+        }
     }//GEN-LAST:event_jToggleButton1ActionPerformed
 
     private void jToggleButton1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jToggleButton1StateChanged
@@ -1118,6 +1132,7 @@ public class ExcelFrame extends javax.swing.JFrame {
                 int newValue = oldValue + value;
                 
                 setTableValues(newValue,row,col);
+                lastAction.put(techFieldName.getText(), newValue);
             }
         }
         
@@ -1344,6 +1359,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JTable mTable;
+    private javax.swing.JLabel multiLable;
     private javax.swing.JLabel multiScanLabel;
     private javax.swing.JMenuItem optionsMenuItem;
     private javax.swing.JButton quotaButton;
