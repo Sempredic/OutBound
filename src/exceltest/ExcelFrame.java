@@ -1241,14 +1241,11 @@ public class ExcelFrame extends javax.swing.JFrame {
         }else{
             lastValue = oValue;
         }
+        
         lastAction[0]=tech;
         lastAction[1]=device;
         lastAction[2]=String.valueOf(lastValue); 
         
-        for(String st:lastAction){
-            System.out.print(st + " ");
-        }
-        System.out.println();
     }
     
     private void calculateUndo(String t,String dev,String val){
@@ -1258,15 +1255,14 @@ public class ExcelFrame extends javax.swing.JFrame {
         String value = val;
         String tech = t;
         String[] ar = new String[3];
+        
         ar[0]= device;
         ar[1]=value;
         ar[2]=tech;
+        
         lastActionMap.put(actionMapID,ar);
 
-
         actionMapID++;
-    
-        System.out.println(lastActionMap);
     }
     
     private void setTableValues(int val, int row, int col){
