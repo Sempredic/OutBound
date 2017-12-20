@@ -479,21 +479,23 @@ public class ExcelFrame extends javax.swing.JFrame {
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE)
                 .addComponent(jScrollPane2))
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(38, 38, 38)
                     .addComponent(dTableList, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(29, 29, 29))
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addGap(0, 37, Short.MAX_VALUE))
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(56, 56, 56)
                     .addComponent(exportButton)
-                    .addGap(45, 45, 45))
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(hourLabel)
-                    .addGap(47, 47, 47))))
+                    .addGap(54, 54, 54))))
         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
             .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(multiScanLabel)
-            .addGap(408, 408, 408))
+            .addGap(420, 420, 420))
     );
     layout.setVerticalGroup(
         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -838,6 +840,7 @@ public class ExcelFrame extends javax.swing.JFrame {
             quotaTextField.setText("");
         }
     }
+    
     private void quotaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quotaButtonActionPerformed
         // TODO add your handling code here:
         
@@ -1187,7 +1190,6 @@ public class ExcelFrame extends javax.swing.JFrame {
     }
     
     private void commitMTable(){
-        int nValue = 0;
         
         if(!multiMap.isEmpty()){
             int row = getRow(tableModel,techFieldName.getText());
