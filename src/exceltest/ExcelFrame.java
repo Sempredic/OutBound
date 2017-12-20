@@ -91,6 +91,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     optionsFrame oFrame;
     String lastHour;
     Stack listStack;
+    int inQuota;
 
     
     
@@ -113,6 +114,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         oFrame = new optionsFrame();
         lastHour = " ";
         listStack = new Stack();
+        inQuota = 0;
         
         
         initTableStyle();
@@ -757,10 +759,11 @@ public class ExcelFrame extends javax.swing.JFrame {
                             newInfoRow[1] = techName.getText();
                         }
                         
-                        newInfoRow[getCol(getInfoModel(),"Quota")]=quotaLabel.getText();
+                        //newInfoRow[getCol(getInfoModel(),"Quota")]= String.valueOf(Integer.valueOf(quotaLabel.getText())/curTable.getRosterNum().size());
                         
                         tableModel.insertRow(0,newTechRow);
                         getInfoModel().insertRow(0, newInfoRow);
+                        updateInfoQuota(quotaLabel.getText());
                         techNumber.setText("");
                         techName.setText("");
                     }else{
@@ -787,24 +790,31 @@ public class ExcelFrame extends javax.swing.JFrame {
         oFrame.setVisible(true);
     }//GEN-LAST:event_optionsMenuItemActionPerformed
 
+    private void updateInfoQuota(String Quota){
+        int col,row=0;
+        col = getCol(getInfoModel(),"Quota");
+        
+        
+        inQuota = Integer.valueOf(Quota)/curTable.getRosterNum().size();
+                
+        for(String tech:curTable.getRosterNum()){
+            row = getRow(getInfoModel(),tech);
+            getInfoModel().setValueAt(inQuota, row, col);
+            quotaTextField.setText("");
+        }
+    }
     private void quotaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quotaButtonActionPerformed
         // TODO add your handling code here:
-        int col,row=0;
+        
         String quota = quotaTextField.getText();
         
         if(isInteger(quota)){
-            
-            col = getCol(getInfoModel(),"Quota");
-            
+
             if(quota.length()<=4){
                 
                 quotaLabel.setText(quota);
+                updateInfoQuota(quota);
                 
-                for(String tech:curTable.getRosterNum()){
-                    row = getRow(getInfoModel(),tech);
-                    getInfoModel().setValueAt(quota, row, col);
-                    quotaTextField.setText("");
-                }
             }else{
                 JOptionPane.showMessageDialog(this,"Quota Exceeds [4]Char Max","Try Again", JOptionPane.WARNING_MESSAGE);
                 quotaTextField.setText("");
