@@ -92,7 +92,8 @@ public class ExcelFrame extends javax.swing.JFrame {
     String lastHour;
     Stack listStack;
     int inQuota;
-    LinkedHashMap<String,Integer> lastAction;
+    String[] lastAction;
+    HashMap<String,String[]> lastActionMap;
 
     
     
@@ -116,7 +117,8 @@ public class ExcelFrame extends javax.swing.JFrame {
         lastHour = " ";
         listStack = new Stack();
         inQuota = 0;
-        lastAction = new LinkedHashMap<String,Integer>();
+        lastAction = new String[3];
+        lastActionMap = new HashMap<String,String[]>();
         
         
         initTableStyle();
@@ -222,6 +224,8 @@ public class ExcelFrame extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         saveMenuItem = new javax.swing.JMenuItem();
+        editMenu = new javax.swing.JMenu();
+        undoMenuItem = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         addMenuItem = new javax.swing.JMenuItem();
         optionsMenuItem = new javax.swing.JMenuItem();
@@ -402,6 +406,19 @@ public class ExcelFrame extends javax.swing.JFrame {
 
     jMenuBar1.add(jMenu1);
 
+    editMenu.setText("Edit");
+
+    undoMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Z, java.awt.event.InputEvent.CTRL_MASK));
+    undoMenuItem.setText("Undo");
+    undoMenuItem.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            undoMenuItemActionPerformed(evt);
+        }
+    });
+    editMenu.add(undoMenuItem);
+
+    jMenuBar1.add(editMenu);
+
     jMenu3.setText("Tools");
 
     addMenuItem.setText("Add New Tech");
@@ -553,7 +570,9 @@ public class ExcelFrame extends javax.swing.JFrame {
         if(keyCode == KeyEvent.VK_ENTER && !multiSelected){
             if(tableModel.findColumn(devFieldName.getText())!=-1){
                 toTable();
-                commitMTable();
+                if(!multiMap.isEmpty()){
+                    commitMTable();
+                }
                 techFieldName.setEditable(true);
                 manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
                 manager.focusPreviousComponent();
@@ -873,6 +892,47 @@ public class ExcelFrame extends javax.swing.JFrame {
         }
     
     }//GEN-LAST:event_saveMenuItemActionPerformed
+
+    private void undoMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoMenuItemActionPerformed
+        // TODO add your handling code here:
+  
+        if(lastAction[0]!=null){
+            
+
+            String tech = lastAction[0];
+            String device = lastAction[1];
+            int value = Integer.valueOf(lastAction[2]);
+
+            int col = getCol(tableModel,device);
+            int row = getRow(tableModel,tech);
+
+            int newValue = (Integer)tableModel.getValueAt(row, col)-value;
+            setTableValues(newValue,row,col); 
+            
+            for(int i=0;i<lastAction.length;i++){
+                lastAction[i] = null;
+            }    
+        }else if(!lastActionMap.isEmpty()){
+            
+            for(Map.Entry<String,String[]> entry:lastActionMap.entrySet()){
+                
+                String tech = entry.getKey();
+                String device = entry.getValue()[0];
+                int value = Integer.valueOf(entry.getValue()[1]);
+
+                int col = getCol(tableModel, device);
+                int row = getRow(tableModel, tech);
+
+                int newValue = (Integer) tableModel.getValueAt(row, col) - value;
+                setTableValues(newValue, row, col);
+            }
+            
+            lastActionMap.clear();
+        }
+        
+        
+
+    }//GEN-LAST:event_undoMenuItemActionPerformed
     
     private void updateTableFromSave(){
         try{
@@ -1117,6 +1177,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     }
     
     private void commitMTable(){
+        int nValue = 0;
         
         if(!multiMap.isEmpty()){
             int row = getRow(tableModel,techFieldName.getText());
@@ -1125,15 +1186,15 @@ public class ExcelFrame extends javax.swing.JFrame {
                 
                 String device = entry.getKey();
                 
-                int value = entry.getValue();                
+                int value = entry.getValue();   
                 int col = getCol(tableModel,device);
 
                 int oldValue = Integer.parseInt(tableModel.getValueAt(row, col).toString());
                 int newValue = oldValue + value;
                 
-                setTableValues(newValue,row,col);
-                lastAction.put(techFieldName.getText(), newValue);
+                setTableValues(newValue,row,col);  
             }
+            calculateUndo(techFieldName.getText(),multiMap);
         }
         
         for(int i=0;i<multiDataTable.length;i++){
@@ -1141,7 +1202,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         }
         
         multiMap.clear();
-            
+   
     }
     
     private void toTable(){
@@ -1156,7 +1217,44 @@ public class ExcelFrame extends javax.swing.JFrame {
         int newValue = oldValue + DEFAULT_INC;
            
         setTableValues(newValue,row,col);    
+       
+        calculateUndo(techFieldName.getText(),device,oldValue,newValue);
+  
+    }
+    
+    private void calculateUndo(String tech,String device,int oValue,int nValue){
+        int lastValue =0;
         
+        if(oValue==0){
+            lastValue = nValue;
+        }else{
+            lastValue = oValue;
+        }
+        lastAction[0]=tech;
+        lastAction[1]=device;
+        lastAction[2]=String.valueOf(lastValue); 
+        
+        for(String st:lastAction){
+            System.out.print(st + " ");
+        }
+        System.out.println();
+    }
+    
+    private void calculateUndo(String tech,HashMap<String,Integer> map){
+        int lastValue =0;
+        //HashMap<String,String[]> temp = new HashMap<String,String[]>(); 
+        
+        for(Map.Entry<String,Integer> entry:map.entrySet()){
+               
+            String device = entry.getKey();
+            String value = entry.getValue().toString();
+            String[] t = new String[2];
+            t[0]= device;
+            t[1]=value;
+            lastActionMap.put(tech,t);
+        }
+    
+        System.out.println(lastActionMap);
     }
     
     private void setTableValues(int val, int row, int col){
@@ -1346,6 +1444,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     private javax.swing.JTextField devFieldName;
     private javax.swing.JLabel deviceField;
     private javax.swing.JLabel eQuotaLabel;
+    private javax.swing.JMenu editMenu;
     private javax.swing.JButton exportButton;
     private javax.swing.JLabel hourLabel;
     public javax.swing.JTable infoTable;
@@ -1371,5 +1470,6 @@ public class ExcelFrame extends javax.swing.JFrame {
     private javax.swing.JLabel techField;
     private javax.swing.JTextField techFieldName;
     private javax.swing.JTable theTable;
+    private javax.swing.JMenuItem undoMenuItem;
     // End of variables declaration//GEN-END:variables
 }
