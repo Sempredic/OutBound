@@ -236,6 +236,11 @@ public class ExcelFrame extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(204, 204, 204));
         setResizable(false);
+        addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                formKeyPressed(evt);
+            }
+        });
 
         techFieldName.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -284,6 +289,11 @@ public class ExcelFrame extends javax.swing.JFrame {
         jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jToggleButton1ActionPerformed(evt);
+            }
+        });
+        jToggleButton1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jToggleButton1KeyPressed(evt);
             }
         });
 
@@ -747,7 +757,6 @@ public class ExcelFrame extends javax.swing.JFrame {
         
         if(n == JOptionPane.YES_OPTION){
         /////////////////////////////////////////////////////////////////////////////////////    
-        
             makeTables(dTableList.getSelectedItems());
             makeProdTable(getModel());
             //StringBuilder location = new StringBuilder("C:\\Users\\Public\\OutBoundProd_");
@@ -954,6 +963,24 @@ public class ExcelFrame extends javax.swing.JFrame {
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jToggleButton1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jToggleButton1KeyPressed
+        // TODO add your handling code here:
+//        int key = evt.getKeyCode();
+//        
+//        if(key==KeyEvent.VK_CONTROL){
+//            System.out.println("YYYYYYYAAAAAAAYYYY");
+//        }
+    }//GEN-LAST:event_jToggleButton1KeyPressed
+
+    private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
+        // TODO add your handling code here:
+        int key = evt.getKeyCode();
+        
+        if(key==KeyEvent.VK_CONTROL){
+            System.out.println("YYYYYYYAAAAAAAYYYY");
+        }
+    }//GEN-LAST:event_formKeyPressed
     
     private void undoLastActionMap(){
         for(Map.Entry<Integer,String[]> entry:lastActionMap.entrySet()){

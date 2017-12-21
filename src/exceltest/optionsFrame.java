@@ -18,6 +18,15 @@ public class optionsFrame extends javax.swing.JFrame {
         initComponents();
     }
     
+    public boolean getCheckBoxStatus(){
+
+        if(multiScanCheckBox.isSelected()){
+            return true;
+        }
+        
+        return false;
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
