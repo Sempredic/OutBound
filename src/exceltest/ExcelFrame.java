@@ -438,6 +438,11 @@ public class ExcelFrame extends javax.swing.JFrame {
     jMenu3.add(addMenuItem);
 
     jMenuItem1.setText("Add Existing Tech");
+    jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            jMenuItem1ActionPerformed(evt);
+        }
+    });
     jMenu3.add(jMenuItem1);
 
     optionsMenuItem.setText("Options...");
@@ -645,8 +650,21 @@ public class ExcelFrame extends javax.swing.JFrame {
         DateFormat hour = new SimpleDateFormat("hh:mm aa");
         Date tableDate = new Date();
         String timeID = hour.format(tableDate);
+        JLabel cen = new JLabel("Are You Sure?",JLabel.CENTER);
+        Object[] options = {"Yes",
+                    "No"};
         
-        if(!curTable.isDTListEmpty()){
+        int n = JOptionPane.showOptionDialog(this,
+            cen,
+            "Continue",
+            JOptionPane.YES_NO_CANCEL_OPTION,
+            JOptionPane.PLAIN_MESSAGE,
+            null,
+            options,
+            options[1]);
+        
+        if(n==JOptionPane.YES_OPTION){
+            if(!curTable.isDTListEmpty()){
             
             if(!curTable.checkDTExists(timeID)){
                 
@@ -660,11 +678,12 @@ public class ExcelFrame extends javax.swing.JFrame {
                         "Error",
                         JOptionPane.PLAIN_MESSAGE);
             }   
-        }else{
-            dTableList.add(curTable.updateTable(getModel()));
-        }
-        
-        updateInfoTable();
+            }else{
+                dTableList.add(curTable.updateTable(getModel()));
+            }
+
+            updateInfoTable();
+        }   
         
     }//GEN-LAST:event_snapShotButtonActionPerformed
 
@@ -931,6 +950,10 @@ public class ExcelFrame extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_undoMenuItemActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
     
     private void undoLastActionMap(){
         for(Map.Entry<Integer,String[]> entry:lastActionMap.entrySet()){
