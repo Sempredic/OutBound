@@ -230,6 +230,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         undoMenuItem = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         addMenuItem = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
         optionsMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -423,7 +424,7 @@ public class ExcelFrame extends javax.swing.JFrame {
 
     jMenu3.setText("Tools");
 
-    addMenuItem.setText("Add New Tech");
+    addMenuItem.setText("Add (New) Tech");
     addMenuItem.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseClicked(java.awt.event.MouseEvent evt) {
             addMenuItemMouseClicked(evt);
@@ -435,6 +436,9 @@ public class ExcelFrame extends javax.swing.JFrame {
         }
     });
     jMenu3.add(addMenuItem);
+
+    jMenuItem1.setText("Add Existing Tech");
+    jMenu3.add(jMenuItem1);
 
     optionsMenuItem.setText("Options...");
     optionsMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -1462,6 +1466,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;

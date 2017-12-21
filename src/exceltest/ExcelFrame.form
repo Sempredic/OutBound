@@ -44,12 +44,17 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="addMenuItem">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Add New Tech"/>
+                <Property name="text" type="java.lang.String" value="Add (New) Tech"/>
               </Properties>
               <Events>
                 <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="addMenuItemMouseClicked"/>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addMenuItemActionPerformed"/>
               </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem1">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Add Existing Tech"/>
+              </Properties>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="optionsMenuItem">
               <Properties>
