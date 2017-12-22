@@ -230,7 +230,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         undoMenuItem = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         addMenuItem = new javax.swing.JMenuItem();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        addExistingTechMenuItem = new javax.swing.JMenuItem();
         optionsMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -447,13 +447,13 @@ public class ExcelFrame extends javax.swing.JFrame {
     });
     jMenu3.add(addMenuItem);
 
-    jMenuItem1.setText("Add Existing Tech");
-    jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+    addExistingTechMenuItem.setText("Add Existing Tech");
+    addExistingTechMenuItem.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jMenuItem1ActionPerformed(evt);
+            addExistingTechMenuItemActionPerformed(evt);
         }
     });
-    jMenu3.add(jMenuItem1);
+    jMenu3.add(addExistingTechMenuItem);
 
     optionsMenuItem.setText("Options...");
     optionsMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -960,9 +960,10 @@ public class ExcelFrame extends javax.swing.JFrame {
 
     }//GEN-LAST:event_undoMenuItemActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void addExistingTechMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addExistingTechMenuItemActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+        
+    }//GEN-LAST:event_addExistingTechMenuItemActionPerformed
 
     private void jToggleButton1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jToggleButton1KeyPressed
         // TODO add your handling code here:
@@ -980,6 +981,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         if(key==KeyEvent.VK_CONTROL){
             System.out.println("YYYYYYYAAAAAAAYYYY");
         }
+        
     }//GEN-LAST:event_formKeyPressed
     
     private void undoLastActionMap(){
@@ -1069,8 +1071,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         int curCell = 0;
         LinkedHashMap<String,String[][]>list = new LinkedHashMap<String,String[][]>();
         String[] devNames = {"Tech","Name","Classic","Nano","Shuffle","Touch","Pad","Phone","     Tech Total    "};  
-        
-        
+                
         for(String item:selectedList){
             //System.out.println(item);
             list.put(item,curTable.getDataTableFromList(item));
@@ -1503,6 +1504,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem addExistingTechMenuItem;
     private javax.swing.JMenuItem addMenuItem;
     private java.awt.List dTableList;
     private javax.swing.JTextField devFieldName;
@@ -1516,7 +1518,6 @@ public class ExcelFrame extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
