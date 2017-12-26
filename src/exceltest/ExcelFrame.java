@@ -10,6 +10,7 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.AbstractButton;
@@ -96,6 +97,8 @@ public class ExcelFrame extends javax.swing.JFrame {
     HashMap<Integer,String[]> lastActionMap;
     int actionMapID;
     int SHIFT_HOURS;
+    ArrayList existingTechList;
+    LinkedHashMap<String,String> existingRosterList;
 
     
     
@@ -123,8 +126,10 @@ public class ExcelFrame extends javax.swing.JFrame {
         lastActionMap = new HashMap<Integer,String[]>();
         actionMapID = 0;
         SHIFT_HOURS = 10;
-        
+        existingRosterList = new LinkedHashMap<String,String>();
+        existingTechList = new ArrayList();
         initTableStyle();
+        initExistingTechs();
     }
     
     private void initMultiTable(){
@@ -179,6 +184,28 @@ public class ExcelFrame extends javax.swing.JFrame {
         }
 
          theTable.getColumn("Tech Total").setCellRenderer(colRender);
+    }
+    
+    private void initExistingTechs(){
+         try{
+            File tmpDir = new File("roster.txt");
+            boolean exists = tmpDir.exists();
+
+            if(exists){
+                for(String name:Files.readAllLines(Paths.get("roster.txt"))){
+                    String[] li = {" "," "};
+                    li = name.split(" ");
+                
+                    if(!existingRosterList.containsKey(li[0])){
+                        existingRosterList.put(li[0],li[1]);
+                        existingTechList.add(li[0]); 
+                    }
+                }
+            }
+            
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
     }
 
     DefaultTableModel getModel(){
@@ -874,9 +901,8 @@ public class ExcelFrame extends javax.swing.JFrame {
         int col,row=0;
         col = getCol(getInfoModel(),"Quota");
         
-        
         inQuota = Integer.valueOf(Quota)/curTable.getRosterNum().size();
-                
+                  
         for(String tech:curTable.getRosterNum()){
             row = getRow(getInfoModel(),tech);
             getInfoModel().setValueAt(inQuota, row, col);
@@ -973,7 +999,52 @@ public class ExcelFrame extends javax.swing.JFrame {
 
     private void addExistingTechMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addExistingTechMenuItemActionPerformed
         // TODO add your handling code here:
+        String[] newTechRow = new String [9];
+        String[] newInfoRow = new String[getInfoModel().getColumnCount()];
         
+        Object[] options = existingTechList.toArray();
+        String tech = (String)JOptionPane.showInputDialog(
+                            this,
+                            new JLabel("Select Existing Tech", SwingConstants.CENTER),
+                            "Add Tech",
+                            JOptionPane.PLAIN_MESSAGE,
+                            null,
+                            options,
+                            null);
+
+        //If a string was returned, say so.
+        if ((tech != null) && (tech.length() > 0)) {
+            if(!curTable.getRosterNum().contains(tech)){
+                for(int i=0;i<newTechRow.length;i++){
+                    newTechRow[i] = "0";
+                }
+
+                for(int i=0;i<newInfoRow.length;i++){
+                    newInfoRow[i] = "0";
+                }
+
+                newTechRow[0] = tech;
+                newInfoRow[0] = tech;
+
+                if(existingRosterList.containsKey(tech)){
+                  
+                    curTable.addToRoster(tech,existingRosterList.get(tech));
+                    newTechRow[1] = existingRosterList.get(tech);
+                    newInfoRow[1] = existingRosterList.get(tech);
+                }else{
+                    
+                    JOptionPane.showMessageDialog(this,"Unknown Error","Try Again", JOptionPane.WARNING_MESSAGE);
+                }
+                
+                tableModel.insertRow(0,newTechRow);
+                getInfoModel().insertRow(0, newInfoRow);
+                updateInfoQuota(quotaLabel.getText());
+                    
+            }else{
+                
+                JOptionPane.showMessageDialog(this,"Tech Already Exists","Try Again", JOptionPane.WARNING_MESSAGE);
+            }
+        }
     }//GEN-LAST:event_addExistingTechMenuItemActionPerformed
 
     private void jToggleButton1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jToggleButton1KeyPressed
