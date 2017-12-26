@@ -95,6 +95,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     String[] lastAction;
     HashMap<Integer,String[]> lastActionMap;
     int actionMapID;
+    int SHIFT_HOURS;
 
     
     
@@ -121,7 +122,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         lastAction = new String[3];
         lastActionMap = new HashMap<Integer,String[]>();
         actionMapID = 0;
-        
+        SHIFT_HOURS = 10;
         
         initTableStyle();
     }
@@ -628,6 +629,13 @@ public class ExcelFrame extends javax.swing.JFrame {
                 manager.focusPreviousComponent();
                 techFieldName.setText("");
                 devFieldName.setEnabled(false);
+                if(oFrame.getCheckBoxStatus()){
+                    if(multiSelected){
+                        multiSelected = false;
+                        jToggleButton1.setSelected(false);
+                        multiLable.setText("OFF");
+                    }
+                }
             }else if(tableModel.findColumn(devFieldName.getText())!=-1){
                 toMulti();
             }else if(devFieldName.getText().toUpperCase().equals("CLEAR")){
@@ -699,6 +707,8 @@ public class ExcelFrame extends javax.swing.JFrame {
 
     private void updateInfoTable(){
         
+        SHIFT_HOURS = oFrame.getShiftHours();
+        
         int row = 0;
         int col = 0;
         int value = 0;
@@ -711,7 +721,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         for(Map.Entry<String,String> entry:curTable.getTechAvgList().entrySet()){
             row = getRow(getInfoModel(),entry.getKey());
             value = Integer.valueOf(entry.getValue())/dTableList.getItemCount();
-            eodValue = value*10;
+            eodValue = value*SHIFT_HOURS;
             
             getInfoModel().setValueAt(value,row,col);
             getInfoModel().setValueAt(eodValue,row,estCol);
@@ -857,6 +867,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     private void optionsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optionsMenuItemActionPerformed
         // TODO add your handling code here:
         oFrame.setVisible(true);
+        
     }//GEN-LAST:event_optionsMenuItemActionPerformed
 
     private void updateInfoQuota(String Quota){
@@ -967,21 +978,11 @@ public class ExcelFrame extends javax.swing.JFrame {
 
     private void jToggleButton1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jToggleButton1KeyPressed
         // TODO add your handling code here:
-//        int key = evt.getKeyCode();
-//        
-//        if(key==KeyEvent.VK_CONTROL){
-//            System.out.println("YYYYYYYAAAAAAAYYYY");
-//        }
     }//GEN-LAST:event_jToggleButton1KeyPressed
 
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
         // TODO add your handling code here:
-        int key = evt.getKeyCode();
-        
-        if(key==KeyEvent.VK_CONTROL){
-            System.out.println("YYYYYYYAAAAAAAYYYY");
-        }
-        
+
     }//GEN-LAST:event_formKeyPressed
     
     private void undoLastActionMap(){
