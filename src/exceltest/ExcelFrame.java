@@ -166,12 +166,15 @@ public class ExcelFrame extends javax.swing.JFrame {
         
         DefaultTableCellRenderer centerRender = new DefaultTableCellRenderer();
         DefaultTableCellRenderer colRenderer = new DefaultTableCellRenderer();
+        
        
         colRenderer.setHorizontalAlignment(JLabel.CENTER);
         centerRender.setHorizontalAlignment(JLabel.CENTER);
-
+        
+        newTableRenderer renderer = new newTableRenderer(getModel(),centerRender);
+        
         for(int x=0;x<theTable.getColumnCount();x++){
-            theTable.getColumnModel().getColumn(x).setCellRenderer(centerRender);
+            theTable.getColumnModel().getColumn(x).setCellRenderer(renderer);
         }
          
         for(int i = 0;i<mTable.getColumnCount();i++){
@@ -344,7 +347,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         }
     });
 
-    theTable.setFont(new java.awt.Font("SansSerif", 1, 13));
+    theTable.setFont(new java.awt.Font("Segoe UI", 3, 12)); // NOI18N
     theTable.setModel(new javax.swing.table.DefaultTableModel(curTable.getDataTable(),
         curTable.getcolumnTable())
     );
