@@ -7,6 +7,7 @@ package exceltest;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
@@ -20,7 +21,6 @@ import table.Table;
 
 import java.io.FileOutputStream;
 import java.nio.file.Files;
-import static java.nio.file.Files.list;
 import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -30,7 +30,6 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Set;
 import java.util.Stack;
-import javax.swing.DefaultListCellRenderer;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -164,18 +163,14 @@ public class ExcelFrame extends javax.swing.JFrame {
     }
     
     private void initTableStyle(){
-        DefaultTableCellRenderer centerRender = new DefaultTableCellRenderer();
-        DefaultTableCellRenderer colRender = new DefaultTableCellRenderer();
-        DefaultTableCellRenderer colRenderer = new DefaultTableCellRenderer();
-        colRenderer.setHorizontalAlignment(JLabel.CENTER);
-
-        colRender.setBackground(Color.DARK_GRAY);
-        colRender.setHorizontalAlignment(JLabel.CENTER);
-        colRender.setForeground(Color.WHITE);
         
+        DefaultTableCellRenderer centerRender = new DefaultTableCellRenderer();
+        DefaultTableCellRenderer colRenderer = new DefaultTableCellRenderer();
+       
+        colRenderer.setHorizontalAlignment(JLabel.CENTER);
         centerRender.setHorizontalAlignment(JLabel.CENTER);
 
-         for(int x=0;x<theTable.getColumnCount();x++){
+        for(int x=0;x<theTable.getColumnCount();x++){
             theTable.getColumnModel().getColumn(x).setCellRenderer(centerRender);
         }
          
@@ -183,7 +178,6 @@ public class ExcelFrame extends javax.swing.JFrame {
             mTable.getColumnModel().getColumn(i).setCellRenderer(colRenderer);
         }
 
-         theTable.getColumn("Tech Total").setCellRenderer(colRender);
     }
     
     private void initExistingTechs(){
@@ -239,7 +233,8 @@ public class ExcelFrame extends javax.swing.JFrame {
         exportButton = new javax.swing.JButton();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         tablePanel = new javax.swing.JScrollPane();
-        theTable = new javax.swing.JTable();
+        theTable = new javax.swing.JTable()
+        ;
         jPanel1 = new javax.swing.JPanel();
         quotaButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -349,7 +344,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         }
     });
 
-    theTable.setFont(new java.awt.Font("SansSerif", 1, 13)); // NOI18N
+    theTable.setFont(new java.awt.Font("SansSerif", 1, 13));
     theTable.setModel(new javax.swing.table.DefaultTableModel(curTable.getDataTable(),
         curTable.getcolumnTable())
     );
@@ -583,6 +578,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     pack();
     setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
 
     private void devFieldNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_devFieldNameActionPerformed
         // TODO add your handling code here:
