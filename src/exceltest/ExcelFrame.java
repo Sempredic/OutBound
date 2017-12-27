@@ -780,37 +780,44 @@ public class ExcelFrame extends javax.swing.JFrame {
 
     private void exportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportButtonActionPerformed
         // TODO add your handling code here:
-        Object[] options = {"Yes",
-                    "No"};
-        int n = JOptionPane.showOptionDialog(this,
-            "Export Selected Time(s)?",
-            "Continue",
-            JOptionPane.YES_NO_CANCEL_OPTION,
-            JOptionPane.QUESTION_MESSAGE,
-            null,
-            options,
-            options[1]);
         
-        if(n == JOptionPane.YES_OPTION){
-        /////////////////////////////////////////////////////////////////////////////////////    
-            makeTables(dTableList.getSelectedItems());
-            makeProdTable(getModel());
-            //StringBuilder location = new StringBuilder("C:\\Users\\Public\\OutBoundProd_");
-            StringBuilder location = new StringBuilder("OutBoundProd_");
-            location.append(String.valueOf(sdf.format(date)));
-            location.append(".xlsx");
+        if(dTableList.getSelectedItems().length>0){
+            
+            Object[] options = {"Yes", "No"};
+            
+            int n = JOptionPane.showOptionDialog(this,
+                "Export Selected Time(s)?",
+                "Continue",
+                JOptionPane.YES_NO_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[1]);
 
-            //OUTPUT
-            try (FileOutputStream outputStream = new FileOutputStream(location.toString())){
-                workbook.write(outputStream);
-                outputStream.close();
+            if(n == JOptionPane.YES_OPTION){
+            /////////////////////////////////////////////////////////////////////////////////////    
+                makeTables(dTableList.getSelectedItems());
+                makeProdTable(getModel());
+                //StringBuilder location = new StringBuilder("C:\\Users\\Public\\OutBoundProd_");
+                StringBuilder location = new StringBuilder("OutBoundProd_");
+                location.append(String.valueOf(sdf.format(date)));
+                location.append(".xlsx");
 
-                JOptionPane.showMessageDialog(this,"             File Created","Written Successfully", JOptionPane.WARNING_MESSAGE);
-            } catch (Exception e) {
-                //System.out.println(e.getMessage());
-                JOptionPane.showMessageDialog(this,"Unable To Write, Try Again","File Is Open", JOptionPane.WARNING_MESSAGE);
+                //OUTPUT
+                try (FileOutputStream outputStream = new FileOutputStream(location.toString())){
+                    workbook.write(outputStream);
+                    outputStream.close();
+
+                    JOptionPane.showMessageDialog(this,"             File Created","Written Successfully", JOptionPane.WARNING_MESSAGE);
+                } catch (Exception e) {
+                    //System.out.println(e.getMessage());
+                    JOptionPane.showMessageDialog(this,"Unable To Write, Try Again","File Is Open", JOptionPane.WARNING_MESSAGE);
+                }
             }
+        }else{
+            JOptionPane.showMessageDialog(this,"    No Hour(s) Selected","Try Again", JOptionPane.WARNING_MESSAGE);
         }
+        
     }//GEN-LAST:event_exportButtonActionPerformed
 
     private void addMenuItemMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addMenuItemMouseClicked
