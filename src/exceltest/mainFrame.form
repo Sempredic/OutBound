@@ -39,46 +39,35 @@
               <Component id="jLabel2" min="-2" pref="74" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="73" max="-2" attributes="0"/>
           </Group>
-          <Group type="102" alignment="1" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" max="-2" attributes="0">
                   <Component id="existingList" min="-2" pref="204" max="-2" attributes="0"/>
-                  <Group type="102" attributes="0">
-                      <Component id="selectAllButton" max="32767" attributes="0"/>
+                  <Group type="102" alignment="1" attributes="0">
+                      <Component id="selectAllButton" min="-2" pref="92" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="deSelectButton" min="-2" pref="106" max="-2" attributes="0"/>
+                      <Component id="deSelectButton" max="32767" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace pref="69" max="32767" attributes="0"/>
+              <EmptySpace pref="59" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="1" attributes="0">
-                      <Group type="103" groupAlignment="1" attributes="0">
-                          <Group type="102" alignment="1" attributes="0">
-                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                              <Component id="addTechButton" min="-2" pref="140" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="62" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Group type="103" groupAlignment="1" attributes="0">
-                                  <Component id="jSeparator1" alignment="0" min="-2" pref="140" max="-2" attributes="0"/>
-                                  <Component id="createTechButton" alignment="0" min="-2" pref="143" max="-2" attributes="0"/>
-                                  <Component id="delTechButton" alignment="0" min="-2" pref="143" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace max="32767" attributes="0"/>
-                          </Group>
-                      </Group>
-                      <Component id="finalRosterList" min="-2" pref="201" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="1" attributes="0">
-                      <Component id="doneButton" min="-2" pref="143" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="remTechButton" min="-2" pref="140" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                  </Group>
+                  <Component id="jSeparator1" alignment="0" min="-2" pref="140" max="-2" attributes="0"/>
+                  <Component id="createTechButton" alignment="0" min="-2" pref="143" max="-2" attributes="0"/>
+                  <Component id="delTechButton" alignment="0" min="-2" pref="143" max="-2" attributes="0"/>
+                  <Component id="remTechButton" alignment="0" min="-2" pref="140" max="-2" attributes="0"/>
+                  <Component id="addTechButton" min="-2" pref="140" max="-2" attributes="0"/>
               </Group>
+              <EmptySpace pref="54" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                  <Component id="doneButton" min="-2" pref="143" max="-2" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <Component id="rosterSelectAllButton" min="-2" pref="92" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="rosterDeselectAllButton" max="32767" attributes="0"/>
+                  </Group>
+                  <Component id="finalRosterList" alignment="1" min="-2" pref="202" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -91,6 +80,11 @@
                   <Component id="jLabel2" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
               </Group>
               <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                      <Component id="existingList" pref="314" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="133" max="-2" attributes="0"/>
+                  </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
@@ -111,17 +105,19 @@
                           </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="doneButton" alignment="3" min="-2" pref="38" max="-2" attributes="0"/>
-                          <Component id="deSelectButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="selectAllButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="deSelectButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="selectAllButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                              <Component id="rosterSelectAllButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="rosterDeselectAllButton" alignment="0" min="-2" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                       <EmptySpace max="32767" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                      <Component id="existingList" pref="314" max="32767" attributes="0"/>
-                      <EmptySpace min="-2" pref="124" max="-2" attributes="0"/>
+                      <Component id="doneButton" min="-2" pref="38" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
                   </Group>
               </Group>
           </Group>
@@ -221,6 +217,22 @@
       </Events>
     </Component>
     <Component class="javax.swing.JSeparator" name="jSeparator1">
+    </Component>
+    <Component class="javax.swing.JButton" name="rosterSelectAllButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Select All"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rosterSelectAllButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="rosterDeselectAllButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="DeSelect All"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rosterDeselectAllButtonActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

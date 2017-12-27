@@ -809,7 +809,7 @@ public class ExcelFrame extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this,"             File Created","Written Successfully", JOptionPane.WARNING_MESSAGE);
             } catch (Exception e) {
                 //System.out.println(e.getMessage());
-                JOptionPane.showMessageDialog(this,"Did Not Write Successfully","Try Again", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this,"Unable To Write, Try Again","File Is Open", JOptionPane.WARNING_MESSAGE);
             }
         }
     }//GEN-LAST:event_exportButtonActionPerformed
@@ -919,8 +919,10 @@ public class ExcelFrame extends javax.swing.JFrame {
 
             if(quota.length()<=4){
                 
-                quotaLabel.setText(quota);
-                updateInfoQuota(quota);
+                if(curTable.getRosterNum().size()!=0){
+                    quotaLabel.setText(quota);
+                    updateInfoQuota(quota);
+                }
                 
             }else{
                 JOptionPane.showMessageDialog(this,"Quota Exceeds [4]Char Max","Try Again", JOptionPane.WARNING_MESSAGE);
