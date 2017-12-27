@@ -63,7 +63,7 @@ public class optionsFrame extends javax.swing.JFrame {
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setText("Options");
 
-        jLabel1.setText("Reset MultiScan After Commit");
+        jLabel1.setText("MultiScan Auto-Off After Commit");
 
         locationLabel.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
         locationLabel.setText(" ");
