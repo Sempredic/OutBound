@@ -172,13 +172,14 @@ public class ExcelFrame extends javax.swing.JFrame {
         centerRender.setHorizontalAlignment(JLabel.CENTER);
         
         newTableRenderer renderer = new newTableRenderer(getModel(),centerRender);
+        multiTableRenderer mRenderer = new multiTableRenderer(mTableModel,colRenderer);
         
         for(int x=0;x<theTable.getColumnCount();x++){
             theTable.getColumnModel().getColumn(x).setCellRenderer(renderer);
         }
          
         for(int i = 0;i<mTable.getColumnCount();i++){
-            mTable.getColumnModel().getColumn(i).setCellRenderer(colRenderer);
+            mTable.getColumnModel().getColumn(i).setCellRenderer(mRenderer);
         }
 
     }
@@ -324,7 +325,6 @@ public class ExcelFrame extends javax.swing.JFrame {
         });
 
         mTable.setBackground(new java.awt.Color(51, 51, 51));
-        mTable.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(153, 153, 153)));
         mTable.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
         mTable.setForeground(new java.awt.Color(255, 255, 255));
         mTable.setModel(new javax.swing.table.DefaultTableModel(multiDataTable,
