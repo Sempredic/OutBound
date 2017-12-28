@@ -54,8 +54,8 @@ public class newTableRenderer implements TableCellRenderer{
                 Color prev = c.getBackground();
 
                 if(!o.equals("0")){
-                    c.setBackground(Color.WHITE);
-                    c.setForeground(Color.BLACK);
+                    c.setBackground(Color.BLACK);
+                    c.setForeground(Color.WHITE);
                 }else{
                     c.setBackground(prev);
                 }
@@ -64,8 +64,8 @@ public class newTableRenderer implements TableCellRenderer{
         
         if(i==jtable.getRowCount()-1&&i1==jtable.getColumnCount()-1){
    
-            c.setBackground(Color.BLACK);
-            c.setForeground(Color.WHITE);
+            c.setBackground(Color.WHITE);
+            c.setForeground(Color.BLACK);
         }
 
         return c;

@@ -354,14 +354,15 @@ public class ExcelFrame extends javax.swing.JFrame {
     theTable.setColumnSelectionAllowed(true);
     theTable.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     theTable.setEnabled(false);
-    theTable.setGridColor(new java.awt.Color(0, 0, 0));
+    theTable.setGridColor(new java.awt.Color(255, 255, 255));
+    theTable.setRowHeight(22);
     theTable.setRowSelectionAllowed(false);
     tablePanel.setViewportView(theTable);
     theTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
     jTabbedPane1.addTab("Scan", tablePanel);
 
-    jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+    jPanel1.setBackground(new java.awt.Color(204, 204, 204));
 
     quotaButton.setText("Confirm");
     quotaButton.addActionListener(new java.awt.event.ActionListener() {
@@ -370,9 +371,11 @@ public class ExcelFrame extends javax.swing.JFrame {
         }
     });
 
+    infoTable.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
     infoTable.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
     infoTable.setModel(new javax.swing.table.DefaultTableModel(infoDataTable,infoColumn));
     infoTable.setEnabled(false);
+    infoTable.setRowHeight(20);
     jScrollPane1.setViewportView(infoTable);
 
     eQuotaLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -522,25 +525,23 @@ public class ExcelFrame extends javax.swing.JFrame {
                     .addComponent(snapShotButton)))
             .addGap(18, 18, 18)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE)
-                .addComponent(jScrollPane2))
+                .addComponent(jScrollPane2)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 651, Short.MAX_VALUE))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(38, 38, 38)
-                    .addComponent(dTableList, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 37, Short.MAX_VALUE))
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(56, 56, 56)
-                    .addComponent(exportButton)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(dTableList, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(32, 32, 32))
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addComponent(exportButton)
+                    .addGap(50, 50, 50))
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                     .addComponent(hourLabel)
-                    .addGap(54, 54, 54))))
+                    .addGap(50, 50, 50))))
         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
             .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(multiScanLabel)
-            .addGap(420, 420, 420))
+            .addGap(433, 433, 433))
     );
     layout.setVerticalGroup(
         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
