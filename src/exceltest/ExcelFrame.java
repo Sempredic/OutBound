@@ -347,7 +347,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         }
     });
 
-    theTable.setFont(new java.awt.Font("Segoe UI", 3, 12)); // NOI18N
+    theTable.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
     theTable.setModel(new javax.swing.table.DefaultTableModel(curTable.getDataTable(),
         curTable.getcolumnTable())
     );
