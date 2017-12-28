@@ -37,32 +37,34 @@ public class newTableRenderer implements TableCellRenderer{
             c.setBackground(Color.BLACK);
             c.setForeground(Color.WHITE); 
         }else{
+            c.setBackground(Color.LIGHT_GRAY);
+            c.setForeground(Color.BLACK);
+        }
+        
+        if(i1==model.getColumnCount()-1){
+            c.setBackground(Color.GRAY);
+            c.setForeground(Color.WHITE);
+        }else if(i==jtable.getRowCount()-1){
             c.setBackground(Color.GRAY);
             c.setForeground(Color.WHITE);
         }
         
-        if(i1==model.getColumnCount()-1){
-            c.setBackground(Color.WHITE);
-            c.setForeground(Color.BLACK);
-        }else if(i==jtable.getRowCount()-1){
-            c.setBackground(Color.WHITE);
-            c.setForeground(Color.BLACK);
-        }
-        
-        if(i1>1){
-            Color prev = c.getBackground();
-            if(!o.equals("0")){
-                c.setBackground(Color.WHITE);
-                c.setForeground(Color.BLACK);
-            }else{
-                c.setBackground(prev);
+        if(i1>1&&i1<model.getColumnCount()-1){
+            if(i<jtable.getRowCount()-1){
+                Color prev = c.getBackground();
+
+                if(!o.equals("0")){
+                    c.setBackground(Color.WHITE);
+                    c.setForeground(Color.BLACK);
+                }else{
+                    c.setBackground(prev);
+                }
             }
-        
         }
         
         if(i==jtable.getRowCount()-1&&i1==jtable.getColumnCount()-1){
    
-            c.setBackground(Color.BLACK);
+            c.setBackground(Color.DARK_GRAY);
             c.setForeground(Color.WHITE);
         }
 
