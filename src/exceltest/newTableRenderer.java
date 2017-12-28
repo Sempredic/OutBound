@@ -34,7 +34,7 @@ public class newTableRenderer implements TableCellRenderer{
                 o, bln, bln1, i, i1);
         
         if (i % 2 == 0){
-            c.setBackground(Color.BLACK);
+            c.setBackground(Color.GRAY);
             c.setForeground(Color.WHITE); 
         }else{
             c.setBackground(Color.LIGHT_GRAY);
@@ -42,10 +42,10 @@ public class newTableRenderer implements TableCellRenderer{
         }
         
         if(i1==model.getColumnCount()-1){
-            c.setBackground(Color.GRAY);
+            c.setBackground(Color.DARK_GRAY);
             c.setForeground(Color.WHITE);
         }else if(i==jtable.getRowCount()-1){
-            c.setBackground(Color.GRAY);
+            c.setBackground(Color.DARK_GRAY);
             c.setForeground(Color.WHITE);
         }
         
@@ -64,8 +64,8 @@ public class newTableRenderer implements TableCellRenderer{
         
         if(i==jtable.getRowCount()-1&&i1==jtable.getColumnCount()-1){
    
-            c.setBackground(Color.DARK_GRAY);
-            c.setForeground(Color.WHITE);
+            c.setBackground(Color.ORANGE);
+            c.setForeground(Color.BLACK);
         }
 
         return c;
