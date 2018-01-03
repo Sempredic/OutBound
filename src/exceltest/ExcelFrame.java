@@ -6,8 +6,6 @@
 package exceltest;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
@@ -30,10 +28,13 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Set;
 import java.util.Stack;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
@@ -98,7 +99,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     int SHIFT_HOURS;
     ArrayList existingTechList;
     LinkedHashMap<String,String> existingRosterList;
-
+    int num=0;
     
     
     public ExcelFrame(Table table){
@@ -127,9 +128,15 @@ public class ExcelFrame extends javax.swing.JFrame {
         SHIFT_HOURS = 10;
         existingRosterList = new LinkedHashMap<String,String>();
         existingTechList = new ArrayList();
+
         initTableStyle();
         initExistingTechs();
+        progressBar.setIndeterminate(false);
+        progressBar.setString("Ready");
+        progressBar.setStringPainted(true);
     }
+    
+ 
     
     private void initMultiTable(){
         multiColumn = new String [] {
@@ -250,6 +257,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         hourLabel = new javax.swing.JLabel();
         multiScanLabel = new javax.swing.JLabel();
         multiLable = new javax.swing.JLabel();
+        progressBar = new javax.swing.JProgressBar();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         saveMenuItem = new javax.swing.JMenuItem();
@@ -527,17 +535,17 @@ public class ExcelFrame extends javax.swing.JFrame {
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                 .addComponent(jScrollPane2)
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 651, Short.MAX_VALUE))
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addComponent(dTableList, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(32, 32, 32))
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addComponent(exportButton)
+                    .addComponent(hourLabel)
                     .addGap(50, 50, 50))
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addComponent(hourLabel)
-                    .addGap(50, 50, 50))))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(dTableList, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(exportButton, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGap(32, 32, 32))))
         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
             .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(multiScanLabel)
@@ -569,6 +577,8 @@ public class ExcelFrame extends javax.swing.JFrame {
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(dTableList, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                             .addComponent(exportButton)))))
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(multiScanLabel)
@@ -796,31 +806,103 @@ public class ExcelFrame extends javax.swing.JFrame {
                 options[1]);
 
             if(n == JOptionPane.YES_OPTION){
-            /////////////////////////////////////////////////////////////////////////////////////    
-                makeTables(dTableList.getSelectedItems());
-                makeProdTable(getModel());
-                //StringBuilder location = new StringBuilder("C:\\Users\\Public\\OutBoundProd_");
-                StringBuilder location = new StringBuilder("OutBoundProd_");
-                location.append(String.valueOf(sdf.format(date)));
-                location.append(".xlsx");
+                
+                Thread thread1 = new Thread(new Runnable(){
+                    @Override
+                    public void run() {
+                        try {
+                            startMaker();
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(ExcelFrame.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
 
-                //OUTPUT
-                try (FileOutputStream outputStream = new FileOutputStream(location.toString())){
-                    workbook.write(outputStream);
-                    outputStream.close();
+                });
 
-                    JOptionPane.showMessageDialog(this,"             File Created","Written Successfully", JOptionPane.WARNING_MESSAGE);
-                } catch (Exception e) {
-                    //System.out.println(e.getMessage());
-                    JOptionPane.showMessageDialog(this,"Unable To Write, Try Again","File Is Open", JOptionPane.WARNING_MESSAGE);
-                }
+                Thread thread2 = new Thread(new Runnable(){
+                    @Override
+                    public void run() {
+                        try {
+                            startProgBar();
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(ExcelFrame.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+
+                });
+
+                Thread thread3 = new Thread(new Runnable(){
+                    @Override
+                    public void run() {
+                        try {
+                            startTableWriter();
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(ExcelFrame.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+
+                });
+                    
+                thread2.start();
+                thread3.start();
+                thread1.start();
             }
+            
         }else{
             JOptionPane.showMessageDialog(this,"    No Hour(s) Selected","Try Again", JOptionPane.WARNING_MESSAGE);
         }
         
+        
+        
     }//GEN-LAST:event_exportButtonActionPerformed
 
+    private void startMaker() throws InterruptedException{
+        exportButton.setEnabled(false);
+        
+        Thread.sleep(1000);
+        synchronized(this){
+            
+            makeTables(dTableList.getSelectedItems());
+            makeProdTable(getModel());
+            notify();
+            
+        }
+       
+    }
+    
+    private void startProgBar() throws InterruptedException{
+        
+       progressBar.setIndeterminate(true);
+       progressBar.setString("Exporting");
+    }
+    
+    private void startTableWriter() throws InterruptedException{
+        
+        synchronized(this){
+            
+            wait();
+  
+            progressBar.setIndeterminate(false);
+            progressBar.setString("Ready");
+            
+            StringBuilder location = new StringBuilder("OutBoundProd_");
+            location.append(String.valueOf(sdf.format(date)));
+            location.append(".xlsx");
+
+            try (FileOutputStream outputStream = new FileOutputStream(location.toString())){ 
+
+                workbook.write(outputStream);
+                outputStream.close(); 
+                JOptionPane.showMessageDialog(this,"             File Created","Written Successfully", JOptionPane.WARNING_MESSAGE);
+
+            } catch (Exception e) {}  
+        }
+        
+        exportButton.setEnabled(true);
+        
+    }
+    
+    
     private void addMenuItemMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addMenuItemMouseClicked
         // TODO add your handling code here:
         
@@ -1608,6 +1690,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     private javax.swing.JLabel multiLable;
     private javax.swing.JLabel multiScanLabel;
     private javax.swing.JMenuItem optionsMenuItem;
+    private javax.swing.JProgressBar progressBar;
     private javax.swing.JButton quotaButton;
     private javax.swing.JLabel quotaLabel;
     private javax.swing.JTextField quotaTextField;
