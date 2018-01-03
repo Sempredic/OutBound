@@ -100,6 +100,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     ArrayList existingTechList;
     LinkedHashMap<String,String> existingRosterList;
     int num=0;
+    Thread thread1,thread2,thread3;
     
     
     public ExcelFrame(Table table){
@@ -188,6 +189,9 @@ public class ExcelFrame extends javax.swing.JFrame {
         for(int i = 0;i<mTable.getColumnCount();i++){
             mTable.getColumnModel().getColumn(i).setCellRenderer(mRenderer);
         }
+        
+        infoTable.getTableHeader().setReorderingAllowed(false);
+        theTable.getTableHeader().setReorderingAllowed(false);
 
     }
     
@@ -807,7 +811,7 @@ public class ExcelFrame extends javax.swing.JFrame {
 
             if(n == JOptionPane.YES_OPTION){
                 
-                Thread thread1 = new Thread(new Runnable(){
+                thread1 = new Thread(new Runnable(){
                     @Override
                     public void run() {
                         try {
@@ -819,7 +823,7 @@ public class ExcelFrame extends javax.swing.JFrame {
 
                 });
 
-                Thread thread2 = new Thread(new Runnable(){
+                thread2 = new Thread(new Runnable(){
                     @Override
                     public void run() {
                         try {
@@ -831,7 +835,7 @@ public class ExcelFrame extends javax.swing.JFrame {
 
                 });
 
-                Thread thread3 = new Thread(new Runnable(){
+                thread3 = new Thread(new Runnable(){
                     @Override
                     public void run() {
                         try {
@@ -857,7 +861,10 @@ public class ExcelFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_exportButtonActionPerformed
 
     private void startMaker() throws InterruptedException{
+        
         exportButton.setEnabled(false);
+        undoMenuItem.setEnabled(false);
+        techFieldName.setEnabled(false);
         
         Thread.sleep(1000);
         synchronized(this){
@@ -899,6 +906,8 @@ public class ExcelFrame extends javax.swing.JFrame {
         }
         
         exportButton.setEnabled(true);
+        undoMenuItem.setEnabled(true);
+        techFieldName.setEnabled(true);
         
     }
     
@@ -1022,7 +1031,6 @@ public class ExcelFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this,"Not An Integer","Try Again", JOptionPane.WARNING_MESSAGE);
             quotaTextField.setText("");
         }
-        
         
     }//GEN-LAST:event_quotaButtonActionPerformed
 

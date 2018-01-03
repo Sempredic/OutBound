@@ -215,12 +215,16 @@ public class Table{
                 int v1 = Integer.valueOf(table[i][j]);
                 int v2 = tempTable[i][j];
                 int value = v1-v2;
-                table[i][j] = String.valueOf(value);    
+                
+                if(value >= 0){
+                    table[i][j] = String.valueOf(value);
+                }else{
+                    table[i][j] = "0";
+                }
+                    
             } 
         } 
         
-        
-
         dataTableList.put(dataTableID, table);
         
         updateTechAvgList(tModel);
