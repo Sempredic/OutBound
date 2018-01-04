@@ -132,9 +132,10 @@ public class ExcelFrame extends javax.swing.JFrame {
 
         initTableStyle();
         initExistingTechs();
+        progressBar.setStringPainted(true);
         progressBar.setIndeterminate(false);
         progressBar.setString("Ready");
-        progressBar.setStringPainted(true);
+        
     }
     
  
@@ -192,7 +193,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         
         infoTable.getTableHeader().setReorderingAllowed(false);
         theTable.getTableHeader().setReorderingAllowed(false);
-
+        mTable.getTableHeader().setReorderingAllowed(false);
     }
     
     private void initExistingTechs(){
@@ -274,6 +275,7 @@ public class ExcelFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(204, 204, 204));
+        setMinimumSize(new java.awt.Dimension(1007, 718));
         setResizable(false);
         addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -865,6 +867,9 @@ public class ExcelFrame extends javax.swing.JFrame {
         exportButton.setEnabled(false);
         undoMenuItem.setEnabled(false);
         techFieldName.setEnabled(false);
+        devFieldName.setEnabled(false);
+        addExistingTechMenuItem.setEnabled(false);
+        addMenuItem.setEnabled(false);
         
         Thread.sleep(1000);
         synchronized(this){
@@ -908,6 +913,9 @@ public class ExcelFrame extends javax.swing.JFrame {
         exportButton.setEnabled(true);
         undoMenuItem.setEnabled(true);
         techFieldName.setEnabled(true);
+        devFieldName.setEnabled(true);
+        addExistingTechMenuItem.setEnabled(true);
+        addMenuItem.setEnabled(true);
         
     }
     
