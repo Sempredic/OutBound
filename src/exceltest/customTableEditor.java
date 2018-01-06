@@ -8,7 +8,6 @@ package exceltest;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.GridLayout;
-import java.lang.reflect.Method;
 import javax.swing.AbstractCellEditor;
 import javax.swing.JComponent;
 import javax.swing.JLabel;

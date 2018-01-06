@@ -195,6 +195,10 @@ public class ExcelFrame extends javax.swing.JFrame {
         infoTable.getTableHeader().setReorderingAllowed(false);
         theTable.getTableHeader().setReorderingAllowed(false);
         mTable.getTableHeader().setReorderingAllowed(false);
+        
+        infoTable.getTableHeader().setResizingAllowed(false);
+        theTable.getTableHeader().setResizingAllowed(false);
+        mTable.getTableHeader().setResizingAllowed(false);
     }
     
     private void initExistingTechs(){
