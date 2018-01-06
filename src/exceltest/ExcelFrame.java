@@ -175,7 +175,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         
         DefaultTableCellRenderer centerRender = new DefaultTableCellRenderer();
         DefaultTableCellRenderer colRenderer = new DefaultTableCellRenderer();
-        
+        customTableEditor editor = new customTableEditor(tableModel);
        
         colRenderer.setHorizontalAlignment(JLabel.CENTER);
         centerRender.setHorizontalAlignment(JLabel.CENTER);
@@ -185,6 +185,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         
         for(int x=0;x<theTable.getColumnCount();x++){
             theTable.getColumnModel().getColumn(x).setCellRenderer(renderer);
+            theTable.getColumnModel().getColumn(x).setCellEditor(editor);
         }
          
         for(int i = 0;i<mTable.getColumnCount();i++){
@@ -367,7 +368,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     );
     theTable.setColumnSelectionAllowed(true);
     theTable.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-    theTable.setEnabled(false);
+    theTable.setEnabled(true);
     theTable.setGridColor(new java.awt.Color(255, 255, 255));
     theTable.setRowHeight(22);
     theTable.setRowSelectionAllowed(false);
@@ -1223,7 +1224,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         }
     }
     
-    private boolean isInteger(String s) {
+    public static boolean isInteger(String s) {
         try { 
             Integer.parseInt(s); 
         } catch(NumberFormatException e) { 
@@ -1508,13 +1509,20 @@ public class ExcelFrame extends javax.swing.JFrame {
         updateTotalTech(tableModel);
     }
     
+    public static void setTableValues(DefaultTableModel model,int val, int row, int col){
+        
+        model.setValueAt(val, row, col);    
+        updateTotalDev(model);
+        updateTotalTech(model);
+    }
+    
     private void setMultiTableValues(int val, int row, int col){
         
         mTableModel.setValueAt(val, row, col);    
    
     }
     
-    private void updateTotalDev(DefaultTableModel model){
+    public static void updateTotalDev(DefaultTableModel model){
         String[] devNames = {"Classic","Nano","Shuffle","Touch","Pad","Phone"};
         
         int col =0;
@@ -1536,7 +1544,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         }
     }
     
-    private void updateTotalTech(DefaultTableModel model){
+    private static void updateTotalTech(DefaultTableModel model){
         String[] devNames = {"Classic","Nano","Shuffle","Touch","Pad","Phone"};   
         int totCol,sum,value;
         int tttSum = 0;
@@ -1561,7 +1569,7 @@ public class ExcelFrame extends javax.swing.JFrame {
  
     }
     
-    private void updateTTT(int sum,DefaultTableModel model){
+    private static void updateTTT(int sum,DefaultTableModel model){
         
         int totCol = getCol(model,"Tech Total");
         int totRow = getRow(model,"Total Dev");
@@ -1569,11 +1577,11 @@ public class ExcelFrame extends javax.swing.JFrame {
         model.setValueAt(sum, totRow, totCol);
              
     }
-    private int getCol(DefaultTableModel model, String deviceName){
+    private static int getCol(DefaultTableModel model, String deviceName){
         return model.findColumn(deviceName);
     }
     
-    private int getRow(DefaultTableModel model, String value){
+    private static int getRow(DefaultTableModel model, String value){
   
         String rowValue = "";
        
