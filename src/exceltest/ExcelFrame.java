@@ -1100,24 +1100,30 @@ public class ExcelFrame extends javax.swing.JFrame {
 
             int newV = (Integer) tableModel.getValueAt(r, c) - val;
             setTableValues(newV, r, c);
-
+            System.out.println(dev + " " + val + " " + t);
       
             
             
             if(!multiUndoStack.empty()){
-              for(String[] array:multiUndoStack){
+                
+                if(t.equals(multiUndoStack.peek()[2])){
+                    for(String[] array:multiUndoStack){
     
-                String device = array[0];
-                int value = Integer.valueOf(array[1]);
-                String tech = array[2];
+                    String device = array[0];
+                    int value = Integer.valueOf(array[1]);
+                    String tech = array[2];
 
-                int col = getCol(tableModel, device);
-                int row = getRow(tableModel, tech);
+                    int col = getCol(tableModel, device);
+                    int row = getRow(tableModel, tech);
 
-                int newVal = (Integer) tableModel.getValueAt(row, col) - value;
-                setTableValues(newVal, row, col);
-       
-              }
+                    int newVal = (Integer) tableModel.getValueAt(row, col) - value;
+                    setTableValues(newVal, row, col);
+
+                    System.out.println(device + " " + value + " " + tech);
+
+                  }
+                }
+              
               
           }   
             
@@ -1466,14 +1472,10 @@ public class ExcelFrame extends javax.swing.JFrame {
     
     private void commitMTable(){
         
-        if(!multiUndoStack.empty()){
+        if(!multiUndoStack.isEmpty()){
             multiUndoStack.clear();
         }
-        
-        if(!stUndoStack.empty()){
-            stUndoStack.clear();
-        }
-        
+
         if(!multiMap.isEmpty()){
             int row = getRow(tableModel,techFieldName.getText());
             
@@ -1488,7 +1490,6 @@ public class ExcelFrame extends javax.swing.JFrame {
                 int newValue = oldValue + value;
                 
                 setTableValues(newValue,row,col);  
-                //calculateUndo(techFieldName.getText(),device,String.valueOf(value));
                 calculateMultiUndo(techFieldName.getText(),device,String.valueOf(value));
             }
             
@@ -1504,11 +1505,6 @@ public class ExcelFrame extends javax.swing.JFrame {
     
     private void toTable(){
         
-
-        if(!multiUndoStack.empty()){
-            multiUndoStack.clear();
-        }
-                
         String device = devFieldName.getText();
         devFieldName.setText("");
         
@@ -1520,7 +1516,8 @@ public class ExcelFrame extends javax.swing.JFrame {
            
         setTableValues(newValue,row,col);    
        
-        calculateStackUndo(techFieldName.getText(),device,oldValue,newValue);
+        //calculateStackUndo(techFieldName.getText(),device,oldValue,newValue);0
+        calculateStackUndo(techFieldName.getText(),device,String.valueOf(DEFAULT_INC));
   
     }
     
