@@ -188,7 +188,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         
         for(int x=0;x<theTable.getColumnCount();x++){
             theTable.getColumnModel().getColumn(x).setCellRenderer(renderer);
-            //theTable.getColumnModel().getColumn(x).setCellEditor(editor);
+            theTable.getColumnModel().getColumn(x).setCellEditor(editor);
         }
          
         for(int i = 0;i<mTable.getColumnCount();i++){
@@ -276,6 +276,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         saveMenuItem = new javax.swing.JMenuItem();
         editMenu = new javax.swing.JMenu();
         undoMenuItem = new javax.swing.JMenuItem();
+        editModeMenuItem = new javax.swing.JCheckBoxMenuItem();
         jMenu3 = new javax.swing.JMenu();
         addMenuItem = new javax.swing.JMenuItem();
         addExistingTechMenuItem = new javax.swing.JMenuItem();
@@ -481,6 +482,14 @@ public class ExcelFrame extends javax.swing.JFrame {
         }
     });
     editMenu.add(undoMenuItem);
+
+    editModeMenuItem.setText("Enable Edit Mode");
+    editModeMenuItem.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            editModeMenuItemActionPerformed(evt);
+        }
+    });
+    editMenu.add(editModeMenuItem);
 
     jMenuBar1.add(editMenu);
 
@@ -1100,10 +1109,7 @@ public class ExcelFrame extends javax.swing.JFrame {
 
             int newV = (Integer) tableModel.getValueAt(r, c) - val;
             setTableValues(newV, r, c);
-            System.out.println(dev + " " + val + " " + t);
-      
-            
-            
+
             if(!multiUndoStack.empty()){
                 
                 if(t.equals(multiUndoStack.peek()[2])){
@@ -1118,8 +1124,6 @@ public class ExcelFrame extends javax.swing.JFrame {
 
                     int newVal = (Integer) tableModel.getValueAt(row, col) - value;
                     setTableValues(newVal, row, col);
-
-                    System.out.println(device + " " + value + " " + tech);
 
                   }
                 }
@@ -1207,6 +1211,17 @@ public class ExcelFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
 
     }//GEN-LAST:event_formKeyPressed
+
+    private void editModeMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editModeMenuItemActionPerformed
+        // TODO add your handling code here:
+        if(editModeMenuItem.isSelected()){
+            
+            theTable.setEnabled(true);
+        }else{
+            
+            theTable.setEnabled(false);
+        }
+    }//GEN-LAST:event_editModeMenuItemActionPerformed
     
     private void undoLastActionMap(){
         for(Map.Entry<Integer,String[]> entry:lastActionMap.entrySet()){
@@ -1514,8 +1529,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         int newValue = oldValue + DEFAULT_INC;
            
         setTableValues(newValue,row,col);    
-       
-        //calculateStackUndo(techFieldName.getText(),device,oldValue,newValue);0
+
         calculateStackUndo(techFieldName.getText(),device,String.valueOf(DEFAULT_INC));
   
     }
@@ -1740,7 +1754,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         style.setTopBorderColor(IndexedColors.BLACK.getIndex());
 
     }
-   
+    
     /**
      * @param args the command line arguments
      */
@@ -1782,6 +1796,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     private javax.swing.JLabel deviceField;
     private javax.swing.JLabel eQuotaLabel;
     private javax.swing.JMenu editMenu;
+    private javax.swing.JCheckBoxMenuItem editModeMenuItem;
     private javax.swing.JButton exportButton;
     private javax.swing.JLabel hourLabel;
     public javax.swing.JTable infoTable;

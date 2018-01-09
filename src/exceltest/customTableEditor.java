@@ -55,9 +55,14 @@ class customTableEditor extends AbstractCellEditor implements TableCellEditor {
                     String option = JOptionPane.showInputDialog(p, "Enter Number");
 
                     if(ExcelFrame.isInteger(option)){
-                        val = option;
-                        ExcelFrame.setTableValues(model, Integer.parseInt(option), rowIndex, vColIndex);
-                        ExcelFrame.updateTotalDev(model);
+                        if(Integer.parseInt(option)<400&&Integer.parseInt(option)>=0){
+                            val = option;
+                            ExcelFrame.setTableValues(model, Integer.parseInt(option), rowIndex, vColIndex);
+                            ExcelFrame.updateTotalDev(model);
+                        }else{
+                             JOptionPane.showMessageDialog(table,"Number Exceeds Limit","Try Again", JOptionPane.WARNING_MESSAGE);
+                        }
+                        
                     }else if(option==null){
                     }else{
                          JOptionPane.showMessageDialog(table,"Not A Number","Try Again", JOptionPane.WARNING_MESSAGE);
