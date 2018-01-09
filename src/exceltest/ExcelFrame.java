@@ -1215,7 +1215,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     private void editModeMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editModeMenuItemActionPerformed
         // TODO add your handling code here:
         if(editModeMenuItem.isSelected()){
-            
+            JOptionPane.showMessageDialog(this,"Warning: Table Is Now Editable, Use Only If Necessary","Warning", JOptionPane.WARNING_MESSAGE);
             theTable.setEnabled(true);
         }else{
             
