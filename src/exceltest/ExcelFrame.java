@@ -93,7 +93,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     String lastHour;
     Stack listStack;
     int inQuota;
-    String[] lastAction;
+    //String[] lastAction;
     HashMap<Integer,String[]> lastActionMap;
     int actionMapID;
     int SHIFT_HOURS;
@@ -101,6 +101,8 @@ public class ExcelFrame extends javax.swing.JFrame {
     LinkedHashMap<String,String> existingRosterList;
     int num=0;
     Thread thread1,thread2,thread3;
+    Stack<String[]> multiUndoStack;
+    Stack<String[]> stUndoStack;
     
     
     public ExcelFrame(Table table){
@@ -123,12 +125,13 @@ public class ExcelFrame extends javax.swing.JFrame {
         lastHour = " ";
         listStack = new Stack();
         inQuota = 0;
-        lastAction = new String[3];
         lastActionMap = new HashMap<Integer,String[]>();
         actionMapID = 0;
         SHIFT_HOURS = 10;
         existingRosterList = new LinkedHashMap<String,String>();
         existingTechList = new ArrayList();
+        multiUndoStack = new Stack<String[]>();
+        stUndoStack = new Stack<String[]>();
 
         initTableStyle();
         initExistingTechs();
@@ -185,7 +188,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         
         for(int x=0;x<theTable.getColumnCount();x++){
             theTable.getColumnModel().getColumn(x).setCellRenderer(renderer);
-            theTable.getColumnModel().getColumn(x).setCellEditor(editor);
+            //theTable.getColumnModel().getColumn(x).setCellEditor(editor);
         }
          
         for(int i = 0;i<mTable.getColumnCount();i++){
@@ -372,7 +375,8 @@ public class ExcelFrame extends javax.swing.JFrame {
     );
     theTable.setColumnSelectionAllowed(true);
     theTable.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-    theTable.setEnabled(true);
+    theTable.setEnabled(false
+    );
     theTable.setGridColor(new java.awt.Color(255, 255, 255));
     theTable.setRowHeight(22);
     theTable.setRowSelectionAllowed(false);
@@ -877,6 +881,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         addMenuItem.setEnabled(false);
         
         Thread.sleep(1000);
+        
         synchronized(this){
             
             makeTables(dTableList.getSelectedItems());
@@ -1082,29 +1087,60 @@ public class ExcelFrame extends javax.swing.JFrame {
     private void undoMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoMenuItemActionPerformed
         // TODO add your handling code here:
   
-        if(lastAction[0]!=null){
+        if(!stUndoStack.empty()){
             
 
-            String tech = lastAction[0];
-            String device = lastAction[1];
-            int value = Integer.valueOf(lastAction[2]);
+            String[]ar =  stUndoStack.pop();
+            String dev = ar[0];
+            int val = Integer.valueOf(ar[1]);
+            String t = ar[2];
 
-            int col = getCol(tableModel,device);
-            int row = getRow(tableModel,tech);
+            int c = getCol(tableModel, dev);
+            int r = getRow(tableModel, t);
 
-            int newValue = (Integer)tableModel.getValueAt(row, col)-value;
-            setTableValues(newValue,row,col); 
+            int newV = (Integer) tableModel.getValueAt(r, c) - val;
+            setTableValues(newV, r, c);
+
+      
             
-            for(int i=0;i<lastAction.length;i++){
-                lastAction[i] = null;
-            }
             
-            if(!lastActionMap.isEmpty()){
-                undoLastActionMap();
-            }
-        }else if(!lastActionMap.isEmpty()){
+            if(!multiUndoStack.empty()){
+              for(String[] array:multiUndoStack){
+    
+                String device = array[0];
+                int value = Integer.valueOf(array[1]);
+                String tech = array[2];
+
+                int col = getCol(tableModel, device);
+                int row = getRow(tableModel, tech);
+
+                int newVal = (Integer) tableModel.getValueAt(row, col) - value;
+                setTableValues(newVal, row, col);
+       
+              }
+              
+          }   
             
-            undoLastActionMap();
+          stUndoStack.clear();
+          multiUndoStack.clear();
+          
+        }else if(!multiUndoStack.empty()){
+
+            for(String[] ar:multiUndoStack){
+    
+                String dev = ar[0];
+                int val = Integer.valueOf(ar[1]);
+                String t = ar[2];
+
+                int c = getCol(tableModel, dev);
+                int r = getRow(tableModel, t);
+
+                int newV = (Integer) tableModel.getValueAt(r, c) - val;
+                setTableValues(newV, r, c);
+       
+              }
+
+              multiUndoStack.clear();
         }
 
     }//GEN-LAST:event_undoMenuItemActionPerformed
@@ -1430,6 +1466,14 @@ public class ExcelFrame extends javax.swing.JFrame {
     
     private void commitMTable(){
         
+        if(!multiUndoStack.empty()){
+            multiUndoStack.clear();
+        }
+        
+        if(!stUndoStack.empty()){
+            stUndoStack.clear();
+        }
+        
         if(!multiMap.isEmpty()){
             int row = getRow(tableModel,techFieldName.getText());
             
@@ -1444,7 +1488,8 @@ public class ExcelFrame extends javax.swing.JFrame {
                 int newValue = oldValue + value;
                 
                 setTableValues(newValue,row,col);  
-                calculateUndo(techFieldName.getText(),device,String.valueOf(value));
+                //calculateUndo(techFieldName.getText(),device,String.valueOf(value));
+                calculateMultiUndo(techFieldName.getText(),device,String.valueOf(value));
             }
             
         }
@@ -1459,6 +1504,11 @@ public class ExcelFrame extends javax.swing.JFrame {
     
     private void toTable(){
         
+
+        if(!multiUndoStack.empty()){
+            multiUndoStack.clear();
+        }
+                
         String device = devFieldName.getText();
         devFieldName.setText("");
         
@@ -1470,12 +1520,18 @@ public class ExcelFrame extends javax.swing.JFrame {
            
         setTableValues(newValue,row,col);    
        
-        calculateUndo(techFieldName.getText(),device,oldValue,newValue);
+        calculateStackUndo(techFieldName.getText(),device,oldValue,newValue);
   
     }
     
-    private void calculateUndo(String tech,String device,int oValue,int nValue){
+    
+    private void calculateStackUndo(String t,String dev,int oValue,int nValue){
         int lastValue =0;
+        String device = dev;
+        int oldValue = oValue;
+        int newValue = nValue;
+        String tech = t;
+        String[] ar = new String[3];
         
         if(oValue==0){
             lastValue = nValue;
@@ -1483,13 +1539,28 @@ public class ExcelFrame extends javax.swing.JFrame {
             lastValue = oValue;
         }
         
-        lastAction[0]=tech;
-        lastAction[1]=device;
-        lastAction[2]=String.valueOf(lastValue); 
+        ar[0]= device;
+        ar[1]=String.valueOf(lastValue);
+        ar[2]=tech;
         
+        stUndoStack.push(ar);
     }
     
-    private void calculateUndo(String t,String dev,String val){
+    private void calculateStackUndo(String t,String dev,String val){
+        String device = dev;
+        String value = val;
+        String tech = t;
+        String[] ar = new String[3];
+        
+        ar[0]= device;
+        ar[1]=value;
+        ar[2]=tech;
+        
+        stUndoStack.push(ar);
+    }
+    
+    
+    private void calculateMultiUndo(String t,String dev,String val){
         
   
         String device = dev;
@@ -1501,9 +1572,8 @@ public class ExcelFrame extends javax.swing.JFrame {
         ar[1]=value;
         ar[2]=tech;
         
-        lastActionMap.put(actionMapID,ar);
-
-        actionMapID++;
+        multiUndoStack.push(ar);
+       
     }
     
     private void setTableValues(int val, int row, int col){

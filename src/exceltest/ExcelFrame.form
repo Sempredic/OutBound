@@ -356,7 +356,7 @@
                   <Color id="Default Cursor"/>
                 </Property>
                 <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="true" type="code"/>
+                  <Connection code="false&#xd;&#xa;" type="code"/>
                 </Property>
                 <Property name="gridColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
