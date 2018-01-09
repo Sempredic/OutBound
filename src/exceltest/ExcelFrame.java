@@ -1123,8 +1123,6 @@ public class ExcelFrame extends javax.swing.JFrame {
 
                   }
                 }
-              
-              
           }   
             
           stUndoStack.clear();
@@ -1285,6 +1283,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         return (DefaultTableModel)infoTable.getModel();
     }
     public void makeTables(String[] selectedList){
+        
         workbook = new XSSFWorkbook();
         sheet = workbook.createSheet("Prod Tables");
         style = workbook.createCellStyle();
@@ -1680,6 +1679,13 @@ public class ExcelFrame extends javax.swing.JFrame {
 
     }
     
+    public static void setStyleFontBlack(CellStyle style) {
+        XSSFFont font = workbook.createFont();
+        font.setColor(HSSFColor.BLACK.index);
+        style.setFont(font);
+
+    }
+    
     public static void setStyleFontBold(CellStyle style) {
         XSSFFont font = workbook.createFont();
         font.setBold(true);
@@ -1703,6 +1709,13 @@ public class ExcelFrame extends javax.swing.JFrame {
     
     public static void cellFillBlack(CellStyle style) {
         style.setFillForegroundColor(IndexedColors.BLACK.getIndex());
+        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+   
+
+    }
+    
+    public static void cellFillWhite(CellStyle style) {
+        style.setFillForegroundColor(IndexedColors.WHITE.getIndex());
         style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
    
 
