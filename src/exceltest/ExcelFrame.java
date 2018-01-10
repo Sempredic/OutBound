@@ -1251,7 +1251,7 @@ public class ExcelFrame extends javax.swing.JFrame {
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         // TODO add your handling code here:
-        if(JOptionPane.showConfirmDialog(this, "Are You Sure?", "Exiting",
+        if(JOptionPane.showConfirmDialog(this,"          Are You Sure?", "Exiting",
                 JOptionPane.OK_CANCEL_OPTION)==JOptionPane.OK_OPTION){
             System.exit(0);
         }
