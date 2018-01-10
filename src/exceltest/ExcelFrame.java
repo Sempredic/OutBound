@@ -292,10 +292,15 @@ public class ExcelFrame extends javax.swing.JFrame {
         addExistingTechMenuItem = new javax.swing.JMenuItem();
         optionsMenuItem = new javax.swing.JMenuItem();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setBackground(new java.awt.Color(204, 204, 204));
         setMinimumSize(new java.awt.Dimension(1007, 718));
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
         addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 formKeyPressed(evt);
@@ -1243,6 +1248,15 @@ public class ExcelFrame extends javax.swing.JFrame {
             theTable.setEnabled(false);
         }
     }//GEN-LAST:event_editModeMenuItemActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+        if(JOptionPane.showConfirmDialog(this, "Are You Sure?", "Exiting",
+                JOptionPane.OK_CANCEL_OPTION)==JOptionPane.OK_OPTION){
+            System.exit(0);
+        }
+        
+    }//GEN-LAST:event_formWindowClosing
     
     private void undoLastActionMap(){
         for(Map.Entry<Integer,String[]> entry:lastActionMap.entrySet()){
