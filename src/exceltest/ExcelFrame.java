@@ -679,6 +679,9 @@ public class ExcelFrame extends javax.swing.JFrame {
                 techFieldName.setText("");
                 devFieldName.setEnabled(false);
             }else if(devFieldName.getText().toUpperCase().equals("CLEAR")){
+                if(!multiMap.isEmpty()){
+                    multiMap.clear();
+                }
                 manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
                 manager.focusPreviousComponent();
                 techFieldName.setEditable(true);
