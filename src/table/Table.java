@@ -95,9 +95,7 @@ public class Table{
                        dataTable[row][col] = "0";
                    } 
                 }
-                //System.out.print(dataTable[row][col]+" ");
             }
-            //System.out.println();
         }
     }
     

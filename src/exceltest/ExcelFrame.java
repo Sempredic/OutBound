@@ -157,21 +157,31 @@ public class ExcelFrame extends javax.swing.JFrame {
     }
     
     private void initInfoTable(){
+        
         int rosterSize = curTable.getRosterNum().size();
 
         infoColumn = new String [] {
                 "Tech#","Name","Quota","Avg/Hr","EOD Est"};
-        infoDataTable = new Object[rosterSize][infoColumn.length];
+        infoDataTable = new Object[rosterSize+1][infoColumn.length];
         
         for(int i=0;i<infoDataTable.length;i++){
             for(int j=0;j<infoDataTable[0].length;j++){
                 infoDataTable[i][j]= "0";  
             }
         }
-        for(int i=0;i<infoDataTable.length;i++){
-            infoDataTable[i][0]= curTable.getRosterNum().get(i);
-            infoDataTable[i][1]= curTable.getRosterNames().get(i);
-        }   
+        
+        for(int row =0;row<curTable.getRosterNum().size()+1;row++){
+            if(row<curTable.getRosterNum().size()){
+                infoDataTable[row][0]= curTable.getRosterNum().get(row);
+                infoDataTable[row][1]= curTable.getRosterNames().get(row);
+            }else{
+                infoDataTable[row][0]= "TOTAL";
+                infoDataTable[row][1]= " ";
+                infoDataTable[row][2]= " ";
+                
+            }
+        }
+
     }
     
     private void initTableStyle(){
@@ -772,21 +782,32 @@ public class ExcelFrame extends javax.swing.JFrame {
         
         int row = 0;
         int col = 0;
+        int totalRow = 0;
         int value = 0;
         int eodValue =0;
         int estCol = 0;
+        int eodTotal = 0;
+        int avgTotal = 0;
         
         col = getInfoModel().findColumn("Avg/Hr");
         estCol = getInfoModel().findColumn("EOD Est");
-        
+        totalRow = getRow(getInfoModel(),"TOTAL");
+
         for(Map.Entry<String,String> entry:curTable.getTechAvgList().entrySet()){
+            
             row = getRow(getInfoModel(),entry.getKey());
             value = Integer.valueOf(entry.getValue())/dTableList.getItemCount();
             eodValue = value*SHIFT_HOURS;
             
+            eodTotal+=eodValue;
+            avgTotal+=value;
+            
             getInfoModel().setValueAt(value,row,col);
             getInfoModel().setValueAt(eodValue,row,estCol);
         }
+        
+        getInfoModel().setValueAt(avgTotal,totalRow,col);
+        getInfoModel().setValueAt(eodTotal,totalRow,estCol);
         
     }
     
