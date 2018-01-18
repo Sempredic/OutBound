@@ -423,7 +423,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     jLabel1.setText("Current Quota");
 
     quotaLabel.setBackground(new java.awt.Color(255, 255, 255));
-    quotaLabel.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+    quotaLabel.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
     quotaLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     quotaLabel.setText("0");
 
@@ -451,8 +451,8 @@ public class ExcelFrame extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addComponent(jLabel1)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                    .addComponent(quotaLabel)
-                    .addGap(78, 78, 78)
+                    .addComponent(quotaLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(48, 48, 48)
                     .addComponent(eQuotaLabel)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(quotaTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
