@@ -106,6 +106,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     
     
     public ExcelFrame(Table table){
+        
         this.curTable = table; 
         
         initMultiTable();
