@@ -460,7 +460,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     techField.setText("Tech");
 
     multiLable.setBackground(new java.awt.Color(255, 255, 255));
-    multiLable.setFont(new java.awt.Font("MS Reference Sans Serif", 2, 11)); // NOI18N
+    multiLable.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
     multiLable.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     multiLable.setText("OFF");
     multiLable.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -720,7 +720,6 @@ public class ExcelFrame extends javax.swing.JFrame {
                     JOptionPane.PLAIN_MESSAGE);
                 techFieldName.setText("");
             }  
-            
         }
     }//GEN-LAST:event_techFieldNameKeyPressed
 
