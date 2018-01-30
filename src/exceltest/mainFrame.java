@@ -8,22 +8,17 @@ package exceltest;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.KeyboardFocusManager;
-import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import javax.swing.JLabel;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import table.Table;
 
 /**
@@ -80,6 +75,7 @@ public class mainFrame extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         selectAllButton = new javax.swing.JButton();
         deSelectButton = new javax.swing.JButton();
+        nameList = new java.awt.List();
         jLabel3 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
 
@@ -97,6 +93,7 @@ public class mainFrame extends javax.swing.JFrame {
         });
 
         jPanel1.setBackground(new java.awt.Color(225, 225, 225));
+        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         existingList.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         existingList.setMultipleMode(true);
@@ -262,6 +259,8 @@ public class mainFrame extends javax.swing.JFrame {
             }
         });
 
+        nameList.setEnabled(false);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -269,14 +268,16 @@ public class mainFrame extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap(20, Short.MAX_VALUE)
+                        .addGap(20, 20, 20)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(selectAllButton, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(deSelectButton, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(existingList, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(existingList, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(2, 2, 2)
+                                .addComponent(nameList, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -295,7 +296,9 @@ public class mainFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(existingList, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(existingList, javax.swing.GroupLayout.DEFAULT_SIZE, 360, Short.MAX_VALUE)
+                    .addComponent(nameList, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(selectAllButton)
@@ -386,15 +389,25 @@ public class mainFrame extends javax.swing.JFrame {
             if(techNumber.getText().length()==4){
                 if(techName.getText().length()<=10){
                     if(!existingRosterList.containsKey(techNumber.getText())){
-                        existingList.add(techNumber.getText());
-                        if(techName.getText().length()==0){
-                            existingRosterList.put(techNumber.getText(),"**");
+                        if(!existingRosterList.containsValue(techName.getText())){
+                            
+                            existingList.add(techNumber.getText());
+                            nameList.add(techName.getText());
+                            
+                            if(techName.getText().length()==0){
+                                existingRosterList.put(techNumber.getText(),"**");
+                            }else{
+                                existingRosterList.put(techNumber.getText(),techName.getText());
+                            }
+
+                            techNumber.setText("");
+                            techName.setText("");
                         }else{
-                            existingRosterList.put(techNumber.getText(),techName.getText());
+                            JOptionPane.showMessageDialog(this,"Tech Name Already Exists","Try Again", JOptionPane.WARNING_MESSAGE);
+                            techNumber.setText("");
+                            techName.setText("");
                         }
                         
-                        techNumber.setText("");
-                        techName.setText("");
                     }else{
                         JOptionPane.showMessageDialog(this,"Tech Already Exists","Try Again", JOptionPane.WARNING_MESSAGE);
                         techNumber.setText("");
@@ -476,14 +489,28 @@ public class mainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_existingListMousePressed
 
     private void delTechButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delTechButtonActionPerformed
-        // TODO add your handling code here:
-        // TODO add your handling code here:
+
+        ArrayList<String> list = new ArrayList<String>();
+        
+        for(int i:existingList.getSelectedIndexes()){
+            list.add(nameList.getItem(i));
+
+        }
+     
         if(existingList.getSelectedItems().length != 0){
             for(String tech:existingList.getSelectedItems()){
+      
                 existingList.remove(tech);
                 existingRosterList.remove(tech);
+                
             }
         }
+   
+        for(String name:list){
+            nameList.remove(name);
+        }
+        
+        
         
     }//GEN-LAST:event_delTechButtonActionPerformed
 
@@ -530,7 +557,8 @@ public class mainFrame extends javax.swing.JFrame {
                 
                 if(!existingRosterList.containsKey(li[0])){
                    existingRosterList.put(li[0],li[1]);
-                   existingList.add(li[0]); 
+                   existingList.add(li[0]);
+                   nameList.add(li[1]);
                 }
             }
         }catch(Exception e){
@@ -605,6 +633,7 @@ public class mainFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JSeparator jSeparator1;
+    private java.awt.List nameList;
     private javax.swing.JButton remTechButton;
     private javax.swing.JButton rosterDeselectAllButton;
     private javax.swing.JButton rosterSelectAllButton;
