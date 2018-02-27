@@ -38,7 +38,7 @@ public class Table{
     HashMap<String,String>techAvgList;
 
 
-    public Table(HashMap<String,String> roster){
+    public Table(HashMap<String,String> roster,boolean is_iDevice){
         this.roster = roster;
         dataTableID=" ";
        
@@ -49,7 +49,13 @@ public class Table{
 
         setRosterNames();
         setRosterTechNum();
-        initTableData(); 
+        
+        if(is_iDevice){
+            initTableData();
+        }else{
+            initDroidData();
+        }
+         
         saveTable = table;
     }
     
@@ -72,6 +78,36 @@ public class Table{
     private void initTableData(){
         columnTable = new String [] {
                 "Tech #","Name","Classic", "Nano", "Shuffle", "Touch","Pad",
+                    "Phone", "Tech Total"
+            };
+        dataTable = new Object[tRosterTechNum.size()+1][columnTable.length];
+        
+        for(int row=0;row<tRosterTechNum.size()+1;row++){
+            for(int col=0;col<columnTable.length;col++){
+                if(row<tRosterTechNum.size()){
+                   if(col == 0){
+                        dataTable[row][col]= tRosterTechNum.get(row);
+                   }else if(col == 1){
+                       dataTable[row][col] = tRosterNames.get(row);
+                   }else{
+                       dataTable[row][col] = "0";
+                   } 
+                }else{
+                    if(col == 0){
+                        dataTable[row][col]= "Total Dev";
+                   }else if(col == 1){
+                       dataTable[row][col] = " ";
+                   }else{
+                       dataTable[row][col] = "0";
+                   } 
+                }
+            }
+        }
+    }
+    
+    private void initDroidData(){
+        columnTable = new String [] {
+                "Tech #","Name","Tablet",
                     "Phone", "Tech Total"
             };
         dataTable = new Object[tRosterTechNum.size()+1][columnTable.length];

@@ -103,14 +103,25 @@ public class ExcelFrame extends javax.swing.JFrame {
     Thread thread1,thread2,thread3;
     Stack<String[]> multiUndoStack;
     Stack<String[]> stUndoStack;
+    static boolean is_iDevice;
+    static ArrayList<String> iDeviceNames;
+    static ArrayList<String> droidNames;
     
     
-    public ExcelFrame(Table table){
+    public ExcelFrame(Table table,boolean dpt){
         
         this.curTable = table; 
+        is_iDevice = dpt;
         
-        initMultiTable();
+        if(dpt == true){
+            initMultiTable();
+            
+        }else{
+            initDroidMTable();
+        }
+        
         initInfoTable();
+        
         initComponents(); 
      
         tableModel = (DefaultTableModel)theTable.getModel();
@@ -133,16 +144,30 @@ public class ExcelFrame extends javax.swing.JFrame {
         existingTechList = new ArrayList();
         multiUndoStack = new Stack<String[]>();
         stUndoStack = new Stack<String[]>();
-
+        iDeviceNames = new ArrayList<String>();
+        droidNames =new ArrayList<String>();
+        
+        popDevNames();
         initTableStyle();
         initExistingTechs();
+        
         progressBar.setStringPainted(true);
         progressBar.setIndeterminate(false);
         progressBar.setString("Ready");
         
     }
     
- 
+    private void popDevNames(){
+        iDeviceNames.add("Classic");
+        iDeviceNames.add("Nano");
+        iDeviceNames.add("Shuffle");
+        iDeviceNames.add("Touch");
+        iDeviceNames.add("Pad");
+        iDeviceNames.add("Phone");
+        
+        droidNames.add("Tablet");
+        droidNames.add("Phone");
+    }
     
     private void initMultiTable(){
         multiColumn = new String [] {
@@ -153,6 +178,15 @@ public class ExcelFrame extends javax.swing.JFrame {
             {"Shuffle",0},
             {"Touch",0},
             {"Pad",0},
+            {"Phone",0}
+        };
+    }
+    
+    private void initDroidMTable(){
+        multiColumn = new String [] {
+                "Device Type","Amount"};
+        multiDataTable = new Object[][]{
+            {"Tablet",0},
             {"Phone",0}
         };
     }
@@ -1412,7 +1446,18 @@ public class ExcelFrame extends javax.swing.JFrame {
         int rowNum = 1;
         int curCell = 0;
         LinkedHashMap<String,String[][]>list = new LinkedHashMap<String,String[][]>();
+        CellRangeAddress range;
+        String[] tempNames;
+        
+
         String[] devNames = {"Tech","Name","Classic","Nano","Shuffle","Touch","Pad","Phone","     Tech Total    "};  
+        String[] droidNames = {"Tech","Name","Tablet","Phone"," Tech Total"};
+        
+        if(is_iDevice){
+            tempNames = devNames;
+        }else{
+            tempNames = droidNames;
+        }
                 
         for(String item:selectedList){
             //System.out.println(item);
@@ -1427,8 +1472,11 @@ public class ExcelFrame extends javax.swing.JFrame {
             
             Map.Entry me = (Map.Entry)it.next();
             
-            CellRangeAddress range = new CellRangeAddress(
-                    rowNum,rowNum,colNum,devNames.length);
+           
+            range = new CellRangeAddress(
+                    rowNum,rowNum,colNum,tempNames.length);
+           
+            
             sheet.addMergedRegion(range);
             
             // Creates the cell
@@ -1446,10 +1494,10 @@ public class ExcelFrame extends javax.swing.JFrame {
             
             Row header = sheet.createRow(rowNum++);
             
-            for(int col = 0;col<devNames.length;col++){
+            for(int col = 0;col<tempNames.length;col++){
                 
                 Cell headerCell = header.createCell(colNum++);
-                headerCell.setCellValue(devNames[col]);  
+                headerCell.setCellValue(tempNames[col]);  
                 headStyle.setAlignment(HorizontalAlignment.CENTER);
                 cellBorderBlack(headStyle);
                 cellFillHGrey(headStyle);
@@ -1495,8 +1543,16 @@ public class ExcelFrame extends javax.swing.JFrame {
         int colNum = 1;
         int rowNum = 1;
         int curCell = 0;
+        String[] tempNames;
         
         String[] devNames = {"Tech","Name","Classic","Nano","Shuffle","Touch","Pad","Phone","     Tech Total    "};  
+        String[] droidNames = {"Tech","Name","Tablet","Phone"," Tech Total"};
+        
+        if(is_iDevice){
+            tempNames = devNames;
+        }else{
+            tempNames = droidNames;
+        }
         
         CellRangeAddress range = new CellRangeAddress(
                     rowNum,rowNum,colNum,devNames.length);
@@ -1709,25 +1765,39 @@ public class ExcelFrame extends javax.swing.JFrame {
     }
     
     public static void updateTotalDev(DefaultTableModel model){
-        String[] devNames = {"Classic","Nano","Shuffle","Touch","Pad","Phone"};
-        
+     
         int col =0;
         int devRow =0;
         int sum =0;
         
         devRow = getRow(model,"Total Dev");
-               
-        for(String dev:devNames){
-            sum = 0;
-            col = getCol(model,dev);
+        
+        if(is_iDevice){
+            for(String dev:iDeviceNames){
+                sum = 0;
+                col = getCol(model,dev);
 
-            for(int row =0;row<model.getRowCount()-1;row++){
-                sum += Integer.parseInt(model.getValueAt(row, col).toString());
+                for(int row =0;row<model.getRowCount()-1;row++){
+                    sum += Integer.parseInt(model.getValueAt(row, col).toString());
+                }
+
+                model.setValueAt(sum, devRow, col);
+
             }
-            
-            model.setValueAt(sum, devRow, col);
-            
+        }else{
+            for(String dev:droidNames){
+                sum = 0;
+                col = getCol(model,dev);
+
+                for(int row =0;row<model.getRowCount()-1;row++){
+                    sum += Integer.parseInt(model.getValueAt(row, col).toString());
+                }
+
+                model.setValueAt(sum, devRow, col);
+
+            }
         }
+        
     }
     
     private static void updateTotalTech(DefaultTableModel model){
@@ -1740,11 +1810,21 @@ public class ExcelFrame extends javax.swing.JFrame {
         for(String tech:curTable.getRosterNum()){
             int row = getRow(model,tech);
             sum = 0;
-            for(String dev:devNames){
-                int col = getCol(model,dev);
-                value = Integer.parseInt(model.getValueAt(row, col).toString());
-                sum += value;
+            
+            if(is_iDevice){
+                for(String dev:iDeviceNames){
+                    int col = getCol(model,dev);
+                    value = Integer.parseInt(model.getValueAt(row, col).toString());
+                    sum += value;
+                }
+            }else{
+                for(String dev:droidNames){
+                    int col = getCol(model,dev);
+                    value = Integer.parseInt(model.getValueAt(row, col).toString());
+                    sum += value;
+                }
             }
+            
             
             tttSum += sum;
             
