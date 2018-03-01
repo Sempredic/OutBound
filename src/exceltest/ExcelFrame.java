@@ -18,6 +18,7 @@ import javax.swing.table.*;
 import table.Table;
 
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.DateFormat;
@@ -35,14 +36,21 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.CellUtil;
 import org.apache.poi.xssf.usermodel.XSSFFont;
@@ -106,6 +114,8 @@ public class ExcelFrame extends javax.swing.JFrame {
     static boolean is_iDevice;
     static ArrayList<String> iDeviceNames;
     static ArrayList<String> droidNames;
+    JFileChooser fileChooser;
+    FileNameExtensionFilter filter;
     
     
     public ExcelFrame(Table table,boolean dpt){
@@ -154,6 +164,12 @@ public class ExcelFrame extends javax.swing.JFrame {
         progressBar.setStringPainted(true);
         progressBar.setIndeterminate(false);
         progressBar.setString("Ready");
+        
+        String[] fileTypes = {"xlsx","xls"};
+        filter = new FileNameExtensionFilter(
+                "Microsoft Excel Workbook (.xlsx,.xls)", fileTypes);
+            
+        fileChooser = new JFileChooser();
         
     }
     
@@ -1397,17 +1413,62 @@ public class ExcelFrame extends javax.swing.JFrame {
 
     private void exportMergeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportMergeButtonActionPerformed
         // TODO add your handling code here:
-        JFileChooser fileChooser;
+         
+        File file;
         
-        fileChooser = new JFileChooser(); 
         fileChooser.setCurrentDirectory(new java.io.File("."));
         fileChooser.setDialogTitle("Select File");
-        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         fileChooser.setAcceptAllFileFilterUsed(false);
+        fileChooser.setFileFilter(filter);
         
-        fileChooser.showOpenDialog(this);
-        
+        if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) { 
+          file = fileChooser.getSelectedFile();
+          readFileMerge(file);
+        }else {
+          System.out.println("No Selection ");
+        }
+             
     }//GEN-LAST:event_exportMergeButtonActionPerformed
+    
+    private void readFileMerge(File file){
+        try {
+            
+            Workbook workbook = WorkbookFactory.create(file);
+            int rowNum;
+            
+            // Getting the Sheet at index one
+            Sheet sheet = workbook.getSheetAt(1);
+
+            // Create a DataFormatter to format and get each cell's value as String
+            DataFormatter dataFormatter = new DataFormatter();
+            
+            System.out.println(workbook.getNumberOfSheets());
+            
+            for (Row row: sheet) {
+                
+                for(Cell cell: row) {
+                    
+                    String cellValue = dataFormatter.formatCellValue(cell);
+                    
+                    if(cellValue == "Tech"){
+                        rowNum = row.getRowNum();
+                    }
+                    System.out.print(cellValue + "\t");
+                }
+                System.out.println();
+            }
+            
+            
+                        
+        } catch (IOException ex) {
+            Logger.getLogger(ExcelFrame.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvalidFormatException ex) {
+            Logger.getLogger(ExcelFrame.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (EncryptedDocumentException ex) {
+            Logger.getLogger(ExcelFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
     private void undoLastActionMap(){
         for(Map.Entry<Integer,String[]> entry:lastActionMap.entrySet()){

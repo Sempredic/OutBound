@@ -37,10 +37,12 @@ public class mainFrame extends javax.swing.JFrame {
     KeyboardFocusManager focusManager;
     JTextField techName;
     boolean is_iDevice;
+    manageFrame areaFrame;
   
     
     public mainFrame() {
         initComponents();
+        areaFrame = new manageFrame();
         rosterList = new LinkedHashMap<String,String>();
         existingRosterList = new LinkedHashMap<String,String>();
         done = false;
@@ -85,6 +87,8 @@ public class mainFrame extends javax.swing.JFrame {
         rosterDeselectAllButton = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        mAreaOption = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(102, 102, 102));
@@ -384,22 +388,39 @@ public class mainFrame extends javax.swing.JFrame {
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("Outbound Tool");
         jLabel3.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(102, 102, 102)));
+
+        jMenu1.setText("Options");
+        jMenu1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jMenu1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+
+        mAreaOption.setText("Manage Areas");
+        mAreaOption.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mAreaOptionActionPerformed(evt);
+            }
+        });
+        jMenu1.add(mAreaOption);
+
+        jMenuBar1.add(jMenu1);
+
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(doneButton, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(31, 31, 31))
             .addGroup(layout.createSequentialGroup()
                 .addGap(17, 17, 17)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(doneButton, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(31, 31, 31))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap(19, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -698,6 +719,12 @@ public class mainFrame extends javax.swing.JFrame {
     private void existingList2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_existingList2MousePressed
         // TODO add your handling code here:
     }//GEN-LAST:event_existingList2MousePressed
+
+    private void mAreaOptionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mAreaOptionActionPerformed
+        // TODO add your handling code here:
+        areaFrame.setVisible(true);
+        
+    }//GEN-LAST:event_mAreaOptionActionPerformed
     private void initExistingTechList(){
         
         try{
@@ -803,6 +830,7 @@ public class mainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -812,6 +840,7 @@ public class mainFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel7;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTabbedPane jTabbedPane3;
+    private javax.swing.JMenuItem mAreaOption;
     private java.awt.List nameList;
     private java.awt.List nameList2;
     private javax.swing.JButton remTechButton;
