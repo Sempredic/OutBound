@@ -526,7 +526,8 @@ public class mainFrame extends javax.swing.JFrame {
 
     private void doneButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_doneButtonActionPerformed
         // TODO add your handling code here:
-        Object[] options = {"iDevice","Android"};
+        Object[] options = areaFrame.getAreaMapNames().toArray();
+        
         String dpt = (String)JOptionPane.showInputDialog(
                             this,
                             new JLabel("Select Area", SwingConstants.CENTER),
