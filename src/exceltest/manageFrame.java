@@ -41,10 +41,17 @@ public class manageFrame extends javax.swing.JFrame {
         
         
         initComponents();
-        initExistingDevicesList();
         initExistingAreasList();
         updateExistingAreaList();
         
+    }
+    
+    public LinkedHashMap<String,cellArea> getAreaMap(){
+        return areaMap;
+    }
+    
+    public ArrayList<String> getAreaMapNames(){
+        return existingAreaArray;
     }
 
     /**
@@ -73,13 +80,6 @@ public class manageFrame extends javax.swing.JFrame {
         existingListLabel = new javax.swing.JLabel();
         deleteButton2 = new javax.swing.JButton();
         editAreaButton = new javax.swing.JButton();
-        jPanel3 = new javax.swing.JPanel();
-        deviceNameField = new javax.swing.JTextField();
-        addEditButton = new javax.swing.JButton();
-        deleteButton = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
-        editDevicesList = new java.awt.List();
-        applyButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -256,72 +256,6 @@ public class manageFrame extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Edit Areas", jPanel2);
 
-        addEditButton.setText("Add-->");
-        addEditButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addEditButtonActionPerformed(evt);
-            }
-        });
-
-        deleteButton.setText("<--Delete");
-        deleteButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deleteButtonActionPerformed(evt);
-            }
-        });
-
-        jLabel2.setText("Device Name:");
-
-        applyButton.setText("Apply");
-        applyButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                applyButtonActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addGap(0, 162, Short.MAX_VALUE)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(deleteButton)
-                            .addComponent(addEditButton, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(applyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(71, 71, 71))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(deviceNameField)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addComponent(editDevicesList, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(29, 29, 29)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(editDevicesList, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(deviceNameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(addEditButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(deleteButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 206, Short.MAX_VALUE)
-                        .addComponent(applyButton)))
-                .addContainerGap())
-        );
-
-        jTabbedPane1.addTab("Edit Devices", jPanel3);
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -347,29 +281,6 @@ public class manageFrame extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void applyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applyButtonActionPerformed
-        // TODO add your handling code here:
-        writeToFile();
-    }//GEN-LAST:event_applyButtonActionPerformed
-
-    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
-        // TODO add your handling code here:
-        for(String name:editDevicesList.getSelectedItems()){
-            editDevicesList.remove(name);
-        }
-
-    }//GEN-LAST:event_deleteButtonActionPerformed
-
-    private void addEditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEditButtonActionPerformed
-        // TODO add your handling code here:
-        if(!deviceTypes.contains(deviceNameField.getText())){
-            editDevicesList.add(deviceNameField.getText());
-            deviceTypes.add(deviceNameField.getText());
-        }
-        
-
-    }//GEN-LAST:event_addEditButtonActionPerformed
 
     private void deleteButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButton2ActionPerformed
         // TODO add your handling code here:
@@ -507,30 +418,7 @@ public class manageFrame extends javax.swing.JFrame {
         }
               
     }
-    private void initExistingDevicesList(){
-        
-        try{
-            
-            File tmpDir = new File("devices.txt");
 
-            boolean exists = tmpDir.exists();  
-            
-            if(exists == false){
-                writeToFile();
-            }
-
-            for(String name:Files.readAllLines(Paths.get("devices.txt"))){
- 
-                if(!deviceTypes.contains(name)){
-                   deviceTypes.add(name);
-                   editDevicesList.add(name);
-                }
-            }
-        }catch(Exception e){
-            System.out.println(e.getMessage());
-        }
-    }
-    
     private void initExistingAreasList(){
         
         int areaAmount=0;
@@ -555,28 +443,25 @@ public class manageFrame extends javax.swing.JFrame {
                 areaAmount = Integer.parseInt(list.remove(0));
             }
 
-            System.out.println(areaAmount);
-
             for(int i=0;i<areaAmount;i++){
+                
                 cellArea newArea = new cellArea();
                 int lines = Integer.parseInt(list.get(counter));
+                
                 counter++;
+                
                 for(int j=0;j<lines;j++){
                     if(j==0){
                         newArea.updateAreaName(list.get(counter));
-                        System.out.println("Name: " + list.get(counter));
                     }else{
                         newArea.addDeviceType(list.get(counter));
-                        System.out.println("Device: " + list.get(counter));
                     }
                          
                     counter++;
                 }   
                 areaMap.put(newArea.getAreaName(), newArea);
                 existingAreaArray.add(newArea.getAreaName());
-                System.out.println();
             }
-            System.out.println(areaMap.size());
             
         }catch(Exception e){
             System.out.println("error");
@@ -592,27 +477,7 @@ public class manageFrame extends javax.swing.JFrame {
         
         return true;
     }
-    
-    private void writeToFile(){
-        
-        try{
-            
-            PrintWriter writer = new PrintWriter("devices.txt", "UTF-8");
-            //PrintWriter cellAreaWriter = new PrintWriter("cellAreas.txt", "UTF-8");
-            
-            for(String tDevice:editDevicesList.getItems()){
-                
-                writer.println(tDevice);
-            }
-            
-            writer.close();
-            
-        }catch(Exception e){
-            System.out.println(e.getMessage());
-        }
-   
-    }
-    
+
     private void writeAreasToFile(){
         
         try{
@@ -671,26 +536,19 @@ public class manageFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addButton;
-    private javax.swing.JButton addEditButton;
-    private javax.swing.JButton applyButton;
     private javax.swing.JLabel areaManagerLabel;
     private javax.swing.JTextField areaNameField2;
     private javax.swing.JLabel areaNameLabel;
     private java.awt.List assignedDevList;
     private javax.swing.JLabel assignedDevicesLabel;
     private javax.swing.JButton createAreaButton;
-    private javax.swing.JButton deleteButton;
     private javax.swing.JButton deleteButton2;
-    private javax.swing.JTextField deviceNameField;
     private javax.swing.JButton editApplyButton;
     private javax.swing.JButton editAreaButton;
-    private java.awt.List editDevicesList;
     private java.awt.List existingAreaList;
     private javax.swing.JLabel existingListLabel;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JButton removeButton;
