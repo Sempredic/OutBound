@@ -6,14 +6,13 @@
 package exceltest;
 
 import java.awt.BorderLayout;
-import java.awt.GridLayout;
 import java.io.File;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.Vector;
+import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -28,8 +27,8 @@ public class manageFrame extends javax.swing.JFrame {
      */
     
     LinkedHashMap<String,cellArea> areaMap;
+    ArrayList<String> existingAreaArray;
     ArrayList<String> deviceTypes;
-    ArrayList<String> assignedDevArray;
     String current;
  
     
@@ -37,11 +36,14 @@ public class manageFrame extends javax.swing.JFrame {
         
         areaMap = new LinkedHashMap<String,cellArea>();
         deviceTypes = new ArrayList<String>();
-        assignedDevArray = new ArrayList<String>();
+        existingAreaArray = new ArrayList<String>();
         current = new String();
+        
         
         initComponents();
         initExistingDevicesList();
+        initExistingAreasList();
+        updateExistingAreaList();
         
     }
 
@@ -373,80 +375,90 @@ public class manageFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         if(areaMap.containsKey(existingAreaList.getSelectedItem())){
             areaMap.remove(existingAreaList.getSelectedItem());
-            existingAreaList.remove(existingAreaList.getSelectedItem());
+            existingAreaArray.remove(existingAreaList.getSelectedItem());
         }
         
+        areaNameField2.setText(" ");
+        assignedDevList.removeAll(); 
+        updateExistingAreaList();
     }//GEN-LAST:event_deleteButton2ActionPerformed
 
     private void createAreaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createAreaButtonActionPerformed
         // TODO add your handling code here:
         JPanel p = new JPanel(new BorderLayout(5,5));
 
-        JPanel labels = new JPanel(new GridLayout(0,1,2,2));
-
         String areaName = JOptionPane.showInputDialog(p, "Enter Area Name");
         
-        if(!areaMap.containsKey(areaName)){
+        if(areaName != null){
             
-            cellArea newArea = new cellArea(areaName);
-  
-            areaMap.put(areaName, newArea);
+            if(!areaMap.containsKey(areaName)){
             
-            existingAreaList.add(areaName);
-        }else{
-            JOptionPane.showMessageDialog(this,"Area Already Exists","Try Again", JOptionPane.WARNING_MESSAGE);
+                cellArea newArea = new cellArea(areaName);
+
+                areaMap.put(areaName, newArea);
+                
+                existingAreaArray.add(areaName);                
+            }else{
+                JOptionPane.showMessageDialog(this,"Area Already Exists","Try Again", JOptionPane.WARNING_MESSAGE);
+            }
+            
+            updateExistingAreaList();
         }
-        
+           
     }//GEN-LAST:event_createAreaButtonActionPerformed
 
+    private void updateExistingAreaList(){
+       
+        existingAreaList.removeAll();
+        
+        for(String value:existingAreaArray){
+            
+            existingAreaList.add(value);        
+        }
+            
+    }
     private void existingAreaListFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_existingAreaListFocusGained
         // TODO add your handling code here:
        
     }//GEN-LAST:event_existingAreaListFocusGained
 
     private void existingAreaListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_existingAreaListMouseClicked
-        // TODO add your handling code here:
-  
-
-        
-        
+        // TODO add your handling code here:      
         if(existingAreaList.getSelectedItem() != null){
-            
-            if(current == existingAreaList.getSelectedItem()){
-               
+             
+                //update current area name
                 areaNameField2.setText(areaMap.get(existingAreaList.getSelectedItem()).getAreaName());
-            
-                updateAssignedDevList(areaMap.get(existingAreaList.getSelectedItem()));
-            }else{
-                assignedDevList.removeAll();
                 
-            }
+                //update current area devices list                
+                updateAssignedDevList(areaMap.get(existingAreaList.getSelectedItem()));
 
-            
-  
         }else{
             areaNameField2.setText(" ");
             assignedDevList.removeAll();
         }
-        
-        current = existingAreaList.getSelectedItem();
-        
-        
+              
     }//GEN-LAST:event_existingAreaListMouseClicked
 
     private void editAreaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editAreaButtonActionPerformed
         // TODO add your handling code here:
-        areaNameField2.setEnabled(true);
-        assignedDevList.setEnabled(true);
-        addButton.setEnabled(true);
-        removeButton.setEnabled(true);
-        areaNameLabel.setEnabled(true);
-        assignedDevicesLabel.setEnabled(true);
         
-        createAreaButton.setEnabled(false);
-        deleteButton2.setEnabled(false);
-        existingAreaList.setEnabled(false);
-        existingListLabel.setEnabled(false);
+        if(existingAreaList.getSelectedItems().length !=0){
+            
+            areaNameField2.setEnabled(true);
+            assignedDevList.setEnabled(true);
+            addButton.setEnabled(true);
+            removeButton.setEnabled(true);
+            areaNameLabel.setEnabled(true);
+            assignedDevicesLabel.setEnabled(true);
+
+            createAreaButton.setEnabled(false);
+            deleteButton2.setEnabled(false);
+            existingAreaList.setEnabled(false);
+            existingListLabel.setEnabled(false);
+        }else{
+            JOptionPane.showMessageDialog(this,"Select an Existing Area","Try Again", JOptionPane.WARNING_MESSAGE);
+        }
+        
     }//GEN-LAST:event_editAreaButtonActionPerformed
 
     private void editApplyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editApplyButtonActionPerformed
@@ -462,6 +474,8 @@ public class manageFrame extends javax.swing.JFrame {
         deleteButton2.setEnabled(true);
         existingAreaList.setEnabled(true);
         existingListLabel.setEnabled(true);
+        
+        writeAreasToFile();
    
     }//GEN-LAST:event_editApplyButtonActionPerformed
 
@@ -471,28 +485,25 @@ public class manageFrame extends javax.swing.JFrame {
 
         String deviceName = JOptionPane.showInputDialog(p, "Enter Device Name");
         
-        if(areaMap.containsKey(existingAreaList.getSelectedItem())){
-            if(!areaMap.get(existingAreaList.getSelectedItem()).getDeviceTypes().contains(deviceName)){
-                areaMap.get(existingAreaList.getSelectedItem()).addDeviceType(deviceName);
+        if(deviceName != null){
+            if(areaMap.containsKey(existingAreaList.getSelectedItem())){  
+                if(!areaMap.get(existingAreaList.getSelectedItem()).getDeviceTypes().contains(deviceName)){
+                    areaMap.get(existingAreaList.getSelectedItem()).addDeviceType(deviceName);
+                }
+
+                updateAssignedDevList(areaMap.get(existingAreaList.getSelectedItem()));
             }
-                  
-            
-            updateAssignedDevList(areaMap.get(existingAreaList.getSelectedItem()));
         }
+        
         
     }//GEN-LAST:event_addButtonActionPerformed
 
     void updateAssignedDevList(cellArea area){
-        for(String device:area.getDeviceTypes()){
-            if(!assignedDevArray.contains(device)){
-                assignedDevArray.add(device);
-            }
-        }
         
         assignedDevList.removeAll();
         
-        for(String dev:assignedDevArray){
-            assignedDevList.add(dev);
+        for(String device:area.getDeviceTypes()){
+            assignedDevList.add(device);
         }
               
     }
@@ -515,10 +526,71 @@ public class manageFrame extends javax.swing.JFrame {
                    editDevicesList.add(name);
                 }
             }
-
         }catch(Exception e){
             System.out.println(e.getMessage());
         }
+    }
+    
+    private void initExistingAreasList(){
+        
+        int areaAmount=0;
+        int counter = 0;
+        String areaName = " ";
+        String devices = " ";
+        ArrayList<String> list = new ArrayList<String>();
+        
+        try{
+            
+            File tmpDir = new File("cellAreas.txt");
+
+            boolean exists = tmpDir.exists();  
+            
+            if(exists == false){
+                writeAreasToFile();
+            }
+            
+            list = (ArrayList)Files.readAllLines(Paths.get("cellAreas.txt"));
+            
+            if(isInteger(list.get(0))){
+                areaAmount = Integer.parseInt(list.remove(0));
+            }
+
+            System.out.println(areaAmount);
+
+            for(int i=0;i<areaAmount;i++){
+                cellArea newArea = new cellArea();
+                int lines = Integer.parseInt(list.get(counter));
+                counter++;
+                for(int j=0;j<lines;j++){
+                    if(j==0){
+                        newArea.updateAreaName(list.get(counter));
+                        System.out.println("Name: " + list.get(counter));
+                    }else{
+                        newArea.addDeviceType(list.get(counter));
+                        System.out.println("Device: " + list.get(counter));
+                    }
+                         
+                    counter++;
+                }   
+                areaMap.put(newArea.getAreaName(), newArea);
+                existingAreaArray.add(newArea.getAreaName());
+                System.out.println();
+            }
+            System.out.println(areaMap.size());
+            
+        }catch(Exception e){
+            System.out.println("error");
+        }
+    }
+    
+    private boolean isInteger(String string){
+        try{
+            Integer.parseInt(string);
+        }catch(Exception e){
+            return false;
+        }
+        
+        return true;
     }
     
     private void writeToFile(){
@@ -526,6 +598,7 @@ public class manageFrame extends javax.swing.JFrame {
         try{
             
             PrintWriter writer = new PrintWriter("devices.txt", "UTF-8");
+            //PrintWriter cellAreaWriter = new PrintWriter("cellAreas.txt", "UTF-8");
             
             for(String tDevice:editDevicesList.getItems()){
                 
@@ -538,6 +611,33 @@ public class manageFrame extends javax.swing.JFrame {
             System.out.println(e.getMessage());
         }
    
+    }
+    
+    private void writeAreasToFile(){
+        
+        try{
+            
+            PrintWriter writer = new PrintWriter("cellAreas.txt", "UTF-8");
+            
+            writer.println(areaMap.size());
+
+            for(Map.Entry<String,cellArea> areas:areaMap.entrySet()){
+                
+                //get number of lines to write
+                writer.println(areas.getValue().getDeviceTypes().size()+1);
+                writer.println(areas.getKey());
+                
+                for(String dev:areas.getValue().getDeviceTypes()){
+                    writer.println(dev);
+                } 
+            }
+            
+            writer.close();
+            
+        }catch(Exception e){
+            System.out.println("error");
+        }
+        
     }
     /**
      * @param args the command line arguments
