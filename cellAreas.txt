@@ -1,4 +1,4 @@
-3
+2
 7
 idevice
 phone
@@ -11,5 +11,3 @@ shuffle
 android
 beats
 galaxy
-1
-done
