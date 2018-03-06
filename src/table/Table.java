@@ -49,10 +49,8 @@ public class Table{
         dataTableList = new LinkedHashMap<String,String[][]>();
         techAvgList= new HashMap<>();
         newAreaList = areaList;
-       
         saveTable = table;
-        
-        System.out.println(newAreaList);
+
         setRosterNames();
         setRosterTechNum();
         initTableData();
@@ -87,7 +85,6 @@ public class Table{
         columnTable[1] = "Name";
         
         for(int i = 0;i<newAreaList.size();i++){
-            System.out.println(newAreaList.get(i));
             columnTable[i+2] = newAreaList.get(i);
         }
         
@@ -100,7 +97,6 @@ public class Table{
                 if(row<tRosterTechNum.size()){
                    if(col == 0){
                         dataTable[row][col]= tRosterTechNum.get(row);
-                        System.out.println(dataTable[row][col]);
                    }else if(col == 1){
                        dataTable[row][col] = tRosterNames.get(row);
                    }else{
@@ -116,9 +112,7 @@ public class Table{
                    } 
                 }
             }
-        }
-        
-        
+        }  
     }
  
     

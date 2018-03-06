@@ -536,12 +536,16 @@ public class mainFrame extends javax.swing.JFrame {
                             null,
                             options,
                             null);
+        
+        if(dpt != null){
+            writeToFileSave();
+            writeToFileSave2();
+            setRoster(rosterList);
+            prepExcelFrame(dpt);
+            dispose();
+        }
 
-        writeToFileSave();
-        writeToFileSave2();
-        setRoster(rosterList);
-        prepExcelFrame(dpt);
-        dispose();
+        
     }//GEN-LAST:event_doneButtonActionPerformed
 
     private void writeToFileSave(){
