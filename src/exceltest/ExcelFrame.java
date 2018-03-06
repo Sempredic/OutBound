@@ -118,18 +118,12 @@ public class ExcelFrame extends javax.swing.JFrame {
     FileNameExtensionFilter filter;
     
     
-    public ExcelFrame(Table table,boolean dpt){
+    public ExcelFrame(Table table){
         
         this.curTable = table; 
-        is_iDevice = dpt;
-        
-        if(dpt == true){
-            initMultiTable();
+
+        initMultiTable();
             
-        }else{
-            initDroidMTable();
-        }
-        
         initInfoTable();
         
         initComponents(); 
@@ -157,7 +151,6 @@ public class ExcelFrame extends javax.swing.JFrame {
         iDeviceNames = new ArrayList<String>();
         droidNames =new ArrayList<String>();
         
-        popDevNames();
         initTableStyle();
         initExistingTechs();
         
@@ -173,18 +166,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         
     }
     
-    private void popDevNames(){
-        iDeviceNames.add("Classic");
-        iDeviceNames.add("Nano");
-        iDeviceNames.add("Shuffle");
-        iDeviceNames.add("Touch");
-        iDeviceNames.add("Pad");
-        iDeviceNames.add("Phone");
-        
-        droidNames.add("Tablet");
-        droidNames.add("Phone");
-    }
-    
+
     private void initMultiTable(){
         multiColumn = new String [] {
                 "Device Type","Amount"};
@@ -198,14 +180,6 @@ public class ExcelFrame extends javax.swing.JFrame {
         };
     }
     
-    private void initDroidMTable(){
-        multiColumn = new String [] {
-                "Device Type","Amount"};
-        multiDataTable = new Object[][]{
-            {"Tablet",0},
-            {"Phone",0}
-        };
-    }
     
     private void initInfoTable(){
         
@@ -1880,34 +1854,22 @@ public class ExcelFrame extends javax.swing.JFrame {
         int col =0;
         int devRow =0;
         int sum =0;
-        
+        String[] devNames = {"Classic","Nano","Shuffle","Touch","Pad","Phone"};  
         devRow = getRow(model,"Total Dev");
         
-        if(is_iDevice){
-            for(String dev:iDeviceNames){
-                sum = 0;
-                col = getCol(model,dev);
+      
+        for(String dev:devNames){
+            sum = 0;
+            col = getCol(model,dev);
 
-                for(int row =0;row<model.getRowCount()-1;row++){
-                    sum += Integer.parseInt(model.getValueAt(row, col).toString());
-                }
-
-                model.setValueAt(sum, devRow, col);
-
+            for(int row =0;row<model.getRowCount()-1;row++){
+                sum += Integer.parseInt(model.getValueAt(row, col).toString());
             }
-        }else{
-            for(String dev:droidNames){
-                sum = 0;
-                col = getCol(model,dev);
 
-                for(int row =0;row<model.getRowCount()-1;row++){
-                    sum += Integer.parseInt(model.getValueAt(row, col).toString());
-                }
+            model.setValueAt(sum, devRow, col);
 
-                model.setValueAt(sum, devRow, col);
-
-            }
         }
+ 
         
     }
     
@@ -1922,21 +1884,13 @@ public class ExcelFrame extends javax.swing.JFrame {
             int row = getRow(model,tech);
             sum = 0;
             
-            if(is_iDevice){
-                for(String dev:iDeviceNames){
-                    int col = getCol(model,dev);
-                    value = Integer.parseInt(model.getValueAt(row, col).toString());
-                    sum += value;
-                }
-            }else{
-                for(String dev:droidNames){
-                    int col = getCol(model,dev);
-                    value = Integer.parseInt(model.getValueAt(row, col).toString());
-                    sum += value;
-                }
+        
+            for(String dev:devNames){
+                int col = getCol(model,dev);
+                value = Integer.parseInt(model.getValueAt(row, col).toString());
+                sum += value;
             }
-            
-            
+
             tttSum += sum;
             
             model.setValueAt(sum,row,totCol);

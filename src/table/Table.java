@@ -36,27 +36,27 @@ public class Table{
     Date tableDate;
     DateFormat hour;
     HashMap<String,String>techAvgList;
+    ArrayList<String> newAreaList;
 
 
-    public Table(HashMap<String,String> roster,boolean is_iDevice){
+    public Table(HashMap<String,String> roster,ArrayList<String> areaList){
+        
         this.roster = roster;
-        dataTableID=" ";
+        dataTableID= " ";
        
         tRosterNames = new ArrayList<String>();
         tRosterTechNum = new ArrayList<String>(); 
         dataTableList = new LinkedHashMap<String,String[][]>();
         techAvgList= new HashMap<>();
-
-        setRosterNames();
-        setRosterTechNum();
+        newAreaList = new ArrayList<String>();
         
-        if(is_iDevice){
-            initTableData();
-        }else{
-            initDroidData();
-        }
+        newAreaList = areaList;
          
         saveTable = table;
+        
+        setRosterNames();
+        setRosterTechNum();
+        initTableData();
     }
     
     public void addToRoster(String techNumber,String techName){
@@ -76,10 +76,15 @@ public class Table{
     }
     
     private void initTableData(){
+        
+        //columnTable = (String[]) newAreaList.toArray();
+        
         columnTable = new String [] {
                 "Tech #","Name","Classic", "Nano", "Shuffle", "Touch","Pad",
                     "Phone", "Tech Total"
             };
+        
+        
         dataTable = new Object[tRosterTechNum.size()+1][columnTable.length];
         
         for(int row=0;row<tRosterTechNum.size()+1;row++){
@@ -87,6 +92,7 @@ public class Table{
                 if(row<tRosterTechNum.size()){
                    if(col == 0){
                         dataTable[row][col]= tRosterTechNum.get(row);
+                        System.out.println(dataTable[row][col]);
                    }else if(col == 1){
                        dataTable[row][col] = tRosterNames.get(row);
                    }else{
@@ -103,37 +109,39 @@ public class Table{
                 }
             }
         }
+        
+        
     }
     
-    private void initDroidData(){
-        columnTable = new String [] {
-                "Tech #","Name","Tablet",
-                    "Phone", "Tech Total"
-            };
-        dataTable = new Object[tRosterTechNum.size()+1][columnTable.length];
-        
-        for(int row=0;row<tRosterTechNum.size()+1;row++){
-            for(int col=0;col<columnTable.length;col++){
-                if(row<tRosterTechNum.size()){
-                   if(col == 0){
-                        dataTable[row][col]= tRosterTechNum.get(row);
-                   }else if(col == 1){
-                       dataTable[row][col] = tRosterNames.get(row);
-                   }else{
-                       dataTable[row][col] = "0";
-                   } 
-                }else{
-                    if(col == 0){
-                        dataTable[row][col]= "Total Dev";
-                   }else if(col == 1){
-                       dataTable[row][col] = " ";
-                   }else{
-                       dataTable[row][col] = "0";
-                   } 
-                }
-            }
-        }
-    }
+//    private void initTableData(){
+//        columnTable = new String [] {
+//                "Tech #","Name","Classic", "Nano", "Shuffle", "Touch","Pad",
+//                    "Phone", "Tech Total"
+//            };
+//        dataTable = new Object[tRosterTechNum.size()+1][columnTable.length];
+//        
+//        for(int row=0;row<tRosterTechNum.size()+1;row++){
+//            for(int col=0;col<columnTable.length;col++){
+//                if(row<tRosterTechNum.size()){
+//                   if(col == 0){
+//                        dataTable[row][col]= tRosterTechNum.get(row);
+//                   }else if(col == 1){
+//                       dataTable[row][col] = tRosterNames.get(row);
+//                   }else{
+//                       dataTable[row][col] = "0";
+//                   } 
+//                }else{
+//                    if(col == 0){
+//                        dataTable[row][col]= "Total Dev";
+//                   }else if(col == 1){
+//                       dataTable[row][col] = " ";
+//                   }else{
+//                       dataTable[row][col] = "0";
+//                   } 
+//                }
+//            }
+//        }
+//    }
     
     private void setRosterNames(){
         for(String key:roster.keySet()){

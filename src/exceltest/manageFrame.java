@@ -53,6 +53,11 @@ public class manageFrame extends javax.swing.JFrame {
     public ArrayList<String> getAreaMapNames(){
         return existingAreaArray;
     }
+    
+    public cellArea getAreaByName(String area){
+        
+        return areaMap.get(area);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.

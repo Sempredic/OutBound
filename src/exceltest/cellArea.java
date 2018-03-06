@@ -35,6 +35,12 @@ public class cellArea {
         
     }
     
+    cellArea(){
+        this.name = " ";
+        deviceType = new ArrayList<String>();
+        
+    }
+    
     ArrayList<String> getDeviceTypes(){
         return this.deviceType;
     }

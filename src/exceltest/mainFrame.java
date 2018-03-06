@@ -536,18 +536,11 @@ public class mainFrame extends javax.swing.JFrame {
                             null,
                             options,
                             null);
-       if(dpt == "Android"){
-           is_iDevice = false;
-
-
-       }else if(dpt == null){
-           return;
-       }
 
         writeToFileSave();
         writeToFileSave2();
         setRoster(rosterList);
-        prepExcelFrame();
+        prepExcelFrame(dpt);
         dispose();
     }//GEN-LAST:event_doneButtonActionPerformed
 
@@ -594,9 +587,11 @@ public class mainFrame extends javax.swing.JFrame {
    
     }
     
-    private void prepExcelFrame(){
-        Table newTable = new Table(rosterList,is_iDevice);
-        ExcelFrame newExcelFrame = new ExcelFrame(newTable,is_iDevice);
+    private void prepExcelFrame(String area){
+        
+        
+        Table newTable = new Table(rosterList,areaFrame.getAreaByName(area).getDeviceTypes());
+        ExcelFrame newExcelFrame = new ExcelFrame(newTable);
         runExcel(newExcelFrame);
     }
     private void setRoster(LinkedHashMap<String,String> rosterList){
