@@ -48,12 +48,11 @@ public class Table{
         tRosterTechNum = new ArrayList<String>(); 
         dataTableList = new LinkedHashMap<String,String[][]>();
         techAvgList= new HashMap<>();
-        newAreaList = new ArrayList<String>();
-        
         newAreaList = areaList;
-         
+       
         saveTable = table;
         
+        System.out.println(newAreaList);
         setRosterNames();
         setRosterTechNum();
         initTableData();
@@ -71,19 +70,28 @@ public class Table{
         return columnTable;
     }
     
+    public ArrayList<String> getAreaDevices(){
+        return newAreaList;
+    }
+    
     public boolean isDTListEmpty(){
         return dataTableList.isEmpty();
     }
     
     private void initTableData(){
         
-        //columnTable = (String[]) newAreaList.toArray();
+
+        columnTable = new String[newAreaList.size()+3];
+     
+        columnTable[0] = "Tech#";
+        columnTable[1] = "Name";
         
-        columnTable = new String [] {
-                "Tech #","Name","Classic", "Nano", "Shuffle", "Touch","Pad",
-                    "Phone", "Tech Total"
-            };
+        for(int i = 0;i<newAreaList.size();i++){
+            System.out.println(newAreaList.get(i));
+            columnTable[i+2] = newAreaList.get(i);
+        }
         
+        columnTable[columnTable.length-1] = "Tech Total";
         
         dataTable = new Object[tRosterTechNum.size()+1][columnTable.length];
         
@@ -112,36 +120,7 @@ public class Table{
         
         
     }
-    
-//    private void initTableData(){
-//        columnTable = new String [] {
-//                "Tech #","Name","Classic", "Nano", "Shuffle", "Touch","Pad",
-//                    "Phone", "Tech Total"
-//            };
-//        dataTable = new Object[tRosterTechNum.size()+1][columnTable.length];
-//        
-//        for(int row=0;row<tRosterTechNum.size()+1;row++){
-//            for(int col=0;col<columnTable.length;col++){
-//                if(row<tRosterTechNum.size()){
-//                   if(col == 0){
-//                        dataTable[row][col]= tRosterTechNum.get(row);
-//                   }else if(col == 1){
-//                       dataTable[row][col] = tRosterNames.get(row);
-//                   }else{
-//                       dataTable[row][col] = "0";
-//                   } 
-//                }else{
-//                    if(col == 0){
-//                        dataTable[row][col]= "Total Dev";
-//                   }else if(col == 1){
-//                       dataTable[row][col] = " ";
-//                   }else{
-//                       dataTable[row][col] = "0";
-//                   } 
-//                }
-//            }
-//        }
-//    }
+ 
     
     private void setRosterNames(){
         for(String key:roster.keySet()){

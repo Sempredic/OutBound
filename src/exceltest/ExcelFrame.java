@@ -112,8 +112,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     Stack<String[]> multiUndoStack;
     Stack<String[]> stUndoStack;
     static boolean is_iDevice;
-    static ArrayList<String> iDeviceNames;
-    static ArrayList<String> droidNames;
+    static ArrayList<String> deviceNames;
     JFileChooser fileChooser;
     FileNameExtensionFilter filter;
     
@@ -148,8 +147,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         existingTechList = new ArrayList();
         multiUndoStack = new Stack<String[]>();
         stUndoStack = new Stack<String[]>();
-        iDeviceNames = new ArrayList<String>();
-        droidNames =new ArrayList<String>();
+        deviceNames = curTable.getAreaDevices();
         
         initTableStyle();
         initExistingTechs();
@@ -242,10 +240,25 @@ public class ExcelFrame extends javax.swing.JFrame {
     private void initExistingTechs(){
          try{
             File tmpDir = new File("roster.txt");
+            File tmpDir2 = new File("roster2.txt");
+            
             boolean exists = tmpDir.exists();
+            boolean exists2 = tmpDir2.exists();
 
             if(exists){
                 for(String name:Files.readAllLines(Paths.get("roster.txt"))){
+                    String[] li = {" "," "};
+                    li = name.split(" ");
+                
+                    if(!existingRosterList.containsKey(li[0])){
+                        existingRosterList.put(li[0],li[1]);
+                        existingTechList.add(li[0]); 
+                    }
+                }
+            }
+            
+            if(exists2){
+                for(String name:Files.readAllLines(Paths.get("roster2.txt"))){
                     String[] li = {" "," "};
                     li = name.split(" ");
                 
@@ -1854,11 +1867,10 @@ public class ExcelFrame extends javax.swing.JFrame {
         int col =0;
         int devRow =0;
         int sum =0;
-        String[] devNames = {"Classic","Nano","Shuffle","Touch","Pad","Phone"};  
+        
         devRow = getRow(model,"Total Dev");
         
-      
-        for(String dev:devNames){
+        for(String dev:curTable.getAreaDevices()){
             sum = 0;
             col = getCol(model,dev);
 
@@ -1874,7 +1886,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     }
     
     private static void updateTotalTech(DefaultTableModel model){
-        String[] devNames = {"Classic","Nano","Shuffle","Touch","Pad","Phone"};   
+ 
         int totCol,sum,value;
         int tttSum = 0;
 
@@ -1884,8 +1896,7 @@ public class ExcelFrame extends javax.swing.JFrame {
             int row = getRow(model,tech);
             sum = 0;
             
-        
-            for(String dev:devNames){
+            for(String dev:curTable.getAreaDevices()){
                 int col = getCol(model,dev);
                 value = Integer.parseInt(model.getValueAt(row, col).toString());
                 sum += value;
