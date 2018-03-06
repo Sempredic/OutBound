@@ -168,14 +168,16 @@ public class ExcelFrame extends javax.swing.JFrame {
     private void initMultiTable(){
         multiColumn = new String [] {
                 "Device Type","Amount"};
-        multiDataTable = new Object[][]{
-            {"Classic",0},
-            {"Nano",0},
-            {"Shuffle",0},
-            {"Touch",0},
-            {"Pad",0},
-            {"Phone",0}
-        };
+        multiDataTable = new Object[curTable.getAreaDevices().size()][2];
+        
+        for(int i=0;i<multiDataTable.length;i++){
+            for(int j=0;j<multiDataTable[0].length;j++){
+                multiDataTable[i][j]= curTable.getAreaDevices().get(i);
+                if(j==1){
+                    multiDataTable[i][j]= 0;
+                }    
+            }
+        }
     }
     
     
@@ -1881,8 +1883,7 @@ public class ExcelFrame extends javax.swing.JFrame {
             model.setValueAt(sum, devRow, col);
 
         }
- 
-        
+  
     }
     
     private static void updateTotalTech(DefaultTableModel model){
