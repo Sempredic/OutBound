@@ -6,7 +6,7 @@
 package exceltest;
 
 import java.awt.BorderLayout;
-import java.awt.event.WindowEvent;
+import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.PrintWriter;
 import java.nio.file.Files;
@@ -438,6 +438,26 @@ public class manageFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         if(!assignedDevList.isEnabled()){
           evt.getWindow().dispose();
+        }else{
+            if(JOptionPane.showConfirmDialog(this,"Apply Area Changes?", "Exiting",
+                JOptionPane.OK_CANCEL_OPTION)==JOptionPane.OK_OPTION){
+                
+                areaNameField2.setEnabled(false);
+                assignedDevList.setEnabled(false);
+                addButton.setEnabled(false);
+                removeButton.setEnabled(false);
+
+                areaNameLabel.setEnabled(false);
+                assignedDevicesLabel.setEnabled(false);
+                createAreaButton.setEnabled(true);
+                deleteButton2.setEnabled(true);
+                existingAreaList.setEnabled(true);
+                existingListLabel.setEnabled(true);
+
+                writeAreasToFile();
+                
+                evt.getWindow().dispose();
+            }
         }
     }//GEN-LAST:event_formWindowClosing
 
