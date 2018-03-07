@@ -6,6 +6,7 @@
 package exceltest;
 
 import java.awt.BorderLayout;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.PrintWriter;
 import java.nio.file.Files;
@@ -51,6 +52,12 @@ public class manageFrame extends javax.swing.JFrame {
     }
     
     public ArrayList<String> getAreaMapNames(){
+        
+        for(Map.Entry<String,cellArea> area:areaMap.entrySet()){
+            if(!existingAreaArray.contains(area.getKey())){
+                existingAreaArray.add(area.getKey());
+            }
+        }
         return existingAreaArray;
     }
     
@@ -86,7 +93,15 @@ public class manageFrame extends javax.swing.JFrame {
         deleteButton2 = new javax.swing.JButton();
         editAreaButton = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setTitle("Area Manager");
+        setAlwaysOnTop(true);
+        setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         areaManagerLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         areaManagerLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -296,6 +311,7 @@ public class manageFrame extends javax.swing.JFrame {
         
         areaNameField2.setText(" ");
         assignedDevList.removeAll(); 
+        
         updateExistingAreaList();
     }//GEN-LAST:event_deleteButton2ActionPerformed
 
@@ -306,19 +322,23 @@ public class manageFrame extends javax.swing.JFrame {
         String areaName = JOptionPane.showInputDialog(p, "Enter Area Name");
         
         if(areaName != null){
+            if(areaName.length()<=10){
+               if(!areaMap.containsKey(areaName)){
             
-            if(!areaMap.containsKey(areaName)){
-            
-                cellArea newArea = new cellArea(areaName);
+                    cellArea newArea = new cellArea(areaName);
 
-                areaMap.put(areaName, newArea);
-                
-                existingAreaArray.add(areaName);                
+                    areaMap.put(areaName, newArea);
+
+                    existingAreaArray.add(areaName);                
+                }else{
+                    JOptionPane.showMessageDialog(this,"Area Already Exists","Try Again", JOptionPane.WARNING_MESSAGE);
+                }
+
+                updateExistingAreaList(); 
             }else{
-                JOptionPane.showMessageDialog(this,"Area Already Exists","Try Again", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this,"Name Exceeds 10 Characters","Try Again", JOptionPane.WARNING_MESSAGE);
             }
             
-            updateExistingAreaList();
         }
            
     }//GEN-LAST:event_createAreaButtonActionPerformed
@@ -390,6 +410,7 @@ public class manageFrame extends javax.swing.JFrame {
         deleteButton2.setEnabled(true);
         existingAreaList.setEnabled(true);
         existingListLabel.setEnabled(true);
+       
         
         writeAreasToFile();
    
@@ -410,9 +431,15 @@ public class manageFrame extends javax.swing.JFrame {
                 updateAssignedDevList(areaMap.get(existingAreaList.getSelectedItem()));
             }
         }
-        
-        
+  
     }//GEN-LAST:event_addButtonActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+        if(!assignedDevList.isEnabled()){
+          evt.getWindow().dispose();
+        }
+    }//GEN-LAST:event_formWindowClosing
 
     void updateAssignedDevList(cellArea area){
         

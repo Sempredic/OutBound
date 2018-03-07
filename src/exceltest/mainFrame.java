@@ -91,6 +91,7 @@ public class mainFrame extends javax.swing.JFrame {
         mAreaOption = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Outbound Tool");
         setBackground(new java.awt.Color(102, 102, 102));
         setResizable(false);
         setSize(new java.awt.Dimension(700, 515));

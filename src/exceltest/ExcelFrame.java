@@ -338,6 +338,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         optionsMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setTitle("Outbound Tool");
         setBackground(new java.awt.Color(204, 204, 204));
         setMinimumSize(new java.awt.Dimension(1007, 718));
         setResizable(false);
@@ -1397,7 +1398,6 @@ public class ExcelFrame extends javax.swing.JFrame {
                 JOptionPane.OK_CANCEL_OPTION)==JOptionPane.OK_OPTION){
             System.exit(0);
         }
-        
     }//GEN-LAST:event_formWindowClosing
 
     private void exportMergeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportMergeButtonActionPerformed
