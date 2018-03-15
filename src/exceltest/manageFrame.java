@@ -205,6 +205,9 @@ public class manageFrame extends javax.swing.JFrame {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 existingAreaListFocusGained(evt);
             }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                existingAreaListFocusLost(evt);
+            }
         });
 
         existingListLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
@@ -333,9 +336,8 @@ public class manageFrame extends javax.swing.JFrame {
 
     private void createAreaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createAreaButtonActionPerformed
         // TODO add your handling code here:
-        JPanel p = new JPanel(new BorderLayout(5,5));
 
-        String areaName = JOptionPane.showInputDialog(p, "Enter Area Name");
+        String areaName = JOptionPane.showInputDialog(this, "Enter Area Name");
         
         if(areaName != null){
             if(areaName.length()<=10){
@@ -376,14 +378,15 @@ public class manageFrame extends javax.swing.JFrame {
 
     private void existingAreaListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_existingAreaListMouseClicked
         // TODO add your handling code here:      
-        
+      
               
     }//GEN-LAST:event_existingAreaListMouseClicked
 
     private void editAreaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editAreaButtonActionPerformed
         // TODO add your handling code here:
-        
-        if(existingAreaList.getSelectedItems().length !=0){
+        assDevListArray.clear();
+
+        if(existingAreaList.getSelectedItem()!=null){
             
             assDevNameField.setEnabled(true);
             assignedDevList.setEnabled(true);
@@ -396,6 +399,8 @@ public class manageFrame extends javax.swing.JFrame {
             deleteButton2.setEnabled(false);
             existingAreaList.setEnabled(false);
             existingListLabel.setEnabled(false);
+            
+            
         }else{
             JOptionPane.showMessageDialog(this,"Select an Existing Area","Try Again", JOptionPane.WARNING_MESSAGE);
         }
@@ -423,18 +428,22 @@ public class manageFrame extends javax.swing.JFrame {
 
     private void assDevAddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_assDevAddButtonActionPerformed
         // TODO add your handling code here:
-        JPanel p = new JPanel(new BorderLayout(5,5));
-
-        String deviceName = JOptionPane.showInputDialog(p, "Enter Device Name");
+      
+        String deviceName = JOptionPane.showInputDialog(this, "Enter Device Name");
         
         if(deviceName != null){
-            if(areaMap.containsKey(existingAreaList.getSelectedItem())){  
-                if(!areaMap.get(existingAreaList.getSelectedItem()).getDeviceTypes().contains(deviceName)){
-                    areaMap.get(existingAreaList.getSelectedItem()).addDeviceType(deviceName);
-                }
+            if(deviceName.length()>0){
+                if(areaMap.containsKey(existingAreaList.getSelectedItem())){  
+                    if(!areaMap.get(existingAreaList.getSelectedItem()).getDeviceTypes().contains(deviceName)){
+                        areaMap.get(existingAreaList.getSelectedItem()).addDeviceType(deviceName);
+                    }
 
-                updateAssignedDevList(areaMap.get(existingAreaList.getSelectedItem()));
+                    updateAssignedDevList(areaMap.get(existingAreaList.getSelectedItem()));
+                }    
+            }else{
+                JOptionPane.showMessageDialog(this,"Not Enough Characters","Try Again", JOptionPane.WARNING_MESSAGE);
             }
+            
         }
   
     }//GEN-LAST:event_assDevAddButtonActionPerformed
@@ -481,6 +490,12 @@ public class manageFrame extends javax.swing.JFrame {
             assignedDevList.removeAll();
         }
     }//GEN-LAST:event_existingAreaListItemStateChanged
+
+    private void existingAreaListFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_existingAreaListFocusLost
+        // TODO add your handling code here:
+
+        
+    }//GEN-LAST:event_existingAreaListFocusLost
 
     void updateAssignedDevList(cellArea area){
         
