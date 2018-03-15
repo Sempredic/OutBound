@@ -30,6 +30,7 @@ public class manageFrame extends javax.swing.JFrame {
     LinkedHashMap<String,cellArea> areaMap;
     ArrayList<String> existingAreaArray;
     ArrayList<String> deviceTypes;
+    ArrayList<String> assDevListArray;
     String current;
  
     
@@ -39,6 +40,7 @@ public class manageFrame extends javax.swing.JFrame {
         deviceTypes = new ArrayList<String>();
         existingAreaArray = new ArrayList<String>();
         current = new String();
+        assDevListArray = new ArrayList<String>();
         
         
         initComponents();
@@ -80,10 +82,10 @@ public class manageFrame extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         editApplyButton = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
-        areaNameField2 = new javax.swing.JTextField();
+        assDevNameField = new javax.swing.JTextField();
         assignedDevicesLabel = new javax.swing.JLabel();
-        removeButton = new javax.swing.JButton();
-        addButton = new javax.swing.JButton();
+        assDevDelButton = new javax.swing.JButton();
+        assDevAddButton = new javax.swing.JButton();
         areaNameLabel = new javax.swing.JLabel();
         assignedDevList = new java.awt.List();
         jPanel4 = new javax.swing.JPanel();
@@ -96,6 +98,7 @@ public class manageFrame extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Area Manager");
         setAlwaysOnTop(true);
+        setBackground(new java.awt.Color(51, 51, 255));
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -107,6 +110,8 @@ public class manageFrame extends javax.swing.JFrame {
         areaManagerLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         areaManagerLabel.setText("Area Manager");
         areaManagerLabel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        jTabbedPane1.setBackground(new java.awt.Color(0, 0, 0));
 
         editApplyButton.setText("Apply");
         editApplyButton.addActionListener(new java.awt.event.ActionListener() {
@@ -121,14 +126,14 @@ public class manageFrame extends javax.swing.JFrame {
         assignedDevicesLabel.setText("Assigned Devices");
         assignedDevicesLabel.setEnabled(false);
 
-        removeButton.setText("Del");
-        removeButton.setEnabled(false);
+        assDevDelButton.setText("Del");
+        assDevDelButton.setEnabled(false);
 
-        addButton.setText("Add");
-        addButton.setEnabled(false);
-        addButton.addActionListener(new java.awt.event.ActionListener() {
+        assDevAddButton.setText("Add");
+        assDevAddButton.setEnabled(false);
+        assDevAddButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addButtonActionPerformed(evt);
+                assDevAddButtonActionPerformed(evt);
             }
         });
 
@@ -136,6 +141,7 @@ public class manageFrame extends javax.swing.JFrame {
         areaNameLabel.setText("Area Name");
         areaNameLabel.setEnabled(false);
 
+        assignedDevList.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         assignedDevList.setEnabled(false);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -145,15 +151,15 @@ public class manageFrame extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(areaNameField2)
+                    .addComponent(assDevNameField)
                     .addComponent(assignedDevList, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(assignedDevicesLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(areaNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(assDevAddButton, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(removeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                        .addComponent(assDevDelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -161,21 +167,21 @@ public class manageFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(areaNameLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(areaNameField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(assDevNameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(assignedDevicesLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(assignedDevList, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(addButton)
-                    .addComponent(removeButton))
-                .addContainerGap())
+                    .addComponent(assDevAddButton)
+                    .addComponent(assDevDelButton))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
 
-        areaNameField2.setEnabled(false);
+        assDevNameField.setEnabled(false);
 
-        jPanel4.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel4.setBackground(new java.awt.Color(153, 153, 153));
 
         createAreaButton.setText("Create New Area");
         createAreaButton.addActionListener(new java.awt.event.ActionListener() {
@@ -184,9 +190,15 @@ public class manageFrame extends javax.swing.JFrame {
             }
         });
 
+        existingAreaList.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         existingAreaList.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 existingAreaListMouseClicked(evt);
+            }
+        });
+        existingAreaList.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                existingAreaListItemStateChanged(evt);
             }
         });
         existingAreaList.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -195,6 +207,8 @@ public class manageFrame extends javax.swing.JFrame {
             }
         });
 
+        existingListLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        existingListLabel.setForeground(new java.awt.Color(255, 255, 255));
         existingListLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         existingListLabel.setText("Existing Areas");
 
@@ -218,22 +232,23 @@ public class manageFrame extends javax.swing.JFrame {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(existingListLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(existingAreaList, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(deleteButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(createAreaButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(editAreaButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(existingAreaList, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(deleteButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(createAreaButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(editAreaButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(existingListLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(5, 5, 5)
                 .addComponent(existingListLabel)
-                .addGap(4, 4, 4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(existingAreaList, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
@@ -254,7 +269,7 @@ public class manageFrame extends javax.swing.JFrame {
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(20, 20, 20))
+                .addContainerGap())
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(170, 170, 170)
                 .addComponent(editApplyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -263,14 +278,15 @@ public class manageFrame extends javax.swing.JFrame {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(29, 29, 29)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(editApplyButton)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(editApplyButton))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -309,7 +325,7 @@ public class manageFrame extends javax.swing.JFrame {
             existingAreaArray.remove(existingAreaList.getSelectedItem());
         }
         
-        areaNameField2.setText(" ");
+        assDevNameField.setText(" ");
         assignedDevList.removeAll(); 
         
         updateExistingAreaList();
@@ -360,18 +376,7 @@ public class manageFrame extends javax.swing.JFrame {
 
     private void existingAreaListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_existingAreaListMouseClicked
         // TODO add your handling code here:      
-        if(existingAreaList.getSelectedItem() != null){
-             
-                //update current area name
-                areaNameField2.setText(areaMap.get(existingAreaList.getSelectedItem()).getAreaName());
-                
-                //update current area devices list                
-                updateAssignedDevList(areaMap.get(existingAreaList.getSelectedItem()));
-
-        }else{
-            areaNameField2.setText(" ");
-            assignedDevList.removeAll();
-        }
+        
               
     }//GEN-LAST:event_existingAreaListMouseClicked
 
@@ -380,10 +385,10 @@ public class manageFrame extends javax.swing.JFrame {
         
         if(existingAreaList.getSelectedItems().length !=0){
             
-            areaNameField2.setEnabled(true);
+            assDevNameField.setEnabled(true);
             assignedDevList.setEnabled(true);
-            addButton.setEnabled(true);
-            removeButton.setEnabled(true);
+            assDevAddButton.setEnabled(true);
+            assDevDelButton.setEnabled(true);
             areaNameLabel.setEnabled(true);
             assignedDevicesLabel.setEnabled(true);
 
@@ -399,10 +404,10 @@ public class manageFrame extends javax.swing.JFrame {
 
     private void editApplyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editApplyButtonActionPerformed
         // TODO add your handling code here:
-        areaNameField2.setEnabled(false);
+        assDevNameField.setEnabled(false);
         assignedDevList.setEnabled(false);
-        addButton.setEnabled(false);
-        removeButton.setEnabled(false);
+        assDevAddButton.setEnabled(false);
+        assDevDelButton.setEnabled(false);
         
         areaNameLabel.setEnabled(false);
         assignedDevicesLabel.setEnabled(false);
@@ -416,7 +421,7 @@ public class manageFrame extends javax.swing.JFrame {
    
     }//GEN-LAST:event_editApplyButtonActionPerformed
 
-    private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
+    private void assDevAddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_assDevAddButtonActionPerformed
         // TODO add your handling code here:
         JPanel p = new JPanel(new BorderLayout(5,5));
 
@@ -432,7 +437,7 @@ public class manageFrame extends javax.swing.JFrame {
             }
         }
   
-    }//GEN-LAST:event_addButtonActionPerformed
+    }//GEN-LAST:event_assDevAddButtonActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         // TODO add your handling code here:
@@ -442,10 +447,10 @@ public class manageFrame extends javax.swing.JFrame {
             if(JOptionPane.showConfirmDialog(this,"Apply Area Changes?", "Exiting",
                 JOptionPane.OK_CANCEL_OPTION)==JOptionPane.OK_OPTION){
                 
-                areaNameField2.setEnabled(false);
+                assDevNameField.setEnabled(false);
                 assignedDevList.setEnabled(false);
-                addButton.setEnabled(false);
-                removeButton.setEnabled(false);
+                assDevAddButton.setEnabled(false);
+                assDevDelButton.setEnabled(false);
 
                 areaNameLabel.setEnabled(false);
                 assignedDevicesLabel.setEnabled(false);
@@ -460,6 +465,22 @@ public class manageFrame extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_formWindowClosing
+
+    private void existingAreaListItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_existingAreaListItemStateChanged
+        // TODO add your handling code here:
+        if(existingAreaList.getSelectedItem() != null){
+             
+            //update current area name
+            assDevNameField.setText(areaMap.get(existingAreaList.getSelectedItem()).getAreaName());
+
+            //update current area devices list                
+            updateAssignedDevList(areaMap.get(existingAreaList.getSelectedItem()));
+
+        }else{
+            assDevNameField.setText(" ");
+            assignedDevList.removeAll();
+        }
+    }//GEN-LAST:event_existingAreaListItemStateChanged
 
     void updateAssignedDevList(cellArea area){
         
@@ -587,10 +608,11 @@ public class manageFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton addButton;
     private javax.swing.JLabel areaManagerLabel;
-    private javax.swing.JTextField areaNameField2;
     private javax.swing.JLabel areaNameLabel;
+    private javax.swing.JButton assDevAddButton;
+    private javax.swing.JButton assDevDelButton;
+    private javax.swing.JTextField assDevNameField;
     private java.awt.List assignedDevList;
     private javax.swing.JLabel assignedDevicesLabel;
     private javax.swing.JButton createAreaButton;
@@ -603,6 +625,5 @@ public class manageFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JButton removeButton;
     // End of variables declaration//GEN-END:variables
 }
