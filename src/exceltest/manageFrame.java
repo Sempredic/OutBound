@@ -114,6 +114,7 @@ public class manageFrame extends javax.swing.JFrame {
         jTabbedPane1.setBackground(new java.awt.Color(0, 0, 0));
 
         editApplyButton.setText("Apply");
+        editApplyButton.setEnabled(false);
         editApplyButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 editApplyButtonActionPerformed(evt);
@@ -386,29 +387,50 @@ public class manageFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         assDevListArray.clear();
 
-        if(existingAreaList.getSelectedItem()!=null){
+        if(!assignedDevList.isEnabled()){
+            if(existingAreaList.getSelectedItem()!=null){
             
-            assDevNameField.setEnabled(true);
-            assignedDevList.setEnabled(true);
-            assDevAddButton.setEnabled(true);
-            assDevDelButton.setEnabled(true);
-            areaNameLabel.setEnabled(true);
-            assignedDevicesLabel.setEnabled(true);
+                editApplyButton.setEnabled(true);
+                assDevNameField.setEnabled(true);
+                assignedDevList.setEnabled(true);
+                assDevAddButton.setEnabled(true);
+                assDevDelButton.setEnabled(true);
+                areaNameLabel.setEnabled(true);
+                assignedDevicesLabel.setEnabled(true);
 
-            createAreaButton.setEnabled(false);
-            deleteButton2.setEnabled(false);
-            existingAreaList.setEnabled(false);
-            existingListLabel.setEnabled(false);
-            
-            
+                createAreaButton.setEnabled(false);
+                deleteButton2.setEnabled(false);
+                existingAreaList.setEnabled(false);
+                existingListLabel.setEnabled(false);
+
+                editAreaButton.setText("Cancel Edit");
+
+            }else{
+                JOptionPane.showMessageDialog(this,"Select an Existing Area","Try Again", JOptionPane.WARNING_MESSAGE);
+            }
         }else{
-            JOptionPane.showMessageDialog(this,"Select an Existing Area","Try Again", JOptionPane.WARNING_MESSAGE);
+            editApplyButton.setEnabled(false);
+            assDevNameField.setEnabled(false);
+            assignedDevList.setEnabled(false);
+            assDevAddButton.setEnabled(false);
+            assDevDelButton.setEnabled(false);
+
+            areaNameLabel.setEnabled(false);
+            assignedDevicesLabel.setEnabled(false);
+            createAreaButton.setEnabled(true);
+            deleteButton2.setEnabled(true);
+            existingAreaList.setEnabled(true);
+            existingListLabel.setEnabled(true);
+            
+            editAreaButton.setText("Edit Area");
         }
+        
         
     }//GEN-LAST:event_editAreaButtonActionPerformed
 
     private void editApplyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editApplyButtonActionPerformed
         // TODO add your handling code here:
+        editApplyButton.setEnabled(false);
         assDevNameField.setEnabled(false);
         assignedDevList.setEnabled(false);
         assDevAddButton.setEnabled(false);
@@ -421,6 +443,7 @@ public class manageFrame extends javax.swing.JFrame {
         existingAreaList.setEnabled(true);
         existingListLabel.setEnabled(true);
        
+        editAreaButton.setText("Edit Area");
         
         writeAreasToFile();
    
@@ -456,6 +479,7 @@ public class manageFrame extends javax.swing.JFrame {
             if(JOptionPane.showConfirmDialog(this,"Apply Area Changes?", "Exiting",
                 JOptionPane.OK_CANCEL_OPTION)==JOptionPane.OK_OPTION){
                 
+                editApplyButton.setEnabled(false);
                 assDevNameField.setEnabled(false);
                 assignedDevList.setEnabled(false);
                 assDevAddButton.setEnabled(false);
@@ -467,6 +491,8 @@ public class manageFrame extends javax.swing.JFrame {
                 deleteButton2.setEnabled(true);
                 existingAreaList.setEnabled(true);
                 existingListLabel.setEnabled(true);
+                
+                editAreaButton.setText("Edit Area");
 
                 writeAreasToFile();
                 
