@@ -430,6 +430,8 @@ public class manageFrame extends javax.swing.JFrame {
 
     private void editApplyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editApplyButtonActionPerformed
         // TODO add your handling code here:
+        commitAssDevList();
+        
         editApplyButton.setEnabled(false);
         assDevNameField.setEnabled(false);
         assignedDevList.setEnabled(false);
@@ -458,10 +460,12 @@ public class manageFrame extends javax.swing.JFrame {
             if(deviceName.length()>0){
                 if(areaMap.containsKey(existingAreaList.getSelectedItem())){  
                     if(!areaMap.get(existingAreaList.getSelectedItem()).getDeviceTypes().contains(deviceName)){
-                        areaMap.get(existingAreaList.getSelectedItem()).addDeviceType(deviceName);
+                        assDevListArray.add(deviceName);
+                        //areaMap.get(existingAreaList.getSelectedItem()).addDeviceType(deviceName);
                     }
 
                     updateAssignedDevList(areaMap.get(existingAreaList.getSelectedItem()));
+                    updateAssignedDevList();
                 }    
             }else{
                 JOptionPane.showMessageDialog(this,"Not Enough Characters","Try Again", JOptionPane.WARNING_MESSAGE);
@@ -531,6 +535,24 @@ public class manageFrame extends javax.swing.JFrame {
             assignedDevList.add(device);
         }
               
+    }
+    
+    void updateAssignedDevList(){
+
+        for(String device:assDevListArray){
+            assignedDevList.add(device);
+        }
+              
+    }
+    
+    void commitAssDevList(){
+        
+        for(String device:assDevListArray){
+            areaMap.get(existingAreaList.getSelectedItem()).addDeviceType(device);
+        }
+        
+        assDevListArray.clear();
+    
     }
 
     private void initExistingAreasList(){

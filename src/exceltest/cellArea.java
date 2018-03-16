@@ -49,6 +49,10 @@ public class cellArea {
         return this.name;
     }
     
+    public void setNewName(String name){
+        this.name = name;
+    }
+    
     public void addDeviceType(String device){
         deviceType.add(device);
     }
