@@ -123,6 +123,8 @@ public class manageFrame extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(204, 204, 204));
 
+        assDevNameField.setEditable(false);
+
         assignedDevicesLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         assignedDevicesLabel.setText("Assigned Devices");
         assignedDevicesLabel.setEnabled(false);
