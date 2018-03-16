@@ -344,18 +344,23 @@ public class manageFrame extends javax.swing.JFrame {
         
         if(areaName != null){
             if(areaName.length()<=10){
-               if(!areaMap.containsKey(areaName)){
+                if(!areaName.isEmpty()){
+                    if(!areaMap.containsKey(areaName)){
             
-                    cellArea newArea = new cellArea(areaName);
+                        cellArea newArea = new cellArea(areaName);
 
-                    areaMap.put(areaName, newArea);
+                        areaMap.put(areaName, newArea);
 
-                    existingAreaArray.add(areaName);                
+                        existingAreaArray.add(areaName);                
+                    }else{
+                        JOptionPane.showMessageDialog(this,"Area Already Exists","Try Again", JOptionPane.WARNING_MESSAGE);
+                    }
+
+                    updateExistingAreaList(); 
                 }else{
-                    JOptionPane.showMessageDialog(this,"Area Already Exists","Try Again", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(this,"Please Enter A Name","Try Again", JOptionPane.WARNING_MESSAGE);
                 }
-
-                updateExistingAreaList(); 
+               
             }else{
                 JOptionPane.showMessageDialog(this,"Name Exceeds 10 Characters","Try Again", JOptionPane.WARNING_MESSAGE);
             }
@@ -411,6 +416,8 @@ public class manageFrame extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this,"Select an Existing Area","Try Again", JOptionPane.WARNING_MESSAGE);
             }
         }else{
+            updateAssignedDevList(areaMap.get(existingAreaList.getSelectedItem()));
+            
             editApplyButton.setEnabled(false);
             assDevNameField.setEnabled(false);
             assignedDevList.setEnabled(false);
@@ -479,12 +486,17 @@ public class manageFrame extends javax.swing.JFrame {
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         // TODO add your handling code here:
+        int option =0;
+        
         if(!assignedDevList.isEnabled()){
           evt.getWindow().dispose();
         }else{
-            if(JOptionPane.showConfirmDialog(this,"Apply Area Changes?", "Exiting",
-                JOptionPane.OK_CANCEL_OPTION)==JOptionPane.OK_OPTION){
+            option = JOptionPane.showConfirmDialog(this,"Apply Area Changes?", "Exiting",
+                JOptionPane.YES_NO_CANCEL_OPTION);
+            if(option==JOptionPane.YES_OPTION){
                 
+                commitAssDevList();
+        
                 editApplyButton.setEnabled(false);
                 assDevNameField.setEnabled(false);
                 assignedDevList.setEnabled(false);
@@ -501,6 +513,26 @@ public class manageFrame extends javax.swing.JFrame {
                 editAreaButton.setText("Edit Area");
 
                 writeAreasToFile();
+                
+                evt.getWindow().dispose();
+            }else if(option==JOptionPane.NO_OPTION){
+                
+                updateAssignedDevList(areaMap.get(existingAreaList.getSelectedItem()));
+                
+                editApplyButton.setEnabled(false);
+                assDevNameField.setEnabled(false);
+                assignedDevList.setEnabled(false);
+                assDevAddButton.setEnabled(false);
+                assDevDelButton.setEnabled(false);
+
+                areaNameLabel.setEnabled(false);
+                assignedDevicesLabel.setEnabled(false);
+                createAreaButton.setEnabled(true);
+                deleteButton2.setEnabled(true);
+                existingAreaList.setEnabled(true);
+                existingListLabel.setEnabled(true);
+                
+                editAreaButton.setText("Edit Area");
                 
                 evt.getWindow().dispose();
             }
