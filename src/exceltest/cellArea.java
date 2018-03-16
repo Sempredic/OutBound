@@ -57,6 +57,10 @@ public class cellArea {
         deviceType.add(device);
     }
     
+    public void removeDeviceType(String device){
+        deviceType.remove(device);
+    }
+    
     public void updateAreaName(String name){
         this.name = name;
     }

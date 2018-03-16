@@ -205,6 +205,9 @@
                     <Property name="text" type="java.lang.String" value="Del"/>
                     <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="assDevDelButtonActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="assDevAddButton">
                   <Properties>
@@ -249,7 +252,7 @@
                                   <Component id="existingAreaList" min="-2" pref="96" max="-2" attributes="0"/>
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="deleteButton2" max="32767" attributes="0"/>
+                                      <Component id="deleteAreaButton" max="32767" attributes="0"/>
                                       <Component id="createAreaButton" max="32767" attributes="0"/>
                                       <Component id="editAreaButton" max="32767" attributes="0"/>
                                   </Group>
@@ -273,7 +276,7 @@
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="editAreaButton" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="deleteButton2" min="-2" max="-2" attributes="0"/>
+                                  <Component id="deleteAreaButton" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
@@ -318,12 +321,12 @@
                     <Property name="text" type="java.lang.String" value="Existing Areas"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JButton" name="deleteButton2">
+                <Component class="javax.swing.JButton" name="deleteAreaButton">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Remove Area(s)"/>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="deleteButton2ActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="deleteAreaButtonActionPerformed"/>
                   </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="editAreaButton">

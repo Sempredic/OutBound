@@ -31,6 +31,7 @@ public class manageFrame extends javax.swing.JFrame {
     ArrayList<String> existingAreaArray;
     ArrayList<String> deviceTypes;
     ArrayList<String> assDevListArray;
+
     String current;
  
     
@@ -41,7 +42,7 @@ public class manageFrame extends javax.swing.JFrame {
         existingAreaArray = new ArrayList<String>();
         current = new String();
         assDevListArray = new ArrayList<String>();
-        
+      
         
         initComponents();
         initExistingAreasList();
@@ -92,7 +93,7 @@ public class manageFrame extends javax.swing.JFrame {
         createAreaButton = new javax.swing.JButton();
         existingAreaList = new java.awt.List();
         existingListLabel = new javax.swing.JLabel();
-        deleteButton2 = new javax.swing.JButton();
+        deleteAreaButton = new javax.swing.JButton();
         editAreaButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -131,6 +132,11 @@ public class manageFrame extends javax.swing.JFrame {
 
         assDevDelButton.setText("Del");
         assDevDelButton.setEnabled(false);
+        assDevDelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                assDevDelButtonActionPerformed(evt);
+            }
+        });
 
         assDevAddButton.setText("Add");
         assDevAddButton.setEnabled(false);
@@ -218,10 +224,10 @@ public class manageFrame extends javax.swing.JFrame {
         existingListLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         existingListLabel.setText("Existing Areas");
 
-        deleteButton2.setText("Remove Area(s)");
-        deleteButton2.addActionListener(new java.awt.event.ActionListener() {
+        deleteAreaButton.setText("Remove Area(s)");
+        deleteAreaButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deleteButton2ActionPerformed(evt);
+                deleteAreaButtonActionPerformed(evt);
             }
         });
 
@@ -243,7 +249,7 @@ public class manageFrame extends javax.swing.JFrame {
                         .addComponent(existingAreaList, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(deleteButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(deleteAreaButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(createAreaButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(editAreaButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addComponent(existingListLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -262,7 +268,7 @@ public class manageFrame extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(editAreaButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(deleteButton2)))
+                        .addComponent(deleteAreaButton)))
                 .addContainerGap())
         );
 
@@ -324,7 +330,7 @@ public class manageFrame extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void deleteButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButton2ActionPerformed
+    private void deleteAreaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteAreaButtonActionPerformed
         // TODO add your handling code here:
         if(areaMap.containsKey(existingAreaList.getSelectedItem())){
             areaMap.remove(existingAreaList.getSelectedItem());
@@ -335,7 +341,7 @@ public class manageFrame extends javax.swing.JFrame {
         assignedDevList.removeAll(); 
         
         updateExistingAreaList();
-    }//GEN-LAST:event_deleteButton2ActionPerformed
+    }//GEN-LAST:event_deleteAreaButtonActionPerformed
 
     private void createAreaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createAreaButtonActionPerformed
         // TODO add your handling code here:
@@ -406,7 +412,7 @@ public class manageFrame extends javax.swing.JFrame {
                 assignedDevicesLabel.setEnabled(true);
 
                 createAreaButton.setEnabled(false);
-                deleteButton2.setEnabled(false);
+                deleteAreaButton.setEnabled(false);
                 existingAreaList.setEnabled(false);
                 existingListLabel.setEnabled(false);
 
@@ -427,7 +433,7 @@ public class manageFrame extends javax.swing.JFrame {
             areaNameLabel.setEnabled(false);
             assignedDevicesLabel.setEnabled(false);
             createAreaButton.setEnabled(true);
-            deleteButton2.setEnabled(true);
+            deleteAreaButton.setEnabled(true);
             existingAreaList.setEnabled(true);
             existingListLabel.setEnabled(true);
             
@@ -450,7 +456,7 @@ public class manageFrame extends javax.swing.JFrame {
         areaNameLabel.setEnabled(false);
         assignedDevicesLabel.setEnabled(false);
         createAreaButton.setEnabled(true);
-        deleteButton2.setEnabled(true);
+        deleteAreaButton.setEnabled(true);
         existingAreaList.setEnabled(true);
         existingListLabel.setEnabled(true);
        
@@ -506,7 +512,7 @@ public class manageFrame extends javax.swing.JFrame {
                 areaNameLabel.setEnabled(false);
                 assignedDevicesLabel.setEnabled(false);
                 createAreaButton.setEnabled(true);
-                deleteButton2.setEnabled(true);
+                deleteAreaButton.setEnabled(true);
                 existingAreaList.setEnabled(true);
                 existingListLabel.setEnabled(true);
                 
@@ -528,7 +534,7 @@ public class manageFrame extends javax.swing.JFrame {
                 areaNameLabel.setEnabled(false);
                 assignedDevicesLabel.setEnabled(false);
                 createAreaButton.setEnabled(true);
-                deleteButton2.setEnabled(true);
+                deleteAreaButton.setEnabled(true);
                 existingAreaList.setEnabled(true);
                 existingListLabel.setEnabled(true);
                 
@@ -560,6 +566,32 @@ public class manageFrame extends javax.swing.JFrame {
 
         
     }//GEN-LAST:event_existingAreaListFocusLost
+
+    private void assDevDelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_assDevDelButtonActionPerformed
+        // TODO add your handling code here:
+        String deviceName = assignedDevList.getSelectedItem();
+        String areaName = existingAreaList.getSelectedItem();
+        
+        if(deviceName != null){
+            if(areaMap.get(areaName).getDeviceTypes().contains(deviceName)){
+                if(JOptionPane.showConfirmDialog(this,"Delete Device From " + areaName + " ?", "Exiting",
+                    JOptionPane.OK_CANCEL_OPTION)==JOptionPane.OK_OPTION){
+                    
+                    areaMap.get(areaName).removeDeviceType(deviceName);
+                }  
+            }else if(assDevListArray.contains(deviceName)){
+                if(JOptionPane.showConfirmDialog(this,"Delete Device From " + areaName + " ?", "Exiting",
+                    JOptionPane.OK_CANCEL_OPTION)==JOptionPane.OK_OPTION){
+                    
+                    assDevListArray.remove(deviceName);
+                } 
+            }
+
+            updateAssignedDevList(areaMap.get(areaName));
+            updateAssignedDevList();
+              
+        }
+    }//GEN-LAST:event_assDevDelButtonActionPerformed
 
     void updateAssignedDevList(cellArea area){
         
@@ -713,7 +745,7 @@ public class manageFrame extends javax.swing.JFrame {
     private java.awt.List assignedDevList;
     private javax.swing.JLabel assignedDevicesLabel;
     private javax.swing.JButton createAreaButton;
-    private javax.swing.JButton deleteButton2;
+    private javax.swing.JButton deleteAreaButton;
     private javax.swing.JButton editApplyButton;
     private javax.swing.JButton editAreaButton;
     private java.awt.List existingAreaList;
