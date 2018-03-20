@@ -333,7 +333,7 @@ public class manageFrame extends javax.swing.JFrame {
     private void deleteAreaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteAreaButtonActionPerformed
         // TODO add your handling code here:
         
-        int option = JOptionPane.showConfirmDialog(this,"Delete This Area?", "Removing",
+        int option = JOptionPane.showConfirmDialog(this,"Are You Sure?", "Deleting Area",
                 JOptionPane.YES_NO_CANCEL_OPTION);
         
         if(option==JOptionPane.YES_OPTION){
