@@ -332,15 +332,23 @@ public class manageFrame extends javax.swing.JFrame {
 
     private void deleteAreaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteAreaButtonActionPerformed
         // TODO add your handling code here:
-        if(areaMap.containsKey(existingAreaList.getSelectedItem())){
-            areaMap.remove(existingAreaList.getSelectedItem());
-            existingAreaArray.remove(existingAreaList.getSelectedItem());
+        
+        int option = JOptionPane.showConfirmDialog(this,"Delete This Area?", "Removing",
+                JOptionPane.YES_NO_CANCEL_OPTION);
+        
+        if(option==JOptionPane.YES_OPTION){
+            if(areaMap.containsKey(existingAreaList.getSelectedItem())){
+                areaMap.remove(existingAreaList.getSelectedItem());
+                existingAreaArray.remove(existingAreaList.getSelectedItem());
+            }
+
+            assDevNameField.setText(" ");
+            assignedDevList.removeAll(); 
+
+            updateExistingAreaList();
+            writeAreasToFile();
         }
         
-        assDevNameField.setText(" ");
-        assignedDevList.removeAll(); 
-        
-        updateExistingAreaList();
     }//GEN-LAST:event_deleteAreaButtonActionPerformed
 
     private void createAreaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createAreaButtonActionPerformed
