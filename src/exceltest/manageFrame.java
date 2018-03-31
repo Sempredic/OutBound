@@ -354,11 +354,13 @@ public class manageFrame extends javax.swing.JFrame {
     private void createAreaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createAreaButtonActionPerformed
         // TODO add your handling code here:
 
-        String areaName = JOptionPane.showInputDialog(this, "Enter Area Name");
+        String areaName = JOptionPane.showInputDialog(this, "Enter Area Name (No Spaces/Max 10 Char)");
+        
+        areaName = areaName.toUpperCase();
         
         if(areaName != null){
-            if(areaName.length()<=10){
-                if(!areaName.isEmpty()){
+            if(!areaName.isEmpty() && areaName.length()<=10){
+                if(!areaName.contains(" ")){
                     if(!areaMap.containsKey(areaName)){
             
                         cellArea newArea = new cellArea(areaName);
@@ -376,7 +378,7 @@ public class manageFrame extends javax.swing.JFrame {
                 }
                
             }else{
-                JOptionPane.showMessageDialog(this,"Name Exceeds 10 Characters","Try Again", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this,"Please Enter A Name","Try Again", JOptionPane.WARNING_MESSAGE);
             }
             
         }

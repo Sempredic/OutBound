@@ -5,6 +5,7 @@
  */
 package main;
 
+import exceltest.DatabaseObj;
 import exceltest.mainFrame;
 //import exceltest.sceneManager;
 
@@ -15,7 +16,8 @@ import exceltest.mainFrame;
 public class main {
     
     public static void main(String args[]){
-        
+          //STEP 3: Open a connection
+        DatabaseObj DB = new DatabaseObj();
         mainFrame frame = new mainFrame();
         frame.run();
   
