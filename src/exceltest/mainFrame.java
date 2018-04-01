@@ -5,6 +5,7 @@
  */
 package exceltest;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.KeyboardFocusManager;
@@ -553,18 +554,24 @@ public class mainFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         Object[] options = areaFrame.getAreaMapNames().toArray();
         String[] shifts = {"1","2"};
+        JLabel theDate = new JLabel("Entry Date: " + curDate ,JLabel.CENTER);
+        JLabel theArea = new JLabel("Select Area", JLabel.CENTER);
+        JLabel theShift = new JLabel("Select Shift", JLabel.CENTER);
         int exists = 0;
         
         JComboBox<String> cb = new JComboBox<String>(shifts);
         JComboBox<Object> ob = new JComboBox<Object>(options);
-        
+         
         JPanel panel = new JPanel(new GridLayout(0,1));
-        panel.add(new JLabel("Select Area"));
+        panel.add(theDate);
+        panel.add(new JLabel(" "));
+        panel.add(theArea);
         panel.add(ob);
-        panel.add(new JLabel("Select Shift"));
+        panel.add(theShift);
         panel.add(cb);
+        panel.add(new JLabel(" "));
         
-        int option = JOptionPane.showConfirmDialog(this, panel,"Confirm Area",JOptionPane.YES_NO_OPTION);
+        int option = JOptionPane.showConfirmDialog(this, panel,"Confirm Area",JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE);
 
         if(option == 0){
             try{
