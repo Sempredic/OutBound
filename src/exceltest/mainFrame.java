@@ -51,7 +51,7 @@ public class mainFrame extends javax.swing.JFrame {
         techName = new JTextField("");
         is_iDevice = true;
         initExistingTechList();
-        initDatabaseStatus();
+        initFromDatabase();
     }
 
     /**
@@ -456,7 +456,18 @@ public class mainFrame extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void initDatabaseStatus(){
+    private void initFromDatabase(){
+        if(initDatabaseStatus()){
+            try{
+                
+               
+            }catch(Exception e){
+                
+            } 
+        }
+        
+    }
+    private boolean initDatabaseStatus(){
         databaseConn = DatabaseObj.getStatus();
         switch(databaseConn){
             case "Connected":
@@ -468,7 +479,10 @@ public class mainFrame extends javax.swing.JFrame {
                 databaseStatus.setForeground(Color.RED);
                 break;
         }
+        
+        return DatabaseObj.getStatusBoolean();
     }
+    
     private void addTechButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addTechButtonActionPerformed
 
         if(existingList.isShowing()){

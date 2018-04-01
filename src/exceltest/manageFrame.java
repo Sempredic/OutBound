@@ -356,10 +356,10 @@ public class manageFrame extends javax.swing.JFrame {
 
         String areaName = JOptionPane.showInputDialog(this, "Enter Area Name (No Spaces/Max 10 Char)");
         
-        areaName = areaName.toUpperCase();
-        
+  
         if(areaName != null){
             if(!areaName.isEmpty() && areaName.length()<=10){
+                areaName = areaName.toUpperCase();
                 if(!areaName.contains(" ")){
                     if(!areaMap.containsKey(areaName)){
             

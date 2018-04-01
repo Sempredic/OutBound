@@ -6,6 +6,7 @@
 package exceltest;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
@@ -115,6 +116,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     static ArrayList<String> deviceNames;
     JFileChooser fileChooser;
     FileNameExtensionFilter filter;
+    String databaseConn;
     
     
     public ExcelFrame(Table table){
@@ -162,6 +164,22 @@ public class ExcelFrame extends javax.swing.JFrame {
             
         fileChooser = new JFileChooser();
         
+        initDatabaseStatus();
+        
+    }
+    
+    private void initDatabaseStatus(){
+        databaseConn = DatabaseObj.getStatus();
+        switch(databaseConn){
+            case "Connected":
+                dbStatus.setText(databaseConn);
+                dbStatus.setForeground(Color.BLUE);
+                break;
+            case "Disconnected":
+                dbStatus.setText(databaseConn);
+                dbStatus.setForeground(Color.RED);
+                break;
+        }
     }
     
 
@@ -326,6 +344,8 @@ public class ExcelFrame extends javax.swing.JFrame {
         jPanel5 = new javax.swing.JPanel();
         exportMergeButton = new javax.swing.JButton();
         exportButton = new javax.swing.JButton();
+        dbStatusLabel = new javax.swing.JLabel();
+        dbStatus = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         saveMenuItem = new javax.swing.JMenuItem();
@@ -652,6 +672,13 @@ public class ExcelFrame extends javax.swing.JFrame {
             .addContainerGap())
     );
 
+    dbStatusLabel.setForeground(new java.awt.Color(255, 0, 0));
+    dbStatusLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+    dbStatusLabel.setText(" ");
+
+    dbStatus.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+    dbStatus.setText(" ");
+
     jMenu1.setText("File");
 
     saveMenuItem.setText("Load Auto-Save");
@@ -724,23 +751,25 @@ public class ExcelFrame extends javax.swing.JFrame {
     getContentPane().setLayout(layout);
     layout.setHorizontalGroup(
         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGroup(layout.createSequentialGroup()
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
+        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(multiScanLabel)
+                    .addGap(274, 274, 274))
+                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                     .addGap(14, 14, 14)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGap(18, 18, 18)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(dbStatus, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(dbStatusLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createSequentialGroup()
                             .addGap(0, 0, Short.MAX_VALUE)
                             .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 651, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(jScrollPane2)))
-                .addGroup(layout.createSequentialGroup()
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(multiScanLabel)
-                    .addGap(274, 274, 274)))
+                        .addComponent(jScrollPane2))))
             .addGap(18, 18, 18)
             .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGap(11, 11, 11))
@@ -766,7 +795,11 @@ public class ExcelFrame extends javax.swing.JFrame {
                 .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                     .addGap(29, 29, 29)
                     .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-            .addContainerGap(63, Short.MAX_VALUE))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addComponent(dbStatus)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(dbStatusLabel)
+            .addGap(23, 23, 23))
     );
 
     pack();
@@ -1918,7 +1951,18 @@ public class ExcelFrame extends javax.swing.JFrame {
         int totRow = getRow(model,"Total Dev");
         
         model.setValueAt(sum, totRow, totCol);
-             
+
+        //update database totals
+        try{
+            
+            DatabaseObj.executeUpdateTotalsQuery((int)model.getValueAt(totRow, totCol));
+    
+            dbStatusLabel.setText(" ");
+        }catch(Exception e){
+            
+            dbStatusLabel.setText(e.toString());
+        }
+        
     }
     private static int getCol(DefaultTableModel model, String deviceName){
         return model.findColumn(deviceName);
@@ -2051,6 +2095,8 @@ public class ExcelFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem addExistingTechMenuItem;
     private javax.swing.JMenuItem addMenuItem;
     private java.awt.List dTableList;
+    private javax.swing.JLabel dbStatus;
+    private static javax.swing.JLabel dbStatusLabel;
     private javax.swing.JTextField devFieldName;
     private javax.swing.JLabel deviceField;
     private javax.swing.JLabel eQuotaLabel;
