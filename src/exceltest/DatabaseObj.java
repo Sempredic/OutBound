@@ -50,15 +50,44 @@ public class DatabaseObj {
        }
     }
     
+    static ArrayList<String> getEmployeeList(){
+        return employeesList;
+    }
+    
+    static ArrayList<String> getAreaList(){
+        return areasList;
+    }
+    
+    static ArrayList<String> getDevicesList(){
+        return devicesList;
+    }
+    
     static void closeConnection() throws Exception{
         conn.close();
     }
     
     static String getStatus(){
-       return status?"Connected":"Disconnected"; 
+       boolean temp;
+       temp = getStatusBoolean();
+
+       return temp?"Connected":"Disconnected"; 
     }
     
     static boolean getStatusBoolean(){
+        
+        int timeout =0;
+        
+        try{
+            System.out.println("Getting Database Status...");
+    
+            timeout = conn.getNetworkTimeout();
+          
+            status = true;
+        } catch(Exception e){
+            
+            status = false;
+        }
+        
         return status;
     }
     
@@ -70,6 +99,27 @@ public class DatabaseObj {
         stmt = conn.createStatement();
 
         stmt.executeUpdate(SQL);  
+    }
+    
+    static boolean executeCellEntryExistsQ(String Date,String CellArea,String Shift)throws Exception{
+        
+        boolean exists = false;
+        String SQL = "SELECT cellEntries.DateOfEntry, areas.AreaName, areas.Shift\n" +
+                     "FROM areas RIGHT JOIN cellEntries ON areas.ID = cellEntries.CellID\n" +
+                     "WHERE (((cellEntries.DateOfEntry)=#" + Date + "#) AND ((areas.AreaName)=\"" + CellArea + "\")\n" +
+                     "AND ((areas.Shift)=" + Shift + "))";
+     
+        stmt = conn.createStatement();
+        
+        ResultSet rs = stmt.executeQuery(SQL);
+        
+        if(!rs.next()){
+            exists = false;
+        }else{
+            exists = true;
+        }
+        
+        return exists;
     }
     
     static void getCellAreasQuery(){
@@ -99,16 +149,18 @@ public class DatabaseObj {
     static void getDevicesQuery(){
         
         String dev = " ";
-        String SQL = "SELECT devices.[Device Name]\n" +
-                     "FROM devices;";
+        String SQL = "SELECT *\n" +
+                     "FROM techProdEntries";
         try{
             stmt = conn.createStatement();
 
             ResultSet rs = stmt.executeQuery(SQL);
-
-            while(rs.next()){
-                dev = rs.getString("Device Name");
-
+            ResultSetMetaData rsmd = rs.getMetaData();
+            
+            for(int i=5;i<rsmd.getColumnCount()+1;i++){
+                
+                dev = rsmd.getColumnName(i);
+                
                 if(!devicesList.contains(dev)){
                     devicesList.add(dev);
                 }

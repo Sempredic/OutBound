@@ -14,8 +14,10 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 /**
  *
@@ -354,35 +356,30 @@ public class manageFrame extends javax.swing.JFrame {
     private void createAreaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createAreaButtonActionPerformed
         // TODO add your handling code here:
 
-        String areaName = JOptionPane.showInputDialog(this, "Enter Area Name (No Spaces/Max 10 Char)");
+        Object[] options = DatabaseObj.getAreaList().toArray();
         
-  
-        if(areaName != null){
-            if(!areaName.isEmpty() && areaName.length()<=10){
-                areaName = areaName.toUpperCase();
-                if(!areaName.contains(" ")){
-                    if(!areaMap.containsKey(areaName)){
-            
-                        cellArea newArea = new cellArea(areaName);
+        String area = (String)JOptionPane.showInputDialog(
+                            this,
+                            new JLabel("Select Existing Area", SwingConstants.CENTER),
+                            "Add Area",
+                            JOptionPane.PLAIN_MESSAGE,
+                            null,
+                            options,
+                            null);
 
-                        areaMap.put(areaName, newArea);
+        if(area != null){
+            if(!areaMap.containsKey(area)){
+                cellArea newArea = new cellArea(area);
 
-                        existingAreaArray.add(areaName);                
-                    }else{
-                        JOptionPane.showMessageDialog(this,"Area Already Exists","Try Again", JOptionPane.WARNING_MESSAGE);
-                    }
+                areaMap.put(area, newArea);
 
-                    updateExistingAreaList(); 
-                }else{
-                    JOptionPane.showMessageDialog(this,"Please Enter A Name","Try Again", JOptionPane.WARNING_MESSAGE);
-                }
-               
+                existingAreaArray.add(area);                
+
+                updateExistingAreaList(); 
             }else{
-                JOptionPane.showMessageDialog(this,"Please Enter A Name","Try Again", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this,"Area Already Exists","Try Again", JOptionPane.WARNING_MESSAGE);
             }
-            
-        }
-           
+        }     
     }//GEN-LAST:event_createAreaButtonActionPerformed
 
     private void updateExistingAreaList(){
@@ -479,25 +476,35 @@ public class manageFrame extends javax.swing.JFrame {
     private void assDevAddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_assDevAddButtonActionPerformed
         // TODO add your handling code here:
       
-        String deviceName = JOptionPane.showInputDialog(this, "Enter Device Name");
+        Object[] options = DatabaseObj.getDevicesList().toArray();
         
+        String deviceName = (String)JOptionPane.showInputDialog(
+                            this,
+                            new JLabel("Select Existing Device", SwingConstants.CENTER),
+                            "Add Device",
+                            JOptionPane.PLAIN_MESSAGE,
+                            null,
+                            options,
+                            null);
+     
         if(deviceName != null){
-            if(deviceName.length()>0){
-                if(areaMap.containsKey(existingAreaList.getSelectedItem())){  
-                    if(!areaMap.get(existingAreaList.getSelectedItem()).getDeviceTypes().contains(deviceName)){
+         
+            if(areaMap.containsKey(existingAreaList.getSelectedItem())){  
+                if(!areaMap.get(existingAreaList.getSelectedItem()).getDeviceTypes().contains(deviceName)){
+                    if(!assDevListArray.contains(deviceName)){
                         assDevListArray.add(deviceName);
-                        //areaMap.get(existingAreaList.getSelectedItem()).addDeviceType(deviceName);
+                    }else{
+                        JOptionPane.showMessageDialog(this,"Device Already Exists","Try Again", JOptionPane.WARNING_MESSAGE);
                     }
+                    
+                }else{
+                    JOptionPane.showMessageDialog(this,"Device Already Exists","Try Again", JOptionPane.WARNING_MESSAGE);
+                }
 
-                    updateAssignedDevList(areaMap.get(existingAreaList.getSelectedItem()));
-                    updateAssignedDevList();
-                }    
-            }else{
-                JOptionPane.showMessageDialog(this,"Not Enough Characters","Try Again", JOptionPane.WARNING_MESSAGE);
-            }
-            
+                updateAssignedDevList(areaMap.get(existingAreaList.getSelectedItem()));
+                updateAssignedDevList();
+            }    
         }
-  
     }//GEN-LAST:event_assDevAddButtonActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing

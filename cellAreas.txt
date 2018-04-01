@@ -1,13 +1,16 @@
-2
-7
-idevice
-phone
-pad
-touch
-classic
-nano
-shuffle
 3
-android
-beats
-galaxy
+7
+CellA
+iPhone
+iPad
+iTouch
+Classic
+Shuffle
+Nano
+3
+CellB
+Android Phone
+Android Tablet
+2
+CellC
+Wearables

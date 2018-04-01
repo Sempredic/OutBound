@@ -37,10 +37,12 @@ public class Table{
     DateFormat hour;
     HashMap<String,String>techAvgList;
     ArrayList<String> newAreaList;
+    String Shift;
 
 
-    public Table(HashMap<String,String> roster,ArrayList<String> areaList){
+    public Table(HashMap<String,String> roster,ArrayList<String> areaList,String Shift){
         
+        this.Shift = Shift;
         this.roster = roster;
         dataTableID= " ";
        

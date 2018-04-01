@@ -5,7 +5,6 @@
  */
 package exceltest;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.KeyboardFocusManager;
@@ -13,8 +12,11 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedHashMap;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -40,9 +42,14 @@ public class mainFrame extends javax.swing.JFrame {
     boolean is_iDevice;
     manageFrame areaFrame;
     String databaseConn;
+    SimpleDateFormat formatter;  
+    Date date;
+    String curDate;
     
     public mainFrame() {
+        
         initComponents();
+        
         areaFrame = new manageFrame();
         rosterList = new LinkedHashMap<String,String>();
         existingRosterList = new LinkedHashMap<String,String>();
@@ -50,8 +57,13 @@ public class mainFrame extends javax.swing.JFrame {
         techNumber = new JTextField("");
         techName = new JTextField("");
         is_iDevice = true;
+        formatter = new SimpleDateFormat("M/d/yyyy");  
+        date = new Date();
+        curDate = formatter.format(date);
+        
         initExistingTechList();
-        initFromDatabase();
+        initDatabaseStatus();
+        
     }
 
     /**
@@ -456,31 +468,24 @@ public class mainFrame extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void initFromDatabase(){
-        if(initDatabaseStatus()){
-            try{
-                
-               
-            }catch(Exception e){
-                
-            } 
-        }
-        
-    }
     private boolean initDatabaseStatus(){
         databaseConn = DatabaseObj.getStatus();
+        boolean st = false;
+        
         switch(databaseConn){
             case "Connected":
                 databaseStatus.setText(databaseConn);
                 databaseStatus.setForeground(Color.BLUE);
+                st = true;
                 break;
             case "Disconnected":
                 databaseStatus.setText(databaseConn);
                 databaseStatus.setForeground(Color.RED);
+                st = false;
                 break;
         }
         
-        return DatabaseObj.getStatusBoolean();
+        return st;
     }
     
     private void addTechButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addTechButtonActionPerformed
@@ -506,91 +511,94 @@ public class mainFrame extends javax.swing.JFrame {
 
     private void createTechButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createTechButtonActionPerformed
         // TODO add your handling code here:
-     
-        JPanel p = new JPanel(new BorderLayout(5,5));
+        String employeeNumber = " ";
+        String employeeName = " ";
+        String[] employeeArray = new String[2];
+        Object[] options = DatabaseObj.getEmployeeList().toArray();
+        
+        String employee = (String)JOptionPane.showInputDialog(
+                            this,
+                            new JLabel("Select Existing Tech", SwingConstants.CENTER),
+                            "Add Tech",
+                            JOptionPane.PLAIN_MESSAGE,
+                            null,
+                            options,
+                            null);
 
-        JPanel labels = new JPanel(new GridLayout(0,1,2,2));
-        labels.add(new JLabel("Tech Number", SwingConstants.RIGHT));
-        labels.add(new JLabel("Tech Name", SwingConstants.RIGHT));
-        p.add(labels, BorderLayout.WEST);
-
-        JPanel controls = new JPanel(new GridLayout(0,1,2,2));
-        techNumber.requestFocusInWindow();
-        controls.add(techNumber);
-        controls.add(techName);
-        p.add(controls, BorderLayout.CENTER);
-
-        int option = JOptionPane.showConfirmDialog(this, p, "Create Tech", JOptionPane.PLAIN_MESSAGE);
-
-        if (option == JOptionPane.OK_OPTION) {
+        if(employee!=null){
             
-            if(techNumber.getText().length()==4){
-                if(techName.getText().length()<=10){
-                    if(!existingRosterList.containsKey(techNumber.getText())){
-                        if(!existingRosterList.containsValue(techName.getText())){
-                            
-                            if(existingList.isShowing()){
-                                existingList.add(techNumber.getText());
-                                nameList.add(techName.getText());
-                            }else{
-                                existingList2.add(techNumber.getText());
-                                nameList2.add(techName.getText());
-                            }
-
-                            if(techName.getText().length()==0){
-                                existingRosterList.put(techNumber.getText(),"**");
-                            }else{
-                                existingRosterList.put(techNumber.getText(),techName.getText());
-                            }
-
-                            techNumber.setText("");
-                            techName.setText("");
-                        }else{
-                            JOptionPane.showMessageDialog(this,"Tech Name Already Exists","Try Again", JOptionPane.WARNING_MESSAGE);
-                            techNumber.setText("");
-                            techName.setText("");
-                        }
-                        
-                    }else{
-                        JOptionPane.showMessageDialog(this,"Tech Already Exists","Try Again", JOptionPane.WARNING_MESSAGE);
-                        techNumber.setText("");
-                        techName.setText("");
-                    }
+            employeeArray = employee.split(" ");
+            employeeNumber = employeeArray[0];
+            employeeName = employeeArray[1];
+            
+            if(!existingRosterList.containsKey(employeeNumber)){
+                
+                if(existingList.isShowing()){
+                    existingList.add(employeeNumber);
+                    nameList.add(employeeName);
                 }else{
-                    JOptionPane.showMessageDialog(this,"Tech Name Exceeds [10]Char Max","Try Again", JOptionPane.WARNING_MESSAGE);
-                    techNumber.setText("");
-                    techName.setText("");
-                }  
+                    existingList2.add(employeeNumber);
+                    nameList2.add(employeeName);
+                }
+
+                existingRosterList.put(employeeNumber,employeeName);
             }else{
-                JOptionPane.showMessageDialog(this,"Tech must be 4 characters","Try Again", JOptionPane.WARNING_MESSAGE);
-                    techNumber.setText("");
-                    techName.setText("");
-            }    
+  
+                JOptionPane.showMessageDialog(this,"Tech Already Exists","Try Again", JOptionPane.WARNING_MESSAGE);         
+            }       
         }
     }//GEN-LAST:event_createTechButtonActionPerformed
 
     private void doneButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_doneButtonActionPerformed
         // TODO add your handling code here:
         Object[] options = areaFrame.getAreaMapNames().toArray();
+        String[] shifts = {"1","2"};
+        int exists = 0;
         
-        String dpt = (String)JOptionPane.showInputDialog(
-                            this,
-                            new JLabel("Select Area", SwingConstants.CENTER),
-                            "Department Type",
-                            JOptionPane.PLAIN_MESSAGE,
-                            null,
-                            options,
-                            null);
+        JComboBox<String> cb = new JComboBox<String>(shifts);
+        JComboBox<Object> ob = new JComboBox<Object>(options);
         
-        if(dpt != null){
-            writeToFileSave();
-            writeToFileSave2();
-            setRoster(rosterList);
-            prepExcelFrame(dpt);
-            dispose();
-        }
+        JPanel panel = new JPanel(new GridLayout(0,1));
+        panel.add(new JLabel("Select Area"));
+        panel.add(ob);
+        panel.add(new JLabel("Select Shift"));
+        panel.add(cb);
+        
+        int option = JOptionPane.showConfirmDialog(this, panel,"Confirm Area",JOptionPane.YES_NO_OPTION);
 
-        
+        if(option == 0){
+            try{
+                if(DatabaseObj.executeCellEntryExistsQ(curDate,(String)ob.getSelectedItem(),
+                        (String)cb.getSelectedItem())){
+                    exists = JOptionPane.showConfirmDialog(this, "Entry Already Exists, Continue?","Warning",JOptionPane.YES_NO_OPTION);
+                }else{
+                    exists = JOptionPane.showConfirmDialog(this, "Create New Entry?","Entry Doesn't Exist",JOptionPane.YES_NO_OPTION);
+                    
+                }
+                
+                if(exists == 0){
+                    writeToFileSave();
+                    writeToFileSave2();
+                    setRoster(rosterList);
+                    prepExcelFrame((String)ob.getSelectedItem(),(String)cb.getSelectedItem());
+                    dispose();
+                }
+            }catch(Exception e){
+                
+                JOptionPane.showMessageDialog(this,"Error With Database, Check Connection","Try Again", JOptionPane.WARNING_MESSAGE);
+                
+                int offline = JOptionPane.showConfirmDialog(this, "Continue Offline?","Warning",JOptionPane.YES_NO_OPTION);
+                
+                if(offline == 0){
+                    writeToFileSave();
+                    writeToFileSave2();
+                    setRoster(rosterList);
+                    prepExcelFrame((String)ob.getSelectedItem(),(String)cb.getSelectedItem());
+                    dispose();
+                }
+            } 
+        }
+ 
     }//GEN-LAST:event_doneButtonActionPerformed
 
     private void writeToFileSave(){
@@ -609,7 +617,7 @@ public class mainFrame extends javax.swing.JFrame {
             writer.close();
             
         }catch(Exception e){
-            System.out.println(e.getMessage());
+            System.out.println("WriteToFileSave");
         }
    
     }
@@ -631,15 +639,15 @@ public class mainFrame extends javax.swing.JFrame {
             writer2.close();
             
         }catch(Exception e){
-            System.out.println(e.getMessage());
+            System.out.println("WriteToFileSave2");
         }
    
     }
     
-    private void prepExcelFrame(String area){
+    private void prepExcelFrame(String area,String Shift){
         
         
-        Table newTable = new Table(rosterList,areaFrame.getAreaByName(area).getDeviceTypes());
+        Table newTable = new Table(rosterList,areaFrame.getAreaByName(area).getDeviceTypes(),Shift);
         ExcelFrame newExcelFrame = new ExcelFrame(newTable);
         runExcel(newExcelFrame);
     }
@@ -707,10 +715,7 @@ public class mainFrame extends javax.swing.JFrame {
                 nameList2.remove(name);
             }
         }
-        
-        
-        
-        
+  
     }//GEN-LAST:event_delTechButtonActionPerformed
 
     private void selectAllButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectAllButtonActionPerformed
@@ -809,7 +814,7 @@ public class mainFrame extends javax.swing.JFrame {
                 }
             }
         }catch(Exception e){
-            System.out.println(e.getMessage());
+            System.out.println("InitExistingTechList");
         }
     }
     /**

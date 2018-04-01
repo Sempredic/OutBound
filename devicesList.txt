@@ -4,5 +4,6 @@ iTouch
 Classic
 Shuffle
 Nano
-Android
-Beats
+Android Phone
+Android Tablet
+Wearables
