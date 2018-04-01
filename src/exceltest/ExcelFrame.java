@@ -1953,15 +1953,19 @@ public class ExcelFrame extends javax.swing.JFrame {
         model.setValueAt(sum, totRow, totCol);
 
         //update database totals
-        try{
+        if(DatabaseObj.getStatusBoolean()){
             
-            DatabaseObj.executeUpdateTotalsQuery((int)model.getValueAt(totRow, totCol));
-    
-            dbStatusLabel.setText(" ");
-        }catch(Exception e){
+            try{
             
-            dbStatusLabel.setText(e.toString());
+                DatabaseObj.executeUpdateTotalsQuery((int)model.getValueAt(totRow, totCol),curTable.getCellID());
+
+                dbStatusLabel.setText(" ");
+            }catch(Exception e){
+
+                dbStatusLabel.setText(e.toString());
+            }
         }
+        
         
     }
     private static int getCol(DefaultTableModel model, String deviceName){

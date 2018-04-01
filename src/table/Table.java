@@ -37,12 +37,12 @@ public class Table{
     DateFormat hour;
     HashMap<String,String>techAvgList;
     ArrayList<String> newAreaList;
-    String Shift;
+    int cellID;
 
 
-    public Table(HashMap<String,String> roster,ArrayList<String> areaList,String Shift){
+    public Table(HashMap<String,String> roster,ArrayList<String> areaList,int cellID){
         
-        this.Shift = Shift;
+        this.cellID = cellID;
         this.roster = roster;
         dataTableID= " ";
        
@@ -68,6 +68,10 @@ public class Table{
     }
     public String[] getcolumnTable(){
         return columnTable;
+    }
+    
+    public int getCellID(){
+        return cellID;
     }
     
     public ArrayList<String> getAreaDevices(){

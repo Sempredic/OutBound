@@ -91,11 +91,12 @@ public class DatabaseObj {
         return status;
     }
     
-    static void executeUpdateTotalsQuery(int total)throws Exception{
+    static void executeUpdateTotalsQuery(int total,int cellID)throws Exception{
         String SQL = "UPDATE cellEntries\n" +
                      "SET cellEntries.[Total Completed] = " + total + "\n" +
-                     "WHERE (((cellEntries.DateOfEntry)=Date()))";
+                     "WHERE (((cellEntries.DateOfEntry)=Date())) AND ((cellEntries.CellID)="+ cellID + ")";
  
+        //System.out.println(SQL);
         stmt = conn.createStatement();
 
         stmt.executeUpdate(SQL);  
@@ -120,6 +121,34 @@ public class DatabaseObj {
         }
         
         return exists;
+    }
+    
+    static int executeGetCellIDQ(String Date,String CellArea,String Shift)throws Exception{
+        int areaID = 0;
+        String selectSQL = "SELECT areas.ID\n" +
+                           "FROM areas\n" +
+                           "WHERE (((areas.AreaName)=\"" + CellArea + "\") AND ((areas.Shift)="+ Shift + "))";
+        
+        stmt = conn.createStatement();
+        
+        ResultSet rs = stmt.executeQuery(selectSQL);
+        
+        while(rs.next()){
+            areaID = rs.getInt("ID");
+        }
+        
+        return areaID;
+    }
+    static int executeCellEntryAppendQ(String Date,String CellArea,String Shift)throws Exception{
+        int areaID = 0;
+        areaID = executeGetCellIDQ(Date,CellArea,Shift);
+        
+        String appendSQL = "INSERT INTO cellEntries ( DateOfEntry, CellID )\n" +
+                           "VALUES (#" + Date + "#," + areaID + ")";
+        
+        stmt.executeUpdate(appendSQL);
+  
+        return areaID;
     }
     
     static void getCellAreasQuery(){

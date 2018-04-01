@@ -558,6 +558,7 @@ public class mainFrame extends javax.swing.JFrame {
         JLabel theArea = new JLabel("Select Area", JLabel.CENTER);
         JLabel theShift = new JLabel("Select Shift", JLabel.CENTER);
         int exists = 0;
+        int resultCellID = 0;
         
         JComboBox<String> cb = new JComboBox<String>(shifts);
         JComboBox<Object> ob = new JComboBox<Object>(options);
@@ -578,18 +579,30 @@ public class mainFrame extends javax.swing.JFrame {
                 if(DatabaseObj.executeCellEntryExistsQ(curDate,(String)ob.getSelectedItem(),
                         (String)cb.getSelectedItem())){
                     exists = JOptionPane.showConfirmDialog(this, "Entry Already Exists, Continue?","Warning",JOptionPane.YES_NO_OPTION);
+                    if(exists == 0){
+                        writeToFileSave();
+                        writeToFileSave2();
+                        setRoster(rosterList);
+                        prepExcelFrame((String)ob.getSelectedItem(),DatabaseObj.executeGetCellIDQ
+                                (curDate, (String)ob.getSelectedItem(),(String)cb.getSelectedItem()));
+                        dispose();
+                    }
+                    
                 }else{
                     exists = JOptionPane.showConfirmDialog(this, "Create New Entry?","Entry Doesn't Exist",JOptionPane.YES_NO_OPTION);
+                    if(exists == 0){
+                        
+                        resultCellID = DatabaseObj.executeCellEntryAppendQ(curDate,(String)ob.getSelectedItem(),
+                        (String)cb.getSelectedItem());
+                        writeToFileSave();
+                        writeToFileSave2();
+                        setRoster(rosterList);
+                        prepExcelFrame((String)ob.getSelectedItem(),resultCellID);
+                        dispose();
+                    }
                     
                 }
                 
-                if(exists == 0){
-                    writeToFileSave();
-                    writeToFileSave2();
-                    setRoster(rosterList);
-                    prepExcelFrame((String)ob.getSelectedItem(),(String)cb.getSelectedItem());
-                    dispose();
-                }
             }catch(Exception e){
                 
                 JOptionPane.showMessageDialog(this,"Error With Database, Check Connection","Try Again", JOptionPane.WARNING_MESSAGE);
@@ -600,7 +613,7 @@ public class mainFrame extends javax.swing.JFrame {
                     writeToFileSave();
                     writeToFileSave2();
                     setRoster(rosterList);
-                    prepExcelFrame((String)ob.getSelectedItem(),(String)cb.getSelectedItem());
+                    prepExcelFrame((String)ob.getSelectedItem(),0);
                     dispose();
                 }
             } 
@@ -651,10 +664,10 @@ public class mainFrame extends javax.swing.JFrame {
    
     }
     
-    private void prepExcelFrame(String area,String Shift){
+    private void prepExcelFrame(String area,int cellID){
         
         
-        Table newTable = new Table(rosterList,areaFrame.getAreaByName(area).getDeviceTypes(),Shift);
+        Table newTable = new Table(rosterList,areaFrame.getAreaByName(area).getDeviceTypes(),cellID);
         ExcelFrame newExcelFrame = new ExcelFrame(newTable);
         runExcel(newExcelFrame);
     }
