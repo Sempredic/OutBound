@@ -5,7 +5,6 @@
  */
 package exceltest;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.KeyboardFocusManager;
@@ -17,8 +16,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -36,6 +37,7 @@ public class mainFrame extends javax.swing.JFrame {
      */
     protected LinkedHashMap<String,String> rosterList;
     protected LinkedHashMap<String,String> existingRosterList;
+    ArrayList<Object> techIDList;
     boolean done;
     JTextField techNumber;
     KeyboardFocusManager focusManager;
@@ -54,6 +56,7 @@ public class mainFrame extends javax.swing.JFrame {
         areaFrame = new manageFrame();
         rosterList = new LinkedHashMap<String,String>();
         existingRosterList = new LinkedHashMap<String,String>();
+        techIDList = new ArrayList<Object>();
         done = false;
         techNumber = new JTextField("");
         techName = new JTextField("");
@@ -550,41 +553,65 @@ public class mainFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_createTechButtonActionPerformed
 
+    private void loadTechIDList(){
+        
+        techIDList.clear();
+        
+        try{
+            DatabaseObj.executeGetEmployeeIDQ(techIDList, rosterList);
+        }catch(Exception e){
+            System.out.println(e.toString());
+        }
+        
+    }
     private void doneButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_doneButtonActionPerformed
         // TODO add your handling code here:
+        loadTechIDList();
+        LinkedHashMap<String,String> entryMap = new LinkedHashMap<String,String>();
         Object[] options = areaFrame.getAreaMapNames().toArray();
         String[] shifts = {"1","2"};
         JLabel theDate = new JLabel("Entry Date: " + curDate ,JLabel.CENTER);
         JLabel theArea = new JLabel("Select Area", JLabel.CENTER);
         JLabel theShift = new JLabel("Select Shift", JLabel.CENTER);
+
         int exists = 0;
-        int resultCellID = 0;
+        String areaName = " ";
+        String shift = " ";
         
-        JComboBox<String> cb = new JComboBox<String>(shifts);
-        JComboBox<Object> ob = new JComboBox<Object>(options);
+        JComboBox<String> shiftOB = new JComboBox<String>(shifts);
+        JComboBox<Object> areaOB = new JComboBox<Object>(options);
          
         JPanel panel = new JPanel(new GridLayout(0,1));
         panel.add(theDate);
         panel.add(new JLabel(" "));
         panel.add(theArea);
-        panel.add(ob);
+        panel.add(areaOB);
         panel.add(theShift);
-        panel.add(cb);
+        panel.add(shiftOB);
         panel.add(new JLabel(" "));
+
         
         int option = JOptionPane.showConfirmDialog(this, panel,"Confirm Area",JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE);
 
         if(option == 0){
+            
+            areaName = (String)areaOB.getSelectedItem();
+            shift = (String)shiftOB.getSelectedItem();
+            
             try{
-                if(DatabaseObj.executeCellEntryExistsQ(curDate,(String)ob.getSelectedItem(),
-                        (String)cb.getSelectedItem())){
+                if(DatabaseObj.executeCellEntryExistsQ(curDate,(String)areaOB.getSelectedItem(),
+                        (String)shiftOB.getSelectedItem())){
                     exists = JOptionPane.showConfirmDialog(this, "Entry Already Exists, Continue?","Warning",JOptionPane.YES_NO_OPTION);
                     if(exists == 0){
+                        entryMap.put("EntryID",String.valueOf(DatabaseObj.executeGetEntryIDQ(curDate,DatabaseObj.executeGetCellIDQ(curDate,areaName,shift))));
+                        entryMap.put("Date",curDate);
+                        entryMap.put("AreaID", String.valueOf(DatabaseObj.executeGetCellIDQ(curDate,areaName,shift)));
+                        entryMap.put("AreaName",areaName);
+                        entryMap.put("Shift",shift);
                         writeToFileSave();
                         writeToFileSave2();
                         setRoster(rosterList);
-                        prepExcelFrame((String)ob.getSelectedItem(),DatabaseObj.executeGetCellIDQ
-                                (curDate, (String)ob.getSelectedItem(),(String)cb.getSelectedItem()));
+                        prepExcelFrame(entryMap);
                         dispose();
                     }
                     
@@ -592,28 +619,33 @@ public class mainFrame extends javax.swing.JFrame {
                     exists = JOptionPane.showConfirmDialog(this, "Create New Entry?","Entry Doesn't Exist",JOptionPane.YES_NO_OPTION);
                     if(exists == 0){
                         
-                        resultCellID = DatabaseObj.executeCellEntryAppendQ(curDate,(String)ob.getSelectedItem(),
-                        (String)cb.getSelectedItem());
+                        entryMap = DatabaseObj.executeCellEntryAppendQ(curDate,areaName,shift);
+                        DatabaseObj.executeTechProdEntriesAppendQ(entryMap, techIDList);
                         writeToFileSave();
                         writeToFileSave2();
                         setRoster(rosterList);
-                        prepExcelFrame((String)ob.getSelectedItem(),resultCellID);
+                        prepExcelFrame(entryMap);
                         dispose();
                     }
                     
                 }
                 
             }catch(Exception e){
-                
+                ///////////////////////////OFFLINE MODE//////////////////////////////
                 JOptionPane.showMessageDialog(this,"Error With Database, Check Connection","Try Again", JOptionPane.WARNING_MESSAGE);
                 
                 int offline = JOptionPane.showConfirmDialog(this, "Continue Offline?","Warning",JOptionPane.YES_NO_OPTION);
                 
                 if(offline == 0){
+                    entryMap.put("EntryID", " ");
+                    entryMap.put("Date",curDate);
+                    entryMap.put("AreaID","0");
+                    entryMap.put("AreaName",areaName);
+                    entryMap.put("Shift",shift);
                     writeToFileSave();
                     writeToFileSave2();
                     setRoster(rosterList);
-                    prepExcelFrame((String)ob.getSelectedItem(),0);
+                    prepExcelFrame(entryMap);
                     dispose();
                 }
             } 
@@ -664,10 +696,10 @@ public class mainFrame extends javax.swing.JFrame {
    
     }
     
-    private void prepExcelFrame(String area,int cellID){
+    private void prepExcelFrame(LinkedHashMap<String,String> cellEntryMap){
         
-        
-        Table newTable = new Table(rosterList,areaFrame.getAreaByName(area).getDeviceTypes(),cellID);
+        String area = cellEntryMap.get("AreaName");
+        Table newTable = new Table(rosterList,areaFrame.getAreaByName(area).getDeviceTypes(),cellEntryMap);
         ExcelFrame newExcelFrame = new ExcelFrame(newTable);
         runExcel(newExcelFrame);
     }

@@ -182,6 +182,10 @@ public class ExcelFrame extends javax.swing.JFrame {
         }
     }
     
+    private void createDBtechProdEntries(){
+        
+    }
+    
 
     private void initMultiTable(){
         multiColumn = new String [] {
@@ -1429,6 +1433,10 @@ public class ExcelFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         if(JOptionPane.showConfirmDialog(this,"          Are You Sure?", "Exiting",
                 JOptionPane.OK_CANCEL_OPTION)==JOptionPane.OK_OPTION){
+            try{
+                DatabaseObj.closeConnection();    
+            }catch(Exception e){}
+            
             System.exit(0);
         }
     }//GEN-LAST:event_formWindowClosing
@@ -1957,7 +1965,7 @@ public class ExcelFrame extends javax.swing.JFrame {
             
             try{
             
-                DatabaseObj.executeUpdateTotalsQuery((int)model.getValueAt(totRow, totCol),curTable.getCellID());
+                DatabaseObj.executeUpdateTotalsQuery((int)model.getValueAt(totRow, totCol),curTable.getEntryID());
 
                 dbStatusLabel.setText(" ");
             }catch(Exception e){

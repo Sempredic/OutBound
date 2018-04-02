@@ -5,7 +5,6 @@
  */
 package table;
 
-import java.awt.List;
 import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -13,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -37,12 +35,11 @@ public class Table{
     DateFormat hour;
     HashMap<String,String>techAvgList;
     ArrayList<String> newAreaList;
-    int cellID;
+    LinkedHashMap<String,String> databaseEntryInfo;
 
 
-    public Table(HashMap<String,String> roster,ArrayList<String> areaList,int cellID){
+    public Table(HashMap<String,String> roster,ArrayList<String> areaList,LinkedHashMap<String,String> databaseEntryInfo){
         
-        this.cellID = cellID;
         this.roster = roster;
         dataTableID= " ";
        
@@ -52,6 +49,7 @@ public class Table{
         techAvgList= new HashMap<>();
         newAreaList = areaList;
         saveTable = table;
+        this.databaseEntryInfo = databaseEntryInfo;
 
         setRosterNames();
         setRosterTechNum();
@@ -70,8 +68,8 @@ public class Table{
         return columnTable;
     }
     
-    public int getCellID(){
-        return cellID;
+    public int getEntryID(){
+        return Integer.parseInt(databaseEntryInfo.get("EntryID"));
     }
     
     public ArrayList<String> getAreaDevices(){
@@ -118,10 +116,14 @@ public class Table{
                    } 
                 }
             }
-        }  
+        }
+        
+ 
     }
  
-    
+    private void setRosterIDs(){
+        
+    }
     private void setRosterNames(){
         for(String key:roster.keySet()){
             tRosterNames.add(roster.get(key));

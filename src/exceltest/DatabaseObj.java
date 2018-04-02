@@ -7,6 +7,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  *
@@ -91,10 +93,10 @@ public class DatabaseObj {
         return status;
     }
     
-    static void executeUpdateTotalsQuery(int total,int cellID)throws Exception{
+    static void executeUpdateTotalsQuery(int total,int EntryID)throws Exception{
         String SQL = "UPDATE cellEntries\n" +
-                     "SET cellEntries.[Total Completed] = " + total + "\n" +
-                     "WHERE (((cellEntries.DateOfEntry)=Date())) AND ((cellEntries.CellID)="+ cellID + ")";
+                     "SET cellEntries.[Total Completed] = cellEntries.[Total Completed]+" + total + "\n" +
+                     "WHERE (((cellEntries.ID)=" + EntryID + "))";
  
         //System.out.println(SQL);
         stmt = conn.createStatement();
@@ -139,16 +141,92 @@ public class DatabaseObj {
         
         return areaID;
     }
-    static int executeCellEntryAppendQ(String Date,String CellArea,String Shift)throws Exception{
+    
+    static int executeGetEntryIDQ(String Date,int CellID)throws Exception{
+        int entryID = 0;
+        String selectSQL = "SELECT cellEntries.ID\n" +
+                           "FROM cellEntries\n" +
+                           "WHERE (((cellEntries.DateOfEntry)=#" + Date + "#) AND ((cellEntries.CellID)="+ CellID + "))";
+        
+        stmt = conn.createStatement();
+        
+        ResultSet rs = stmt.executeQuery(selectSQL);
+        
+        while(rs.next()){
+            entryID = rs.getInt("ID");
+        }
+        
+        return entryID;
+    }
+    
+    static void executeGetEmployeeIDQ(ArrayList<Object> techIDList,LinkedHashMap<String,String> roster)throws Exception{
+        
+        String SQL = " ";
+
+        for(Map.Entry<String,String> entry:roster.entrySet()){
+            
+            SQL = "SELECT employees.ID\n" +
+                   "FROM employees\n" +
+                   "WHERE (((employees.TechID)=\"" + entry.getKey() + "\"));";
+
+            ResultSet rs = stmt.executeQuery(SQL);
+            
+            while(rs.next()){
+                techIDList.add(rs.getInt("ID"));
+            }
+        }
+
+    }
+    
+    static ArrayList<Integer> executeTechProdEntriesAppendQ(LinkedHashMap<String,String> entryMap,ArrayList<Object> techIDList)throws Exception{
+       
+        String prodID = entryMap.get("EntryID");
+        String Date = entryMap.get("Date");
+        String SQL = " ";
+        ArrayList<Integer> generatedKeys = new ArrayList<Integer>();
+        
+        for(Object employeeID:techIDList){
+            SQL = "INSERT INTO techProdEntries ( prodID,[Date of Entry],employeeID )\n" +
+                     "VALUES (" + prodID + ",#" + Date + "#," + employeeID + ")";
+             
+            stmt.executeUpdate(SQL);
+            ResultSet rs = stmt.getGeneratedKeys();
+            
+            while(rs.next()){
+                generatedKeys.add(rs.getInt(1));
+            }
+        }
+        
+        return generatedKeys;
+        
+    }
+    
+    static LinkedHashMap<String,String> executeCellEntryAppendQ(String Date,String CellArea,String Shift)throws Exception{
+        LinkedHashMap<String,String> cellEntryInfo = new LinkedHashMap<String,String>();
         int areaID = 0;
+        int cellEntryID = 0;
+        
         areaID = executeGetCellIDQ(Date,CellArea,Shift);
+        
+        cellEntryInfo.put("Date",Date);
+        cellEntryInfo.put("AreaID", String.valueOf(areaID));
+        cellEntryInfo.put("AreaName",CellArea);
+        cellEntryInfo.put("Shift",Shift);
         
         String appendSQL = "INSERT INTO cellEntries ( DateOfEntry, CellID )\n" +
                            "VALUES (#" + Date + "#," + areaID + ")";
         
         stmt.executeUpdate(appendSQL);
+        
+        ResultSet rs = stmt.getGeneratedKeys();
+            
+        while(rs.next()){
+            cellEntryID = rs.getInt(1);
+        }
+        
+        cellEntryInfo.put("EntryID",String.valueOf(cellEntryID));
   
-        return areaID;
+        return cellEntryInfo;
     }
     
     static void getCellAreasQuery(){
