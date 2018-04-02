@@ -23,6 +23,7 @@ public class DatabaseObj {
     static ArrayList<String> areasList;
     static ArrayList<String> devicesList;
     static ArrayList<String> employeesList;
+    String dbLocation;
     
     public DatabaseObj(){
         
@@ -30,13 +31,14 @@ public class DatabaseObj {
         areasList = new ArrayList<String>();
         devicesList = new ArrayList<String>();
         employeesList = new ArrayList<String>();
+        dbLocation = "C:\\Users\\Vince\\Downloads\\DB.accdb";
         
         try{
             //STEP 2: Register JDBC driver
           Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
             //STEP 3: Open a connection
-          System.out.println("Connecting to a selected database...");
-          conn = DriverManager.getConnection("jdbc:ucanaccess://C:\\Users\\Vince\\Downloads\\DB.accdb");
+          System.out.println("Connecting to database: " + dbLocation + "...");
+          conn = DriverManager.getConnection("jdbc:ucanaccess://" + dbLocation);
           
           status = true;
        } catch(Exception e){
