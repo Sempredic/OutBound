@@ -618,7 +618,7 @@ public class mainFrame extends javax.swing.JFrame {
                 }else{
                     exists = JOptionPane.showConfirmDialog(this, "Create New Entry?","Entry Doesn't Exist",JOptionPane.YES_NO_OPTION);
                     if(exists == 0){
-                        
+                         
                         entryMap = DatabaseObj.executeCellEntryAppendQ(curDate,areaName,shift);
                         DatabaseObj.executeTechProdEntriesAppendQ(entryMap, techIDList);
                         writeToFileSave();
