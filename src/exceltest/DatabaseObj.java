@@ -20,6 +20,7 @@ public class DatabaseObj {
     static Connection conn;
     static boolean status;
     static Statement stmt;
+    static PreparedStatement preparedStatement;
     static ArrayList<String> areasList;
     static ArrayList<String> devicesList;
     static ArrayList<String> employeesList;
@@ -28,6 +29,7 @@ public class DatabaseObj {
     public DatabaseObj(){
         
         stmt = null;
+        preparedStatement = null;
         areasList = new ArrayList<String>();
         devicesList = new ArrayList<String>();
         employeesList = new ArrayList<String>();
@@ -96,14 +98,16 @@ public class DatabaseObj {
     }
     
     static void executeUpdateTotalsQuery(int total,int EntryID)throws Exception{
-        String SQL = "UPDATE cellEntries\n" +
-                     "SET cellEntries.[Total Completed] = cellEntries.[Total Completed]+" + total + "\n" +
-                     "WHERE (((cellEntries.ID)=" + EntryID + "))";
- 
-        //System.out.println(SQL);
-        stmt = conn.createStatement();
+   
+        String SQL = "UPDATE cellEntries SET cellEntries.[Total Completed] = [Total Completed]+?\n" +
+                     "WHERE (((cellEntries.ID)=?))";
 
-        stmt.executeUpdate(SQL);  
+        preparedStatement = conn.prepareStatement(SQL);
+        preparedStatement.setInt(1,total);
+        preparedStatement.setInt(2,EntryID);
+   
+        preparedStatement .executeUpdate();
+
     }
     
     static boolean executeCellEntryExistsQ(String Date,String CellArea,String Shift)throws Exception{
