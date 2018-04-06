@@ -1890,6 +1890,14 @@ public class ExcelFrame extends javax.swing.JFrame {
         tableModel.setValueAt(val, row, col);    
         updateTotalDev(tableModel);
         updateTotalTech(tableModel);
+        
+        try{
+            
+            DatabaseObj.executeUpdateTechProdQ(
+                    techFieldName.getText(),tableModel.getColumnName(col),(int)tableModel.getValueAt(row, col),curTable.getEntryID());
+        }catch(Exception e){
+            System.out.println(e.toString());
+        }
     }
     
     public static void setTableValues(DefaultTableModel model,int val, int row, int col){
@@ -1897,6 +1905,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         model.setValueAt(val, row, col);    
         updateTotalDev(model);
         updateTotalTech(model);
+       
     }
     
     private void setMultiTableValues(int val, int row, int col){
@@ -2109,7 +2118,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     private java.awt.List dTableList;
     private javax.swing.JLabel dbStatus;
     private static javax.swing.JLabel dbStatusLabel;
-    private javax.swing.JTextField devFieldName;
+    private static javax.swing.JTextField devFieldName;
     private javax.swing.JLabel deviceField;
     private javax.swing.JLabel eQuotaLabel;
     private javax.swing.JMenu editMenu;
@@ -2143,7 +2152,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     private javax.swing.JButton snapShotButton;
     private javax.swing.JScrollPane tablePanel;
     private javax.swing.JLabel techField;
-    private javax.swing.JTextField techFieldName;
+    private static javax.swing.JTextField techFieldName;
     private javax.swing.JTable theTable;
     private javax.swing.JMenuItem undoMenuItem;
     // End of variables declaration//GEN-END:variables

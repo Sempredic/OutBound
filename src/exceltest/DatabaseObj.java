@@ -97,9 +97,42 @@ public class DatabaseObj {
         return status;
     }
     
+    static int getEmployeeID(String tech)throws Exception{
+        int ID = 0;
+        String SQL = "SELECT employees.ID\n" +
+                     "FROM employees\n" +
+                     "WHERE (((employees.TechID)=\"" + tech + "\"))";
+        
+        
+        ResultSet rs = stmt.executeQuery(SQL);
+        
+        while(rs.next()){
+            ID = rs.getInt("ID");
+        }
+        
+        return ID;
+    }
+    
+    static void executeUpdateTechProdQ(String tech, String device, int total, int entryID)throws Exception{
+        
+        int ID = getEmployeeID(tech);
+        String SQL = "UPDATE techProdEntries \n" +
+                     "SET techProdEntries.[" + device + "] = ?\n" +
+                     "WHERE (((techProdEntries.prodID)=?)) AND (((techProdEntries.EmployeeID)=?))";
+
+        preparedStatement = conn.prepareStatement(SQL);
+        
+        preparedStatement.setInt(1,total);
+        preparedStatement.setInt(2,entryID);
+        preparedStatement.setInt(3,ID);
+   
+        preparedStatement .executeUpdate();
+        
+    }
+    
     static void executeUpdateTotalsQuery(int total,int EntryID)throws Exception{
    
-        String SQL = "UPDATE cellEntries SET cellEntries.[Total Completed] = [Total Completed]+?\n" +
+        String SQL = "UPDATE cellEntries SET cellEntries.[Total Completed] = ?\n" +
                      "WHERE (((cellEntries.ID)=?))";
 
         preparedStatement = conn.prepareStatement(SQL);
