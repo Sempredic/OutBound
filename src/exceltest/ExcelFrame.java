@@ -1195,9 +1195,7 @@ public class ExcelFrame extends javax.swing.JFrame {
                             newTechRow[1] = techName.getText();
                             newInfoRow[1] = techName.getText();
                         }
-                        
-                        //newInfoRow[getCol(getInfoModel(),"Quota")]= String.valueOf(Integer.valueOf(quotaLabel.getText())/curTable.getRosterNum().size());
-                        
+                           
                         tableModel.insertRow(0,newTechRow);
                         getInfoModel().insertRow(0, newInfoRow);
                         updateInfoQuota(quotaLabel.getText());
@@ -1890,14 +1888,6 @@ public class ExcelFrame extends javax.swing.JFrame {
         tableModel.setValueAt(val, row, col);    
         updateTotalDev(tableModel);
         updateTotalTech(tableModel);
-        
-        try{
-            
-            DatabaseObj.executeUpdateTechProdQ(
-                    techFieldName.getText(),tableModel.getColumnName(col),(int)tableModel.getValueAt(row, col),curTable.getEntryID());
-        }catch(Exception e){
-            System.out.println(e.toString());
-        }
     }
     
     public static void setTableValues(DefaultTableModel model,int val, int row, int col){
@@ -1951,6 +1941,15 @@ public class ExcelFrame extends javax.swing.JFrame {
                 int col = getCol(model,dev);
                 value = Integer.parseInt(model.getValueAt(row, col).toString());
                 sum += value;
+                
+                ////////////////////////////////////////////////////////////////////////DATABASE///////////////////////////////////////////
+                try{
+
+                    DatabaseObj.executeUpdateTechProdQ(
+                            tech,dev,value,curTable.getEntryID());
+                }catch(Exception e){
+                    System.out.println(e.toString());
+                }
             }
 
             tttSum += sum;
@@ -1969,6 +1968,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         
         model.setValueAt(sum, totRow, totCol);
 
+        ////////////////////////////////////////////////////////////////////////DATABASE///////////////////////////////////////////
         //update database totals
         if(DatabaseObj.getStatusBoolean()){
             
@@ -1982,8 +1982,7 @@ public class ExcelFrame extends javax.swing.JFrame {
                 dbStatusLabel.setText(e.toString());
             }
         }
-        
-        
+  
     }
     private static int getCol(DefaultTableModel model, String deviceName){
         return model.findColumn(deviceName);
