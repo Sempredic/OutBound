@@ -24,6 +24,7 @@ public class DatabaseObj {
     static ArrayList<String> areasList;
     static ArrayList<String> devicesList;
     static ArrayList<String> employeesList;
+    static ArrayList<Object> curRosterList;
     String dbLocation;
     
     public DatabaseObj(){
@@ -33,6 +34,7 @@ public class DatabaseObj {
         areasList = new ArrayList<String>();
         devicesList = new ArrayList<String>();
         employeesList = new ArrayList<String>();
+        curRosterList = new ArrayList<Object>();
         dbLocation = "C:\\Users\\Vince\\Downloads\\DB.accdb";
         
         try{
@@ -56,6 +58,14 @@ public class DatabaseObj {
        }
     }
     
+    static void setCurRosterList(ArrayList<Object> techIDList){
+       curRosterList = techIDList;
+    }
+    
+    static ArrayList<Object> getCurRosterList(){
+        return curRosterList;
+    }
+          
     static ArrayList<String> getEmployeeList(){
         return employeesList;
     }
@@ -84,8 +94,7 @@ public class DatabaseObj {
         int timeout =0;
         
         try{
-            System.out.println("Getting Database Status...");
-    
+ 
             timeout = conn.getNetworkTimeout();
           
             status = true;
@@ -141,6 +150,27 @@ public class DatabaseObj {
    
         preparedStatement .executeUpdate();
 
+    }
+    
+    static boolean executeTechProdEntryEmployeeExistsQ(String tech, int entryID)throws Exception{
+        int ID = 0;
+        boolean exists = false;
+        
+        String SQL = "SELECT techProdEntries.ID\n" +
+                     "FROM employees LEFT JOIN techProdEntries ON employees.ID = techProdEntries.EmployeeID\n" +
+                     "WHERE (((employees.TechID)=\""+tech+"\") AND ((techProdEntries.prodID)="+entryID+"));";
+        
+        stmt = conn.createStatement();
+        
+        ResultSet rs = stmt.executeQuery(SQL);
+        
+        if(!rs.next()){
+            exists = false;
+        }else{
+            exists = true;
+        }
+        
+        return exists;
     }
     
     static boolean executeCellEntryExistsQ(String Date,String CellArea,String Shift)throws Exception{
@@ -237,6 +267,29 @@ public class DatabaseObj {
         }
         
         return generatedKeys;
+        
+    }
+    
+    static int executeTechProdEntriesAppendQ(LinkedHashMap<String,String> entryMap,String tech)throws Exception{
+       
+        String prodID = entryMap.get("EntryID");
+        String Date = entryMap.get("Date");
+        String SQL = " ";
+        int generatedKey = 0;
+        int employeeID = getEmployeeID(tech);
+        
+       
+        SQL = "INSERT INTO techProdEntries ( prodID,[Date of Entry],employeeID )\n" +
+                 "VALUES (" + prodID + ",#" + Date + "#," + employeeID + ")";
+
+        stmt.executeUpdate(SQL);
+        ResultSet rs = stmt.getGeneratedKeys();
+
+        while(rs.next()){
+            generatedKey = rs.getInt(1);
+        }
+         
+        return generatedKey;
         
     }
     

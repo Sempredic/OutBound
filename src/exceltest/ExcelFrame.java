@@ -116,7 +116,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     static ArrayList<String> deviceNames;
     JFileChooser fileChooser;
     FileNameExtensionFilter filter;
-    String databaseConn;
+    static String databaseConn;
     
     
     public ExcelFrame(Table table){
@@ -164,11 +164,12 @@ public class ExcelFrame extends javax.swing.JFrame {
             
         fileChooser = new JFileChooser();
         
-        initDatabaseStatus();
+        updateDatabaseStatus();
         
     }
     
-    private void initDatabaseStatus(){
+    ////////////////////////////////////////////////////////////////////////////DATABASE/////////////////
+    private static void updateDatabaseStatus(){
         databaseConn = DatabaseObj.getStatus();
         switch(databaseConn){
             case "Connected":
@@ -1943,12 +1944,25 @@ public class ExcelFrame extends javax.swing.JFrame {
                 sum += value;
                 
                 ////////////////////////////////////////////////////////////////////////DATABASE///////////////////////////////////////////
-                try{
-
-                    DatabaseObj.executeUpdateTechProdQ(
-                            tech,dev,value,curTable.getEntryID());
-                }catch(Exception e){
-                    System.out.println(e.toString());
+                if(DatabaseObj.getStatusBoolean()){
+                    
+                    if(curTable.getEntryID()!=0){
+                        
+                        try{
+                            if(DatabaseObj.executeTechProdEntryEmployeeExistsQ(tech, curTable.getEntryID())){
+                                DatabaseObj.executeUpdateTechProdQ(
+                                    tech,dev,value,curTable.getEntryID());
+                            }else{
+                                DatabaseObj.executeTechProdEntriesAppendQ(curTable.getDBEntryInfo(), tech);
+                            }          
+                        }catch(Exception e){
+                            
+                            System.out.println(e.toString());
+                        }
+                    }
+                    
+                }else{
+                    updateDatabaseStatus();
                 }
             }
 
@@ -1981,6 +1995,8 @@ public class ExcelFrame extends javax.swing.JFrame {
 
                 dbStatusLabel.setText(e.toString());
             }
+        }else{
+            updateDatabaseStatus();
         }
   
     }
@@ -2115,7 +2131,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem addExistingTechMenuItem;
     private javax.swing.JMenuItem addMenuItem;
     private java.awt.List dTableList;
-    private javax.swing.JLabel dbStatus;
+    private static javax.swing.JLabel dbStatus;
     private static javax.swing.JLabel dbStatusLabel;
     private static javax.swing.JTextField devFieldName;
     private javax.swing.JLabel deviceField;

@@ -69,7 +69,15 @@ public class Table{
     }
     
     public int getEntryID(){
+      
+        if(databaseEntryInfo.get("EntryID")== " "){
+            return 0;
+        }
         return Integer.parseInt(databaseEntryInfo.get("EntryID"));
+    }
+    
+    public LinkedHashMap<String,String> getDBEntryInfo(){
+        return databaseEntryInfo;
     }
     
     public ArrayList<String> getAreaDevices(){
