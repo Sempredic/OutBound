@@ -1,4 +1,4 @@
-3
+4
 7
 CellA
 iPhone
@@ -14,3 +14,7 @@ Android Tablet
 2
 CellC
 Wearables
+3
+Repair
+Android Phone
+Android Tablet

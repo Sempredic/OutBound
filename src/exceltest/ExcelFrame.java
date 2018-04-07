@@ -16,7 +16,6 @@ import java.util.Map;
 import javax.swing.AbstractButton;
 import javax.swing.JOptionPane;
 import javax.swing.table.*;
-import table.Table;
 
 import java.io.FileOutputStream;
 import java.io.IOException;

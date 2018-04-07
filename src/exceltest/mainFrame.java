@@ -24,7 +24,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import table.Table;
 
 /**
  *
@@ -48,6 +47,7 @@ public class mainFrame extends javax.swing.JFrame {
     SimpleDateFormat formatter;  
     Date date;
     String curDate;
+    boolean dbExist;
     
     public mainFrame() {
         
@@ -64,6 +64,7 @@ public class mainFrame extends javax.swing.JFrame {
         formatter = new SimpleDateFormat("M/d/yyyy");  
         date = new Date();
         curDate = formatter.format(date);
+        dbExist = false;
         
         initExistingTechList();
         initDatabaseStatus();
@@ -603,6 +604,7 @@ public class mainFrame extends javax.swing.JFrame {
                         (String)shiftOB.getSelectedItem())){
                     exists = JOptionPane.showConfirmDialog(this, "Entry Already Exists, Continue?","Warning",JOptionPane.YES_NO_OPTION);
                     if(exists == 0){
+                        dbExist = true;
                         entryMap.put("EntryID",String.valueOf(DatabaseObj.executeGetEntryIDQ(curDate,DatabaseObj.executeGetCellIDQ(curDate,areaName,shift))));
                         entryMap.put("Date",curDate);
                         entryMap.put("AreaID", String.valueOf(DatabaseObj.executeGetCellIDQ(curDate,areaName,shift)));
@@ -618,7 +620,7 @@ public class mainFrame extends javax.swing.JFrame {
                 }else{
                     exists = JOptionPane.showConfirmDialog(this, "Create New Entry?","Entry Doesn't Exist",JOptionPane.YES_NO_OPTION);
                     if(exists == 0){
-                         
+                        dbExist = false;
                         entryMap = DatabaseObj.executeCellEntryAppendQ(curDate,areaName,shift);
                         DatabaseObj.executeTechProdEntriesAppendQ(entryMap, techIDList);
                         writeToFileSave();
@@ -637,6 +639,7 @@ public class mainFrame extends javax.swing.JFrame {
                 int offline = JOptionPane.showConfirmDialog(this, "Continue Offline?","Warning",JOptionPane.YES_NO_OPTION);
                 
                 if(offline == 0){
+                    dbExist = false;
                     entryMap.put("EntryID", " ");
                     entryMap.put("Date",curDate);
                     entryMap.put("AreaID","0");
@@ -699,7 +702,7 @@ public class mainFrame extends javax.swing.JFrame {
     private void prepExcelFrame(LinkedHashMap<String,String> cellEntryMap){
         
         String area = cellEntryMap.get("AreaName");
-        Table newTable = new Table(rosterList,areaFrame.getAreaByName(area).getDeviceTypes(),cellEntryMap);
+        Table newTable = new Table(rosterList,areaFrame.getAreaByName(area).getDeviceTypes(),cellEntryMap,dbExist);
         ExcelFrame newExcelFrame = new ExcelFrame(newTable);
         runExcel(newExcelFrame);
     }

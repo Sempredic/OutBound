@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package table;
+package exceltest;
 
 import java.io.PrintWriter;
 import java.text.DateFormat;
@@ -38,7 +38,7 @@ public class Table{
     LinkedHashMap<String,String> databaseEntryInfo;
 
 
-    public Table(HashMap<String,String> roster,ArrayList<String> areaList,LinkedHashMap<String,String> databaseEntryInfo){
+    public Table(HashMap<String,String> roster,ArrayList<String> areaList,LinkedHashMap<String,String> databaseEntryInfo,boolean dbExist){
         
         this.roster = roster;
         dataTableID= " ";
@@ -51,9 +51,16 @@ public class Table{
         saveTable = table;
         this.databaseEntryInfo = databaseEntryInfo;
 
-        setRosterNames();
-        setRosterTechNum();
-        initTableData();
+        if(dbExist){
+            initExistingDBTable();
+            
+        }else{
+            setRosterNames();
+            setRosterTechNum();
+            initTableData();
+        }
+            
+        
     }
     
     public void addToRoster(String techNumber,String techName){
@@ -125,18 +132,69 @@ public class Table{
                 }
             }
         }
-        
- 
     }
- 
-    private void setRosterIDs(){
+    
+    private void initExistingDBTable(){
         
+        ArrayList<ArrayList> dataTableList = new ArrayList();
+        this.roster.clear();
+       
+        try{
+            
+            dataTableList = DatabaseObj.executeGetTechProdEntries(newAreaList, getEntryID());
+            
+            for(int i=0;i<dataTableList.size();i++){
+                this.roster.put((String)dataTableList.get(i).get(0),DatabaseObj.getEmployeeNameQ((String)dataTableList.get(i).get(0)));
+            }
+            setRosterNames();
+            setRosterTechNum();
+            
+            columnTable = new String[newAreaList.size()+3];
+     
+            columnTable[0] = "Tech#";
+            columnTable[1] = "Name";
+
+            for(int i = 0;i<newAreaList.size();i++){
+                columnTable[i+2] = newAreaList.get(i);
+            }
+
+            columnTable[columnTable.length-1] = "Tech Total";
+
+            dataTable = new Object[tRosterTechNum.size()+1][columnTable.length];
+
+            for(int row=0;row<tRosterTechNum.size()+1;row++){
+                for(int col=0;col<columnTable.length;col++){
+                   if(row<tRosterTechNum.size()){
+                   
+                       if(col == 0){
+                           dataTable[row][col] = tRosterTechNum.get(row);
+                       }else if(col == 1){
+                           dataTable[row][col] = tRosterNames.get(row);
+                       }else if(col == columnTable.length-1){
+                           dataTable[row][col] = "0";
+                       }else{
+                           dataTable[row][col] = dataTable[row][col] = dataTableList.get(row).get(col-1);
+                       }
+                    }else{
+                        if(col == 0){
+                            dataTable[row][col]= "Total Dev";
+                       }else if(col == 1){
+                           dataTable[row][col] = " ";
+                       }else{
+                           dataTable[row][col] = "0";
+                       } 
+                    }
+                }
+            }
+        }catch(Exception e){
+            System.out.println(e.toString());
+        }
     }
+
     private void setRosterNames(){
         for(String key:roster.keySet()){
             tRosterNames.add(roster.get(key));
-        }
-        
+        } 
     }
     
     private void setRosterTechNum(){
@@ -147,14 +205,12 @@ public class Table{
     
     public ArrayList<String> getRosterNames(){
         
-        return tRosterNames;
-       
+        return tRosterNames;  
     }
     
     public ArrayList<String> getRosterNum(){
         
-        return tRosterTechNum;
-       
+        return tRosterTechNum;  
     }
     
     public boolean checkDTExists(String timeID){
@@ -293,6 +349,29 @@ public class Table{
         }
         
         return result;
+    }
+    
+    private int getDataTableTechRow(String tech){
+        int row = 0;
+        
+        for(int i=0;i<dataTable.length;i++){
+            if(dataTable[i][0].equals(tech)){
+                row = i;
+            }
+        }
+        
+        return row;
+    }
+    
+    private int getDataTableDeviceCol(String device){
+        int col = 0;
+        
+        for(int i=0;i<dataTable[0].length;i++){
+            if(dataTable[0][i].equals(device)){
+                col = i;
+            }
+        }      
+        return col;
     }
    
     

@@ -122,6 +122,22 @@ public class DatabaseObj {
         return ID;
     }
     
+    static String getEmployeeNameQ(String tech)throws Exception{
+        String name = " ";
+        String SQL = "SELECT [First Name]+Left([Last Name],1)+\".\" AS Name\n" +
+                     "FROM employees\n" +
+                     "WHERE (((employees.TechID)=\"" + tech + "\"))";
+        
+        
+        ResultSet rs = stmt.executeQuery(SQL);
+        
+        while(rs.next()){
+            name = rs.getString("Name");
+        }
+        
+        return name;
+    }
+    
     static void executeUpdateTechProdQ(String tech, String device, int total, int entryID)throws Exception{
         
         int ID = getEmployeeID(tech);
@@ -192,6 +208,39 @@ public class DatabaseObj {
         }
         
         return exists;
+    }
+    
+    static ArrayList executeGetTechProdEntries(ArrayList devices,int entryID)throws Exception{
+        ArrayList<ArrayList> tableList = new ArrayList();
+        
+        StringBuilder builder = new StringBuilder();
+        
+        for(Object dev:devices){
+            builder.append(",techProdEntries." + dev);
+        }
+        
+        String SQL = "SELECT employees.TechID" + builder + ", techProdEntries.prodID\n" +
+                     "FROM employees LEFT JOIN techProdEntries ON employees.ID = techProdEntries.EmployeeID\n" +
+                     "WHERE (((techProdEntries.prodID)=" + entryID + "))";
+        
+        stmt = conn.createStatement();
+        
+        ResultSet rs = stmt.executeQuery(SQL);
+        
+        while(rs.next()){
+            
+            ArrayList rowList = new ArrayList();
+            
+            rowList.add(rs.getString("TechID"));
+            
+            for(Object dev:devices){
+                rowList.add(rs.getInt((String)dev));
+            }
+            
+            tableList.add(rowList);
+        }
+
+        return tableList;
     }
     
     static int executeGetCellIDQ(String Date,String CellArea,String Shift)throws Exception{
