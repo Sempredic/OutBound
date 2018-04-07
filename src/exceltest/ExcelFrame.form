@@ -53,6 +53,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="addMenuItem">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Add (New) Tech"/>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
                 <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="addMenuItemMouseClicked"/>
@@ -696,6 +697,7 @@
             <Component class="javax.swing.JButton" name="exportMergeButton">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Export/Merge"/>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="exportMergeButtonActionPerformed"/>

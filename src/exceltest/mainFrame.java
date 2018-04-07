@@ -558,12 +558,14 @@ public class mainFrame extends javax.swing.JFrame {
         
         techIDList.clear();
         
-        try{
-            DatabaseObj.executeGetEmployeeIDQ(techIDList, rosterList);
-        }catch(Exception e){
-            System.out.println(e.toString());
+        if(DatabaseObj.getStatusBoolean()){
+            try{
+                DatabaseObj.executeGetEmployeeIDQ(techIDList, rosterList);
+            }catch(Exception e){
+                System.out.println(e.toString());
+            }
         }
-        
+  
     }
     private void doneButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_doneButtonActionPerformed
         // TODO add your handling code here:

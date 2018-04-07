@@ -38,6 +38,7 @@ public class DatabaseObj {
         dbLocation = "C:\\Users\\Vince\\Downloads\\DB.accdb";
         
         try{
+          ///////////////////////////CONNECTION////////////////////////////////
             //STEP 2: Register JDBC driver
           Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
             //STEP 3: Open a connection
@@ -46,6 +47,7 @@ public class DatabaseObj {
           
           status = true;
        } catch(Exception e){
+          //////////////////////////NO CONNECTION/////////////////////////////////
           status = false;
        }
         
@@ -55,6 +57,8 @@ public class DatabaseObj {
           getDevicesQuery();
           getEmployeesQuery();
           writeToFileSave();
+       }else{
+           readFileSave();
        }
     }
     

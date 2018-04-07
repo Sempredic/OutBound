@@ -615,6 +615,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     dTableList.setMultipleMode(true);
 
     exportMergeButton.setText("Export/Merge");
+    exportMergeButton.setEnabled(false);
     exportMergeButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
             exportMergeButtonActionPerformed(evt);
@@ -721,6 +722,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     jMenu3.setText("Tools");
 
     addMenuItem.setText("Add (New) Tech");
+    addMenuItem.setEnabled(false);
     addMenuItem.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseClicked(java.awt.event.MouseEvent evt) {
             addMenuItemMouseClicked(evt);
