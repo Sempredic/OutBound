@@ -58,9 +58,7 @@ public class Table{
             setRosterNames();
             setRosterTechNum();
             initTableData();
-        }
-            
-        
+        }   
     }
     
     public void addToRoster(String techNumber,String techName){

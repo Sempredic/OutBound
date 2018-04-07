@@ -165,6 +165,8 @@ public class ExcelFrame extends javax.swing.JFrame {
         
         updateDatabaseStatus();
         
+        updateTotalDev(tableModel);
+        updateTotalTech(tableModel);
     }
     
     ////////////////////////////////////////////////////////////////////////////DATABASE/////////////////
