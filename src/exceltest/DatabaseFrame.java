@@ -7,9 +7,9 @@ package exceltest;
 
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
@@ -28,14 +28,16 @@ public class DatabaseFrame extends javax.swing.JFrame {
     private String shift;
     private ArrayList<String> areaListArray;
     private TableModel tbModel; 
+    private TableModel prodModel; 
     private Object[] tbColumn;
-    private Object[] tbRows;
+    private Object[] prodColumn;
     /**
      * Creates new form DatabaseFrame
      */
     public DatabaseFrame() {
         
         tbModel = new DefaultTableModel();
+        prodModel = new DefaultTableModel();
         selectionType = new String();
         date = new String();
         area = new String();
@@ -64,9 +66,11 @@ public class DatabaseFrame extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         typeComboBox = new javax.swing.JComboBox<>();
         dateLabel = new javax.swing.JLabel();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
+        entryProdTab = new javax.swing.JTabbedPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         theTable = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        prodTable = new javax.swing.JTable();
         typeLabel = new javax.swing.JLabel();
         areaLabel = new javax.swing.JLabel();
         shiftLabel = new javax.swing.JLabel();
@@ -92,7 +96,12 @@ public class DatabaseFrame extends javax.swing.JFrame {
         theTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
         jScrollPane1.setViewportView(theTable);
 
-        jTabbedPane1.addTab("Table", jScrollPane1);
+        entryProdTab.addTab("Entries", jScrollPane1);
+
+        prodTable.setModel(prodModel);
+        jScrollPane2.setViewportView(prodTable);
+
+        entryProdTab.addTab("Entry Prod", jScrollPane2);
 
         typeLabel.setText("Type");
 
@@ -146,8 +155,8 @@ public class DatabaseFrame extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(81, 81, 81)
                         .addComponent(queryButton)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 684, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                .addComponent(entryProdTab, javax.swing.GroupLayout.PREFERRED_SIZE, 744, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -155,7 +164,7 @@ public class DatabaseFrame extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(entryProdTab, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(typeLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -212,19 +221,32 @@ public class DatabaseFrame extends javax.swing.JFrame {
     private void initialize(){
         
         statusLabel.setText(DatabaseObj.getStatus());
+        
         theTable.getTableHeader().setReorderingAllowed(false);
         theTable.getTableHeader().setResizingAllowed(false);
+        theTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+            public void valueChanged(ListSelectionEvent event) {
+            
+                if(theTable.getSelectedRow()!=-1){
+                    if(theTable.getValueAt(theTable.getSelectedRow(), 0)!= null){
+
+                        try{
+
+                            Object[][] ob = makeProdObjectFromArray(DatabaseObj.executeGetTechProdRecordsQ((int)theTable.getValueAt(theTable.getSelectedRow(), 0)));
+                            prodModel = new DefaultTableModel(ob,prodColumn);
+                            prodTable.setModel(prodModel);
+                        }catch(Exception e){
+                            System.out.println(e.toString());
+                        }
+                    }
+                }     
+            }
+        });
         
-        
-        tbColumn = new Object[]{"Date","Area","Shift","Total Comp","Net Goal Total","% of Goal","% of Fails"};
+        tbColumn = new Object[]{"ID","Date","Area","Shift","Total Comp","Net Goal Total","% of Goal","% of Fails"};
+        prodColumn = new Object[]{"TechID","FName","LName","iPhone","iPad","iTouch","Classic","Shuffle","Nano","A.Phone","A.Tab","Wearables","Total"};
         tbModel = new DefaultTableModel(tbColumn,10);
         theTable.setModel(tbModel);
-        
-        if(DatabaseObj.getStatusBoolean()){
-            
-        }else{
-            
-        }
         
     }
     
@@ -239,6 +261,41 @@ public class DatabaseFrame extends javax.swing.JFrame {
             for(int col =0;col<tbColumn.length;col++){
                 
                 ob[row][col] = ar.get(row).get(col);  
+            }
+        }
+        
+        return ob;
+    }
+    
+    private Object[][] makeProdObjectFromArray(ArrayList<ArrayList> ar){
+        
+        if(ar.size()==0){
+            JOptionPane.showMessageDialog(this,"No Entry For This Criteria","Try Again", JOptionPane.WARNING_MESSAGE);
+        }
+        
+        Object[][] ob = new Object[ar.size()+1][prodColumn.length];
+        
+        for(int row = 0;row<ar.size()+1;row++){
+            for(int col =0;col<prodColumn.length;col++){
+                
+                ob[row][col] = 0;  
+            }
+        }
+        
+        for(int row = 0;row<ar.size();row++){
+            for(int col =0;col<prodColumn.length;col++){
+                
+                ob[row][col] = ar.get(row).get(col);
+                
+                if(col ==0){
+                    ob[ar.size()][col] = "Totals";
+                }else if(col > 2){
+                    if(row<ar.size()){
+                        ob[ar.size()][col] = (int)ob[row][col]+(int)ob[ar.size()][col];
+                    }   
+                }else{
+                    ob[ar.size()][col] = " ";
+                }    
             }
         }
         
@@ -290,7 +347,7 @@ public class DatabaseFrame extends javax.swing.JFrame {
         switch((String)typeComboBox.getSelectedItem()){
             case "Cell Records":
                 
-                tbColumn = new Object[]{"Date","Area","Shift","Total Comp","Net Goal Total","% of Goal","% of Fails"};
+                tbColumn = new Object[]{"ID","Date","Area","Shift","Total Comp","Net Goal Total","% of Goal","% of Fails"};
                 tbModel = new DefaultTableModel(tbColumn,10);
                 theTable.setModel(tbModel);
                 break;
@@ -352,10 +409,12 @@ public class DatabaseFrame extends javax.swing.JFrame {
     private javax.swing.JLabel areaLabel;
     private javax.swing.JLabel dateLabel;
     private javax.swing.JFormattedTextField dateTextField;
+    private javax.swing.JTabbedPane entryProdTab;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane mainPanel;
+    private javax.swing.JTable prodTable;
     private javax.swing.JButton queryButton;
     private javax.swing.JComboBox<String> shiftComboBox;
     private javax.swing.JLabel shiftLabel;

@@ -374,6 +374,52 @@ public class DatabaseObj {
         return cellEntryInfo;
     }
     
+    static ArrayList executeGetTechProdRecordsQ(int entryID)throws Exception{
+        
+        ArrayList<ArrayList> tableList = new ArrayList();
+        int iPhone,iPad,iTouch,Classic,Shuffle,Nano,aTablet,aPhone,Wearables =0;
+        
+        String SQL = "SELECT employees.TechID, employees.[First Name], employees.[Last Name], techProdEntries.iPhone, "
+                   + "techProdEntries.iPad, techProdEntries.iTouch, techProdEntries.Classic, techProdEntries.Shuffle, techProdEntries.Nano, techProdEntries.[Android Phone], techProdEntries.[Android Tablet], techProdEntries.Wearables\n" +
+                     "FROM employees LEFT JOIN techProdEntries ON employees.ID = techProdEntries.EmployeeID\n" +
+                     "WHERE (((techProdEntries.prodID)="+entryID+"))";
+        
+        stmt = conn.createStatement();
+
+        ResultSet rs = stmt.executeQuery(SQL);
+        
+        while(rs.next()){
+            ArrayList row = new ArrayList();
+            
+            row.add(rs.getString("TechID"));
+            row.add(rs.getString("First Name"));
+            row.add(rs.getString("Last Name"));
+            iPhone = rs.getInt("iPhone");
+            iPad = rs.getInt("iPad");
+            iTouch = rs.getInt("iTouch");
+            Classic = rs.getInt("Classic");
+            Shuffle = rs.getInt("Shuffle");
+            Nano = rs.getInt("Nano");
+            aPhone = rs.getInt("Android Phone");
+            aTablet = rs.getInt("Android Tablet");
+            Wearables = rs.getInt("Wearables");
+            row.add(iPhone);
+            row.add(iPad);
+            row.add(iTouch);
+            row.add(Classic);
+            row.add(Shuffle);
+            row.add(Nano);
+            row.add(aPhone);
+            row.add(aTablet);
+            row.add(Wearables);
+            row.add((iPhone+iPad+iTouch+Classic+Shuffle+Nano+aPhone+aTablet+Wearables));
+            
+            tableList.add(row);
+        }
+        
+        return tableList;
+    }
+    
     static ArrayList executeGetCellRecordsQ(String date,String area, String shift)throws Exception{
         
         ArrayList<ArrayList> tableList = new ArrayList();
@@ -396,7 +442,7 @@ public class DatabaseObj {
             builder.append("");
         }
         
-        String sql = "SELECT cellEntries.DateOfEntry, areas.AreaName, areas.Shift, cellEntries.[Total Completed], areas.[Net Goal Total], failCountQuery.CountOfprodID\n" +
+        String sql = "SELECT cellEntries.ID, cellEntries.DateOfEntry, areas.AreaName, areas.Shift, cellEntries.[Total Completed], areas.[Net Goal Total], failCountQuery.CountOfprodID\n" +
                      "FROM attendence RIGHT JOIN (failCountQuery RIGHT JOIN (cellEntries LEFT JOIN areas ON cellEntries.CellID = areas.ID) ON failCountQuery.ID = cellEntries.ID) ON attendence.ID = cellEntries.AttendanceID\n" +
                      "WHERE (((cellEntries.DateOfEntry)=#"+date+"#))" + builder + "\n" +
                      "ORDER BY cellEntries.DateOfEntry";
@@ -409,6 +455,7 @@ public class DatabaseObj {
             
             ArrayList row = new ArrayList();
             
+            row.add(rs.getInt("ID"));
             row.add(rs.getDate("DateOfEntry"));
             row.add(rs.getString("AreaName"));
             row.add(rs.getString("Shift"));
