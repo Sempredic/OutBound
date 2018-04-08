@@ -374,6 +374,52 @@ public class DatabaseObj {
         return cellEntryInfo;
     }
     
+    static ArrayList executeGetCellRecordsQ(String date,String area, String shift)throws Exception{
+        
+        ArrayList<ArrayList> tableList = new ArrayList();
+        StringBuilder builder = new StringBuilder();
+        
+        if(area != null){
+            if(area != "All"){
+                builder.append(" AND (((areas.AreaName)=\""+area+"\"))");
+                if(shift!="All"){
+                    builder.append(" AND (((areas.Shift)="+shift+"))");
+                }
+            }else{
+                builder.append("");
+            }
+            
+        }else{
+            builder.append("");
+        }
+        
+        String sql = "SELECT cellEntries.DateOfEntry, areas.AreaName, areas.Shift, cellEntries.[Total Completed], areas.[Net Goal Total], failCountQuery.CountOfprodID\n" +
+                     "FROM attendence RIGHT JOIN (failCountQuery RIGHT JOIN (cellEntries LEFT JOIN areas ON cellEntries.CellID = areas.ID) ON failCountQuery.ID = cellEntries.ID) ON attendence.ID = cellEntries.AttendanceID\n" +
+                     "WHERE (((cellEntries.DateOfEntry)=#"+date+"#))" + builder + "\n" +
+                     "ORDER BY cellEntries.DateOfEntry";
+
+        stmt = conn.createStatement();
+
+        ResultSet rs = stmt.executeQuery(sql);
+        
+        while(rs.next()){
+            
+            ArrayList row = new ArrayList();
+            
+            row.add(rs.getDate("DateOfEntry"));
+            row.add(rs.getString("AreaName"));
+            row.add(rs.getString("Shift"));
+            row.add(rs.getInt("Total Completed"));
+            row.add(rs.getInt("Net Goal Total"));
+            row.add(rs.getInt("CountOfprodID"));
+
+            tableList.add(row);
+        }
+        
+        return tableList;
+        
+    }
+    
     static void getCellAreasQuery(){
         
         String area = " ";

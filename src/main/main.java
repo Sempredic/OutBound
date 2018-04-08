@@ -5,9 +5,9 @@
  */
 package main;
 
+import exceltest.DatabaseFrame;
 import exceltest.DatabaseObj;
 import exceltest.mainFrame;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
@@ -20,8 +20,10 @@ import javax.swing.SwingConstants;
 public class main {
     
     public static void main(String args[]){
-          //STEP 3: Open a connection
-        String[] options = {"Outbound Tool","Database Viewer(login required)"};
+        
+        DatabaseObj DB = new DatabaseObj();
+        
+        String[] options = {"Outbound Tool","Database Tool (login required)"};
         
         String selection = (String)JOptionPane.showInputDialog(
                             null,
@@ -36,12 +38,12 @@ public class main {
         if(selection != null){
             switch(selection){
                 case "Outbound Tool":
-                    DatabaseObj DB = new DatabaseObj();
                     mainFrame frame = new mainFrame();
                     frame.run();
                     break;
-                case "Database Viewer(login required)":
-                    System.out.println("Launching Database Viewer");
+                case "Database Tool (login required)":
+                    DatabaseFrame dbFrame = new DatabaseFrame();
+                    dbFrame.run();
                     break;
             }
         }
