@@ -101,7 +101,6 @@ public class ExcelFrame extends javax.swing.JFrame {
     String lastHour;
     Stack listStack;
     int inQuota;
-    //String[] lastAction;
     HashMap<Integer,String[]> lastActionMap;
     int actionMapID;
     int SHIFT_HOURS;
@@ -116,6 +115,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     JFileChooser fileChooser;
     FileNameExtensionFilter filter;
     static String databaseConn;
+    ArrayList<String> excelColumn;
     
     
     public ExcelFrame(Table table){
@@ -149,6 +149,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         multiUndoStack = new Stack<String[]>();
         stUndoStack = new Stack<String[]>();
         deviceNames = curTable.getAreaDevices();
+        excelColumn = new ArrayList<String>();
         
         initTableStyle();
         initExistingTechs();
@@ -167,6 +168,13 @@ public class ExcelFrame extends javax.swing.JFrame {
         
         updateTotalDev(tableModel);
         updateTotalTech(tableModel);
+        
+        excelColumn.add("Tech#");
+        excelColumn.add("Name");
+        for(String dev:curTable.getAreaDevices()){
+            excelColumn.add(dev);
+        }
+        excelColumn.add("Tech Total");
     }
     
     ////////////////////////////////////////////////////////////////////////////DATABASE/////////////////
@@ -1465,7 +1473,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     
     private void readFileMerge(File file){
         try {
-            
+           
             Workbook workbook = WorkbookFactory.create(file);
             int rowNum;
             
@@ -1590,17 +1598,6 @@ public class ExcelFrame extends javax.swing.JFrame {
         int curCell = 0;
         LinkedHashMap<String,String[][]>list = new LinkedHashMap<String,String[][]>();
         CellRangeAddress range;
-        String[] tempNames;
-        
-
-        String[] devNames = {"Tech","Name","Classic","Nano","Shuffle","Touch","Pad","Phone","     Tech Total    "};  
-        String[] droidNames = {"Tech","Name","Tablet","Phone"," Tech Total"};
-        
-        if(is_iDevice){
-            tempNames = devNames;
-        }else{
-            tempNames = droidNames;
-        }
                 
         for(String item:selectedList){
             //System.out.println(item);
@@ -1617,7 +1614,7 @@ public class ExcelFrame extends javax.swing.JFrame {
             
            
             range = new CellRangeAddress(
-                    rowNum,rowNum,colNum,tempNames.length);
+                    rowNum,rowNum,colNum,excelColumn.size());
            
             
             sheet.addMergedRegion(range);
@@ -1637,10 +1634,10 @@ public class ExcelFrame extends javax.swing.JFrame {
             
             Row header = sheet.createRow(rowNum++);
             
-            for(int col = 0;col<tempNames.length;col++){
+            for(int col = 0;col<excelColumn.size();col++){
                 
                 Cell headerCell = header.createCell(colNum++);
-                headerCell.setCellValue(tempNames[col]);  
+                headerCell.setCellValue(excelColumn.get(col));  
                 headStyle.setAlignment(HorizontalAlignment.CENTER);
                 cellBorderBlack(headStyle);
                 cellFillHGrey(headStyle);
@@ -1686,19 +1683,9 @@ public class ExcelFrame extends javax.swing.JFrame {
         int colNum = 1;
         int rowNum = 1;
         int curCell = 0;
-        String[] tempNames;
-        
-        String[] devNames = {"Tech","Name","Classic","Nano","Shuffle","Touch","Pad","Phone","     Tech Total    "};  
-        String[] droidNames = {"Tech","Name","Tablet","Phone"," Tech Total"};
-        
-        if(is_iDevice){
-            tempNames = devNames;
-        }else{
-            tempNames = droidNames;
-        }
         
         CellRangeAddress range = new CellRangeAddress(
-                    rowNum,rowNum,colNum,devNames.length);
+                    rowNum,rowNum,colNum,excelColumn.size());
             sheet2.addMergedRegion(range);
             
             // Creates the cell
@@ -1716,10 +1703,10 @@ public class ExcelFrame extends javax.swing.JFrame {
             
             Row header = sheet2.createRow(rowNum++);
             
-            for(int col = 0;col<devNames.length;col++){
+            for(int col = 0;col<excelColumn.size();col++){
                 
                 Cell headerCell = header.createCell(colNum++);
-                headerCell.setCellValue(devNames[col]);  
+                headerCell.setCellValue(excelColumn.get(col));  
                 headStyle.setAlignment(HorizontalAlignment.CENTER);
                 cellBorderBlack(headStyle);
                 cellFillHGrey(headStyle);
