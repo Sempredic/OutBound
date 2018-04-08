@@ -85,7 +85,7 @@ public class DatabaseFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        typeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cell Records", "Tech Records", "Attendance Records" }));
+        typeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cell Records", "Tech Records" }));
         typeComboBox.setSelectedItem(" ");
         typeComboBox.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -252,7 +252,7 @@ public class DatabaseFrame extends javax.swing.JFrame {
         
         tbColumn = new Object[]{"ID","Date","Area","Shift","Total Comp","Net Goal Total","% of Goal","% of Fails"};
         prodColumn = new Object[]{"TechID","FName","LName","iPhone","iPad","iTouch","Classic","Shuffle","Nano","A.Phone","A.Tab","Wearables","Total"};
-        tbModel = new DefaultTableModel(tbColumn,10);
+        tbModel = new DefaultTableModel(tbColumn,0);
         theTable.setModel(tbModel);
         
         initTheTableStyle();
@@ -395,8 +395,7 @@ public class DatabaseFrame extends javax.swing.JFrame {
         switch((String)typeComboBox.getSelectedItem()){
             case "Cell Records":
                 
-                tbColumn = new Object[]{"ID","Date","Area","Shift","Total Comp","Net Goal Total","% of Goal","% of Fails"};
-                tbModel = new DefaultTableModel(tbColumn,10);
+                tbModel = new DefaultTableModel(tbColumn,0);
                 theTable.setModel(tbModel);
                 initTheTableStyle();
                 
@@ -406,8 +405,6 @@ public class DatabaseFrame extends javax.swing.JFrame {
                 Object[] col = {"one","two","three"};
                 tbModel = new DefaultTableModel(col,10);
                 theTable.setModel(tbModel);
-                break;
-            case "Attendance":
                 break;
         }
     }//GEN-LAST:event_typeComboBoxItemStateChanged

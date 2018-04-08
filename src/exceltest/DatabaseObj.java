@@ -448,7 +448,7 @@ public class DatabaseObj {
         }
         
         String sql = "SELECT cellEntries.ID, cellEntries.DateOfEntry, areas.AreaName, areas.Shift, cellEntries.[Total Completed], areas.[Net Goal Total], failCountQuery.CountOfprodID\n" +
-                     "FROM attendence RIGHT JOIN (failCountQuery RIGHT JOIN (cellEntries LEFT JOIN areas ON cellEntries.CellID = areas.ID) ON failCountQuery.ID = cellEntries.ID) ON attendence.ID = cellEntries.AttendanceID\n" +
+                     "FROM (areas RIGHT JOIN cellEntries ON areas.ID = cellEntries.CellID) LEFT JOIN failCountQuery ON cellEntries.ID = failCountQuery.ID\n" +
                      "WHERE (((cellEntries.DateOfEntry)=#"+date+"#))" + builder + "\n" +
                      "ORDER BY cellEntries.DateOfEntry";
 
