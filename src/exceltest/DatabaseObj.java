@@ -378,6 +378,9 @@ public class DatabaseObj {
         
         ArrayList<ArrayList> tableList = new ArrayList();
         StringBuilder builder = new StringBuilder();
+        int totComp = 0;
+        int netGoal = 0;
+        int failCount = 0;
         
         if(area != null){
             if(area != "All"){
@@ -409,9 +412,20 @@ public class DatabaseObj {
             row.add(rs.getDate("DateOfEntry"));
             row.add(rs.getString("AreaName"));
             row.add(rs.getString("Shift"));
-            row.add(rs.getInt("Total Completed"));
-            row.add(rs.getInt("Net Goal Total"));
-            row.add(rs.getInt("CountOfprodID"));
+            
+            totComp = rs.getInt("Total Completed");
+            netGoal = rs.getInt("Net Goal Total");
+            failCount = rs.getInt("CountOfprodID");
+            
+            row.add(totComp);
+            row.add(netGoal);
+            row.add((((double)totComp/(double)netGoal)*100.0));
+            
+            if(failCount != 0){
+                row.add((((double)failCount/(double)totComp)*100.0));
+            }else{
+                row.add(0);
+            }
 
             tableList.add(row);
         }
