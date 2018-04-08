@@ -7,9 +7,11 @@ package exceltest;
 
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
@@ -222,8 +224,10 @@ public class DatabaseFrame extends javax.swing.JFrame {
         
         statusLabel.setText(DatabaseObj.getStatus());
         
+                
         theTable.getTableHeader().setReorderingAllowed(false);
         theTable.getTableHeader().setResizingAllowed(false);
+        
         theTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
             public void valueChanged(ListSelectionEvent event) {
             
@@ -235,6 +239,7 @@ public class DatabaseFrame extends javax.swing.JFrame {
                             Object[][] ob = makeProdObjectFromArray(DatabaseObj.executeGetTechProdRecordsQ((int)theTable.getValueAt(theTable.getSelectedRow(), 0)));
                             prodModel = new DefaultTableModel(ob,prodColumn);
                             prodTable.setModel(prodModel);
+                            initTableStyle();
                         }catch(Exception e){
                             System.out.println(e.toString());
                         }
@@ -248,6 +253,26 @@ public class DatabaseFrame extends javax.swing.JFrame {
         tbModel = new DefaultTableModel(tbColumn,10);
         theTable.setModel(tbModel);
         
+        
+        
+    }
+    
+    private void initTableStyle(){
+        
+        DefaultTableCellRenderer centerRender = new DefaultTableCellRenderer();
+        DefaultTableCellRenderer colRenderer = new DefaultTableCellRenderer();
+
+        colRenderer.setHorizontalAlignment(JLabel.CENTER);
+        centerRender.setHorizontalAlignment(JLabel.CENTER);
+        
+        newTableRenderer renderer = new newTableRenderer((DefaultTableModel)prodModel,centerRender);
+
+        for(int x=0;x<prodTable.getColumnCount();x++){
+            prodTable.getColumnModel().getColumn(x).setCellRenderer(renderer);
+        }
+
+        prodTable.getTableHeader().setReorderingAllowed(false);
+        prodTable.getTableHeader().setResizingAllowed(false); 
     }
     
     private Object[][] makeObjectFromArray(ArrayList<ArrayList> ar){
