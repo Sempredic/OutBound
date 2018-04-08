@@ -5,6 +5,7 @@
  */
 package exceltest;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
@@ -94,13 +95,16 @@ public class DatabaseFrame extends javax.swing.JFrame {
 
         dateLabel.setText("Date");
 
+        theTable.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         theTable.setModel(tbModel);
         theTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
         jScrollPane1.setViewportView(theTable);
 
         entryProdTab.addTab("Entries", jScrollPane1);
 
+        prodTable.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         prodTable.setModel(prodModel);
+        prodTable.setEnabled(false);
         jScrollPane2.setViewportView(prodTable);
 
         entryProdTab.addTab("Entry Prod", jScrollPane2);
@@ -224,27 +228,25 @@ public class DatabaseFrame extends javax.swing.JFrame {
         
         statusLabel.setText(DatabaseObj.getStatus());
         
-                
-        theTable.getTableHeader().setReorderingAllowed(false);
-        theTable.getTableHeader().setResizingAllowed(false);
-        
         theTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
             public void valueChanged(ListSelectionEvent event) {
             
-                if(theTable.getSelectedRow()!=-1){
-                    if(theTable.getValueAt(theTable.getSelectedRow(), 0)!= null){
+                if(selectionType == "Cell Records"){
+                    if(theTable.getSelectedRow()!=-1){
+                        if(theTable.getValueAt(theTable.getSelectedRow(), 0)!= null){
 
-                        try{
+                            try{
 
-                            Object[][] ob = makeProdObjectFromArray(DatabaseObj.executeGetTechProdRecordsQ((int)theTable.getValueAt(theTable.getSelectedRow(), 0)));
-                            prodModel = new DefaultTableModel(ob,prodColumn);
-                            prodTable.setModel(prodModel);
-                            initTableStyle();
-                        }catch(Exception e){
-                            System.out.println(e.toString());
+                                Object[][] ob = makeProdObjectFromArray(DatabaseObj.executeGetTechProdRecordsQ((int)theTable.getValueAt(theTable.getSelectedRow(), 0)));
+                                prodModel = new DefaultTableModel(ob,prodColumn);
+                                prodTable.setModel(prodModel);
+                                initProdTableStyle();
+                            }catch(Exception e){
+                                System.out.println(e.toString());
+                            }
                         }
                     }
-                }     
+                }      
             }
         });
         
@@ -253,11 +255,11 @@ public class DatabaseFrame extends javax.swing.JFrame {
         tbModel = new DefaultTableModel(tbColumn,10);
         theTable.setModel(tbModel);
         
-        
+        initTheTableStyle();
         
     }
     
-    private void initTableStyle(){
+    private void initProdTableStyle(){
         
         DefaultTableCellRenderer centerRender = new DefaultTableCellRenderer();
         DefaultTableCellRenderer colRenderer = new DefaultTableCellRenderer();
@@ -275,6 +277,20 @@ public class DatabaseFrame extends javax.swing.JFrame {
         prodTable.getTableHeader().setResizingAllowed(false); 
     }
     
+    private void initTheTableStyle(){
+        
+        DefaultTableCellRenderer centerRender = new DefaultTableCellRenderer();
+    
+        centerRender.setHorizontalAlignment(JLabel.CENTER);
+        
+        for(int x=0;x<theTable.getColumnCount();x++){
+            theTable.getColumnModel().getColumn(x).setCellRenderer(centerRender);
+        }
+
+        theTable.getTableHeader().setReorderingAllowed(false);
+        theTable.getTableHeader().setResizingAllowed(false); 
+    }
+    
     private Object[][] makeObjectFromArray(ArrayList<ArrayList> ar){
         
         if(ar.size()==0){
@@ -285,7 +301,12 @@ public class DatabaseFrame extends javax.swing.JFrame {
         for(int row = 0;row<ar.size();row++){
             for(int col =0;col<tbColumn.length;col++){
                 
-                ob[row][col] = ar.get(row).get(col);  
+                if(ar.get(row).get(col) instanceof Double){
+                    ob[row][col] = new DecimalFormat(".#").format(ar.get(row).get(col));
+                }else{
+                    ob[row][col] = ar.get(row).get(col);
+                }
+                  
             }
         }
         
@@ -341,8 +362,10 @@ public class DatabaseFrame extends javax.swing.JFrame {
                     if(!date.equals("")){
                         Object[][] ob = makeObjectFromArray(DatabaseObj.executeGetCellRecordsQ(date, area, shift));
                         tbModel = new DefaultTableModel(ob,tbColumn);
+                        
                         theTable.setModel(tbModel); 
-                    
+                        initTheTableStyle();
+                        
                     }else{
                         JOptionPane.showMessageDialog(this,"Date Must Be Entered","Try Again", JOptionPane.WARNING_MESSAGE);
                     }
@@ -375,6 +398,8 @@ public class DatabaseFrame extends javax.swing.JFrame {
                 tbColumn = new Object[]{"ID","Date","Area","Shift","Total Comp","Net Goal Total","% of Goal","% of Fails"};
                 tbModel = new DefaultTableModel(tbColumn,10);
                 theTable.setModel(tbModel);
+                initTheTableStyle();
+                
                 break;
             case "Tech Records":
                 

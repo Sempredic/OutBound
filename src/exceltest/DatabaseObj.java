@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.*;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -25,7 +26,7 @@ public class DatabaseObj {
     static ArrayList<String> devicesList;
     static ArrayList<String> employeesList;
     static ArrayList<Object> curRosterList;
-    String dbLocation;
+    static String dbLocation;
     
     public DatabaseObj(){
         
@@ -64,6 +65,10 @@ public class DatabaseObj {
     
     static void setCurRosterList(ArrayList<Object> techIDList){
        curRosterList = techIDList;
+    }
+    
+    static String getDatabaseLocation(){
+        return dbLocation;
     }
     
     static ArrayList<Object> getCurRosterList(){
@@ -466,10 +471,10 @@ public class DatabaseObj {
             
             row.add(totComp);
             row.add(netGoal);
-            row.add((((double)totComp/(double)netGoal)*100.0));
+            row.add((((double)totComp/netGoal)*100));
             
             if(failCount != 0){
-                row.add((((double)failCount/(double)totComp)*100.0));
+                row.add((((double)failCount/totComp)*100));
             }else{
                 row.add(0);
             }
