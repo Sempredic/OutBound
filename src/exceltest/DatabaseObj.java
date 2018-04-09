@@ -351,6 +351,24 @@ public class DatabaseObj {
         
     }
     
+    static void executeFailEntriesAppendQ(int entryID,String tech,String device,String failType)throws Exception{
+       
+        int employeeID = getEmployeeID(tech);
+        
+        String SQL = "INSERT INTO failEntries ( prodID,EmployeeID,Device,[Fail Type] )\n" +
+                 "VALUES (?,?,?,?)";
+
+        preparedStatement = conn.prepareStatement(SQL);
+        
+        preparedStatement.setInt(1, entryID);
+        preparedStatement.setInt(2, employeeID);
+        preparedStatement.setString(3, device);
+        preparedStatement.setString(4, failType);
+
+        preparedStatement.executeUpdate();
+
+    }
+    
     static LinkedHashMap<String,String> executeCellEntryAppendQ(String Date,String CellArea,String Shift)throws Exception{
         LinkedHashMap<String,String> cellEntryInfo = new LinkedHashMap<String,String>();
         int areaID = 0;
