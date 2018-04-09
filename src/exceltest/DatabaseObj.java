@@ -379,6 +379,32 @@ public class DatabaseObj {
         return cellEntryInfo;
     }
     
+    static ArrayList executeGetFailRecordsQ(int entryID)throws Exception{
+        ArrayList<ArrayList> tableList = new ArrayList();
+        
+        String SQL = "SELECT employees.[First Name], employees.[Last Name], failEntries.Device, failEntries.[Fail Type]\n" +
+                     "FROM failEntries LEFT JOIN employees ON failEntries.EmployeeID = employees.ID\n" +
+                     "WHERE (((failEntries.prodID)="+entryID+"))"
+                   + "ORDER BY employees.[First Name]";
+        
+        stmt = conn.createStatement();
+
+        ResultSet rs = stmt.executeQuery(SQL);
+        
+        while(rs.next()){
+            ArrayList row = new ArrayList();
+            
+            row.add(rs.getString("First Name"));
+            row.add(rs.getString("Last Name"));
+            row.add(rs.getString("Device"));
+            row.add(rs.getString("Fail Type"));
+            
+            tableList.add(row);
+        }
+        
+        return tableList;
+    }
+    
     static ArrayList executeGetTechProdRecordsQ(int entryID)throws Exception{
         
         ArrayList<ArrayList> tableList = new ArrayList();
@@ -425,13 +451,23 @@ public class DatabaseObj {
         return tableList;
     }
     
-    static ArrayList executeGetCellRecordsQ(String date,String area, String shift)throws Exception{
+    static ArrayList executeGetCellRecordsQ(String month,String day,String year,String area, String shift)throws Exception{
         
         ArrayList<ArrayList> tableList = new ArrayList();
         StringBuilder builder = new StringBuilder();
+        String date = new String();
+        String dateOfEntry = new String();
         int totComp = 0;
         int netGoal = 0;
         int failCount = 0;
+        
+        if(day != "ALL"){
+            date = month + "/" + day + "/" + year;
+            dateOfEntry = "(((cellEntries.DateOfEntry)=#"+date+"#))";
+        }else{
+            date = month;
+            dateOfEntry = "(((Month([cellEntries].[DateOfEntry]))="+date+"))";
+        }
         
         if(area != null){
             if(area != "All"){
@@ -449,7 +485,7 @@ public class DatabaseObj {
         
         String sql = "SELECT cellEntries.ID, cellEntries.DateOfEntry, areas.AreaName, areas.Shift, cellEntries.[Total Completed], areas.[Net Goal Total], failCountQuery.CountOfprodID\n" +
                      "FROM (areas RIGHT JOIN cellEntries ON areas.ID = cellEntries.CellID) LEFT JOIN failCountQuery ON cellEntries.ID = failCountQuery.ID\n" +
-                     "WHERE (((cellEntries.DateOfEntry)=#"+date+"#))" + builder + "\n" +
+                     "WHERE "+ dateOfEntry + builder + "\n" +
                      "ORDER BY cellEntries.DateOfEntry";
 
         stmt = conn.createStatement();
