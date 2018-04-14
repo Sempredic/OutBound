@@ -8,11 +8,9 @@ package main;
 import exceltest.DatabaseFrame;
 import exceltest.DatabaseObj;
 import exceltest.mainFrame;
-import java.awt.GridLayout;
-import javax.swing.JComboBox;
+import exceltest.techLabeler;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 //import exceltest.sceneManager;
 
@@ -26,7 +24,9 @@ public class main {
         
         DatabaseObj DB = new DatabaseObj();
         
-        String[] options = {"Outbound Tool","Database Tool (login required)"};
+        
+        
+        String[] options = {"Outbound Tool","Database Tool (login required)","Label Generator"};
         
         String selection = (String)JOptionPane.showInputDialog(
                             null,
@@ -47,6 +47,10 @@ public class main {
                 case "Database Tool (login required)":
                     DatabaseFrame dbFrame = new DatabaseFrame();
                     dbFrame.run();
+                    break;
+                case "Label Generator":
+                    techLabeler labeler = new techLabeler();
+                    labeler.run();
                     break;
             }
         }
