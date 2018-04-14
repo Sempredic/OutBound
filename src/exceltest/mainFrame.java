@@ -583,8 +583,8 @@ public class mainFrame extends javax.swing.JFrame {
         
         JComboBox<String> shiftOB = new JComboBox<String>(shifts);
         JComboBox<Object> areaOB = new JComboBox<Object>(options);
-         
         JPanel panel = new JPanel(new GridLayout(0,1));
+        
         panel.add(theDate);
         panel.add(new JLabel(" "));
         panel.add(theArea);
@@ -601,15 +601,63 @@ public class mainFrame extends javax.swing.JFrame {
             areaName = (String)areaOB.getSelectedItem();
             shift = (String)shiftOB.getSelectedItem();
             
-            try{
-                if(DatabaseObj.executeCellEntryExistsQ(curDate,(String)areaOB.getSelectedItem(),
-                        (String)shiftOB.getSelectedItem())){
-                    exists = JOptionPane.showConfirmDialog(this, "Entry Already Exists, Continue?","Warning",JOptionPane.YES_NO_OPTION);
-                    if(exists == 0){
-                        dbExist = true;
-                        entryMap.put("EntryID",String.valueOf(DatabaseObj.executeGetEntryIDQ(curDate,DatabaseObj.executeGetCellIDQ(curDate,areaName,shift))));
+            if(areaName != null){
+                try{
+                    if(DatabaseObj.executeCellEntryExistsQ(curDate,(String)areaOB.getSelectedItem(),
+                            (String)shiftOB.getSelectedItem())){
+                        exists = JOptionPane.showConfirmDialog(this, "Entry Already Exists, Continue?","Warning",JOptionPane.YES_NO_OPTION);
+                        if(exists == 0){
+                            dbExist = true;
+                            entryMap.put("EntryID",String.valueOf(DatabaseObj.executeGetEntryIDQ(curDate,DatabaseObj.executeGetCellIDQ(curDate,areaName,shift))));
+                            entryMap.put("Date",curDate);
+                            entryMap.put("AreaID", String.valueOf(DatabaseObj.executeGetCellIDQ(curDate,areaName,shift)));
+                            entryMap.put("AreaName",areaName);
+                            entryMap.put("Shift",shift);
+                            writeToFileSave();
+                            writeToFileSave2();
+                            setRoster(rosterList);
+                            prepExcelFrame(entryMap);
+                            dispose();
+                        }
+
+                    }else{
+                        exists = JOptionPane.showConfirmDialog(this, "Create New Entry?","Entry Doesn't Exist",JOptionPane.YES_NO_CANCEL_OPTION);
+                        if(exists == 0){
+                            dbExist = false;
+                            entryMap = DatabaseObj.executeCellEntryAppendQ(curDate,areaName,shift);
+                            DatabaseObj.executeTechProdEntriesAppendQ(entryMap, techIDList);
+                            writeToFileSave();
+                            writeToFileSave2();
+                            setRoster(rosterList);
+                            prepExcelFrame(entryMap);
+                            dispose();
+                        }else if(exists == 1){
+                            
+                            entryMap.put("EntryID", " ");
+                            entryMap.put("Date",curDate);
+                            entryMap.put("AreaID","0");
+                            entryMap.put("AreaName",areaName);
+                            entryMap.put("Shift",shift);
+                            writeToFileSave();
+                            writeToFileSave2();
+                            setRoster(rosterList);
+                            prepExcelFrame(entryMap);
+                            dispose();
+                        }
+
+                    }
+
+                }catch(Exception e){
+                    ///////////////////////////OFFLINE MODE//////////////////////////////
+                    JOptionPane.showMessageDialog(this,"Error With Database, Check Connection","Try Again", JOptionPane.WARNING_MESSAGE);
+
+                    int offline = JOptionPane.showConfirmDialog(this, "Continue Offline?","Warning",JOptionPane.YES_NO_OPTION);
+
+                    if(offline == 0){
+                        dbExist = false;
+                        entryMap.put("EntryID", " ");
                         entryMap.put("Date",curDate);
-                        entryMap.put("AreaID", String.valueOf(DatabaseObj.executeGetCellIDQ(curDate,areaName,shift)));
+                        entryMap.put("AreaID","0");
                         entryMap.put("AreaName",areaName);
                         entryMap.put("Shift",shift);
                         writeToFileSave();
@@ -618,42 +666,10 @@ public class mainFrame extends javax.swing.JFrame {
                         prepExcelFrame(entryMap);
                         dispose();
                     }
-                    
-                }else{
-                    exists = JOptionPane.showConfirmDialog(this, "Create New Entry?","Entry Doesn't Exist",JOptionPane.YES_NO_OPTION);
-                    if(exists == 0){
-                        dbExist = false;
-                        entryMap = DatabaseObj.executeCellEntryAppendQ(curDate,areaName,shift);
-                        DatabaseObj.executeTechProdEntriesAppendQ(entryMap, techIDList);
-                        writeToFileSave();
-                        writeToFileSave2();
-                        setRoster(rosterList);
-                        prepExcelFrame(entryMap);
-                        dispose();
-                    }
-                    
-                }
-                
-            }catch(Exception e){
-                ///////////////////////////OFFLINE MODE//////////////////////////////
-                JOptionPane.showMessageDialog(this,"Error With Database, Check Connection","Try Again", JOptionPane.WARNING_MESSAGE);
-                
-                int offline = JOptionPane.showConfirmDialog(this, "Continue Offline?","Warning",JOptionPane.YES_NO_OPTION);
-                
-                if(offline == 0){
-                    dbExist = false;
-                    entryMap.put("EntryID", " ");
-                    entryMap.put("Date",curDate);
-                    entryMap.put("AreaID","0");
-                    entryMap.put("AreaName",areaName);
-                    entryMap.put("Shift",shift);
-                    writeToFileSave();
-                    writeToFileSave2();
-                    setRoster(rosterList);
-                    prepExcelFrame(entryMap);
-                    dispose();
-                }
-            } 
+                } 
+            }else{
+                JOptionPane.showMessageDialog(this,"No Area Selected","Try Again", JOptionPane.WARNING_MESSAGE);
+            }  
         }
  
     }//GEN-LAST:event_doneButtonActionPerformed
