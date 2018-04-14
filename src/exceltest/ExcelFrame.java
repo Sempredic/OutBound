@@ -839,7 +839,9 @@ public class ExcelFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         int keyCode = evt.getKeyCode();
         if(keyCode == KeyEvent.VK_ENTER){
+            
             techFieldName.setText(techFieldName.getText().trim());
+            
             if(curTable.getRosterNum().contains(techFieldName.getText())){
                 devFieldName.setEnabled(true);
                 techFieldName.setEditable(false);
@@ -866,6 +868,9 @@ public class ExcelFrame extends javax.swing.JFrame {
         int keyCode = evt.getKeyCode();
         
         if(keyCode == KeyEvent.VK_ENTER && !multiSelected){
+            
+            devFieldName.setText(devFieldName.getText().toLowerCase().trim());
+            
             if(tableModel.findColumn(devFieldName.getText())!=-1){
                 toTable();
                 if(!multiMap.isEmpty()){
@@ -898,6 +903,9 @@ public class ExcelFrame extends javax.swing.JFrame {
             
             
         }else if(keyCode == KeyEvent.VK_ENTER && multiSelected){
+            
+            devFieldName.setText(devFieldName.getText().toLowerCase().trim());
+            
             if(devFieldName.getText().equals("")&&!multiMap.isEmpty()){
                 //toMulti();
                 commitMTable();

@@ -7,6 +7,7 @@ package exceltest;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -48,6 +49,7 @@ public class DatabaseFrame extends javax.swing.JFrame {
     private Object[] failColumn;
     private Object[] failEntriesColumn;
     private int failCellID;
+    private String year;
     /**
      * Creates new form DatabaseFrame
      */
@@ -71,6 +73,7 @@ public class DatabaseFrame extends javax.swing.JFrame {
         areaListArray = new ArrayList<String>(DatabaseObj.getAreaList());
         failAreaListArray = new ArrayList<String>(DatabaseObj.getAreaList());
         failCellID = 0;
+        year = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
 
         if(!areaListArray.contains("All")){
             areaListArray.add("All");
@@ -730,6 +733,8 @@ public class DatabaseFrame extends javax.swing.JFrame {
             dayCB.addItem(String.valueOf(j));
             failDayCB.addItem(String.valueOf(j));
         }
+        
+        yearTextField.setText(year);
         
     }
     
