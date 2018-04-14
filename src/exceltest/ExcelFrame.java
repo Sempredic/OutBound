@@ -101,15 +101,13 @@ public class ExcelFrame extends javax.swing.JFrame {
     String lastHour;
     Stack listStack;
     int inQuota;
-    HashMap<Integer,String[]> lastActionMap;
+    Stack<techObject>lastActionStack;
     int actionMapID;
     int SHIFT_HOURS;
     ArrayList existingTechList;
     LinkedHashMap<String,String> existingRosterList;
     int num=0;
     Thread thread1,thread2,thread3;
-    Stack<String[]> multiUndoStack;
-    Stack<String[]> stUndoStack;
     static boolean is_iDevice;
     static ArrayList<String> deviceNames;
     JFileChooser fileChooser;
@@ -141,13 +139,11 @@ public class ExcelFrame extends javax.swing.JFrame {
         lastHour = " ";
         listStack = new Stack();
         inQuota = 0;
-        lastActionMap = new HashMap<Integer,String[]>();
+        lastActionStack = new Stack<techObject>();
         actionMapID = 0;
         SHIFT_HOURS = 10;
         existingRosterList = new LinkedHashMap<String,String>();
         existingTechList = new ArrayList();
-        multiUndoStack = new Stack<String[]>();
-        stUndoStack = new Stack<String[]>();
         deviceNames = curTable.getAreaDevices();
         excelColumn = new ArrayList<String>();
         
@@ -1279,7 +1275,7 @@ public class ExcelFrame extends javax.swing.JFrame {
 
     private void saveMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveMenuItemActionPerformed
         // TODO add your handling code here:
-        //
+        
         Object[] options = {"Yes",
                     "No"};
         int n = JOptionPane.showOptionDialog(this,
@@ -1311,62 +1307,28 @@ public class ExcelFrame extends javax.swing.JFrame {
 
     private void undoMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoMenuItemActionPerformed
         // TODO add your handling code here:
-  
-        if(!stUndoStack.empty()){
+        
+        int c=0;
+        int r=0;
+        int newV=0;
+        
+        if(lastActionStack.size()>0){
             
-
-            String[]ar =  stUndoStack.pop();
-            String dev = ar[0];
-            int val = Integer.valueOf(ar[1]);
-            String t = ar[2];
-
-            int c = getCol(tableModel, dev);
-            int r = getRow(tableModel, t);
-
-            int newV = (Integer) tableModel.getValueAt(r, c) - val;
-            setTableValues(newV, r, c);
-
-            if(!multiUndoStack.empty()){
+            if(lastActionStack.peek().getDeviceCount()>0){
                 
-                if(t.equals(multiUndoStack.peek()[2])){
-                    for(String[] array:multiUndoStack){
-    
-                    String device = array[0];
-                    int value = Integer.valueOf(array[1]);
-                    String tech = array[2];
-
-                    int col = getCol(tableModel, device);
-                    int row = getRow(tableModel, tech);
-
-                    int newVal = (Integer) tableModel.getValueAt(row, col) - value;
-                    setTableValues(newVal, row, col);
-
-                  }
+                techObject curTech = lastActionStack.pop();
+                
+                for(String dev:curTech.getDevices()){
+                    c = getCol(tableModel, dev);
+                    r = getRow(tableModel, curTech.getTechID());
+                    
+                    if((Integer)tableModel.getValueAt(r, c)>0){
+                        newV = (Integer) tableModel.getValueAt(r, c) - 1;
+                        setTableValues(newV, r, c);
+                    } 
                 }
-          }   
-            
-          stUndoStack.clear();
-          multiUndoStack.clear();
-          
-        }else if(!multiUndoStack.empty()){
-
-            for(String[] ar:multiUndoStack){
-    
-                String dev = ar[0];
-                int val = Integer.valueOf(ar[1]);
-                String t = ar[2];
-
-                int c = getCol(tableModel, dev);
-                int r = getRow(tableModel, t);
-
-                int newV = (Integer) tableModel.getValueAt(r, c) - val;
-                setTableValues(newV, r, c);
-       
-              }
-
-              multiUndoStack.clear();
+            }
         }
-
     }//GEN-LAST:event_undoMenuItemActionPerformed
 
     private void addExistingTechMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addExistingTechMenuItemActionPerformed
@@ -1508,25 +1470,6 @@ public class ExcelFrame extends javax.swing.JFrame {
         } catch (EncryptedDocumentException ex) {
             Logger.getLogger(ExcelFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-    
-    private void undoLastActionMap(){
-        for(Map.Entry<Integer,String[]> entry:lastActionMap.entrySet()){
-                
-                //
-                String device = entry.getValue()[0];
-                int value = Integer.valueOf(entry.getValue()[1]);
-                String tech = entry.getValue()[2];
-
-                int col = getCol(tableModel, device);
-                int row = getRow(tableModel, tech);
-
-                int newValue = (Integer) tableModel.getValueAt(row, col) - value;
-                setTableValues(newValue, row, col);
-            }
-            
-            lastActionMap.clear();
-            actionMapID=0;
     }
     
     private void updateTableFromSave(){
@@ -1774,10 +1717,9 @@ public class ExcelFrame extends javax.swing.JFrame {
     
     private void commitMTable(){
         
-        if(!multiUndoStack.isEmpty()){
-            multiUndoStack.clear();
-        }
-
+        techObject tech = new techObject();
+        tech.setTechID(techFieldName.getText());
+        
         if(!multiMap.isEmpty()){
             int row = getRow(tableModel,techFieldName.getText());
             
@@ -1792,9 +1734,18 @@ public class ExcelFrame extends javax.swing.JFrame {
                 int newValue = oldValue + value;
                 
                 setTableValues(newValue,row,col);  
-                calculateMultiUndo(techFieldName.getText(),device,String.valueOf(value));
+                
+                /////////////////////////////////////UNDO/////////////////////////////////////////////
+                for(int i=0;i<value;i++){
+                    tech.addTechDevice(device);
+                }
             }
             
+            lastActionStack.push(tech);
+
+            if(lastActionStack.size()>3){
+                lastActionStack.remove(0);    
+            }
         }
         
         for(int i=0;i<multiDataTable.length;i++){
@@ -1818,60 +1769,20 @@ public class ExcelFrame extends javax.swing.JFrame {
            
         setTableValues(newValue,row,col);    
 
-        calculateStackUndo(techFieldName.getText(),device,String.valueOf(DEFAULT_INC));
-  
-    }
-    
-    
-    private void calculateStackUndo(String t,String dev,int oValue,int nValue){
-        int lastValue =0;
-        String device = dev;
-        int oldValue = oValue;
-        int newValue = nValue;
-        String tech = t;
-        String[] ar = new String[3];
+        ////////////////////////////////////////////////////////UNDO////////////////////////////////
+        techObject tech = new techObject();
+        tech.setTechID(techFieldName.getText());
         
-        if(oValue==0){
-            lastValue = nValue;
-        }else{
-            lastValue = oValue;
+        for(int i=0;i<6;i++){
+            tech.addTechDevice(device);
         }
+        lastActionStack.push(tech);
         
-        ar[0]= device;
-        ar[1]=String.valueOf(lastValue);
-        ar[2]=tech;
-        
-        stUndoStack.push(ar);
-    }
-    
-    private void calculateStackUndo(String t,String dev,String val){
-        String device = dev;
-        String value = val;
-        String tech = t;
-        String[] ar = new String[3];
-        
-        ar[0]= device;
-        ar[1]=value;
-        ar[2]=tech;
-        
-        stUndoStack.push(ar);
-    }
-    
-    
-    private void calculateMultiUndo(String t,String dev,String val){
-        
-  
-        String device = dev;
-        String value = val;
-        String tech = t;
-        String[] ar = new String[3];
-        
-        ar[0]= device;
-        ar[1]=value;
-        ar[2]=tech;
-        
-        multiUndoStack.push(ar);
-       
+
+        if(lastActionStack.size()>3){
+            lastActionStack.remove(0);
+        }
+
     }
     
     private void setTableValues(int val, int row, int col){

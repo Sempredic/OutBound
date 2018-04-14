@@ -50,6 +50,7 @@ public class DatabaseObj {
        } catch(Exception e){
           //////////////////////////NO CONNECTION/////////////////////////////////
           status = false;
+          System.out.println(e.toString());
        }
         
        if(status){             

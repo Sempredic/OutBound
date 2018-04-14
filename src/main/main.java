@@ -12,7 +12,6 @@ import exceltest.techLabeler;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
-//import exceltest.sceneManager;
 
 /**
  *
@@ -23,8 +22,6 @@ public class main {
     public static void main(String args[]){
         
         DatabaseObj DB = new DatabaseObj();
-        
-        
         
         String[] options = {"Outbound Tool","Database Tool (login required)","Label Generator"};
         
