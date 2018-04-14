@@ -839,6 +839,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         int keyCode = evt.getKeyCode();
         if(keyCode == KeyEvent.VK_ENTER){
+            techFieldName.setText(techFieldName.getText().trim());
             if(curTable.getRosterNum().contains(techFieldName.getText())){
                 devFieldName.setEnabled(true);
                 techFieldName.setEditable(false);

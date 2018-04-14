@@ -630,23 +630,30 @@ public class DatabaseObj {
                 writeToFileSave();
             }else{
                 //populate empty lists
-                for(String area:Files.readAllLines(Paths.get("areasList.txt"))){
-                    if(!areasList.contains(area)){
-                       areasList.add(area);
+                if(getStatusBoolean()){
+                    areasList.clear();
+                    devicesList.clear();
+                    employeesList.clear();
+                }else{
+                    for(String area:Files.readAllLines(Paths.get("areasList.txt"))){
+                        if(!areasList.contains(area)){
+                           areasList.add(area);
+                        }
                     }
-                }
 
-                for(String dev:Files.readAllLines(Paths.get("devicesList.txt"))){
-                    if(!devicesList.contains(dev)){
-                       devicesList.add(dev);
+                    for(String dev:Files.readAllLines(Paths.get("devicesList.txt"))){
+                        if(!devicesList.contains(dev)){
+                           devicesList.add(dev);
+                        }
+                    }
+
+                    for(String employee:Files.readAllLines(Paths.get("employeesList.txt"))){
+                        if(!employeesList.contains(employee)){
+                           employeesList.add(employee);
+                        }
                     }
                 }
                 
-                for(String employee:Files.readAllLines(Paths.get("employeesList.txt"))){
-                    if(!employeesList.contains(employee)){
-                       employeesList.add(employee);
-                    }
-                }
             }   
             
         }catch(Exception e){
