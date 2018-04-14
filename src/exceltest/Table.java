@@ -300,11 +300,14 @@ public class Table{
                 int v1 = Integer.valueOf(table[i][j]);
                 int v2 = tempTable[i][j];
                 int value = v1-v2;
+
+                value=Math.abs(value);
                 
                 if(value >= 0){
                     table[i][j] = String.valueOf(value);
                 }else{
                     table[i][j] = "0";
+                    //table[i][j] = String.valueOf(sum);
                 }
                     
             } 
@@ -377,17 +380,34 @@ public class Table{
         return dataTableList.get(dataTableID);
     }
     
+    public void updateTableSave(DefaultTableModel tModel){
+        int numCol = tModel.getColumnCount();
+        int numRow = tModel.getRowCount();
+        this.table = new String[numRow][numCol];
+        hour = new SimpleDateFormat("hh:mm aa");
+        tableDate = new Date();
+      
+        for(int i=0;i<numRow;i++){
+            for(int j=0;j<numCol;j++){
+                table[i][j] = tModel.getValueAt(i, j).toString();
+            }
+        } 
+        
+        this.saveTable = table;
+
+    }
+    
     public void writeSaveTable(){
         //String tName = new String();
         
         try{
             PrintWriter writer = new PrintWriter("save.txt", "UTF-8");
-            writer.println((saveTable.length-1));
+            writer.println((table.length-1));
             
-            for(int i=0;i<saveTable.length;i++){
-                for(int j=0;j<saveTable[0].length;j++){
-                    //System.out.print(saveTable[i][j]);
-                     writer.println(saveTable[i][j]+" ");
+            for(int i=0;i<table.length;i++){
+                for(int j=0;j<table[0].length;j++){
+                    //System.out.print(table[i][j]);
+                     writer.println(table[i][j]+" ");
                 }
             }
             

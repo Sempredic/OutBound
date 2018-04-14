@@ -1832,6 +1832,9 @@ public class ExcelFrame extends javax.swing.JFrame {
         tableModel.setValueAt(val, row, col);    
         updateTotalDev(tableModel);
         updateTotalTech(tableModel);
+        
+        curTable.updateTableSave(tableModel);
+        curTable.writeSaveTable();
     }
     
     public static void setTableValues(DefaultTableModel model,int val, int row, int col){
@@ -1839,6 +1842,8 @@ public class ExcelFrame extends javax.swing.JFrame {
         model.setValueAt(val, row, col);    
         updateTotalDev(model);
         updateTotalTech(model);
+        curTable.updateTableSave(model);
+        curTable.writeSaveTable();
        
     }
     
