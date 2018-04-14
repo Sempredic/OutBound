@@ -356,6 +356,8 @@ public class ExcelFrame extends javax.swing.JFrame {
         exportButton = new javax.swing.JButton();
         dbStatusLabel = new javax.swing.JLabel();
         dbStatus = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        lastScanDetailArea = new javax.swing.JTextArea();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         saveMenuItem = new javax.swing.JMenuItem();
@@ -690,6 +692,14 @@ public class ExcelFrame extends javax.swing.JFrame {
     dbStatus.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     dbStatus.setText(" ");
 
+    lastScanDetailArea.setEditable(false);
+    lastScanDetailArea.setBackground(new java.awt.Color(233, 233, 233));
+    lastScanDetailArea.setColumns(15);
+    lastScanDetailArea.setFont(new java.awt.Font("Segoe UI", 3, 12)); // NOI18N
+    lastScanDetailArea.setLineWrap(true);
+    lastScanDetailArea.setRows(5);
+    jScrollPane3.setViewportView(lastScanDetailArea);
+
     jMenu1.setText("File");
 
     saveMenuItem.setText("Load Auto-Save");
@@ -771,9 +781,10 @@ public class ExcelFrame extends javax.swing.JFrame {
                     .addGap(274, 274, 274))
                 .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                     .addGap(14, 14, 14)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                     .addGap(18, 18, 18)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(dbStatus, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -795,11 +806,12 @@ public class ExcelFrame extends javax.swing.JFrame {
                         .addGroup(layout.createSequentialGroup()
                             .addGap(111, 111, 111)
                             .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(188, 188, 188))
+                            .addGap(11, 11, 11)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                             .addGap(29, 29, 29)
-                            .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(multiScanLabel)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -807,11 +819,11 @@ public class ExcelFrame extends javax.swing.JFrame {
                 .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                     .addGap(29, 29, 29)
                     .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-            .addComponent(dbStatus)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(dbStatus)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(dbStatusLabel)
-            .addGap(23, 23, 23))
+            .addContainerGap())
     );
 
     pack();
@@ -1318,6 +1330,15 @@ public class ExcelFrame extends javax.swing.JFrame {
                 
                 techObject curTech = lastActionStack.pop();
                 
+                if(lastActionStack.size()>0){
+                    lastScanDetailArea.setText("Last Scan Details: \n" + "\n" +
+                                    "Tech: " +lastActionStack.peek().getTechID()+"\n"
+                                    + "Count: " + lastActionStack.peek().getDeviceCount());
+                }else{
+                    lastScanDetailArea.setText(" ");
+                }
+                
+                
                 for(String dev:curTech.getDevices()){
                     c = getCol(tableModel, dev);
                     r = getRow(tableModel, curTech.getTechID());
@@ -1327,7 +1348,10 @@ public class ExcelFrame extends javax.swing.JFrame {
                         setTableValues(newV, r, c);
                     } 
                 }
+               
             }
+        }else{
+            lastScanDetailArea.setText(" ");
         }
     }//GEN-LAST:event_undoMenuItemActionPerformed
 
@@ -1742,6 +1766,11 @@ public class ExcelFrame extends javax.swing.JFrame {
             }
             
             lastActionStack.push(tech);
+            
+            lastScanDetailArea.setText("Last Scan Details: \n" + "\n" +
+                                    "Tech: " +lastActionStack.peek().getTechID()+"\n"
+                                    + "Devices: Many \n"
+                                    + "Count: " + lastActionStack.peek().getDeviceCount());
 
             if(lastActionStack.size()>3){
                 lastActionStack.remove(0);    
@@ -1769,7 +1798,7 @@ public class ExcelFrame extends javax.swing.JFrame {
            
         setTableValues(newValue,row,col);    
 
-        ////////////////////////////////////////////////////////UNDO////////////////////////////////
+        ////////////////////////////////////////////////////////UNDO//////////////////////////////// 
         techObject tech = new techObject();
         tech.setTechID(techFieldName.getText());
         
@@ -1778,7 +1807,11 @@ public class ExcelFrame extends javax.swing.JFrame {
         }
         lastActionStack.push(tech);
         
-
+        lastScanDetailArea.setText("Last Scan Details: \n" + "\n" +
+                                    "Tech: " +lastActionStack.peek().getTechID()+"\n"
+                                    + "Device: " + device + "\n"
+                                    + "Count: " + lastActionStack.peek().getDeviceCount());
+       
         if(lastActionStack.size()>3){
             lastActionStack.remove(0);
         }
@@ -2054,8 +2087,10 @@ public class ExcelFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JToggleButton jToggleButton1;
+    private javax.swing.JTextArea lastScanDetailArea;
     private javax.swing.JTable mTable;
     private javax.swing.JLabel multiLable;
     private javax.swing.JLabel multiScanLabel;
