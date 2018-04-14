@@ -427,10 +427,14 @@ public class DatabaseObj {
     static ArrayList executeGetTechProdRecordsQ(int entryID)throws Exception{
         
         ArrayList<ArrayList> tableList = new ArrayList();
-        int iPhone,iPad,iTouch,Classic,Shuffle,Nano,aTablet,aPhone,Wearables =0;
+        StringBuilder builder = new StringBuilder();
+        int sum = 0;
         
-        String SQL = "SELECT employees.TechID, employees.[First Name], employees.[Last Name], techProdEntries.iPhone, "
-                   + "techProdEntries.iPad, techProdEntries.iTouch, techProdEntries.Classic, techProdEntries.Shuffle, techProdEntries.Nano, techProdEntries.[Android Phone], techProdEntries.[Android Tablet], techProdEntries.Wearables\n" +
+        for(String device:devicesList){
+            builder.append(", techProdEntries.[" + device + "] ");
+        }
+        
+        String SQL = "SELECT employees.TechID, employees.[First Name], employees.[Last Name]" + builder +
                      "FROM employees LEFT JOIN techProdEntries ON employees.ID = techProdEntries.EmployeeID\n" +
                      "WHERE (((techProdEntries.prodID)="+entryID+"))";
         
@@ -439,31 +443,20 @@ public class DatabaseObj {
         ResultSet rs = stmt.executeQuery(SQL);
         
         while(rs.next()){
+            
             ArrayList row = new ArrayList();
+            sum=0;
             
             row.add(rs.getString("TechID"));
             row.add(rs.getString("First Name"));
             row.add(rs.getString("Last Name"));
-            iPhone = rs.getInt("iPhone");
-            iPad = rs.getInt("iPad");
-            iTouch = rs.getInt("iTouch");
-            Classic = rs.getInt("Classic");
-            Shuffle = rs.getInt("Shuffle");
-            Nano = rs.getInt("Nano");
-            aPhone = rs.getInt("Android Phone");
-            aTablet = rs.getInt("Android Tablet");
-            Wearables = rs.getInt("Wearables");
-            row.add(iPhone);
-            row.add(iPad);
-            row.add(iTouch);
-            row.add(Classic);
-            row.add(Shuffle);
-            row.add(Nano);
-            row.add(aPhone);
-            row.add(aTablet);
-            row.add(Wearables);
-            row.add((iPhone+iPad+iTouch+Classic+Shuffle+Nano+aPhone+aTablet+Wearables));
             
+            for(String dev:devicesList){
+                sum += rs.getInt(dev);
+                row.add(rs.getInt(dev));
+            }
+
+            row.add(sum);
             tableList.add(row);
         }
         
