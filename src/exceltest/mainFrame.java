@@ -603,50 +603,63 @@ public class mainFrame extends javax.swing.JFrame {
             
             if(areaName != null){
                 try{
-                    if(DatabaseObj.executeCellEntryExistsQ(curDate,(String)areaOB.getSelectedItem(),
-                            (String)shiftOB.getSelectedItem())){
-                        exists = JOptionPane.showConfirmDialog(this, "Entry Already Exists, Continue?","Warning",JOptionPane.YES_NO_OPTION);
-                        if(exists == 0){
-                            dbExist = true;
-                            entryMap.put("EntryID",String.valueOf(DatabaseObj.executeGetEntryIDQ(curDate,DatabaseObj.executeGetCellIDQ(curDate,areaName,shift))));
-                            entryMap.put("Date",curDate);
-                            entryMap.put("AreaID", String.valueOf(DatabaseObj.executeGetCellIDQ(curDate,areaName,shift)));
-                            entryMap.put("AreaName",areaName);
-                            entryMap.put("Shift",shift);
-                            writeToFileSave();
-                            writeToFileSave2();
-                            setRoster(rosterList);
-                            prepExcelFrame(entryMap);
-                            dispose();
-                        }
+                    int online = JOptionPane.showConfirmDialog(this, "Start An Online Session?","Warning",JOptionPane.YES_NO_OPTION);
+                    if(online == 0){
+                        if(DatabaseObj.executeCellEntryExistsQ(curDate,(String)areaOB.getSelectedItem(),
+                                (String)shiftOB.getSelectedItem())){
+                            exists = JOptionPane.showConfirmDialog(this, "Entry Already Exists, Continue?","Warning",JOptionPane.YES_NO_OPTION);
+                            if(exists == 0){
+                                dbExist = true;
+                                entryMap.put("EntryID",String.valueOf(DatabaseObj.executeGetEntryIDQ(curDate,DatabaseObj.executeGetCellIDQ(curDate,areaName,shift))));
+                                entryMap.put("Date",curDate);
+                                entryMap.put("AreaID", String.valueOf(DatabaseObj.executeGetCellIDQ(curDate,areaName,shift)));
+                                entryMap.put("AreaName",areaName);
+                                entryMap.put("Shift",shift);
+                                writeToFileSave();
+                                writeToFileSave2();
+                                setRoster(rosterList);
+                                prepExcelFrame(entryMap);
+                                dispose();
+                            }
 
+                        }else{
+                            exists = JOptionPane.showConfirmDialog(this, "Create New Entry?","Entry Doesn't Exist",JOptionPane.YES_NO_CANCEL_OPTION);
+                            if(exists == 0){
+                                dbExist = false;
+                                entryMap = DatabaseObj.executeCellEntryAppendQ(curDate,areaName,shift);
+                                DatabaseObj.executeTechProdEntriesAppendQ(entryMap, techIDList);
+                                writeToFileSave();
+                                writeToFileSave2();
+                                setRoster(rosterList);
+                                prepExcelFrame(entryMap);
+                                dispose();
+                            }else if(exists == 1){
+
+                                entryMap.put("EntryID", " ");
+                                entryMap.put("Date",curDate);
+                                entryMap.put("AreaID","0");
+                                entryMap.put("AreaName",areaName);
+                                entryMap.put("Shift",shift);
+                                writeToFileSave();
+                                writeToFileSave2();
+                                setRoster(rosterList);
+                                prepExcelFrame(entryMap);
+                                dispose();
+                            }
+
+                        }
                     }else{
-                        exists = JOptionPane.showConfirmDialog(this, "Create New Entry?","Entry Doesn't Exist",JOptionPane.YES_NO_CANCEL_OPTION);
-                        if(exists == 0){
-                            dbExist = false;
-                            entryMap = DatabaseObj.executeCellEntryAppendQ(curDate,areaName,shift);
-                            DatabaseObj.executeTechProdEntriesAppendQ(entryMap, techIDList);
-                            writeToFileSave();
-                            writeToFileSave2();
-                            setRoster(rosterList);
-                            prepExcelFrame(entryMap);
-                            dispose();
-                        }else if(exists == 1){
-                            
-                            entryMap.put("EntryID", " ");
-                            entryMap.put("Date",curDate);
-                            entryMap.put("AreaID","0");
-                            entryMap.put("AreaName",areaName);
-                            entryMap.put("Shift",shift);
-                            writeToFileSave();
-                            writeToFileSave2();
-                            setRoster(rosterList);
-                            prepExcelFrame(entryMap);
-                            dispose();
-                        }
-
+                        entryMap.put("EntryID", " ");
+                        entryMap.put("Date",curDate);
+                        entryMap.put("AreaID","0");
+                        entryMap.put("AreaName",areaName);
+                        entryMap.put("Shift",shift);
+                        writeToFileSave();
+                        writeToFileSave2();
+                        setRoster(rosterList);
+                        prepExcelFrame(entryMap);
+                        dispose();
                     }
-
                 }catch(Exception e){
                     ///////////////////////////OFFLINE MODE//////////////////////////////
                     JOptionPane.showMessageDialog(this,"Error With Database, Check Connection","Try Again", JOptionPane.WARNING_MESSAGE);
