@@ -1161,7 +1161,15 @@ public class ExcelFrame extends javax.swing.JFrame {
                 outputStream.close(); 
                 JOptionPane.showMessageDialog(this,"             File Created","Written Successfully", JOptionPane.WARNING_MESSAGE);
 
-            } catch (Exception e) {}  
+            } catch (Exception e) {
+                System.out.println(e.toString());
+                exportButton.setEnabled(true);
+                undoMenuItem.setEnabled(true);
+                techFieldName.setEnabled(true);
+                devFieldName.setEnabled(true);
+                addExistingTechMenuItem.setEnabled(true);
+                addMenuItem.setEnabled(true);
+            }  
         }
         
         exportButton.setEnabled(true);

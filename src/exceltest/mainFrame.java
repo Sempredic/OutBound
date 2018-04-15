@@ -5,21 +5,25 @@
  */
 package exceltest;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.KeyboardFocusManager;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
-import java.util.Map;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -567,6 +571,7 @@ public class mainFrame extends javax.swing.JFrame {
         }
   
     }
+    
     private void doneButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_doneButtonActionPerformed
         // TODO add your handling code here:
         loadTechIDList();
@@ -576,7 +581,8 @@ public class mainFrame extends javax.swing.JFrame {
         JLabel theDate = new JLabel("Entry Date: " + curDate ,JLabel.CENTER);
         JLabel theArea = new JLabel("Select Area", JLabel.CENTER);
         JLabel theShift = new JLabel("Select Shift", JLabel.CENTER);
-
+        JButton edit = new JButton("Edit");
+   
         int exists = 0;
         String areaName = " ";
         String shift = " ";
@@ -584,7 +590,7 @@ public class mainFrame extends javax.swing.JFrame {
         JComboBox<String> shiftOB = new JComboBox<String>(shifts);
         JComboBox<Object> areaOB = new JComboBox<Object>(options);
         JPanel panel = new JPanel(new GridLayout(0,1));
-        
+
         panel.add(theDate);
         panel.add(new JLabel(" "));
         panel.add(theArea);

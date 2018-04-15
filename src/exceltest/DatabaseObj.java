@@ -36,7 +36,7 @@ public class DatabaseObj {
         devicesList = new ArrayList<String>();
         employeesList = new ArrayList<String>();
         curRosterList = new ArrayList<Object>();
-        dbLocation = "C:\\Users\\Vince\\Downloads\\DB.accdb";
+        dbLocation = readLocSave();
         
         try{
           ///////////////////////////CONNECTION////////////////////////////////
@@ -61,6 +61,26 @@ public class DatabaseObj {
           writeToFileSave();
        }else{
            readFileSave();
+       }
+    }
+    
+    static void reEstablishConnection(){
+        
+        dbLocation = readLocSave();
+        
+        try{
+          ///////////////////////////CONNECTION////////////////////////////////
+            //STEP 2: Register JDBC driver
+          Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+            //STEP 3: Open a connection
+          System.out.println("Connecting to database: " + dbLocation + "...");
+          conn = DriverManager.getConnection("jdbc:ucanaccess://" + dbLocation);
+          
+          status = true;
+       } catch(Exception e){
+          //////////////////////////NO CONNECTION/////////////////////////////////
+          status = false;
+          System.out.println(e.toString());
        }
     }
     
@@ -607,6 +627,30 @@ public class DatabaseObj {
         }
     }
     
+    static public String readLocSave(){
+        
+        String location = " ";
+        
+        try{
+            
+            File tmpDir = new File("dbLocation.txt");
+            boolean exists = tmpDir.exists();
+
+            if(exists){
+                for(String loc:Files.readAllLines(Paths.get("dbLocation.txt"))){
+                    location = loc;
+                }
+            }else{
+                
+            }
+        }catch(Exception e){
+            System.out.println(e.toString());
+        }
+        
+                    
+        return location;
+    }
+    
     private void readFileSave(){
 
         try{
@@ -650,7 +694,7 @@ public class DatabaseObj {
             }   
             
         }catch(Exception e){
-            
+            System.out.println(e.toString());
         }
         
     }
