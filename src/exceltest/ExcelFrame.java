@@ -269,14 +269,11 @@ public class ExcelFrame extends javax.swing.JFrame {
     
     private void initExistingTechs(){
          try{
-            File tmpDir = new File("roster.txt");
-            File tmpDir2 = new File("roster2.txt");
-            
-            boolean exists = tmpDir.exists();
-            boolean exists2 = tmpDir2.exists();
-
-            if(exists){
-                for(String name:Files.readAllLines(Paths.get("roster.txt"))){
+             File tmpDir = new File("employeesList.txt");
+             boolean exists = tmpDir.exists();
+             
+             if(exists){
+                for(String name:Files.readAllLines(Paths.get("employeesList.txt"))){
                     String[] li = {" "," "};
                     li = name.split(" ");
                 
@@ -286,19 +283,6 @@ public class ExcelFrame extends javax.swing.JFrame {
                     }
                 }
             }
-            
-            if(exists2){
-                for(String name:Files.readAllLines(Paths.get("roster2.txt"))){
-                    String[] li = {" "," "};
-                    li = name.split(" ");
-                
-                    if(!existingRosterList.containsKey(li[0])){
-                        existingRosterList.put(li[0],li[1]);
-                        existingTechList.add(li[0]); 
-                    }
-                }
-            }
-            
         }catch(Exception e){
             System.out.println(e.getMessage());
         }
