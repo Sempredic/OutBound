@@ -47,6 +47,39 @@ public class labelerObj {
         this.year = year;
         
     }
+    
+    labelerObj(){doc=null;}
+    
+    public void generateDevice(String text)throws Exception{
+            
+        XWPFDocument doc = new XWPFDocument(OPCPackage.open("deviceLayout.docx"));
+
+        for (XWPFTable tbl : doc.getTables()) {
+            for (XWPFTableRow row : tbl.getRows()) {
+                  
+                for (XWPFTableCell cell : row.getTableCells()) {
+                    if(cell.getColor()==null){
+                        cell.removeParagraph(0);
+                        
+                        XWPFParagraph p = cell.addParagraph();
+                        p.setAlignment(ParagraphAlignment.CENTER);
+
+                        XWPFRun run = p.createRun();
+
+                        run.setText(text);
+                        run.setFontSize(10);
+                    }
+                          
+                }
+            }
+        }
+        
+        doc.write(new FileOutputStream(new File("tech.docx")));
+
+        File file = new File("tech.docx");
+        
+        Desktop.getDesktop().open(file);
+    }
 
     public void generateTech()throws Exception{
         Code128Bean label = new Code128Bean();

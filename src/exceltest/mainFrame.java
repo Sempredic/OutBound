@@ -610,6 +610,7 @@ public class mainFrame extends javax.swing.JFrame {
             if(areaName != null){
                 try{
                     int online = JOptionPane.showConfirmDialog(this, "Start An Online Session?","Warning",JOptionPane.YES_NO_OPTION);
+                    
                     if(online == 0){
                         if(DatabaseObj.executeCellEntryExistsQ(curDate,(String)areaOB.getSelectedItem(),
                                 (String)shiftOB.getSelectedItem())){
@@ -654,7 +655,7 @@ public class mainFrame extends javax.swing.JFrame {
                             }
 
                         }
-                    }else{
+                    }else if(online ==1){
                         entryMap.put("EntryID", " ");
                         entryMap.put("Date",curDate);
                         entryMap.put("AreaID","0");

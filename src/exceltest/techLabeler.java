@@ -28,6 +28,7 @@ public class techLabeler extends javax.swing.JFrame {
         techNumber = new String();
         newLabel = new String();
         labelsList = new ArrayList<String>();
+      
         initComponents();
         
     }
@@ -55,6 +56,7 @@ public class techLabeler extends javax.swing.JFrame {
         labelAddButton = new javax.swing.JButton();
         labelDelButton = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         labelGeneratorLabel = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         generateButton = new javax.swing.JButton();
@@ -108,6 +110,11 @@ public class techLabeler extends javax.swing.JFrame {
         jPanel4.setBackground(new java.awt.Color(204, 204, 204));
 
         labelAddButton.setText("Add -->");
+        labelAddButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                labelAddButtonActionPerformed(evt);
+            }
+        });
 
         labelDelButton.setText("<--Remove");
 
@@ -119,38 +126,42 @@ public class techLabeler extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(labelAddButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(labelDelButton, javax.swing.GroupLayout.DEFAULT_SIZE, 99, Short.MAX_VALUE))
+                    .addComponent(labelDelButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(40, 40, 40)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addContainerGap(27, Short.MAX_VALUE)
                 .addComponent(labelAddButton)
                 .addGap(18, 18, 18)
                 .addComponent(labelDelButton)
-                .addContainerGap(56, Short.MAX_VALUE))
+                .addGap(24, 24, 24))
         );
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Stored Labels");
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 3, 10)); // NOI18N
+        jLabel2.setText("Select A Label Then Generate");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(labelNameField)
                             .addComponent(labelNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
                         .addComponent(labelList, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
@@ -166,8 +177,10 @@ public class techLabeler extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(labelNameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(labelList, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(labelList, javax.swing.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -235,7 +248,7 @@ public class techLabeler extends javax.swing.JFrame {
             if(labelGeneratorTab.getSelectedIndex()==0){
                 if(techNumberField.getText().length()>0 && techNumberField.getText().contains(" ")==false){
                     
-                    if(techNumberField.getText().length()<5){
+                    if(techNumberField.getText().length()<10){
                         if(techYearField.getText().length()<5){
                             labelerObj techLabel = new labelerObj(techNumberField.getText().trim(),techYearField.getText().substring(2).trim());
                             techLabel.generateTech();
@@ -247,12 +260,25 @@ public class techLabeler extends javax.swing.JFrame {
                 }else{
                     JOptionPane.showMessageDialog(this,new JLabel("No Input",JLabel.CENTER),"Try Again", JOptionPane.PLAIN_MESSAGE);
                 }  
+            }else{
+                if(labelList.getSelectedItems().length>0){
+                    labelerObj devLabel = new labelerObj();
+                    devLabel.generateDevice(labelList.getSelectedItem());
+                }
             }
         }catch(Exception e){
             System.out.println(e.toString());
         }
         
     }//GEN-LAST:event_generateButtonActionPerformed
+
+    private void labelAddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_labelAddButtonActionPerformed
+        // TODO add your handling code here:
+        if(labelNameField.getText().length()>0){
+            labelList.add(labelNameField.getText());
+            labelsList.add(labelNameField.getText());
+        }
+    }//GEN-LAST:event_labelAddButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -296,6 +322,7 @@ public class techLabeler extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton generateButton;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
