@@ -403,6 +403,22 @@ public class DatabaseObj {
 
     }
     
+    static void executeEmployeesAppendQ(String techID,String FName,String LName,String Position)throws Exception{
+       
+        String SQL = "INSERT INTO employees ( TechID,[First Name],[Last Name],Position )\n" +
+                 "VALUES (?,?,?,?)";
+
+        preparedStatement = conn.prepareStatement(SQL);
+        
+        preparedStatement.setString(1, techID);
+        preparedStatement.setString(2, FName);
+        preparedStatement.setString(3, LName);
+        preparedStatement.setString(4, Position);
+
+        preparedStatement.executeUpdate();
+
+    }
+    
     static LinkedHashMap<String,String> executeCellEntryAppendQ(String Date,String CellArea,String Shift)throws Exception{
         LinkedHashMap<String,String> cellEntryInfo = new LinkedHashMap<String,String>();
         int areaID = 0;

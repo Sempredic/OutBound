@@ -1010,13 +1010,17 @@
                                   <Group type="102" alignment="0" attributes="0">
                                       <EmptySpace min="-2" pref="70" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                          <Component id="employeeAddButton" alignment="0" pref="119" max="32767" attributes="0"/>
-                                          <Component id="employeeLNameField" alignment="0" max="32767" attributes="0"/>
-                                          <Component id="jLabel12" alignment="0" max="32767" attributes="0"/>
-                                          <Component id="employeeFNameField" alignment="0" max="32767" attributes="0"/>
-                                          <Component id="jLabel11" alignment="0" max="32767" attributes="0"/>
-                                          <Component id="employeeIDField" alignment="0" max="32767" attributes="0"/>
-                                          <Component id="jLabel10" alignment="0" max="32767" attributes="0"/>
+                                          <Component id="positionLabel" pref="119" max="32767" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                              <Component id="employeeAddButton" alignment="0" pref="119" max="32767" attributes="0"/>
+                                              <Component id="employeeLNameField" alignment="0" max="32767" attributes="0"/>
+                                              <Component id="jLabel12" alignment="0" max="32767" attributes="0"/>
+                                              <Component id="employeeFNameField" alignment="0" max="32767" attributes="0"/>
+                                              <Component id="jLabel11" alignment="0" max="32767" attributes="0"/>
+                                              <Component id="employeeIDField" alignment="0" max="32767" attributes="0"/>
+                                              <Component id="jLabel10" alignment="0" max="32767" attributes="0"/>
+                                              <Component id="employeePosField" max="32767" attributes="0"/>
+                                          </Group>
                                       </Group>
                                       <EmptySpace pref="56" max="32767" attributes="0"/>
                                   </Group>
@@ -1037,9 +1041,13 @@
                                       <Component id="jLabel12" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
                                       <Component id="employeeLNameField" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="44" max="-2" attributes="0"/>
+                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                      <Component id="positionLabel" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
+                                      <Component id="employeePosField" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace pref="42" max="32767" attributes="0"/>
                                       <Component id="employeeAddButton" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace pref="72" max="32767" attributes="0"/>
+                                      <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                             </DimensionLayout>
@@ -1072,6 +1080,17 @@
                             <Component class="javax.swing.JButton" name="employeeAddButton">
                               <Properties>
                                 <Property name="text" type="java.lang.String" value="Add Employee"/>
+                              </Properties>
+                              <Events>
+                                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="employeeAddButtonActionPerformed"/>
+                              </Events>
+                            </Component>
+                            <Component class="javax.swing.JTextField" name="employeePosField">
+                            </Component>
+                            <Component class="javax.swing.JLabel" name="positionLabel">
+                              <Properties>
+                                <Property name="horizontalAlignment" type="int" value="0"/>
+                                <Property name="text" type="java.lang.String" value="Position"/>
                               </Properties>
                             </Component>
                           </SubComponents>

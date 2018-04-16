@@ -168,6 +168,8 @@ public class DatabaseFrame extends javax.swing.JFrame {
         employeeFNameField = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
         employeeAddButton = new javax.swing.JButton();
+        employeePosField = new javax.swing.JTextField();
+        positionLabel = new javax.swing.JLabel();
         jScrollPane5 = new javax.swing.JScrollPane();
         employeesTable = new javax.swing.JTable();
         jPanel7 = new javax.swing.JPanel();
@@ -627,6 +629,14 @@ public class DatabaseFrame extends javax.swing.JFrame {
         jLabel12.setText("Employee L Name");
 
         employeeAddButton.setText("Add Employee");
+        employeeAddButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                employeeAddButtonActionPerformed(evt);
+            }
+        });
+
+        positionLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        positionLabel.setText("Position");
 
         javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
         jPanel13.setLayout(jPanel13Layout);
@@ -635,13 +645,16 @@ public class DatabaseFrame extends javax.swing.JFrame {
             .addGroup(jPanel13Layout.createSequentialGroup()
                 .addGap(70, 70, 70)
                 .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(employeeAddButton, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)
-                    .addComponent(employeeLNameField)
-                    .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(employeeFNameField)
-                    .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(employeeIDField)
-                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(positionLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)
+                    .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(employeeAddButton, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)
+                        .addComponent(employeeLNameField)
+                        .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(employeeFNameField)
+                        .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(employeeIDField)
+                        .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(employeePosField)))
                 .addContainerGap(56, Short.MAX_VALUE))
         );
         jPanel13Layout.setVerticalGroup(
@@ -659,9 +672,13 @@ public class DatabaseFrame extends javax.swing.JFrame {
                 .addComponent(jLabel12)
                 .addGap(2, 2, 2)
                 .addComponent(employeeLNameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(44, 44, 44)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(positionLabel)
+                .addGap(8, 8, 8)
+                .addComponent(employeePosField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
                 .addComponent(employeeAddButton)
-                .addContainerGap(72, Short.MAX_VALUE))
+                .addGap(21, 21, 21))
         );
 
         employeesTable.setModel(employeeEntriesModel);
@@ -1271,17 +1288,55 @@ public class DatabaseFrame extends javax.swing.JFrame {
 
     private void employeesDelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_employeesDelButtonActionPerformed
         // TODO add your handling code here:
-        int option = JOptionPane.showConfirmDialog(this, "Deleting An Employee Will Also Effect Records Including Them, Continue?","Warning",JOptionPane.YES_NO_OPTION);
+        int option = JOptionPane.showConfirmDialog(this, "Deleting An Employee Will Also Affect Records Including Them, Continue?","Warning",JOptionPane.YES_NO_OPTION);
         
         if(option ==0){
             try{
                 DatabaseObj.executeDeleteEmployeeEntryQ(employeesCellID);
+                
+                Object[][] ob = makeEntryObjectFromArray(DatabaseObj.executeGetEmployeesQ(),employeeTableColumn);
+                employeeEntriesModel = new DefaultTableModel(ob,employeeTableColumn);
+                employeesTable.setModel(employeeEntriesModel); 
+                initTableStyle(employeesTable);
             }catch(Exception e){
                 System.out.println(e.toString());
             }
         } 
         
     }//GEN-LAST:event_employeesDelButtonActionPerformed
+
+    private void employeeAddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_employeeAddButtonActionPerformed
+        // TODO add your handling code here:
+        int employeeIDLength = employeeIDField.getText().length();
+        if(employeeIDLength >0 && employeeIDLength <5){
+            if(employeeFNameField.getText().length()>0){
+                if(employeeLNameField.getText().length()>0){
+                    if(employeePosField.getText().length()>0){
+                        try{
+                            DatabaseObj.executeEmployeesAppendQ(employeeIDField.getText(),employeeFNameField.getText(),employeeLNameField.getText(),employeePosField.getText());
+                            JOptionPane.showMessageDialog(this,"Employee Added Successfully","Confirmation", JOptionPane.WARNING_MESSAGE);
+                            employeeIDField.setText("");
+                            employeeFNameField.setText("");
+                            employeeLNameField.setText("");
+                            employeePosField.setText("");
+                        }catch(Exception e){
+                            System.out.println(e.toString());
+                        }
+                    }else{
+                        JOptionPane.showMessageDialog(this,"Position Field Empty","Try Again", JOptionPane.WARNING_MESSAGE);
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(this,"Employee LName Field Empty","Try Again", JOptionPane.WARNING_MESSAGE);
+                }
+            }else{
+                JOptionPane.showMessageDialog(this,"Employee FName Field Empty","Try Again", JOptionPane.WARNING_MESSAGE);
+            }
+        }else{
+            JOptionPane.showMessageDialog(this,"Employee ID Field Empty Or Too Long","Try Again", JOptionPane.WARNING_MESSAGE);
+        }
+        
+             
+    }//GEN-LAST:event_employeeAddButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1340,6 +1395,7 @@ public class DatabaseFrame extends javax.swing.JFrame {
     private javax.swing.JTextField employeeFNameField;
     private javax.swing.JTextField employeeIDField;
     private javax.swing.JTextField employeeLNameField;
+    private javax.swing.JTextField employeePosField;
     private javax.swing.JButton employeesDelButton;
     private javax.swing.JButton employeesQueryButton;
     private javax.swing.JTable employeesTable;
@@ -1393,6 +1449,7 @@ public class DatabaseFrame extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTabbedPane mainPanel;
     private javax.swing.JComboBox<String> monthCB;
+    private javax.swing.JLabel positionLabel;
     private javax.swing.JTable prodTable;
     private javax.swing.JButton queryButton;
     private javax.swing.JComboBox<String> shiftComboBox;
