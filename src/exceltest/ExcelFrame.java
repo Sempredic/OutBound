@@ -170,7 +170,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         for(String dev:curTable.getAreaDevices()){
             excelColumn.add(dev);
         }
-        excelColumn.add("Tech Total");
+        excelColumn.add("TechTotal");
     }
     
     ////////////////////////////////////////////////////////////////////////////DATABASE/////////////////
@@ -344,12 +344,10 @@ public class ExcelFrame extends javax.swing.JFrame {
         lastScanDetailArea = new javax.swing.JTextArea();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        saveMenuItem = new javax.swing.JMenuItem();
         editMenu = new javax.swing.JMenu();
         undoMenuItem = new javax.swing.JMenuItem();
         editModeMenuItem = new javax.swing.JCheckBoxMenuItem();
         jMenu3 = new javax.swing.JMenu();
-        addMenuItem = new javax.swing.JMenuItem();
         addExistingTechMenuItem = new javax.swing.JMenuItem();
         optionsMenuItem = new javax.swing.JMenuItem();
 
@@ -685,15 +683,6 @@ public class ExcelFrame extends javax.swing.JFrame {
     jScrollPane3.setViewportView(lastScanDetailArea);
 
     jMenu1.setText("File");
-
-    saveMenuItem.setText("Load Auto-Save");
-    saveMenuItem.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            saveMenuItemActionPerformed(evt);
-        }
-    });
-    jMenu1.add(saveMenuItem);
-
     jMenuBar1.add(jMenu1);
 
     editMenu.setText("Edit");
@@ -718,20 +707,6 @@ public class ExcelFrame extends javax.swing.JFrame {
     jMenuBar1.add(editMenu);
 
     jMenu3.setText("Tools");
-
-    addMenuItem.setText("Add (New) Tech");
-    addMenuItem.setEnabled(false);
-    addMenuItem.addMouseListener(new java.awt.event.MouseAdapter() {
-        public void mouseClicked(java.awt.event.MouseEvent evt) {
-            addMenuItemMouseClicked(evt);
-        }
-    });
-    addMenuItem.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            addMenuItemActionPerformed(evt);
-        }
-    });
-    jMenu3.add(addMenuItem);
 
     addExistingTechMenuItem.setText("Add Existing Tech");
     addExistingTechMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -1106,8 +1081,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         techFieldName.setEnabled(false);
         devFieldName.setEnabled(false);
         addExistingTechMenuItem.setEnabled(false);
-        addMenuItem.setEnabled(false);
-        
+
         Thread.sleep(1000);
         
         synchronized(this){
@@ -1146,13 +1120,13 @@ public class ExcelFrame extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this,"             File Created","Written Successfully", JOptionPane.WARNING_MESSAGE);
 
             } catch (Exception e) {
+                
                 System.out.println(e.toString());
                 exportButton.setEnabled(true);
                 undoMenuItem.setEnabled(true);
                 techFieldName.setEnabled(true);
                 devFieldName.setEnabled(true);
                 addExistingTechMenuItem.setEnabled(true);
-                addMenuItem.setEnabled(true);
             }  
         }
         
@@ -1161,86 +1135,10 @@ public class ExcelFrame extends javax.swing.JFrame {
         techFieldName.setEnabled(true);
         devFieldName.setEnabled(true);
         addExistingTechMenuItem.setEnabled(true);
-        addMenuItem.setEnabled(true);
         
     }
     
     
-    private void addMenuItemMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addMenuItemMouseClicked
-        // TODO add your handling code here:
-        
-    }//GEN-LAST:event_addMenuItemMouseClicked
-
-    private void addMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMenuItemActionPerformed
-        // TODO add your handling code here:
-        String[] newTechRow = new String [9];
-        String[] newInfoRow = new String[getInfoModel().getColumnCount()];
-        JPanel p = new JPanel(new BorderLayout(5,5));
-
-        JPanel labels = new JPanel(new GridLayout(0,1,2,2));
-        labels.add(new JLabel("Tech Number", SwingConstants.RIGHT));
-        labels.add(new JLabel("Tech Name", SwingConstants.RIGHT));
-        p.add(labels, BorderLayout.WEST);
-
-        JPanel controls = new JPanel(new GridLayout(0,1,2,2));
-
-        controls.add(techNumber);
-        controls.add(techName);
-        p.add(controls, BorderLayout.CENTER);
-        
-        int option = JOptionPane.showConfirmDialog(this, p, "Create Tech", JOptionPane.PLAIN_MESSAGE);
-
-        if (option == JOptionPane.OK_OPTION) {
-            
-            if(techNumber.getText().length()==4){
-                if(techName.getText().length()<=10){
-                    if(!curTable.getRosterNum().contains(techNumber.getText())){
-                        for(int i=0;i<newTechRow.length;i++){
-                            newTechRow[i] = "0";
-                        }
-                        
-                        for(int i=0;i<newInfoRow.length;i++){
-                            newInfoRow[i] = "0";
-                        }
-                        
-                        newTechRow[0] = techNumber.getText();
-                        newInfoRow[0] = techNumber.getText();
-                        
-                        if(techName.getText().length()==0){
-                            curTable.addToRoster(techNumber.getText(),"**");
-                            newTechRow[1] = "**";
-                            newInfoRow[1] = "**";
-                        }else{
-                          
-                            curTable.addToRoster(techNumber.getText(),techName.getText());
-                            newTechRow[1] = techName.getText();
-                            newInfoRow[1] = techName.getText();
-                        }
-                           
-                        tableModel.insertRow(0,newTechRow);
-                        getInfoModel().insertRow(0, newInfoRow);
-                        updateInfoQuota(quotaLabel.getText());
-                        techNumber.setText("");
-                        techName.setText("");
-                    }else{
-                        JOptionPane.showMessageDialog(this,"Tech Already Exists","Try Again", JOptionPane.WARNING_MESSAGE);
-                        techNumber.setText("");
-                        techName.setText("");
-                    }
-                }else{
-                    JOptionPane.showMessageDialog(this,"Tech Name Exceeds [10]Char Max","Try Again", JOptionPane.WARNING_MESSAGE);
-                    techNumber.setText("");
-                    techName.setText("");
-                }  
-            }else{
-                JOptionPane.showMessageDialog(this,"Tech must be 4 characters","Try Again", JOptionPane.WARNING_MESSAGE);
-                    techNumber.setText("");
-                    techName.setText("");
-            }
-        }
-   
-    }//GEN-LAST:event_addMenuItemActionPerformed
-
     private void optionsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optionsMenuItemActionPerformed
         // TODO add your handling code here:
         oFrame.setVisible(true);
@@ -1285,38 +1183,6 @@ public class ExcelFrame extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_quotaButtonActionPerformed
-
-    private void saveMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveMenuItemActionPerformed
-        // TODO add your handling code here:
-        
-        Object[] options = {"Yes",
-                    "No"};
-        int n = JOptionPane.showOptionDialog(this,
-            "Load Last Auto-Save?",
-            "Continue",
-            JOptionPane.YES_NO_CANCEL_OPTION,
-            JOptionPane.QUESTION_MESSAGE,
-            null,
-            options,
-            options[1]);
-        
-        if(n == JOptionPane.YES_OPTION){
-            if(curTable.getRosterNum().size()==0){
-                updateTableFromSave();
-                updateTotalDev(tableModel);
-                updateTotalTech(tableModel);
-            }else{
-                JLabel center = new JLabel("Table Already Populated",JLabel.CENTER);
-                JOptionPane.showMessageDialog(this,
-                    center,
-                    "Error",
-                    JOptionPane.PLAIN_MESSAGE);
-            }
-                  
-            
-        }
-    
-    }//GEN-LAST:event_saveMenuItemActionPerformed
 
     private void undoMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoMenuItemActionPerformed
         // TODO add your handling code here:
@@ -1497,47 +1363,6 @@ public class ExcelFrame extends javax.swing.JFrame {
         }
     }
     
-    private void updateTableFromSave(){
-        try{
-            
-            ArrayList<String> saveList = (ArrayList)Files.readAllLines(Paths.get("save.txt"));
-            int rows= Integer.valueOf(saveList.remove(0));
-            String[] newInfoRow = new String[getInfoModel().getColumnCount()];
-            String[][] saveTable = new String[rows][9];
-            int counter = 0;
-            String tech="";
-            String name="";
-            
-            for(int i=0;i<newInfoRow.length;i++){
-                newInfoRow[i] = "0";
-            }
-            
-            for(int i=0;i<rows;i++){
-                for(int j=0;j<9;j++){
-                    if(j==0){
-                        tech = saveList.get(counter).trim();
-                        newInfoRow[0]=tech;
-                    }else if(j==1){
-                        name = saveList.get(counter).trim();
-                        newInfoRow[1]=name;
-                    }
-                    saveTable[i][j] = saveList.get(counter).trim();
-                    counter++;
-                }
-                curTable.addToRoster(tech, name);
-                getInfoModel().insertRow(0, newInfoRow);
-            }
-            
-            for(String[]row:saveTable){
-                tableModel.insertRow(0, row);
-            }
-  
-        }catch(Exception e){
-            System.out.println(e.getMessage());
-
-        }
-    }
-    
     public static boolean isInteger(String s) {
         try { 
             Integer.parseInt(s); 
@@ -1625,7 +1450,7 @@ public class ExcelFrame extends javax.swing.JFrame {
                     Cell cell = row.createCell(colNum++);
                     cell.setCellValue(tCell);
                     
-                    if(tableRow[0].equals("Total Dev") && (curCell == tableRow.length)){
+                    if(tableRow[0].equals("TotalDev") && (curCell == tableRow.length)){
                         setTotalDevCell(cell);
                     }else{
                         cellBorderBlack(style);
@@ -1694,7 +1519,7 @@ public class ExcelFrame extends javax.swing.JFrame {
                     Cell cell = row.createCell(colNum++);
                     cell.setCellValue(tCell);
                     
-                    if(tableRow[0].equals("Total Dev") && (curCell == tableRow.length)){
+                    if(tableRow[0].equals("TotalDev") && (curCell == tableRow.length)){
                         setTotalDevCell(cell);
                     }else{
                         cellBorderBlack(style);
@@ -1851,7 +1676,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         int devRow =0;
         int sum =0;
         
-        devRow = getRow(model,"Total Dev");
+        devRow = getRow(model,"TotalDev");
         
         for(String dev:curTable.getAreaDevices()){
             sum = 0;
@@ -1872,7 +1697,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         int totCol,sum,value;
         int tttSum = 0;
 
-        totCol = getCol(model,"Tech Total");
+        totCol = getCol(model,"TechTotal");
         
         for(String tech:curTable.getRosterNum()){
             int row = getRow(model,tech);
@@ -1917,8 +1742,8 @@ public class ExcelFrame extends javax.swing.JFrame {
     
     private static void updateTTT(int sum,DefaultTableModel model){
         
-        int totCol = getCol(model,"Tech Total");
-        int totRow = getRow(model,"Total Dev");
+        int totCol = getCol(model,"TechTotal");
+        int totRow = getRow(model,"TotalDev");
         
         model.setValueAt(sum, totRow, totCol);
 
@@ -2069,7 +1894,6 @@ public class ExcelFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem addExistingTechMenuItem;
-    private javax.swing.JMenuItem addMenuItem;
     private java.awt.List dTableList;
     private static javax.swing.JLabel dbStatus;
     private static javax.swing.JLabel dbStatusLabel;
@@ -2105,7 +1929,6 @@ public class ExcelFrame extends javax.swing.JFrame {
     private javax.swing.JButton quotaButton;
     private javax.swing.JLabel quotaLabel;
     private javax.swing.JTextField quotaTextField;
-    private javax.swing.JMenuItem saveMenuItem;
     private javax.swing.JButton snapShotButton;
     private javax.swing.JScrollPane tablePanel;
     private javax.swing.JLabel techField;

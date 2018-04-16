@@ -5,6 +5,7 @@
  */
 package exceltest;
 
+import static exceltest.ExcelFrame.curTable;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -114,6 +115,7 @@ public class mainFrame extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         mAreaOption = new javax.swing.JMenuItem();
+        autoSaveMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Outbound Tool");
@@ -440,6 +442,14 @@ public class mainFrame extends javax.swing.JFrame {
         });
         jMenu1.add(mAreaOption);
 
+        autoSaveMenuItem.setText("Load Auto Save");
+        autoSaveMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                autoSaveMenuItemActionPerformed(evt);
+            }
+        });
+        jMenu1.add(autoSaveMenuItem);
+
         jMenuBar1.add(jMenu1);
 
         setJMenuBar(jMenuBar1);
@@ -632,16 +642,21 @@ public class mainFrame extends javax.swing.JFrame {
                         }else{
                             exists = JOptionPane.showConfirmDialog(this, "Create New Entry?","Entry Doesn't Exist",JOptionPane.YES_NO_CANCEL_OPTION);
                             if(exists == 0){
-                                dbExist = false;
-                                entryMap = DatabaseObj.executeCellEntryAppendQ(curDate,areaName,shift);
-                                DatabaseObj.executeTechProdEntriesAppendQ(entryMap, techIDList);
-                                writeToFileSave();
-                                writeToFileSave2();
-                                setRoster(rosterList);
-                                prepExcelFrame(entryMap);
-                                dispose();
+                                if(!areaFrame.getAreaByName(areaName).getDeviceTypes().isEmpty()){
+                                    dbExist = false;
+                                    entryMap = DatabaseObj.executeCellEntryAppendQ(curDate,areaName,shift);
+                                    DatabaseObj.executeTechProdEntriesAppendQ(entryMap, techIDList);
+                                    writeToFileSave();
+                                    writeToFileSave2();
+                                    setRoster(rosterList);
+                                    prepExcelFrame(entryMap);
+                                    dispose();
+                                }else{
+                                    JOptionPane.showMessageDialog(this,"Cell Area Has No Assigned Devices","Try Again", JOptionPane.WARNING_MESSAGE);
+                                }
+                                
                             }else if(exists == 1){
-
+                                dbExist = false;
                                 entryMap.put("EntryID", " ");
                                 entryMap.put("Date",curDate);
                                 entryMap.put("AreaID","0");
@@ -656,6 +671,7 @@ public class mainFrame extends javax.swing.JFrame {
 
                         }
                     }else if(online ==1){
+                        dbExist = false;
                         entryMap.put("EntryID", " ");
                         entryMap.put("Date",curDate);
                         entryMap.put("AreaID","0");
@@ -868,6 +884,64 @@ public class mainFrame extends javax.swing.JFrame {
         areaFrame.setVisible(true);
         
     }//GEN-LAST:event_mAreaOptionActionPerformed
+
+    private void autoSaveMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_autoSaveMenuItemActionPerformed
+        // TODO add your handling code here:
+        LinkedHashMap<String,String> entryMap = new LinkedHashMap<String,String>();
+        int option = JOptionPane.showConfirmDialog(this, "Load Latest File Save?","Warning",JOptionPane.YES_NO_OPTION);
+
+        if(option == 0){
+            
+            try{
+            
+                ArrayList<String> saveList = (ArrayList)Files.readAllLines(Paths.get("save.txt"));
+                LinkedHashMap<String,String> tempRoster = new LinkedHashMap<String,String>();
+                String[] tbInfo = saveList.remove(0).split(",");
+                int rows= Integer.parseInt(tbInfo[0]);
+                int cols= Integer.parseInt(tbInfo[1]);
+                Object[][] saveTable = new String[rows][cols];
+                String tech="";
+                String name="";
+
+                for(int i=0;i<rows;i++){
+                    String[] theRow = saveList.get(i).trim().split(" ");
+                    for(int j=0;j<cols;j++){
+                        if(j==0){
+                            tech = theRow[j];
+
+                        }else if(j==1){
+                            name = theRow[j];
+
+                        }
+
+                        saveTable[i][j] = theRow[j];
+
+                    }
+                    if(i>0 && i<rows-1){
+                        tempRoster.put(tech, name);
+                    }
+
+                }
+
+                entryMap.put("EntryID", " ");
+                entryMap.put("Date",curDate);
+                entryMap.put("AreaID","0");
+                entryMap.put("AreaName","CellA");
+                entryMap.put("Shift","2");
+
+                setRoster(tempRoster);
+                Table newTable = new Table(rosterList,entryMap,saveTable);
+                ExcelFrame newExcelFrame = new ExcelFrame(newTable);
+                runExcel(newExcelFrame);
+                dispose();
+
+            }catch(Exception e){
+                System.out.println(e.getMessage());
+
+            }
+        }
+        
+    }//GEN-LAST:event_autoSaveMenuItemActionPerformed
     private void initExistingTechList(){
         
         try{
@@ -963,6 +1037,7 @@ public class mainFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addTechButton;
+    private javax.swing.JMenuItem autoSaveMenuItem;
     private javax.swing.JButton createTechButton;
     private javax.swing.JLabel databaseLabel;
     private javax.swing.JLabel databaseStatus;

@@ -52,6 +52,7 @@ public class Table{
         this.databaseEntryInfo = databaseEntryInfo;
 
         if(dbExist){
+        
             initExistingDBTable();
             
         }else{
@@ -59,6 +60,45 @@ public class Table{
             setRosterTechNum();
             initTableData();
         }   
+    }
+    
+    public Table(HashMap<String,String> roster,LinkedHashMap<String,String> databaseEntryInfo,Object[][]saveTable){
+        
+        ArrayList<String> deviceList = new ArrayList<String>();
+        
+        this.roster = roster;
+        dataTableID= " ";
+        this.databaseEntryInfo = databaseEntryInfo;
+
+       
+        tRosterNames = new ArrayList<String>();
+        tRosterTechNum = new ArrayList<String>(); 
+        dataTableList = new LinkedHashMap<String,String[][]>();
+        techAvgList= new HashMap<>();
+        
+        setRosterNames();
+        setRosterTechNum();
+        
+        columnTable = new String[saveTable[0].length];
+ 
+        for(int i = 0;i<saveTable[0].length;i++){
+            columnTable[i] = (String)saveTable[0][i];
+            if((i>1)&&(i<saveTable[0].length-1)){
+                deviceList.add((String)saveTable[0][i]);
+            }
+        }
+        
+        newAreaList = deviceList;
+
+        dataTable = new Object[tRosterTechNum.size()+1][columnTable.length];
+        
+        for(int row=0;row<tRosterTechNum.size()+1;row++){
+            for(int col=0;col<columnTable.length;col++){
+              
+                dataTable[row][col] = saveTable[row+1][col];
+            }
+        }
+
     }
     
     public void addToRoster(String techNumber,String techName){
@@ -105,7 +145,7 @@ public class Table{
             columnTable[i+2] = newAreaList.get(i);
         }
         
-        columnTable[columnTable.length-1] = "Tech Total";
+        columnTable[columnTable.length-1] = "TechTotal";
         
         dataTable = new Object[tRosterTechNum.size()+1][columnTable.length];
         
@@ -121,7 +161,7 @@ public class Table{
                    } 
                 }else{
                     if(col == 0){
-                        dataTable[row][col]= "Total Dev";
+                        dataTable[row][col]= "TotalDev";
                    }else if(col == 1){
                        dataTable[row][col] = " ";
                    }else{
@@ -135,6 +175,7 @@ public class Table{
     private void initExistingDBTable(){
         
         ArrayList<ArrayList> dataTableList = new ArrayList();
+        ArrayList<String> deviceList = new ArrayList();
         this.roster.clear();
        
         try{
@@ -156,7 +197,7 @@ public class Table{
                 columnTable[i+2] = newAreaList.get(i);
             }
 
-            columnTable[columnTable.length-1] = "Tech Total";
+            columnTable[columnTable.length-1] = "TechTotal";
 
             dataTable = new Object[tRosterTechNum.size()+1][columnTable.length];
 
@@ -175,7 +216,7 @@ public class Table{
                        }
                     }else{
                         if(col == 0){
-                            dataTable[row][col]= "Total Dev";
+                            dataTable[row][col]= "TotalDev";
                        }else if(col == 1){
                            dataTable[row][col] = " ";
                        }else{
@@ -276,9 +317,7 @@ public class Table{
                 dummyTable[i][j] = tModel.getValueAt(i, j).toString();
             }
         }
-        
-        this.saveTable = dummyTable;
-        
+
         for(String time:timeList){
             int curRow = getDataTableFromList(time).length;
             int curCol = getDataTableFromList(time)[0].length;
@@ -307,7 +346,6 @@ public class Table{
                     table[i][j] = String.valueOf(value);
                 }else{
                     table[i][j] = "0";
-                    //table[i][j] = String.valueOf(sum);
                 }
                     
             } 
@@ -324,7 +362,7 @@ public class Table{
         
         for(String tech:getRosterNum()){
             int row = getTechRow(tech);
-            int col = tModel.findColumn("Tech Total");
+            int col = tModel.findColumn("TechTotal");
             String value = table[row][col];
 
             if(!techAvgList.containsKey(tech)){
@@ -383,13 +421,16 @@ public class Table{
     public void updateTableSave(DefaultTableModel tModel){
         int numCol = tModel.getColumnCount();
         int numRow = tModel.getRowCount();
-        this.table = new String[numRow][numCol];
-        hour = new SimpleDateFormat("hh:mm aa");
-        tableDate = new Date();
-      
-        for(int i=0;i<numRow;i++){
+        this.table = new String[numRow+1][numCol];
+        
+        for(int i=0;i<numRow+1;i++){
             for(int j=0;j<numCol;j++){
-                table[i][j] = tModel.getValueAt(i, j).toString();
+                if(i==0){
+                    table[i][j] = tModel.getColumnName(j);
+                }else{
+                    table[i][j] = tModel.getValueAt(i-1, j).toString();
+                }
+                
             }
         } 
         
@@ -401,14 +442,21 @@ public class Table{
         //String tName = new String();
         
         try{
+            
             PrintWriter writer = new PrintWriter("save.txt", "UTF-8");
-            writer.println((table.length-1));
+            writer.println(table.length + "," + table[0].length);
             
             for(int i=0;i<table.length;i++){
                 for(int j=0;j<table[0].length;j++){
-                    //System.out.print(table[i][j]);
-                     writer.println(table[i][j]+" ");
+                    
+                    if(table[i][j]!=" "){
+                        writer.print(table[i][j]+" ");
+                    }else{
+                        writer.print(table[i][j]);
+                    }
+                    
                 }
+                writer.println();
             }
             
             writer.close();
