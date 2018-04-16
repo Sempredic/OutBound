@@ -44,10 +44,14 @@ public class DatabaseFrame extends javax.swing.JFrame {
     private TableModel prodModel; 
     private TableModel failModel;
     private TableModel failEntriesModel;
+    private TableModel employeeEntriesModel;
+    private TableModel areasEntriesModel;
     private Object[] tbColumn;
     private Object[] prodColumn;
     private Object[] failColumn;
     private Object[] failEntriesColumn;
+    private Object[] employeeTableColumn;
+    private Object[] areasTableColumn;
     private int failCellID;
     private String year;
     /**
@@ -59,6 +63,8 @@ public class DatabaseFrame extends javax.swing.JFrame {
         prodModel = new DefaultTableModel();
         failModel = new DefaultTableModel();
         failEntriesModel = new DefaultTableModel();
+        employeeEntriesModel = new DefaultTableModel();;
+        areasEntriesModel = new DefaultTableModel();;
         selectionType = new String();
         dateYear = new String();
         dateMonth = new String();
@@ -147,14 +153,34 @@ public class DatabaseFrame extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         failDeviceField = new javax.swing.JTextField();
         jPanel6 = new javax.swing.JPanel();
+        jPanel12 = new javax.swing.JPanel();
+        employeesDelButton = new javax.swing.JButton();
+        employeesQueryButton = new javax.swing.JButton();
+        jPanel13 = new javax.swing.JPanel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        employeeIDField = new javax.swing.JTextField();
+        employeeLNameField = new javax.swing.JTextField();
+        employeeFNameField = new javax.swing.JTextField();
+        jLabel12 = new javax.swing.JLabel();
+        employeeAddButton = new javax.swing.JButton();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        employeesTable = new javax.swing.JTable();
         jPanel7 = new javax.swing.JPanel();
+        jPanel15 = new javax.swing.JPanel();
+        jPanel14 = new javax.swing.JPanel();
+        jLabel13 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        areasTable = new javax.swing.JTable();
         jPanel8 = new javax.swing.JPanel();
         statusLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Database Tool");
 
-        typeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cell Records", "Tech Records" }));
+        typeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cell Records" }));
         typeComboBox.setSelectedItem(" ");
         typeComboBox.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -500,6 +526,8 @@ public class DatabaseFrame extends javax.swing.JFrame {
 
         jLabel9.setText("Device");
 
+        failDeviceField.setEnabled(false);
+
         javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
         jPanel11.setLayout(jPanel11Layout);
         jPanel11Layout.setHorizontalGroup(
@@ -567,28 +595,190 @@ public class DatabaseFrame extends javax.swing.JFrame {
 
         dbTabbedPane.addTab("Fail Entry", jPanel5);
 
+        employeesDelButton.setText("Del Employee");
+
+        employeesQueryButton.setText("Update/Query");
+        employeesQueryButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                employeesQueryButtonActionPerformed(evt);
+            }
+        });
+
+        jPanel13.setBackground(new java.awt.Color(204, 204, 204));
+
+        jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel10.setText("Employee ID");
+
+        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel11.setText("Employee F Name");
+
+        jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel12.setText("Employee L Name");
+
+        employeeAddButton.setText("Add Employee");
+
+        javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
+        jPanel13.setLayout(jPanel13Layout);
+        jPanel13Layout.setHorizontalGroup(
+            jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel13Layout.createSequentialGroup()
+                .addGap(70, 70, 70)
+                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(employeeAddButton, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)
+                    .addComponent(employeeLNameField)
+                    .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(employeeFNameField)
+                    .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(employeeIDField)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(56, Short.MAX_VALUE))
+        );
+        jPanel13Layout.setVerticalGroup(
+            jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel13Layout.createSequentialGroup()
+                .addGap(68, 68, 68)
+                .addComponent(jLabel10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(employeeIDField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(15, 15, 15)
+                .addComponent(jLabel11)
+                .addGap(2, 2, 2)
+                .addComponent(employeeFNameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel12)
+                .addGap(2, 2, 2)
+                .addComponent(employeeLNameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(44, 44, 44)
+                .addComponent(employeeAddButton)
+                .addContainerGap(72, Short.MAX_VALUE))
+        );
+
+        employeesTable.setModel(employeeEntriesModel);
+        jScrollPane5.setViewportView(employeesTable);
+
+        javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
+        jPanel12.setLayout(jPanel12Layout);
+        jPanel12Layout.setHorizontalGroup(
+            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel12Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 320, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(employeesQueryButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(employeesDelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jPanel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        jPanel12Layout.setVerticalGroup(
+            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel12Layout.createSequentialGroup()
+                .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel12Layout.createSequentialGroup()
+                        .addGap(111, 111, 111)
+                        .addComponent(employeesQueryButton)
+                        .addGap(71, 71, 71)
+                        .addComponent(employeesDelButton)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel12Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))))
+                .addContainerGap())
+        );
+
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 751, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 396, Short.MAX_VALUE)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         dbTabbedPane.addTab("Employees", jPanel6);
+
+        jPanel15.setBackground(new java.awt.Color(204, 204, 204));
+
+        jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel13.setText("Area Goal");
+
+        jButton1.setText("Update Goal");
+
+        areasTable.setModel(areasEntriesModel);
+        jScrollPane6.setViewportView(areasTable);
+
+        javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
+        jPanel14.setLayout(jPanel14Layout);
+        jPanel14Layout.setHorizontalGroup(
+            jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel14Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
+                    .addComponent(jTextField1)
+                    .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel14Layout.setVerticalGroup(
+            jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel14Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel14Layout.createSequentialGroup()
+                        .addComponent(jLabel13)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton1)))
+                .addGap(21, 21, 21))
+        );
+
+        javax.swing.GroupLayout jPanel15Layout = new javax.swing.GroupLayout(jPanel15);
+        jPanel15.setLayout(jPanel15Layout);
+        jPanel15Layout.setHorizontalGroup(
+            jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel15Layout.createSequentialGroup()
+                .addGap(188, 188, 188)
+                .addComponent(jPanel14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(187, Short.MAX_VALUE))
+        );
+        jPanel15Layout.setVerticalGroup(
+            jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel15Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel14, javax.swing.GroupLayout.PREFERRED_SIZE, 353, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 751, Short.MAX_VALUE)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 396, Short.MAX_VALUE)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         dbTabbedPane.addTab("Areas", jPanel7);
@@ -696,6 +886,7 @@ public class DatabaseFrame extends javax.swing.JFrame {
 
                         failCellID = (int)failEntriesTable.getValueAt(failEntriesTable.getSelectedRow(), 0);
                         failEmployeeField.setEnabled(true);
+                        failDeviceField.setEnabled(true);
                         failTypeField.setEnabled(true);
                         addFailButton.setEnabled(true);
                     }
@@ -703,6 +894,7 @@ public class DatabaseFrame extends javax.swing.JFrame {
                     failEmployeeField.setEnabled(false);
                     failTypeField.setEnabled(false);
                     addFailButton.setEnabled(false);
+                    failDeviceField.setEnabled(false);
                 }
                       
             }
@@ -712,6 +904,8 @@ public class DatabaseFrame extends javax.swing.JFrame {
         prodColumn = new Object[]{"TechID","FName","LName","iPhone","iPad","iTouch","Classic","Shuffle","Nano","A.Phone","A.Tab","Wearables","Total"};
         failColumn = new Object[]{"FName","LName","Device","Type"};
         failEntriesColumn = new Object[]{"ID","Date","Area","Shift"};
+        employeeTableColumn = new Object[]{"ID","TechID","FName","LName"};
+        areasTableColumn = new Object[]{"ID","Area","Shift","Goal"};
         
         tbModel = new DefaultTableModel(tbColumn,0);
         theTable.setModel(tbModel);
@@ -735,6 +929,7 @@ public class DatabaseFrame extends javax.swing.JFrame {
         }
         
         yearTextField.setText(year);
+        failYearTextField.setText(year);
         
     }
     
@@ -801,6 +996,23 @@ public class DatabaseFrame extends javax.swing.JFrame {
         
         for(int row = 0;row<ar.size();row++){
             for(int col =0;col<failEntriesColumn.length;col++){
+                         
+                ob[row][col] = ar.get(row).get(col);     
+            }
+        }
+        
+        return ob;
+    }
+    
+    private Object[][] makeEntryObjectFromArray(ArrayList<ArrayList> ar,Object[] column){
+        
+        if(ar.size()==0){
+            JOptionPane.showMessageDialog(this,"No Entry For This Criteria","Try Again", JOptionPane.WARNING_MESSAGE);
+        }
+        Object[][] ob = new Object[ar.size()][column.length];
+        
+        for(int row = 0;row<ar.size();row++){
+            for(int col =0;col<column.length;col++){
                          
                 ob[row][col] = ar.get(row).get(col);     
             }
@@ -958,14 +1170,39 @@ public class DatabaseFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         
         try{
-            
-            DatabaseObj.executeFailEntriesAppendQ(
-                    failCellID, failEmployeeField.getText(),failDeviceField.getText(),failTypeField.getText());
-            
+            if(failEmployeeField.getText().length()>0){
+                if(failDeviceField.getText().length()>0){
+                    if(failTypeField.getText().length()>0){
+                        DatabaseObj.executeFailEntriesAppendQ(
+                             failCellID, failEmployeeField.getText(),failDeviceField.getText(),failTypeField.getText());
+                    }else{
+                        JOptionPane.showMessageDialog(this,"Fail Type Field Empty","Try Again", JOptionPane.WARNING_MESSAGE);
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(this,"Device Field Empty","Try Again", JOptionPane.WARNING_MESSAGE);
+                }
+            }else{
+                JOptionPane.showMessageDialog(this,"Tech ID Field Empty","Try Again", JOptionPane.WARNING_MESSAGE);
+            }
+             
         }catch(Exception e){
             System.out.println(e.toString());
         } 
     }//GEN-LAST:event_addFailButtonActionPerformed
+
+    private void employeesQueryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_employeesQueryButtonActionPerformed
+        // TODO add your handling code here:
+        
+        try{
+            Object[][] ob = makeEntryObjectFromArray(DatabaseObj.executeGetEmployeesQ(),employeeTableColumn);
+            employeeEntriesModel = new DefaultTableModel(ob,employeeTableColumn);
+            employeesTable.setModel(employeeEntriesModel); 
+            initTableStyle(employeesTable);
+        }catch(Exception e){
+            System.out.println(e.toString());
+        }
+        
+    }//GEN-LAST:event_employeesQueryButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1014,10 +1251,18 @@ public class DatabaseFrame extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> areaComboBox;
     private javax.swing.JLabel areaLabel;
     private javax.swing.JLabel areaLabel1;
+    private javax.swing.JTable areasTable;
     private javax.swing.JLabel dateLabel;
     private javax.swing.JLabel dateLabel1;
     private javax.swing.JComboBox<String> dayCB;
     private javax.swing.JTabbedPane dbTabbedPane;
+    private javax.swing.JButton employeeAddButton;
+    private javax.swing.JTextField employeeFNameField;
+    private javax.swing.JTextField employeeIDField;
+    private javax.swing.JTextField employeeLNameField;
+    private javax.swing.JButton employeesDelButton;
+    private javax.swing.JButton employeesQueryButton;
+    private javax.swing.JTable employeesTable;
     private javax.swing.JTabbedPane entryProdTab;
     private javax.swing.JComboBox<String> failAreaCB;
     private javax.swing.JComboBox<String> failDayCB;
@@ -1030,7 +1275,12 @@ public class DatabaseFrame extends javax.swing.JFrame {
     private javax.swing.JTable failTable;
     private javax.swing.JTextField failTypeField;
     private javax.swing.JFormattedTextField failYearTextField;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1042,6 +1292,10 @@ public class DatabaseFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
+    private javax.swing.JPanel jPanel12;
+    private javax.swing.JPanel jPanel13;
+    private javax.swing.JPanel jPanel14;
+    private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -1054,6 +1308,9 @@ public class DatabaseFrame extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JTextField jTextField1;
     private javax.swing.JTabbedPane mainPanel;
     private javax.swing.JComboBox<String> monthCB;
     private javax.swing.JTable prodTable;

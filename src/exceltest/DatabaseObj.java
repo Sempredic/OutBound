@@ -554,6 +554,29 @@ public class DatabaseObj {
         
     }
     
+    static ArrayList executeGetEmployeesQ()throws Exception{
+        ArrayList<ArrayList> employeeList = new ArrayList<ArrayList>();
+        String name = " ";
+        String SQL = "SELECT employees.ID, employees.TechID, employees.[First Name], employees.[Last Name]\n" +
+                     "FROM employees;";
+        
+        ResultSet rs = stmt.executeQuery(SQL);
+        
+        while(rs.next()){
+            
+            ArrayList row = new ArrayList();
+            
+            row.add(rs.getString("ID"));
+            row.add(rs.getString("TechID"));
+            row.add(rs.getString("First Name"));
+            row.add(rs.getString("Last Name"));
+            
+            employeeList.add(row);
+        }
+        
+        return employeeList;
+    }
+    
     static void getCellAreasQuery(){
         
         String area = " ";
