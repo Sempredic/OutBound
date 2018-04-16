@@ -602,6 +602,11 @@ public class DatabaseFrame extends javax.swing.JFrame {
 
         employeesDelButton.setText("Del Employee");
         employeesDelButton.setEnabled(false);
+        employeesDelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                employeesDelButtonActionPerformed(evt);
+            }
+        });
 
         employeesQueryButton.setText("Update/Query");
         employeesQueryButton.addActionListener(new java.awt.event.ActionListener() {
@@ -1263,6 +1268,20 @@ public class DatabaseFrame extends javax.swing.JFrame {
             System.out.println(e.toString());
         }
     }//GEN-LAST:event_areasQueryButtonActionPerformed
+
+    private void employeesDelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_employeesDelButtonActionPerformed
+        // TODO add your handling code here:
+        int option = JOptionPane.showConfirmDialog(this, "Deleting An Employee Will Also Effect Records Including Them, Continue?","Warning",JOptionPane.YES_NO_OPTION);
+        
+        if(option ==0){
+            try{
+                DatabaseObj.executeDeleteEmployeeEntryQ(employeesCellID);
+            }catch(Exception e){
+                System.out.println(e.toString());
+            }
+        } 
+        
+    }//GEN-LAST:event_employeesDelButtonActionPerformed
 
     /**
      * @param args the command line arguments

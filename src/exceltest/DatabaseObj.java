@@ -372,6 +372,19 @@ public class DatabaseObj {
         
     }
     
+    static void executeDeleteEmployeeEntryQ(int entryID)throws Exception{
+       
+        String SQL = "DELETE *\n" +
+                     "FROM employees\n" +
+                     "WHERE (((employees.ID)=?))";
+
+        preparedStatement = conn.prepareStatement(SQL);
+        
+        preparedStatement.setInt(1, entryID);
+        
+        preparedStatement.executeUpdate();
+    }
+    
     static void executeFailEntriesAppendQ(int entryID,String tech,String device,String failType)throws Exception{
        
         int employeeID = getEmployeeID(tech);
