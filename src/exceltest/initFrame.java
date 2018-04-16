@@ -76,6 +76,11 @@ public class initFrame extends javax.swing.JFrame {
         });
 
         cancelButton.setText("Cancel");
+        cancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelButtonActionPerformed(evt);
+            }
+        });
 
         statusLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         statusLabel.setText("jLabel1");
@@ -126,20 +131,26 @@ public class initFrame extends javax.swing.JFrame {
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
         // TODO add your handling code here:
-        switch(appList.getSelectedItem()){
+        if(appList.getSelectedItems().length>0){
+            switch(appList.getSelectedItem()){
                 case "Outbound Tool":
                     mainFrame frame = new mainFrame();
                     frame.run();
+                    dispose();
                     break;
                 case "Database Tool (login required)":
                     DatabaseFrame dbFrame = new DatabaseFrame();
                     dbFrame.run();
+                    dispose();
                     break;
                 case "Label Generator":
                     techLabeler labeler = new techLabeler();
                     labeler.run();
+                    dispose();
                     break;
             }
+        }
+        
     }//GEN-LAST:event_okButtonActionPerformed
 
     private void browseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseButtonActionPerformed
@@ -162,6 +173,11 @@ public class initFrame extends javax.swing.JFrame {
           System.out.println("No Selection ");
         }
     }//GEN-LAST:event_browseButtonActionPerformed
+
+    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
+        // TODO add your handling code here:
+        System.exit(0);
+    }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void writeToFileSave(){
         
