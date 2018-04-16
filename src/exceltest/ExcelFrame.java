@@ -994,6 +994,9 @@ public class ExcelFrame extends javax.swing.JFrame {
         }else{
             multiLable.setText("OFF");
         }
+        
+        manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+        manager.focusPreviousComponent();
     }//GEN-LAST:event_jToggleButton1ActionPerformed
 
     private void jToggleButton1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jToggleButton1StateChanged
