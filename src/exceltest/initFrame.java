@@ -37,6 +37,7 @@ public class initFrame extends javax.swing.JFrame {
         for(String item:options){
             appList.add(item);
         }
+      
     }
 
     /**
@@ -182,7 +183,7 @@ public class initFrame extends javax.swing.JFrame {
     private void writeToFileSave(){
         
         try{
-            PrintWriter writer = new PrintWriter("dbLocation.txt", "UTF-8");
+            PrintWriter writer = new PrintWriter("Data\\dbLocation.txt", "UTF-8");
             
             writer.println(databaseLocation);
             

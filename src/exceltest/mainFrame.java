@@ -714,7 +714,7 @@ public class mainFrame extends javax.swing.JFrame {
         String tName = new String();
         
         try{
-            PrintWriter writer = new PrintWriter("roster.txt", "UTF-8");
+            PrintWriter writer = new PrintWriter("Data\\roster.txt", "UTF-8");
             
             for(String tNumber:existingList.getItems()){
                 if(existingRosterList.containsKey(tNumber)){
@@ -736,7 +736,7 @@ public class mainFrame extends javax.swing.JFrame {
         String tName2 = new String();
         
         try{
-            PrintWriter writer2 = new PrintWriter("roster2.txt", "UTF-8");
+            PrintWriter writer2 = new PrintWriter("Data\\roster2.txt", "UTF-8");
             
             for(String tNumber:existingList2.getItems()){
                 if(existingRosterList.containsKey(tNumber)){
@@ -945,8 +945,8 @@ public class mainFrame extends javax.swing.JFrame {
     private void initExistingTechList(){
         
         try{
-            File tmpDir = new File("roster.txt");
-            File tmpDir2 = new File("roster2.txt");
+            File tmpDir = new File("Data\\roster.txt");
+            File tmpDir2 = new File("Data\\roster2.txt");
             boolean exists = tmpDir.exists();
             boolean exists2 = tmpDir2.exists();
             
@@ -959,7 +959,7 @@ public class mainFrame extends javax.swing.JFrame {
                 writeToFileSave2();
             }
             
-            for(String name:Files.readAllLines(Paths.get("roster.txt"))){
+            for(String name:Files.readAllLines(Paths.get("Data\\roster.txt"))){
                 String[] li = {" "," "};
                 li = name.split(" ");
                 
@@ -970,7 +970,7 @@ public class mainFrame extends javax.swing.JFrame {
                 }
             }
             
-            for(String names:Files.readAllLines(Paths.get("roster2.txt"))){
+            for(String names:Files.readAllLines(Paths.get("Data\\roster2.txt"))){
                 String[] li = {" "," "};
                 li = names.split(" ");
                 

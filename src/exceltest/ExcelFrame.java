@@ -269,11 +269,11 @@ public class ExcelFrame extends javax.swing.JFrame {
     
     private void initExistingTechs(){
          try{
-             File tmpDir = new File("employeesList.txt");
+             File tmpDir = new File("Data\\employeesList.txt");
              boolean exists = tmpDir.exists();
              
              if(exists){
-                for(String name:Files.readAllLines(Paths.get("employeesList.txt"))){
+                for(String name:Files.readAllLines(Paths.get("Data\\employeesList.txt"))){
                     String[] li = {" "," "};
                     li = name.split(" ");
                 
@@ -1112,7 +1112,7 @@ public class ExcelFrame extends javax.swing.JFrame {
             progressBar.setIndeterminate(false);
             progressBar.setString("Ready");
             
-            StringBuilder location = new StringBuilder("OutBoundProd_");
+            StringBuilder location = new StringBuilder("Data\\OutBoundProd_");
             location.append(String.valueOf(sdf.format(date)));
             location.append(".xlsx");
 

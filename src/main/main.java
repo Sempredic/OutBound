@@ -5,14 +5,9 @@
  */
 package main;
 
-import exceltest.DatabaseFrame;
 import exceltest.DatabaseObj;
+import exceltest.errorLogger;
 import exceltest.initFrame;
-import exceltest.mainFrame;
-import exceltest.techLabeler;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.SwingConstants;
 
 /**
  *
@@ -22,6 +17,10 @@ public class main {
     
     public static void main(String args[]){
         
+//        try{
+//            errorLogger logger = new errorLogger();
+//        }catch(Exception e){}
+//        
         DatabaseObj DB = new DatabaseObj();
         
         initFrame init = new initFrame();

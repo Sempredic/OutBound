@@ -198,6 +198,19 @@ public class DatabaseObj {
 
     }
     
+    static void executeUpdateAreaGoalQ(int EntryID,int Goal)throws Exception{
+   
+        String SQL = "UPDATE areas SET areas.[Net Goal Total] = ?\n" +
+                     "WHERE (((areas.ID)=?))";
+
+        preparedStatement = conn.prepareStatement(SQL);
+        preparedStatement.setInt(1,Goal);
+        preparedStatement.setInt(2,EntryID);
+   
+        preparedStatement .executeUpdate();
+
+    }
+    
     static boolean executeTechProdEntryEmployeeExistsQ(String tech, int entryID)throws Exception{
         int ID = 0;
         boolean exists = false;
@@ -709,11 +722,11 @@ public class DatabaseObj {
         
         try{
             
-            File tmpDir = new File("dbLocation.txt");
+            File tmpDir = new File("Data\\dbLocation.txt");
             boolean exists = tmpDir.exists();
 
             if(exists){
-                for(String loc:Files.readAllLines(Paths.get("dbLocation.txt"))){
+                for(String loc:Files.readAllLines(Paths.get("Data\\dbLocation.txt"))){
                     location = loc;
                 }
             }else{
@@ -730,9 +743,9 @@ public class DatabaseObj {
     private void readFileSave(){
 
         try{
-            File tmpDir = new File("areasList.txt");
-            File tmpDir2 = new File("devicesList.txt");
-            File tmpDir3 = new File("employeesList.txt");
+            File tmpDir = new File("Data\\areasList.txt");
+            File tmpDir2 = new File("Data\\devicesList.txt");
+            File tmpDir3 = new File("Data\\employeesList.txt");
          
             boolean exists = tmpDir.exists();
             boolean exists2 = tmpDir2.exists();
@@ -748,19 +761,19 @@ public class DatabaseObj {
                     devicesList.clear();
                     employeesList.clear();
                 }else{
-                    for(String area:Files.readAllLines(Paths.get("areasList.txt"))){
+                    for(String area:Files.readAllLines(Paths.get("Data\\areasList.txt"))){
                         if(!areasList.contains(area)){
                            areasList.add(area);
                         }
                     }
 
-                    for(String dev:Files.readAllLines(Paths.get("devicesList.txt"))){
+                    for(String dev:Files.readAllLines(Paths.get("Data\\devicesList.txt"))){
                         if(!devicesList.contains(dev)){
                            devicesList.add(dev);
                         }
                     }
 
-                    for(String employee:Files.readAllLines(Paths.get("employeesList.txt"))){
+                    for(String employee:Files.readAllLines(Paths.get("Data\\employeesList.txt"))){
                         if(!employeesList.contains(employee)){
                            employeesList.add(employee);
                         }
@@ -778,9 +791,9 @@ public class DatabaseObj {
     private void writeToFileSave(){
   
         try{
-            PrintWriter writer = new PrintWriter("areasList.txt", "UTF-8");
-            PrintWriter writer2 = new PrintWriter("devicesList.txt", "UTF-8");
-            PrintWriter writer3 = new PrintWriter("employeesList.txt", "UTF-8");
+            PrintWriter writer = new PrintWriter("Data\\areasList.txt", "UTF-8");
+            PrintWriter writer2 = new PrintWriter("Data\\devicesList.txt", "UTF-8");
+            PrintWriter writer3 = new PrintWriter("Data\\employeesList.txt", "UTF-8");
             
             for(String area:areasList){
                 writer.println(area);

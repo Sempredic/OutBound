@@ -176,8 +176,8 @@ public class DatabaseFrame extends javax.swing.JFrame {
         jPanel15 = new javax.swing.JPanel();
         jPanel14 = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        areaGoalField = new javax.swing.JTextField();
+        areaUpdateButton = new javax.swing.JButton();
         jScrollPane6 = new javax.swing.JScrollPane();
         areasTable = new javax.swing.JTable();
         areasQueryButton = new javax.swing.JButton();
@@ -741,7 +741,15 @@ public class DatabaseFrame extends javax.swing.JFrame {
         jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel13.setText("Area Goal");
 
-        jButton1.setText("Update Goal");
+        areaGoalField.setEnabled(false);
+
+        areaUpdateButton.setText("Update Goal");
+        areaUpdateButton.setEnabled(false);
+        areaUpdateButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                areaUpdateButtonActionPerformed(evt);
+            }
+        });
 
         areasTable.setModel(areasEntriesModel);
         jScrollPane6.setViewportView(areasTable);
@@ -762,8 +770,8 @@ public class DatabaseFrame extends javax.swing.JFrame {
                 .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
-                    .addComponent(jTextField1)
+                    .addComponent(areaUpdateButton, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
+                    .addComponent(areaGoalField)
                     .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(areasQueryButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -777,9 +785,9 @@ public class DatabaseFrame extends javax.swing.JFrame {
                     .addGroup(jPanel14Layout.createSequentialGroup()
                         .addComponent(jLabel13)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(areaGoalField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton1)
+                        .addComponent(areaUpdateButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(areasQueryButton)))
                 .addGap(21, 21, 21))
@@ -962,8 +970,12 @@ public class DatabaseFrame extends javax.swing.JFrame {
                     if(areasTable.getValueAt(areasTable.getSelectedRow(), 0)!= null){
 
                         areasCellID = (int)areasTable.getValueAt(areasTable.getSelectedRow(), 0);
-                       
+                        areaGoalField.setEnabled(true);
+                        areaUpdateButton.setEnabled(true);
                     }
+                }else{
+                    areaGoalField.setEnabled(false);
+                    areaUpdateButton.setEnabled(false);
                 }        
             }
         });
@@ -1338,6 +1350,41 @@ public class DatabaseFrame extends javax.swing.JFrame {
              
     }//GEN-LAST:event_employeeAddButtonActionPerformed
 
+    private void areaUpdateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_areaUpdateButtonActionPerformed
+        // TODO add your handling code here:
+        String goal = areaGoalField.getText();
+        
+        if(isInteger(goal)){
+            if(goal.length()>0){
+                try{
+                    DatabaseObj.executeUpdateAreaGoalQ(areasCellID, Integer.parseInt(goal));
+                    areaGoalField.setText("");
+                    Object[][] ob = makeEntryObjectFromArray(DatabaseObj.executeGetAreasQ(),areasTableColumn);
+                    areasEntriesModel = new DefaultTableModel(ob,areasTableColumn);
+                    areasTable.setModel(areasEntriesModel); 
+                    initTableStyle(areasTable);
+                }catch(Exception e){
+                    System.out.println(e.toString());
+                }
+            }else{
+                JOptionPane.showMessageDialog(this,"Goal Field Empty","Try Again", JOptionPane.WARNING_MESSAGE);
+            }
+        }else{
+            JOptionPane.showMessageDialog(this,"Number Values Only","Try Again", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_areaUpdateButtonActionPerformed
+
+    public static boolean isInteger(String s) {
+        try { 
+            Integer.parseInt(s); 
+        } catch(NumberFormatException e) { 
+            return false; 
+        } catch(NullPointerException e) {
+            return false;
+        }
+        // only got here if we didn't return false
+        return true;
+    }
     /**
      * @param args the command line arguments
      */
@@ -1383,8 +1430,10 @@ public class DatabaseFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addFailButton;
     private javax.swing.JComboBox<String> areaComboBox;
+    private javax.swing.JTextField areaGoalField;
     private javax.swing.JLabel areaLabel;
     private javax.swing.JLabel areaLabel1;
+    private javax.swing.JButton areaUpdateButton;
     private javax.swing.JButton areasQueryButton;
     private javax.swing.JTable areasTable;
     private javax.swing.JLabel dateLabel;
@@ -1411,7 +1460,6 @@ public class DatabaseFrame extends javax.swing.JFrame {
     private javax.swing.JTable failTable;
     private javax.swing.JTextField failTypeField;
     private javax.swing.JFormattedTextField failYearTextField;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1446,7 +1494,6 @@ public class DatabaseFrame extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTabbedPane mainPanel;
     private javax.swing.JComboBox<String> monthCB;
     private javax.swing.JLabel positionLabel;
