@@ -566,7 +566,7 @@ public class DatabaseObj {
             
             ArrayList row = new ArrayList();
             
-            row.add(rs.getString("ID"));
+            row.add(rs.getInt("ID"));
             row.add(rs.getString("TechID"));
             row.add(rs.getString("First Name"));
             row.add(rs.getString("Last Name"));
@@ -575,6 +575,30 @@ public class DatabaseObj {
         }
         
         return employeeList;
+    }
+    
+    static ArrayList executeGetAreasQ()throws Exception{
+        
+        ArrayList<ArrayList> areasList = new ArrayList<ArrayList>();
+   
+        String SQL = "SELECT areas.ID, areas.AreaName, areas.Shift, areas.[Net Goal Total]\n" +
+                     "FROM areas;";
+        
+        ResultSet rs = stmt.executeQuery(SQL);
+        
+        while(rs.next()){
+            
+            ArrayList row = new ArrayList();
+            
+            row.add(rs.getInt("ID"));
+            row.add(rs.getString("AreaName"));
+            row.add(rs.getString("Shift"));
+            row.add(rs.getString("Net Goal Total"));
+            
+            areasList.add(row);
+        }
+        
+        return areasList;
     }
     
     static void getCellAreasQuery(){

@@ -53,6 +53,8 @@ public class DatabaseFrame extends javax.swing.JFrame {
     private Object[] employeeTableColumn;
     private Object[] areasTableColumn;
     private int failCellID;
+    private int employeesCellID;
+    private int areasCellID;
     private String year;
     /**
      * Creates new form DatabaseFrame
@@ -79,6 +81,8 @@ public class DatabaseFrame extends javax.swing.JFrame {
         areaListArray = new ArrayList<String>(DatabaseObj.getAreaList());
         failAreaListArray = new ArrayList<String>(DatabaseObj.getAreaList());
         failCellID = 0;
+        employeesCellID =0;
+        areasCellID =0;
         year = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
 
         if(!areaListArray.contains("All")){
@@ -174,6 +178,7 @@ public class DatabaseFrame extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jScrollPane6 = new javax.swing.JScrollPane();
         areasTable = new javax.swing.JTable();
+        areasQueryButton = new javax.swing.JButton();
         jPanel8 = new javax.swing.JPanel();
         statusLabel = new javax.swing.JLabel();
 
@@ -596,6 +601,7 @@ public class DatabaseFrame extends javax.swing.JFrame {
         dbTabbedPane.addTab("Fail Entry", jPanel5);
 
         employeesDelButton.setText("Del Employee");
+        employeesDelButton.setEnabled(false);
 
         employeesQueryButton.setText("Update/Query");
         employeesQueryButton.addActionListener(new java.awt.event.ActionListener() {
@@ -718,6 +724,13 @@ public class DatabaseFrame extends javax.swing.JFrame {
         areasTable.setModel(areasEntriesModel);
         jScrollPane6.setViewportView(areasTable);
 
+        areasQueryButton.setText("Query");
+        areasQueryButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                areasQueryButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
         jPanel14.setLayout(jPanel14Layout);
         jPanel14Layout.setHorizontalGroup(
@@ -729,21 +742,24 @@ public class DatabaseFrame extends javax.swing.JFrame {
                 .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
                     .addComponent(jTextField1)
-                    .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(areasQueryButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel14Layout.setVerticalGroup(
             jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel14Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel14Layout.createSequentialGroup()
                         .addComponent(jLabel13)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton1)))
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(areasQueryButton)))
                 .addGap(21, 21, 21))
         );
 
@@ -897,6 +913,36 @@ public class DatabaseFrame extends javax.swing.JFrame {
                     failDeviceField.setEnabled(false);
                 }
                       
+            }
+        });
+        
+        employeesTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+            public void valueChanged(ListSelectionEvent event) {
+            
+                
+                if(employeesTable.getSelectedRow()!=-1){
+                    if(employeesTable.getValueAt(employeesTable.getSelectedRow(), 0)!= null){
+
+                        employeesCellID = (int)employeesTable.getValueAt(employeesTable.getSelectedRow(), 0);
+                        employeesDelButton.setEnabled(true);
+                    }
+                }else{
+                    employeesDelButton.setEnabled(false);
+                }        
+            }
+        });
+        
+        areasTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+            public void valueChanged(ListSelectionEvent event) {
+            
+                
+                if(areasTable.getSelectedRow()!=-1){
+                    if(areasTable.getValueAt(areasTable.getSelectedRow(), 0)!= null){
+
+                        areasCellID = (int)areasTable.getValueAt(areasTable.getSelectedRow(), 0);
+                       
+                    }
+                }        
             }
         });
         
@@ -1194,6 +1240,7 @@ public class DatabaseFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         
         try{
+            
             Object[][] ob = makeEntryObjectFromArray(DatabaseObj.executeGetEmployeesQ(),employeeTableColumn);
             employeeEntriesModel = new DefaultTableModel(ob,employeeTableColumn);
             employeesTable.setModel(employeeEntriesModel); 
@@ -1203,6 +1250,19 @@ public class DatabaseFrame extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_employeesQueryButtonActionPerformed
+
+    private void areasQueryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_areasQueryButtonActionPerformed
+        // TODO add your handling code here:
+        try{
+            
+            Object[][] ob = makeEntryObjectFromArray(DatabaseObj.executeGetAreasQ(),areasTableColumn);
+            areasEntriesModel = new DefaultTableModel(ob,areasTableColumn);
+            areasTable.setModel(areasEntriesModel); 
+            initTableStyle(areasTable);
+        }catch(Exception e){
+            System.out.println(e.toString());
+        }
+    }//GEN-LAST:event_areasQueryButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1251,6 +1311,7 @@ public class DatabaseFrame extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> areaComboBox;
     private javax.swing.JLabel areaLabel;
     private javax.swing.JLabel areaLabel1;
+    private javax.swing.JButton areasQueryButton;
     private javax.swing.JTable areasTable;
     private javax.swing.JLabel dateLabel;
     private javax.swing.JLabel dateLabel1;

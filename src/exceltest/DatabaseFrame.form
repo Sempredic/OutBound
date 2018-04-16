@@ -983,6 +983,7 @@
                         <Component class="javax.swing.JButton" name="employeesDelButton">
                           <Properties>
                             <Property name="text" type="java.lang.String" value="Del Employee"/>
+                            <Property name="enabled" type="boolean" value="false"/>
                           </Properties>
                         </Component>
                         <Component class="javax.swing.JButton" name="employeesQueryButton">
@@ -1163,6 +1164,7 @@
                                           <Component id="jButton1" pref="110" max="32767" attributes="0"/>
                                           <Component id="jTextField1" alignment="0" max="32767" attributes="0"/>
                                           <Component id="jLabel13" alignment="0" max="32767" attributes="0"/>
+                                          <Component id="areasQueryButton" max="32767" attributes="0"/>
                                       </Group>
                                       <EmptySpace max="32767" attributes="0"/>
                                   </Group>
@@ -1172,7 +1174,7 @@
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="1" attributes="0">
                                       <EmptySpace max="32767" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                           <Component id="jScrollPane6" min="-2" pref="332" max="-2" attributes="0"/>
                                           <Group type="102" attributes="0">
                                               <Component id="jLabel13" min="-2" max="-2" attributes="0"/>
@@ -1180,6 +1182,8 @@
                                               <Component id="jTextField1" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace type="separate" max="-2" attributes="0"/>
                                               <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace max="32767" attributes="0"/>
+                                              <Component id="areasQueryButton" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
                                       <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
@@ -1217,6 +1221,14 @@
                                 </Component>
                               </SubComponents>
                             </Container>
+                            <Component class="javax.swing.JButton" name="areasQueryButton">
+                              <Properties>
+                                <Property name="text" type="java.lang.String" value="Query"/>
+                              </Properties>
+                              <Events>
+                                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="areasQueryButtonActionPerformed"/>
+                              </Events>
+                            </Component>
                           </SubComponents>
                         </Container>
                       </SubComponents>
