@@ -5,8 +5,12 @@
  */
 package exceltest;
 
-import static exceltest.DatabaseObj.areasList;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.PrintWriter;
+import java.text.DateFormat;
+import static java.time.OffsetTime.now;
+import java.util.Date;
 
 /**
  *
@@ -14,15 +18,32 @@ import java.io.PrintWriter;
  */
 public class errorLogger {
     
-    static public PrintWriter errorWriter;
+    static private PrintWriter logWriter;
+    static private Date date;
     
-    public errorLogger()throws Exception{
-        errorWriter = new PrintWriter("errorLogger.txt", "UTF-8");
+    public errorLogger(){
+ 
+        date = new Date();
+        
+        File file = new File("Data\\errorLogger.txt");
+        
+        try{
+            
+            if(!file.exists()){
+                file.createNewFile();
+            }
+            
+            logWriter = new PrintWriter(new FileOutputStream(file,true )); 
+        }catch(Exception e){
+            System.out.println(e.toString());
+            errorLogger.writeToLogger(e.toString());
+        }
+        
     }
     
-    private void writeToFileSave(){
- 
-   
+    static public void writeToLogger(String text){
+        logWriter.println(text + "     " + DateFormat.getDateTimeInstance().format(date));
+        logWriter.close();
     }
     
 }

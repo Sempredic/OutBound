@@ -648,7 +648,7 @@ public class manageFrame extends javax.swing.JFrame {
         
         try{
             
-            File tmpDir = new File("cellAreas.txt");
+            File tmpDir = new File("Data\\cellAreas.txt");
 
             boolean exists = tmpDir.exists();  
             
@@ -656,7 +656,7 @@ public class manageFrame extends javax.swing.JFrame {
                 writeAreasToFile();
             }
             
-            list = (ArrayList)Files.readAllLines(Paths.get("cellAreas.txt"));
+            list = (ArrayList)Files.readAllLines(Paths.get("Data\\cellAreas.txt"));
             
             if(isInteger(list.get(0))){
                 areaAmount = Integer.parseInt(list.remove(0));
@@ -684,6 +684,7 @@ public class manageFrame extends javax.swing.JFrame {
             
         }catch(Exception e){
             System.out.println("error");
+            errorLogger.writeToLogger(e.toString());
         }
     }
     
@@ -701,7 +702,7 @@ public class manageFrame extends javax.swing.JFrame {
         
         try{
             
-            PrintWriter writer = new PrintWriter("cellAreas.txt", "UTF-8");
+            PrintWriter writer = new PrintWriter("Data\\cellAreas.txt", "UTF-8");
             
             writer.println(areaMap.size());
 
@@ -720,6 +721,7 @@ public class manageFrame extends javax.swing.JFrame {
             
         }catch(Exception e){
             System.out.println("error");
+            errorLogger.writeToLogger(e.toString());
         }
         
     }

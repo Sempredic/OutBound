@@ -916,6 +916,7 @@ public class DatabaseFrame extends javax.swing.JFrame {
                                 failTable.setModel(failModel);
                                 initTableStyle(failTable);
                             }catch(Exception e){
+                                errorLogger.writeToLogger(e.toString());
                                 System.out.println(e.toString());
                             }
                         }
@@ -1185,6 +1186,7 @@ public class DatabaseFrame extends javax.swing.JFrame {
             
         }catch(Exception e){
             System.out.println(e.toString());
+            errorLogger.writeToLogger(e.toString());
         }
         
     }//GEN-LAST:event_queryButtonActionPerformed
@@ -1242,6 +1244,7 @@ public class DatabaseFrame extends javax.swing.JFrame {
             }
         }catch(Exception e){
             System.out.println(e.toString());
+            errorLogger.writeToLogger(e.toString());
         }
         
     }//GEN-LAST:event_failQueryButtonActionPerformed
@@ -1267,6 +1270,7 @@ public class DatabaseFrame extends javax.swing.JFrame {
              
         }catch(Exception e){
             System.out.println(e.toString());
+            errorLogger.writeToLogger(e.toString());
         } 
     }//GEN-LAST:event_addFailButtonActionPerformed
 
@@ -1281,6 +1285,7 @@ public class DatabaseFrame extends javax.swing.JFrame {
             initTableStyle(employeesTable);
         }catch(Exception e){
             System.out.println(e.toString());
+            errorLogger.writeToLogger(e.toString());
         }
         
     }//GEN-LAST:event_employeesQueryButtonActionPerformed
@@ -1295,6 +1300,7 @@ public class DatabaseFrame extends javax.swing.JFrame {
             initTableStyle(areasTable);
         }catch(Exception e){
             System.out.println(e.toString());
+            errorLogger.writeToLogger(e.toString());
         }
     }//GEN-LAST:event_areasQueryButtonActionPerformed
 
@@ -1312,6 +1318,7 @@ public class DatabaseFrame extends javax.swing.JFrame {
                 initTableStyle(employeesTable);
             }catch(Exception e){
                 System.out.println(e.toString());
+                errorLogger.writeToLogger(e.toString());
             }
         } 
         
@@ -1333,6 +1340,7 @@ public class DatabaseFrame extends javax.swing.JFrame {
                             employeePosField.setText("");
                         }catch(Exception e){
                             System.out.println(e.toString());
+                            errorLogger.writeToLogger(e.toString());
                         }
                     }else{
                         JOptionPane.showMessageDialog(this,"Position Field Empty","Try Again", JOptionPane.WARNING_MESSAGE);
@@ -1365,6 +1373,7 @@ public class DatabaseFrame extends javax.swing.JFrame {
                     initTableStyle(areasTable);
                 }catch(Exception e){
                     System.out.println(e.toString());
+                    errorLogger.writeToLogger(e.toString());
                 }
             }else{
                 JOptionPane.showMessageDialog(this,"Goal Field Empty","Try Again", JOptionPane.WARNING_MESSAGE);

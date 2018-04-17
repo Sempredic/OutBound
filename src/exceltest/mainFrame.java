@@ -577,6 +577,7 @@ public class mainFrame extends javax.swing.JFrame {
                 DatabaseObj.executeGetEmployeeIDQ(techIDList, rosterList);
             }catch(Exception e){
                 System.out.println(e.toString());
+                errorLogger.writeToLogger(e.toString());
             }
         }
   
@@ -702,6 +703,8 @@ public class mainFrame extends javax.swing.JFrame {
                         prepExcelFrame(entryMap);
                         dispose();
                     }
+                    
+                    errorLogger.writeToLogger(e.toString());
                 } 
             }else{
                 JOptionPane.showMessageDialog(this,"No Area Selected","Try Again", JOptionPane.WARNING_MESSAGE);
@@ -727,6 +730,7 @@ public class mainFrame extends javax.swing.JFrame {
             
         }catch(Exception e){
             System.out.println("WriteToFileSave");
+            errorLogger.writeToLogger(e.toString());
         }
    
     }
@@ -749,6 +753,7 @@ public class mainFrame extends javax.swing.JFrame {
             
         }catch(Exception e){
             System.out.println("WriteToFileSave2");
+            errorLogger.writeToLogger(e.toString());
         }
    
     }
@@ -890,11 +895,12 @@ public class mainFrame extends javax.swing.JFrame {
         LinkedHashMap<String,String> entryMap = new LinkedHashMap<String,String>();
         int option = JOptionPane.showConfirmDialog(this, "Load Latest File Save?","Warning",JOptionPane.YES_NO_OPTION);
 
+        File fileSave = new File("Data\\save.txt");
         if(option == 0){
             
             try{
             
-                ArrayList<String> saveList = (ArrayList)Files.readAllLines(Paths.get("save.txt"));
+                ArrayList<String> saveList = (ArrayList)Files.readAllLines(Paths.get("Data\\save.txt"));
                 LinkedHashMap<String,String> tempRoster = new LinkedHashMap<String,String>();
                 String[] tbInfo = saveList.remove(0).split(",");
                 int rows= Integer.parseInt(tbInfo[0]);
@@ -937,7 +943,7 @@ public class mainFrame extends javax.swing.JFrame {
 
             }catch(Exception e){
                 System.out.println(e.getMessage());
-
+                errorLogger.writeToLogger(e.toString());
             }
         }
         
@@ -982,6 +988,7 @@ public class mainFrame extends javax.swing.JFrame {
             }
         }catch(Exception e){
             System.out.println("InitExistingTechList");
+            errorLogger.writeToLogger(e.toString());
         }
     }
     /**

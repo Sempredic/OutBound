@@ -191,6 +191,7 @@ public class initFrame extends javax.swing.JFrame {
             
         }catch(Exception e){
             System.out.println("WriteToFileSave");
+            errorLogger.writeToLogger(e.toString());
         }
    
     }

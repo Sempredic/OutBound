@@ -51,6 +51,7 @@ public class DatabaseObj {
           //////////////////////////NO CONNECTION/////////////////////////////////
           status = false;
           System.out.println(e.toString());
+          errorLogger.writeToLogger(e.toString());
        }
         
        if(status){             
@@ -81,6 +82,7 @@ public class DatabaseObj {
           //////////////////////////NO CONNECTION/////////////////////////////////
           status = false;
           System.out.println(e.toString());
+          errorLogger.writeToLogger(e.toString());
        }
     }
     
@@ -663,7 +665,7 @@ public class DatabaseObj {
                 }
             }
         }catch(Exception e){
-            
+            errorLogger.writeToLogger(e.toString());
         }
     }
     
@@ -687,7 +689,7 @@ public class DatabaseObj {
                 }
             }
         }catch(Exception e){
-            
+            errorLogger.writeToLogger(e.toString());
         }
     }
     
@@ -712,7 +714,7 @@ public class DatabaseObj {
                 }
             }
         }catch(Exception e){
-            
+            errorLogger.writeToLogger(e.toString());
         }
     }
     
@@ -734,6 +736,7 @@ public class DatabaseObj {
             }
         }catch(Exception e){
             System.out.println(e.toString());
+            errorLogger.writeToLogger(e.toString());
         }
         
                     
@@ -784,6 +787,7 @@ public class DatabaseObj {
             
         }catch(Exception e){
             System.out.println(e.toString());
+            errorLogger.writeToLogger(e.toString());
         }
         
     }
@@ -813,6 +817,7 @@ public class DatabaseObj {
             
         }catch(Exception e){
             System.out.println(e.getMessage());
+            errorLogger.writeToLogger(e.toString());
         }
    
     }

@@ -285,6 +285,7 @@ public class ExcelFrame extends javax.swing.JFrame {
             }
         }catch(Exception e){
             System.out.println(e.getMessage());
+            errorLogger.writeToLogger(e.toString());
         }
     }
 
@@ -1035,6 +1036,7 @@ public class ExcelFrame extends javax.swing.JFrame {
                             startMaker();
                         } catch (InterruptedException ex) {
                             Logger.getLogger(ExcelFrame.class.getName()).log(Level.SEVERE, null, ex);
+                            errorLogger.writeToLogger(ex.toString());
                         }
                     }
 
@@ -1047,6 +1049,7 @@ public class ExcelFrame extends javax.swing.JFrame {
                             startProgBar();
                         } catch (InterruptedException ex) {
                             Logger.getLogger(ExcelFrame.class.getName()).log(Level.SEVERE, null, ex);
+                            errorLogger.writeToLogger(ex.toString());
                         }
                     }
 
@@ -1059,6 +1062,7 @@ public class ExcelFrame extends javax.swing.JFrame {
                             startTableWriter();
                         } catch (InterruptedException ex) {
                             Logger.getLogger(ExcelFrame.class.getName()).log(Level.SEVERE, null, ex);
+                            errorLogger.writeToLogger(ex.toString());
                         }
                     }
 
@@ -1130,6 +1134,7 @@ public class ExcelFrame extends javax.swing.JFrame {
                 techFieldName.setEnabled(true);
                 devFieldName.setEnabled(true);
                 addExistingTechMenuItem.setEnabled(true);
+                errorLogger.writeToLogger(e.toString());
             }  
         }
         
@@ -1726,6 +1731,7 @@ public class ExcelFrame extends javax.swing.JFrame {
                         }catch(Exception e){
                             
                             System.out.println(e.toString());
+                            errorLogger.writeToLogger(e.toString());
                         }
                     }
                     
@@ -1762,6 +1768,7 @@ public class ExcelFrame extends javax.swing.JFrame {
             }catch(Exception e){
 
                 dbStatusLabel.setText(e.toString());
+                errorLogger.writeToLogger(e.toString());
             }
         }else{
             updateDatabaseStatus();

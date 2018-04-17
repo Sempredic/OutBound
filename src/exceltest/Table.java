@@ -227,6 +227,7 @@ public class Table{
             }
         }catch(Exception e){
             System.out.println(e.toString());
+            errorLogger.writeToLogger(e.toString());
         }
     }
 
@@ -443,7 +444,7 @@ public class Table{
         
         try{
             
-            PrintWriter writer = new PrintWriter("save.txt", "UTF-8");
+            PrintWriter writer = new PrintWriter("Data\\save.txt", "UTF-8");
             writer.println(table.length + "," + table[0].length);
             
             for(int i=0;i<table.length;i++){
@@ -466,6 +467,7 @@ public class Table{
                     "Save Error",
                     "Error",
                     JOptionPane.PLAIN_MESSAGE);
+            errorLogger.writeToLogger(e.toString());
         }
     }
     

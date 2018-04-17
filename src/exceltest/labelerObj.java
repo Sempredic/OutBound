@@ -52,7 +52,7 @@ public class labelerObj {
     
     public void generateDevice(String text)throws Exception{
             
-        XWPFDocument doc = new XWPFDocument(OPCPackage.open("deviceLayout.docx"));
+        XWPFDocument doc = new XWPFDocument(OPCPackage.open("Data\\deviceLayout.docx"));
 
         for (XWPFTable tbl : doc.getTables()) {
             for (XWPFTableRow row : tbl.getRows()) {
@@ -74,11 +74,12 @@ public class labelerObj {
             }
         }
         
-        doc.write(new FileOutputStream(new File("tech.docx")));
+        doc.write(new FileOutputStream(new File("Data\\label.doc")));
 
-        File file = new File("tech.docx");
+        File file = new File("Data\\label.doc");
         
-        Desktop.getDesktop().open(file);
+        Runtime.getRuntime().exec(new String[]{"rundll32", "shell32.dll,ShellExec_RunDLL", file.getAbsolutePath()});
+ 
     }
 
     public void generateTech()throws Exception{
@@ -91,7 +92,7 @@ public class labelerObj {
         label.setFontSize(1.5);
 
         //Open output file
-        File outputFile = new File("Barcode.jpg");
+        File outputFile = new File("Data\\Barcode.jpg");
 
         FileOutputStream out = new FileOutputStream(outputFile);
 
@@ -104,9 +105,9 @@ public class labelerObj {
         //Signal end of generation
         canvas.finish();
 
-        fis = new FileInputStream("Barcode.jpg");
+        fis = new FileInputStream("Data\\Barcode.jpg");
 
-        XWPFDocument doc = new XWPFDocument(OPCPackage.open("tableLayout.docx"));
+        XWPFDocument doc = new XWPFDocument(OPCPackage.open("Data\\tableLayout.docx"));
 
         for (XWPFTable tbl : doc.getTables()) {
             for (XWPFTableRow row : tbl.getRows()) {
@@ -120,7 +121,7 @@ public class labelerObj {
 
                         XWPFRun run = p.createRun();
 
-                        fis = new FileInputStream("Barcode.jpg");
+                        fis = new FileInputStream("Data\\Barcode.jpg");
 
                         run.addPicture(fis, XWPFDocument.PICTURE_TYPE_JPEG,null, Units.toEMU(105), Units.toEMU(25));
                         run.setText("/"+year);
@@ -131,12 +132,12 @@ public class labelerObj {
             }
         }
         
-        doc.write(new FileOutputStream(new File("tech.docx")));
+        doc.write(new FileOutputStream(new File("Data\\label.doc")));
 
-        File file = new File("tech.docx");
+        File file = new File("Data\\label.doc");
         
-        Desktop.getDesktop().open(file);
-           
+        Runtime.getRuntime().exec(new String[]{"rundll32", "shell32.dll,ShellExec_RunDLL", file.getAbsolutePath()});
+ 
     }
     
 }

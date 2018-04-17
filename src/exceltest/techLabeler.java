@@ -268,6 +268,7 @@ public class techLabeler extends javax.swing.JFrame {
             }
         }catch(Exception e){
             System.out.println(e.toString());
+            errorLogger.writeToLogger(e.toString());
         }
         
     }//GEN-LAST:event_generateButtonActionPerformed

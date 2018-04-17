@@ -16,15 +16,14 @@ import exceltest.initFrame;
 public class main {
     
     public static void main(String args[]){
-           
-//        try{
-//            errorLogger logger = new errorLogger();
-//        }catch(Exception e){}
-//        
+        
+        errorLogger logger = new errorLogger();
+
         DatabaseObj DB = new DatabaseObj();
         
         initFrame init = new initFrame();
         init.run(); 
+  
 
     }
 }
