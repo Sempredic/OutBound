@@ -63,6 +63,7 @@ public class techLabeler extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Label Generator");
+        setResizable(false);
 
         techNumberField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
