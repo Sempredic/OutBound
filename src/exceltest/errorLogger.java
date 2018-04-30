@@ -33,7 +33,7 @@ public class errorLogger {
                 file.createNewFile();
             }
             
-            logWriter = new PrintWriter(new FileOutputStream(file,true )); 
+            logWriter = new PrintWriter(new FileOutputStream(file,true)); 
         }catch(Exception e){
             System.out.println(e.toString());
             errorLogger.writeToLogger(e.toString());

@@ -5,11 +5,11 @@
  */
 package exceltest;
 
-import java.awt.Desktop;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.util.Units;
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
@@ -50,7 +50,7 @@ public class labelerObj {
     
     labelerObj(){doc=null;}
     
-    public void generateDevice(String text)throws Exception{
+    public void generateDevice(ArrayList<String> text)throws Exception{
             
         XWPFDocument doc = new XWPFDocument(OPCPackage.open("Data\\labelLayout.docx"));
 
@@ -62,12 +62,17 @@ public class labelerObj {
                         cell.removeParagraph(0);
                         
                         XWPFParagraph p = cell.addParagraph();
+                        
                         p.setAlignment(ParagraphAlignment.CENTER);
-
+                       
                         XWPFRun run = p.createRun();
-
-                        run.setText(text);
                         run.setFontSize(10);
+                        
+                        for(String txt:text){
+                            
+                            run.setText(txt);
+                            run.addBreak();
+                        }     
                     }
                           
                 }
