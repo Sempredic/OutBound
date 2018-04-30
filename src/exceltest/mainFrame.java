@@ -73,7 +73,7 @@ public class mainFrame extends javax.swing.JFrame {
         
         initExistingTechList();
         initDatabaseStatus();
-        
+        initFolders();
     }
 
     /**
@@ -487,6 +487,27 @@ public class mainFrame extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void initFolders(){
+        File prodFolder = new File("Production");
+        
+        if(!prodFolder.exists()){
+           
+            if(!prodFolder.mkdir()){
+                System.out.println("Prod Folder Could Not Be Created");
+            }
+        }
+        
+        for(String area:DatabaseObj.getAreaList()){
+            
+            File areaFolder = new File("Production\\"+area);
+            if(!areaFolder.exists()){
+                if(!areaFolder.mkdir()){
+                    System.out.println("Area Folder Could Not Be Created");
+                }
+            }
+        }
+               
+    }
     private boolean initDatabaseStatus(){
         databaseConn = DatabaseObj.getStatus();
         boolean st = false;
@@ -598,7 +619,7 @@ public class mainFrame extends javax.swing.JFrame {
                 }
             }
         }catch(Exception e){
-            System.out.println(e.toString());
+            System.out.println("checkEntryDevices" + e.toString());
             errorLogger.writeToLogger(e.toString());
         }
         
