@@ -52,7 +52,7 @@ public class labelerObj {
     
     public void generateDevice(String text)throws Exception{
             
-        XWPFDocument doc = new XWPFDocument(OPCPackage.open("Data\\deviceLayout.docx"));
+        XWPFDocument doc = new XWPFDocument(OPCPackage.open("Data\\labelLayout.docx"));
 
         for (XWPFTable tbl : doc.getTables()) {
             for (XWPFTableRow row : tbl.getRows()) {
@@ -107,7 +107,7 @@ public class labelerObj {
 
         fis = new FileInputStream("Data\\Barcode.jpg");
 
-        XWPFDocument doc = new XWPFDocument(OPCPackage.open("Data\\tableLayout.docx"));
+        XWPFDocument doc = new XWPFDocument(OPCPackage.open("Data\\labelLayout.docx"));
 
         for (XWPFTable tbl : doc.getTables()) {
             for (XWPFTableRow row : tbl.getRows()) {

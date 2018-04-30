@@ -893,61 +893,69 @@ public class mainFrame extends javax.swing.JFrame {
     private void autoSaveMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_autoSaveMenuItemActionPerformed
         // TODO add your handling code here:
         LinkedHashMap<String,String> entryMap = new LinkedHashMap<String,String>();
-        int option = JOptionPane.showConfirmDialog(this, "Load Latest File Save?","Warning",JOptionPane.YES_NO_OPTION);
-
+        
         File fileSave = new File("Data\\save.txt");
-        if(option == 0){
+        
+        if(fileSave.exists()){
             
-            try{
+            int option = JOptionPane.showConfirmDialog(this, "Load Latest File Save?","Warning",JOptionPane.YES_NO_OPTION);
             
-                ArrayList<String> saveList = (ArrayList)Files.readAllLines(Paths.get("Data\\save.txt"));
-                LinkedHashMap<String,String> tempRoster = new LinkedHashMap<String,String>();
-                String[] tbInfo = saveList.remove(0).split(",");
-                int rows= Integer.parseInt(tbInfo[0]);
-                int cols= Integer.parseInt(tbInfo[1]);
-                Object[][] saveTable = new String[rows][cols];
-                String tech="";
-                String name="";
+            if(option == 0){
+            
+                try{
 
-                for(int i=0;i<rows;i++){
-                    String[] theRow = saveList.get(i).trim().split(" ");
-                    for(int j=0;j<cols;j++){
-                        if(j==0){
-                            tech = theRow[j];
+                    ArrayList<String> saveList = (ArrayList)Files.readAllLines(Paths.get("Data\\save.txt"));
+                    LinkedHashMap<String,String> tempRoster = new LinkedHashMap<String,String>();
+                    String[] tbInfo = saveList.remove(0).split(",");
+                    int rows= Integer.parseInt(tbInfo[0]);
+                    int cols= Integer.parseInt(tbInfo[1]);
+                    Object[][] saveTable = new String[rows][cols];
+                    String tech="";
+                    String name="";
 
-                        }else if(j==1){
-                            name = theRow[j];
+                    for(int i=0;i<rows;i++){
+                        String[] theRow = saveList.get(i).trim().split(" ");
+                        for(int j=0;j<cols;j++){
+                            if(j==0){
+                                tech = theRow[j];
+
+                            }else if(j==1){
+                                name = theRow[j];
+
+                            }
+
+                            saveTable[i][j] = theRow[j];
 
                         }
-
-                        saveTable[i][j] = theRow[j];
+                        if(i>0 && i<rows-1){
+                            tempRoster.put(tech, name);
+                        }
 
                     }
-                    if(i>0 && i<rows-1){
-                        tempRoster.put(tech, name);
-                    }
 
+                    entryMap.put("EntryID", " ");
+                    entryMap.put("Date",curDate);
+                    entryMap.put("AreaID","0");
+                    entryMap.put("AreaName","CellA");
+                    entryMap.put("Shift","2");
+
+                    setRoster(tempRoster);
+                    Table newTable = new Table(rosterList,entryMap,saveTable);
+                    ExcelFrame newExcelFrame = new ExcelFrame(newTable);
+                    runExcel(newExcelFrame);
+                    dispose();
+
+                }catch(Exception e){
+                    System.out.println(e.getMessage());
+                    errorLogger.writeToLogger(e.toString());
                 }
-
-                entryMap.put("EntryID", " ");
-                entryMap.put("Date",curDate);
-                entryMap.put("AreaID","0");
-                entryMap.put("AreaName","CellA");
-                entryMap.put("Shift","2");
-
-                setRoster(tempRoster);
-                Table newTable = new Table(rosterList,entryMap,saveTable);
-                ExcelFrame newExcelFrame = new ExcelFrame(newTable);
-                runExcel(newExcelFrame);
-                dispose();
-
-            }catch(Exception e){
-                System.out.println(e.getMessage());
-                errorLogger.writeToLogger(e.toString());
             }
+        }else{
+            JOptionPane.showMessageDialog(this,"File Save Doesn't Exist","No File", JOptionPane.WARNING_MESSAGE); 
         }
-        
+    
     }//GEN-LAST:event_autoSaveMenuItemActionPerformed
+    
     private void initExistingTechList(){
         
         try{
