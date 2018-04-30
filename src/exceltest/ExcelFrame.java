@@ -1116,7 +1116,8 @@ public class ExcelFrame extends javax.swing.JFrame {
             progressBar.setIndeterminate(false);
             progressBar.setString("Ready");
             
-            StringBuilder location = new StringBuilder("Data\\OutBoundProd_");
+            StringBuilder location = new StringBuilder("Production\\"+curTable.getAreaName()+"\\"+"OutBoundProd_");
+            location.append("S"+curTable.getShiftInfo()+"_");
             location.append(String.valueOf(sdf.format(date)));
             location.append(".xlsx");
 

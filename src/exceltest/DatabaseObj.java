@@ -645,6 +645,39 @@ public class DatabaseObj {
         return areasList;
     }
     
+    static ArrayList executeGetEntryDevicesQ(int entryID)throws Exception{
+        
+        ArrayList<String> deviceList = new ArrayList<String>();
+        
+        StringBuilder builder = new StringBuilder();
+        
+        for(String device:devicesList){
+            builder.append(", techProdEntries.["+device+"]");
+        }
+   
+        String SQL = "SELECT cellEntries.ID" + builder + "\n" +
+                     "FROM cellEntries LEFT JOIN techProdEntries ON cellEntries.ID = techProdEntries.prodID\n" +
+                     "WHERE (((cellEntries.ID)="+entryID+"))";
+
+        ResultSet rs = stmt.executeQuery(SQL);
+        
+        while(rs.next()){
+            
+            for(String device:devicesList){
+                
+                int dev = rs.getInt(device);
+                
+                if(dev>0){
+                    if(!deviceList.contains(device)){
+                        deviceList.add(device);
+                    }    
+                }
+            } 
+        }
+        
+        return deviceList;
+    }
+    
     static void getCellAreasQuery(){
         
         String area = " ";

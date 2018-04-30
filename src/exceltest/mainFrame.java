@@ -583,6 +583,28 @@ public class mainFrame extends javax.swing.JFrame {
   
     }
     
+    private boolean checkEntryDevices(int entryID, String area){
+        
+        ArrayList<String> devices = new ArrayList<String>();
+        
+        try{
+            
+            devices = DatabaseObj.executeGetEntryDevicesQ(entryID);
+            
+            for(String dev:devices){
+                if(!areaFrame.getAreaByName(area).getDeviceTypes().contains(dev)){
+                    JOptionPane.showMessageDialog(this,"Please Add These Devices To Area: " + devices,"Try Again", JOptionPane.WARNING_MESSAGE);
+                    return false;
+                }
+            }
+        }catch(Exception e){
+            System.out.println(e.toString());
+            errorLogger.writeToLogger(e.toString());
+        }
+        
+        return true;
+    }
+    
     private void doneButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_doneButtonActionPerformed
         // TODO add your handling code here:
         loadTechIDList();
@@ -627,19 +649,20 @@ public class mainFrame extends javax.swing.JFrame {
                                 (String)shiftOB.getSelectedItem())){
                             exists = JOptionPane.showConfirmDialog(this, "Entry Already Exists, Continue?","Warning",JOptionPane.YES_NO_OPTION);
                             if(exists == 0){
-                                dbExist = true;
-                                entryMap.put("EntryID",String.valueOf(DatabaseObj.executeGetEntryIDQ(curDate,DatabaseObj.executeGetCellIDQ(curDate,areaName,shift))));
-                                entryMap.put("Date",curDate);
-                                entryMap.put("AreaID", String.valueOf(DatabaseObj.executeGetCellIDQ(curDate,areaName,shift)));
-                                entryMap.put("AreaName",areaName);
-                                entryMap.put("Shift",shift);
-                                writeToFileSave();
-                                writeToFileSave2();
-                                setRoster(rosterList);
-                                prepExcelFrame(entryMap);
-                                dispose();
+                                if(checkEntryDevices(DatabaseObj.executeGetEntryIDQ(curDate,DatabaseObj.executeGetCellIDQ(curDate,areaName,shift)),areaName)){
+                                    dbExist = true;
+                                    entryMap.put("EntryID",String.valueOf(DatabaseObj.executeGetEntryIDQ(curDate,DatabaseObj.executeGetCellIDQ(curDate,areaName,shift))));
+                                    entryMap.put("Date",curDate);
+                                    entryMap.put("AreaID", String.valueOf(DatabaseObj.executeGetCellIDQ(curDate,areaName,shift)));
+                                    entryMap.put("AreaName",areaName);
+                                    entryMap.put("Shift",shift);
+                                    writeToFileSave();
+                                    writeToFileSave2();
+                                    setRoster(rosterList);
+                                    prepExcelFrame(entryMap);
+                                    dispose();
+                                } 
                             }
-
                         }else{
                             exists = JOptionPane.showConfirmDialog(this, "Create New Entry?","Entry Doesn't Exist",JOptionPane.YES_NO_CANCEL_OPTION);
                             if(exists == 0){

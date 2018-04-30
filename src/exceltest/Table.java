@@ -118,7 +118,18 @@ public class Table{
         if(databaseEntryInfo.get("EntryID")== " "){
             return 0;
         }
+        
         return Integer.parseInt(databaseEntryInfo.get("EntryID"));
+    }
+    
+    public String getShiftInfo(){
+      
+        return databaseEntryInfo.get("Shift");
+    }
+    
+    public String getAreaName(){
+      
+        return databaseEntryInfo.get("AreaName");
     }
     
     public LinkedHashMap<String,String> getDBEntryInfo(){
