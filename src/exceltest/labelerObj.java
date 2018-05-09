@@ -20,6 +20,7 @@ import org.apache.poi.xwpf.usermodel.XWPFTable;
 import org.apache.poi.xwpf.usermodel.XWPFTableCell;
 import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 import org.krysalis.barcode4j.impl.code128.Code128Bean;
+import org.krysalis.barcode4j.impl.code39.Code39Bean;
 import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
 import org.krysalis.barcode4j.tools.UnitConv;
 
@@ -88,13 +89,13 @@ public class labelerObj {
     }
 
     public void generateTech()throws Exception{
-        Code128Bean label = new Code128Bean();
+        Code39Bean label = new Code39Bean();
 
         //Configure the barcode generator
         label.setModuleWidth(UnitConv.in2mm(2.8f / dpi));
         label.setBarHeight(5);
         label.doQuietZone(false);
-        label.setFontSize(1.5);
+        label.setFontSize(2);
 
         //Open output file
         File outputFile = new File("Data\\Barcode.jpg");

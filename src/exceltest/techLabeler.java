@@ -331,6 +331,7 @@ public class techLabeler extends javax.swing.JFrame {
         }catch(Exception e){
             System.out.println(e.toString());
             errorLogger.writeToLogger(e.toString());
+            JOptionPane.showMessageDialog(this,new JLabel("Error Generating Label",JLabel.CENTER),"Try Again", JOptionPane.PLAIN_MESSAGE);
         }
         
     }//GEN-LAST:event_generateButtonActionPerformed
@@ -355,12 +356,10 @@ public class techLabeler extends javax.swing.JFrame {
         for(String label:labelList.getSelectedItems()){
             if(labelsList.contains(label)){
                 labelsList.remove(label);
+                labelList.remove(label);
             }
         }
               
-        for(int index:labelList.getSelectedIndexes()){
-            labelList.remove(index);
-        }
     }//GEN-LAST:event_labelDelButtonActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
