@@ -5,25 +5,21 @@
  */
 package exceltest;
 
-import static exceltest.ExcelFrame.curTable;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.KeyboardFocusManager;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -489,11 +485,18 @@ public class mainFrame extends javax.swing.JFrame {
 
     private void initFolders(){
         File prodFolder = new File("Production");
+        File offlineFolder = new File("Production\\Offline");
         
         if(!prodFolder.exists()){
            
             if(!prodFolder.mkdir()){
                 System.out.println("Prod Folder Could Not Be Created");
+            }
+        }
+        
+        if(!offlineFolder.exists()){
+            if(!offlineFolder.mkdir()){
+                System.out.println("Offline Folder Could Not Be Created");
             }
         }
         
@@ -632,11 +635,13 @@ public class mainFrame extends javax.swing.JFrame {
         LinkedHashMap<String,String> entryMap = new LinkedHashMap<String,String>();
         Object[] options = areaFrame.getAreaMapNames().toArray();
         String[] shifts = {"1","2"};
-        JLabel theDate = new JLabel("Entry Date: " + curDate ,JLabel.CENTER);
+        JFormattedTextField theDate = new JFormattedTextField(formatter);
+        theDate.setHorizontalAlignment(JTextField.CENTER);
+        theDate.setText(curDate);
+        JLabel theDateLabel = new JLabel("Entry Date:",JLabel.CENTER);
         JLabel theArea = new JLabel("Select Area", JLabel.CENTER);
         JLabel theShift = new JLabel("Select Shift", JLabel.CENTER);
-        JButton edit = new JButton("Edit");
-   
+
         int exists = 0;
         String areaName = " ";
         String shift = " ";
@@ -645,6 +650,7 @@ public class mainFrame extends javax.swing.JFrame {
         JComboBox<Object> areaOB = new JComboBox<Object>(options);
         JPanel panel = new JPanel(new GridLayout(0,1));
 
+        panel.add(theDateLabel);
         panel.add(theDate);
         panel.add(new JLabel(" "));
         panel.add(theArea);
@@ -666,15 +672,16 @@ public class mainFrame extends javax.swing.JFrame {
                     int online = JOptionPane.showConfirmDialog(this, "Start An Online Session?","Warning",JOptionPane.YES_NO_OPTION);
                     
                     if(online == 0){
-                        if(DatabaseObj.executeCellEntryExistsQ(curDate,(String)areaOB.getSelectedItem(),
+
+                        if(DatabaseObj.executeCellEntryExistsQ(theDate.getText(),(String)areaOB.getSelectedItem(),
                                 (String)shiftOB.getSelectedItem())){
                             exists = JOptionPane.showConfirmDialog(this, "Entry Already Exists, Continue?","Warning",JOptionPane.YES_NO_OPTION);
                             if(exists == 0){
-                                if(checkEntryDevices(DatabaseObj.executeGetEntryIDQ(curDate,DatabaseObj.executeGetCellIDQ(curDate,areaName,shift)),areaName)){
+                                if(checkEntryDevices(DatabaseObj.executeGetEntryIDQ(theDate.getText(),DatabaseObj.executeGetCellIDQ(theDate.getText(),areaName,shift)),areaName)){
                                     dbExist = true;
-                                    entryMap.put("EntryID",String.valueOf(DatabaseObj.executeGetEntryIDQ(curDate,DatabaseObj.executeGetCellIDQ(curDate,areaName,shift))));
-                                    entryMap.put("Date",curDate);
-                                    entryMap.put("AreaID", String.valueOf(DatabaseObj.executeGetCellIDQ(curDate,areaName,shift)));
+                                    entryMap.put("EntryID",String.valueOf(DatabaseObj.executeGetEntryIDQ(theDate.getText(),DatabaseObj.executeGetCellIDQ(theDate.getText(),areaName,shift))));
+                                    entryMap.put("Date",theDate.getText());
+                                    entryMap.put("AreaID", String.valueOf(DatabaseObj.executeGetCellIDQ(theDate.getText(),areaName,shift)));
                                     entryMap.put("AreaName",areaName);
                                     entryMap.put("Shift",shift);
                                     writeToFileSave();
@@ -689,7 +696,7 @@ public class mainFrame extends javax.swing.JFrame {
                             if(exists == 0){
                                 if(!areaFrame.getAreaByName(areaName).getDeviceTypes().isEmpty()){
                                     dbExist = false;
-                                    entryMap = DatabaseObj.executeCellEntryAppendQ(curDate,areaName,shift);
+                                    entryMap = DatabaseObj.executeCellEntryAppendQ(theDate.getText(),areaName,shift);
                                     DatabaseObj.executeTechProdEntriesAppendQ(entryMap, techIDList);
                                     writeToFileSave();
                                     writeToFileSave2();
@@ -703,7 +710,7 @@ public class mainFrame extends javax.swing.JFrame {
                             }else if(exists == 1){
                                 dbExist = false;
                                 entryMap.put("EntryID", " ");
-                                entryMap.put("Date",curDate);
+                                entryMap.put("Date",theDate.getText());
                                 entryMap.put("AreaID","0");
                                 entryMap.put("AreaName",areaName);
                                 entryMap.put("Shift",shift);
@@ -712,13 +719,14 @@ public class mainFrame extends javax.swing.JFrame {
                                 setRoster(rosterList);
                                 prepExcelFrame(entryMap);
                                 dispose();
+                                System.out.print(curDate);
                             }
 
                         }
                     }else if(online ==1){
                         dbExist = false;
                         entryMap.put("EntryID", " ");
-                        entryMap.put("Date",curDate);
+                        entryMap.put("Date",theDate.getText());
                         entryMap.put("AreaID","0");
                         entryMap.put("AreaName",areaName);
                         entryMap.put("Shift",shift);
@@ -737,7 +745,7 @@ public class mainFrame extends javax.swing.JFrame {
                     if(offline == 0){
                         dbExist = false;
                         entryMap.put("EntryID", " ");
-                        entryMap.put("Date",curDate);
+                        entryMap.put("Date",theDate.getText());
                         entryMap.put("AreaID","0");
                         entryMap.put("AreaName",areaName);
                         entryMap.put("Shift",shift);

@@ -946,6 +946,9 @@ public class ExcelFrame extends javax.swing.JFrame {
             }
 
             updateInfoTable();
+            
+            lastActionStack.clear();
+            lastScanDetailArea.setText(" ");
         }   
         
     }//GEN-LAST:event_snapShotButtonActionPerformed
@@ -1108,6 +1111,8 @@ public class ExcelFrame extends javax.swing.JFrame {
     }
     
     private void startTableWriter() throws InterruptedException{
+ 
+        StringBuilder location = new StringBuilder();
         
         synchronized(this){
             
@@ -1116,7 +1121,14 @@ public class ExcelFrame extends javax.swing.JFrame {
             progressBar.setIndeterminate(false);
             progressBar.setString("Ready");
             
-            StringBuilder location = new StringBuilder("Production\\"+curTable.getAreaName()+"\\"+"OutBoundProd_");
+            File areaFolder = new File("Production\\"+curTable.getAreaName());
+            
+            if(areaFolder.exists()){
+                location.append("Production\\"+curTable.getAreaName()+"\\"+"OutBoundProd_");   
+            }else{
+                location.append("Production\\Offline\\"+"OutBoundProd_");
+            }
+            
             location.append("S"+curTable.getShiftInfo()+"_");
             location.append(String.valueOf(sdf.format(date)));
             location.append(".xlsx");
@@ -1607,7 +1619,7 @@ public class ExcelFrame extends javax.swing.JFrame {
                                     + "Devices: Many \n"
                                     + "Count: " + lastActionStack.peek().getDeviceCount());
 
-            if(lastActionStack.size()>3){
+            if(lastActionStack.size()>5){
                 lastActionStack.remove(0);    
             }
         }

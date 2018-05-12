@@ -8,6 +8,7 @@ package exceltest;
 import java.io.File;
 import java.io.PrintWriter;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
@@ -85,7 +86,7 @@ public class initFrame extends javax.swing.JFrame {
         });
 
         statusLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        statusLabel.setText("jLabel1");
+        statusLabel.setText(" ");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -133,24 +134,34 @@ public class initFrame extends javax.swing.JFrame {
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
         // TODO add your handling code here:
+        int choice = 0;
+        
         if(appList.getSelectedItems().length>0){
-            switch(appList.getSelectedItem()){
-                case "Outbound Tool":
-                    mainFrame frame = new mainFrame();
-                    frame.run();
-                    dispose();
-                    break;
-                case "Database Tool (login required)":
-                    DatabaseFrame dbFrame = new DatabaseFrame();
-                    dbFrame.run();
-                    dispose();
-                    break;
-                case "Label Generator":
-                    techLabeler labeler = new techLabeler();
-                    labeler.run();
-                    dispose();
-                    break;
+            
+            if(!DatabaseObj.getStatusBoolean()){
+                choice = JOptionPane.showConfirmDialog(this, "Database Not Connected or Offline, Continue?","Status Offline",JOptionPane.YES_NO_OPTION);
             }
+            
+            if(choice == 0){
+                switch(appList.getSelectedItem()){
+                    case "Outbound Tool":
+                        mainFrame frame = new mainFrame();
+                        frame.run();
+                        dispose();
+                        break;
+                    case "Database Tool (login required)":
+                        DatabaseFrame dbFrame = new DatabaseFrame();
+                        dbFrame.run();
+                        dispose();
+                        break;
+                    case "Label Generator":
+                        techLabeler labeler = new techLabeler();
+                        labeler.run();
+                        dispose();
+                        break;
+                }
+            }
+            
         }
         
     }//GEN-LAST:event_okButtonActionPerformed
