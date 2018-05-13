@@ -5,9 +5,7 @@
  */
 package exceltest;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.GridLayout;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
 import java.io.File;
@@ -33,7 +31,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -348,6 +345,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         editMenu = new javax.swing.JMenu();
         undoMenuItem = new javax.swing.JMenuItem();
         editModeMenuItem = new javax.swing.JCheckBoxMenuItem();
+        addDeviceMenuItem = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         addExistingTechMenuItem = new javax.swing.JMenuItem();
         optionsMenuItem = new javax.swing.JMenuItem();
@@ -604,7 +602,6 @@ public class ExcelFrame extends javax.swing.JFrame {
     dTableList.setMultipleMode(true);
 
     exportMergeButton.setText("Export/Merge");
-    exportMergeButton.setEnabled(false);
     exportMergeButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
             exportMergeButtonActionPerformed(evt);
@@ -704,6 +701,14 @@ public class ExcelFrame extends javax.swing.JFrame {
         }
     });
     editMenu.add(editModeMenuItem);
+
+    addDeviceMenuItem.setText("Add Device");
+    addDeviceMenuItem.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            addDeviceMenuItemActionPerformed(evt);
+        }
+    });
+    editMenu.add(addDeviceMenuItem);
 
     jMenuBar1.add(editMenu);
 
@@ -932,7 +937,7 @@ public class ExcelFrame extends javax.swing.JFrame {
             if(!curTable.checkDTExists(timeID)){
                 
                 dTableList.add(curTable.updateTableViaList(getModel(),dTableList.getItems()));
-                curTable.writeSaveTable();
+                //curTable.writeSaveTable();
       
             }else{
                 JLabel center = new JLabel("Current Time Already Exists",JLabel.CENTER);
@@ -1344,35 +1349,71 @@ public class ExcelFrame extends javax.swing.JFrame {
         }
              
     }//GEN-LAST:event_exportMergeButtonActionPerformed
+
+    private void addDeviceMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addDeviceMenuItemActionPerformed
+        // TODO add your handling code here:
+      
+        
+    }//GEN-LAST:event_addDeviceMenuItemActionPerformed
     
     private void readFileMerge(File file){
         try {
            
             Workbook workbook = WorkbookFactory.create(file);
-            int rowNum;
-            
+            ArrayList<ArrayList> dataTables = new ArrayList<ArrayList>();
             // Getting the Sheet at index one
-            Sheet sheet = workbook.getSheetAt(1);
+            Sheet sheet = workbook.getSheetAt(0);
 
             // Create a DataFormatter to format and get each cell's value as String
             DataFormatter dataFormatter = new DataFormatter();
             
-            System.out.println(workbook.getNumberOfSheets());
+            //System.out.println(workbook.getNumberOfSheets());
             
             for (Row row: sheet) {
-                
+                ArrayList<String> arrayRow = new ArrayList<String>();
                 for(Cell cell: row) {
                     
                     String cellValue = dataFormatter.formatCellValue(cell);
-                    
-                    if(cellValue == "Tech"){
-                        rowNum = row.getRowNum();
-                    }
-                    System.out.print(cellValue + "\t");
+                    System.out.print(cellValue + " ");
+                    arrayRow.add(cellValue);
+                   
                 }
                 System.out.println();
+                dataTables.add(arrayRow);
+            }
+
+            int rowCounter = 0;
+            ArrayList<String>tableID = new ArrayList<String>();
+     
+            for(int i=0;i<dataTables.size();i++){
+                
+                if(dataTables.get(i).get(0).toString().startsWith("HOUR")){
+                    rowCounter =0;
+                    dTableList.add(dataTables.get(i).get(0).toString().substring(5));
+                    tableID.add(dataTables.get(i).get(0).toString().substring(5));
+                    dataTables.remove(i);
+                }
+                rowCounter++;
             }
             
+            int columns = dataTables.get(0).size();
+            int entries = dataTables.size()/rowCounter;
+            
+            
+            int row = 0;
+            int col = 0;
+            int counter =0;
+            
+            for(int i=0;i<entries;i++){
+                String[][] tempTable = new String[rowCounter][columns];
+                for(row=0;row<rowCounter;row++){
+                    for(col=0;col<columns;col++){
+                        tempTable[row][col] = (String)dataTables.get(counter+row).get(col);
+                    }  
+                }
+                curTable.addToDataTableList(tempTable, tableID.get(i));
+                counter+=rowCounter;
+            }
             
                         
         } catch (IOException ex) {
@@ -1671,7 +1712,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         updateTotalDev(tableModel);
         updateTotalTech(tableModel);
         
-        curTable.updateTableSave(tableModel);
+        curTable.updateTableSave(tableModel,theTable);
         curTable.writeSaveTable();
     }
     
@@ -1680,7 +1721,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         model.setValueAt(val, row, col);    
         updateTotalDev(model);
         updateTotalTech(model);
-        curTable.updateTableSave(model);
+        curTable.updateTableSave(model,theTable);
         curTable.writeSaveTable();
        
     }
@@ -1916,6 +1957,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem addDeviceMenuItem;
     private javax.swing.JMenuItem addExistingTechMenuItem;
     private java.awt.List dTableList;
     private static javax.swing.JLabel dbStatus;
@@ -1956,7 +1998,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     private javax.swing.JScrollPane tablePanel;
     private javax.swing.JLabel techField;
     private static javax.swing.JTextField techFieldName;
-    private javax.swing.JTable theTable;
+    private static javax.swing.JTable theTable;
     private javax.swing.JMenuItem undoMenuItem;
     // End of variables declaration//GEN-END:variables
 }

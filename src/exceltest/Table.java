@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -309,6 +310,10 @@ public class Table{
         
     }
     
+    public void addToDataTableList(String[][] theTable,String ID){
+        dataTableList.put(ID, theTable);
+    }
+    
     public String updateTableViaList(DefaultTableModel tModel,String[] timeList){
 
         int numCol = tModel.getColumnCount();
@@ -430,17 +435,20 @@ public class Table{
         return dataTableList.get(dataTableID);
     }
     
-    public void updateTableSave(DefaultTableModel tModel){
+    public void updateTableSave(DefaultTableModel tModel,JTable theTable){
         int numCol = tModel.getColumnCount();
         int numRow = tModel.getRowCount();
+
         this.table = new String[numRow+1][numCol];
         
         for(int i=0;i<numRow+1;i++){
             for(int j=0;j<numCol;j++){
                 if(i==0){
-                    table[i][j] = tModel.getColumnName(j);
+                    //table[i][j] = tModel.getColumnName(j);
+                    table[i][j] = theTable.getColumnName(j);
                 }else{
-                    table[i][j] = tModel.getValueAt(i-1, j).toString();
+                    //table[i][j] = tModel.getValueAt(i-1, j).toString();
+                    table[i][j] = theTable.getValueAt(i-1, j).toString();
                 }
                 
             }
