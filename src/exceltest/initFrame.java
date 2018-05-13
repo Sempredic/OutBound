@@ -20,7 +20,7 @@ public class initFrame extends javax.swing.JFrame {
     /**
      * Creates new form initFrame
      */
-    String[] options = {"Outbound Tool","Database Tool (login required)","Label Generator"};
+    String[] options = {"Outbound Tool","Case Production Tool","Label Generator","Database Tool (login required)"};
     JFileChooser fileChooser;
     FileNameExtensionFilter filter;
     String databaseLocation;
@@ -157,6 +157,11 @@ public class initFrame extends javax.swing.JFrame {
                     case "Label Generator":
                         techLabeler labeler = new techLabeler();
                         labeler.run();
+                        dispose();
+                        break;
+                    case "Case Production Tool":
+                        caseProdFrame caseFrame = new caseProdFrame();
+                        caseFrame.run();
                         dispose();
                         break;
                 }
