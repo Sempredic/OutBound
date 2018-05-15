@@ -329,6 +329,8 @@ public class ExcelFrame extends javax.swing.JFrame {
         techFieldName = new javax.swing.JTextField();
         devFieldName = new javax.swing.JTextField();
         deviceField = new javax.swing.JLabel();
+        caseLabel = new javax.swing.JLabel();
+        caseTextField = new javax.swing.JTextField();
         jPanel4 = new javax.swing.JPanel();
         hourLabel = new javax.swing.JLabel();
         progressBar = new javax.swing.JProgressBar();
@@ -550,24 +552,38 @@ public class ExcelFrame extends javax.swing.JFrame {
     deviceField.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     deviceField.setText("Device");
 
+    caseLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+    caseLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+    caseLabel.setText("Case");
+
+    caseTextField.setEnabled(false);
+    caseTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+        public void keyPressed(java.awt.event.KeyEvent evt) {
+            caseTextFieldKeyPressed(evt);
+        }
+    });
+
     javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
     jPanel3.setLayout(jPanel3Layout);
     jPanel3Layout.setHorizontalGroup(
         jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(jPanel3Layout.createSequentialGroup()
-            .addContainerGap()
             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel3Layout.createSequentialGroup()
+                    .addContainerGap()
                     .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(multiLable, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(jPanel3Layout.createSequentialGroup()
-                    .addGap(9, 9, 9)
-                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(techFieldName)
-                        .addComponent(techField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(devFieldName)
-                        .addComponent(deviceField, javax.swing.GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE))))
+                    .addGap(19, 19, 19)
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(caseTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(techFieldName)
+                            .addComponent(techField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(devFieldName)
+                            .addComponent(deviceField, javax.swing.GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE)
+                            .addComponent(caseLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
             .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
     );
     jPanel3Layout.setVerticalGroup(
@@ -577,14 +593,18 @@ public class ExcelFrame extends javax.swing.JFrame {
             .addComponent(techField)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(techFieldName, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addGap(18, 18, 18)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addComponent(caseLabel)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addComponent(caseTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
             .addComponent(deviceField)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(devFieldName, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addGap(23, 23, 23)
-            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                .addComponent(jToggleButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
-                .addComponent(multiLable, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(multiLable, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addContainerGap())
     );
 
@@ -766,24 +786,22 @@ public class ExcelFrame extends javax.swing.JFrame {
         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(layout.createSequentialGroup()
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(111, 111, 111)
-                            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(11, 11, 11)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                            .addGap(29, 29, 29)
-                            .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(multiScanLabel)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                .addGroup(layout.createSequentialGroup()
                     .addGap(29, 29, 29)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(multiScanLabel)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(dbStatus)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -808,8 +826,9 @@ public class ExcelFrame extends javax.swing.JFrame {
             techFieldName.setText(techFieldName.getText().trim());
             
             if(curTable.getRosterNum().contains(techFieldName.getText())){
-                devFieldName.setEnabled(true);
+                //devFieldName.setEnabled(true);
                 techFieldName.setEditable(false);
+                caseTextField.setEnabled(true);
                 manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
                 manager.focusNextComponent();
             }else{
@@ -845,6 +864,7 @@ public class ExcelFrame extends javax.swing.JFrame {
                 manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
                 manager.focusPreviousComponent();
                 techFieldName.setText("");
+                caseTextField.setText("");
                 devFieldName.setEnabled(false);
             }else if(devFieldName.getText().toUpperCase().equals("CLEAR")){
                 if(!multiMap.isEmpty()){
@@ -854,6 +874,7 @@ public class ExcelFrame extends javax.swing.JFrame {
                 manager.focusPreviousComponent();
                 techFieldName.setEditable(true);
                 techFieldName.setText("");
+                caseTextField.setText("");
                 devFieldName.setEnabled(false);
                 devFieldName.setText("");
             }else{
@@ -878,6 +899,7 @@ public class ExcelFrame extends javax.swing.JFrame {
                 manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
                 manager.focusPreviousComponent();
                 techFieldName.setText("");
+                caseTextField.setText("");
                 devFieldName.setEnabled(false);
                 if(oFrame.getCheckBoxStatus()){
                     if(multiSelected){
@@ -899,6 +921,7 @@ public class ExcelFrame extends javax.swing.JFrame {
                 manager.focusPreviousComponent();
                 techFieldName.setEditable(true);
                 techFieldName.setText("");
+                caseTextField.setText("");
                 devFieldName.setEnabled(false);
                 devFieldName.setText("");    
             }else{
@@ -1355,6 +1378,22 @@ public class ExcelFrame extends javax.swing.JFrame {
       
         
     }//GEN-LAST:event_addDeviceMenuItemActionPerformed
+
+    private void caseTextFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_caseTextFieldKeyPressed
+        // TODO add your handling code here:
+        int keyCode = evt.getKeyCode();
+        if(keyCode == KeyEvent.VK_ENTER){
+            
+            caseTextField.setText(caseTextField.getText().trim());
+
+            devFieldName.setEnabled(true);
+            caseTextField.setEnabled(false);
+
+            manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+            manager.focusNextComponent();
+           
+        }
+    }//GEN-LAST:event_caseTextFieldKeyPressed
     
     private void readFileMerge(File file){
         try {
@@ -1374,11 +1413,9 @@ public class ExcelFrame extends javax.swing.JFrame {
                 for(Cell cell: row) {
                     
                     String cellValue = dataFormatter.formatCellValue(cell);
-                    System.out.print(cellValue + " ");
                     arrayRow.add(cellValue);
                    
                 }
-                System.out.println();
                 dataTables.add(arrayRow);
             }
 
@@ -1397,8 +1434,7 @@ public class ExcelFrame extends javax.swing.JFrame {
             }
             
             int columns = dataTables.get(0).size();
-            int entries = dataTables.size()/rowCounter;
-            
+            int entries = (dataTables.size()/rowCounter);
             
             int row = 0;
             int col = 0;
@@ -1959,6 +1995,8 @@ public class ExcelFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem addDeviceMenuItem;
     private javax.swing.JMenuItem addExistingTechMenuItem;
+    private javax.swing.JLabel caseLabel;
+    private javax.swing.JTextField caseTextField;
     private java.awt.List dTableList;
     private static javax.swing.JLabel dbStatus;
     private static javax.swing.JLabel dbStatusLabel;
