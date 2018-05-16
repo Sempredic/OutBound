@@ -5,10 +5,12 @@
  */
 package exceltest;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.GridLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.KeyboardFocusManager;
+import java.awt.List;
 import java.io.File;
 import java.io.PrintWriter;
 import java.nio.file.Files;
@@ -17,7 +19,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
-import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
@@ -49,6 +50,7 @@ public class mainFrame extends javax.swing.JFrame {
     Date date;
     String curDate;
     boolean dbExist;
+    List theList;
     
     public mainFrame() {
         
@@ -66,6 +68,8 @@ public class mainFrame extends javax.swing.JFrame {
         date = new Date();
         curDate = formatter.format(date);
         dbExist = false;
+        theList = new List();
+        theList.setEnabled(false);
         
         initExistingTechList();
         initDatabaseStatus();
@@ -629,11 +633,19 @@ public class mainFrame extends javax.swing.JFrame {
         return true;
     }
     
+    private void areaOBItemStateChanged(java.awt.event.ItemEvent evt){
+        theList.removeAll();
+        for(String item:areaFrame.getAreaByName(evt.getItem().toString()).getDeviceTypes()){
+            theList.add(item);
+        }
+    }
+    
     private void doneButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_doneButtonActionPerformed
         // TODO add your handling code here:
         loadTechIDList();
         LinkedHashMap<String,String> entryMap = new LinkedHashMap<String,String>();
         Object[] options = areaFrame.getAreaMapNames().toArray();
+        Object[] stuff = {"1","2","1","2","1","2","1","2"};
         String[] shifts = {"1","2"};
         JFormattedTextField theDate = new JFormattedTextField(formatter);
         theDate.setHorizontalAlignment(JTextField.CENTER);
@@ -648,18 +660,72 @@ public class mainFrame extends javax.swing.JFrame {
         
         JComboBox<String> shiftOB = new JComboBox<String>(shifts);
         JComboBox<Object> areaOB = new JComboBox<Object>(options);
-        JPanel panel = new JPanel(new GridLayout(0,1));
-
-        panel.add(theDateLabel);
-        panel.add(theDate);
-        panel.add(new JLabel(" "));
-        panel.add(theArea);
-        panel.add(areaOB);
-        panel.add(theShift);
-        panel.add(shiftOB);
-        panel.add(new JLabel(" "));
-
         
+        if((String)areaOB.getSelectedItem()!=null){
+            theList.removeAll();
+            for(String item:areaFrame.getAreaByName((String)areaOB.getSelectedItem()).getDeviceTypes()){
+                theList.add(item);
+            }
+        }
+
+        areaOB.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                areaOBItemStateChanged(evt);
+            }
+        });
+        
+        JPanel panel = new JPanel(new GridBagLayout());
+        
+        GridBagConstraints gbc = new GridBagConstraints();
+
+        gbc.gridx=0;
+        gbc.gridy=0;
+        gbc.insets = new Insets(0,20,0,0);
+        panel.add(theDateLabel,gbc);
+ 
+        gbc.gridx=0;
+        gbc.gridy=1;
+        panel.add(theDate,gbc);
+
+        gbc.gridx=0;
+        gbc.gridy=2;
+        panel.add(new JLabel(" "),gbc);
+ 
+        gbc.gridx=0;
+        gbc.gridy=3;
+        panel.add(theArea,gbc);
+
+        gbc.gridx=0;
+        gbc.gridy=4;
+        panel.add(areaOB,gbc);
+        
+        gbc.gridx=0;
+        gbc.gridy=5;
+        panel.add(new JLabel(" "),gbc);
+
+        gbc.gridx=0;
+        gbc.gridy=6;
+        panel.add(theShift,gbc);
+  
+        gbc.gridx=0;
+        gbc.gridy=7;
+        panel.add(shiftOB,gbc);
+
+        gbc.gridx=0;
+        gbc.gridy=8;
+        panel.add(new JLabel(" "),gbc);
+        
+        gbc.gridx=2;
+        gbc.gridy=0;
+        panel.add(new JLabel("Assigned Devices",JLabel.CENTER),gbc);
+
+        gbc.gridx=2;
+        gbc.gridy=1;
+        gbc.gridheight = 7;
+        gbc.insets = new Insets(0,50,0,20);
+        gbc.fill = GridBagConstraints.VERTICAL;
+        panel.add(theList,gbc);
+
         int option = JOptionPane.showConfirmDialog(this, panel,"Confirm Area",JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE);
 
         if(option == 0){
