@@ -666,6 +666,8 @@ public class mainFrame extends javax.swing.JFrame {
             for(String item:areaFrame.getAreaByName((String)areaOB.getSelectedItem()).getDeviceTypes()){
                 theList.add(item);
             }
+        }else{
+            theList.removeAll();
         }
 
         areaOB.addItemListener(new java.awt.event.ItemListener() {
