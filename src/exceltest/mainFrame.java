@@ -683,6 +683,7 @@ public class mainFrame extends javax.swing.JFrame {
         gbc.gridx=0;
         gbc.gridy=0;
         gbc.insets = new Insets(0,20,0,0);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
         panel.add(theDateLabel,gbc);
  
         gbc.gridx=0;
