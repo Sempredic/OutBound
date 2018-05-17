@@ -11,7 +11,7 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="addTabMenuItem">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Add Tab"/>
+                <Property name="text" type="java.lang.String" value="Back To Selector"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addTabMenuItemActionPerformed"/>

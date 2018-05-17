@@ -157,7 +157,7 @@ public class caseProdFrame extends javax.swing.JFrame {
 
         jMenu1.setText("File");
 
-        addTabMenuItem.setText("Add Tab");
+        addTabMenuItem.setText("Back To Selector");
         addTabMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addTabMenuItemActionPerformed(evt);
@@ -237,6 +237,9 @@ public class caseProdFrame extends javax.swing.JFrame {
     private void addTabMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addTabMenuItemActionPerformed
         // TODO add your handling code here:
         //scanTab.add(new JTabbedPane());
+        initFrame frame = new initFrame();
+        frame.run();
+        dispose();
     
     }//GEN-LAST:event_addTabMenuItemActionPerformed
 

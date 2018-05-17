@@ -183,6 +183,10 @@ public class DatabaseFrame extends javax.swing.JFrame {
         areasQueryButton = new javax.swing.JButton();
         jPanel8 = new javax.swing.JPanel();
         statusLabel = new javax.swing.JLabel();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        selectorMenuItem = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Database Tool");
@@ -864,6 +868,23 @@ public class DatabaseFrame extends javax.swing.JFrame {
         statusLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         statusLabel.setText(" ");
 
+        jMenu1.setText("File");
+
+        selectorMenuItem.setText("Back To Selector");
+        selectorMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectorMenuItemActionPerformed(evt);
+            }
+        });
+        jMenu1.add(selectorMenuItem);
+
+        jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Edit");
+        jMenuBar1.add(jMenu2);
+
+        setJMenuBar(jMenuBar1);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -884,7 +905,7 @@ public class DatabaseFrame extends javax.swing.JFrame {
                 .addComponent(mainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 476, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(statusLabel)
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -1383,6 +1404,13 @@ public class DatabaseFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_areaUpdateButtonActionPerformed
 
+    private void selectorMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectorMenuItemActionPerformed
+        // TODO add your handling code here:
+        initFrame frame = new initFrame();
+        frame.run();
+        dispose();
+    }//GEN-LAST:event_selectorMenuItemActionPerformed
+
     public static boolean isInteger(String s) {
         try { 
             Integer.parseInt(s); 
@@ -1482,6 +1510,9 @@ public class DatabaseFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
@@ -1508,6 +1539,7 @@ public class DatabaseFrame extends javax.swing.JFrame {
     private javax.swing.JLabel positionLabel;
     private javax.swing.JTable prodTable;
     private javax.swing.JButton queryButton;
+    private javax.swing.JMenuItem selectorMenuItem;
     private javax.swing.JComboBox<String> shiftComboBox;
     private javax.swing.JLabel shiftLabel;
     private javax.swing.JLabel shiftLabel1;

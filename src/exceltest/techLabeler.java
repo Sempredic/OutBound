@@ -69,6 +69,10 @@ public class techLabeler extends javax.swing.JFrame {
         labelGeneratorLabel = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         generateButton = new javax.swing.JButton();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        selectorMenuItem = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Label Generator");
@@ -242,6 +246,23 @@ public class techLabeler extends javax.swing.JFrame {
                 .addContainerGap(25, Short.MAX_VALUE))
         );
 
+        jMenu1.setText("File");
+
+        selectorMenuItem.setText("Back To Selector");
+        selectorMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectorMenuItemActionPerformed(evt);
+            }
+        });
+        jMenu1.add(selectorMenuItem);
+
+        jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Edit");
+        jMenuBar1.add(jMenu2);
+
+        setJMenuBar(jMenuBar1);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -380,6 +401,13 @@ public class techLabeler extends javax.swing.JFrame {
         
     }//GEN-LAST:event_formWindowClosing
 
+    private void selectorMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectorMenuItemActionPerformed
+        // TODO add your handling code here:
+        initFrame frame = new initFrame();
+        frame.run();
+        dispose();
+    }//GEN-LAST:event_selectorMenuItemActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -422,6 +450,9 @@ public class techLabeler extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton generateButton;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -435,6 +466,7 @@ public class techLabeler extends javax.swing.JFrame {
     private java.awt.List labelList;
     private javax.swing.JTextField labelNameField;
     private javax.swing.JLabel labelNameLabel;
+    private javax.swing.JMenuItem selectorMenuItem;
     private javax.swing.JTextField techNumberField;
     private javax.swing.JLabel techNumberLabel;
     private javax.swing.JTextField techYearField;

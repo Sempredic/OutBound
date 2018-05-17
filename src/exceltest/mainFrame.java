@@ -116,6 +116,7 @@ public class mainFrame extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         mAreaOption = new javax.swing.JMenuItem();
         autoSaveMenuItem = new javax.swing.JMenuItem();
+        selectorMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Outbound Tool");
@@ -447,6 +448,14 @@ public class mainFrame extends javax.swing.JFrame {
             }
         });
         jMenu1.add(autoSaveMenuItem);
+
+        selectorMenuItem.setText("Back To Selector");
+        selectorMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectorMenuItemActionPerformed(evt);
+            }
+        });
+        jMenu1.add(selectorMenuItem);
 
         jMenuBar1.add(jMenu1);
 
@@ -1074,6 +1083,13 @@ public class mainFrame extends javax.swing.JFrame {
         }
     
     }//GEN-LAST:event_autoSaveMenuItemActionPerformed
+
+    private void selectorMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectorMenuItemActionPerformed
+        // TODO add your handling code here:
+        initFrame frame = new initFrame();
+        frame.run();
+        dispose();
+    }//GEN-LAST:event_selectorMenuItemActionPerformed
     
     private void initExistingTechList(){
         
@@ -1201,5 +1217,6 @@ public class mainFrame extends javax.swing.JFrame {
     private javax.swing.JButton rosterDeselectAllButton;
     private javax.swing.JButton rosterSelectAllButton;
     private javax.swing.JButton selectAllButton;
+    private javax.swing.JMenuItem selectorMenuItem;
     // End of variables declaration//GEN-END:variables
 }
