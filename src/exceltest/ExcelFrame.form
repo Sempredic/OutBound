@@ -474,13 +474,11 @@
                           <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="caseTextField" pref="108" max="32767" attributes="0"/>
-                              <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                  <Component id="techFieldName" max="32767" attributes="0"/>
-                                  <Component id="techField" alignment="1" max="32767" attributes="0"/>
-                                  <Component id="devFieldName" alignment="1" max="32767" attributes="0"/>
-                                  <Component id="deviceField" alignment="1" pref="108" max="32767" attributes="0"/>
-                                  <Component id="caseLabel" alignment="0" max="32767" attributes="0"/>
-                              </Group>
+                              <Component id="techFieldName" alignment="1" max="32767" attributes="0"/>
+                              <Component id="techField" alignment="1" max="32767" attributes="0"/>
+                              <Component id="devFieldName" alignment="1" max="32767" attributes="0"/>
+                              <Component id="deviceField" alignment="1" pref="108" max="32767" attributes="0"/>
+                              <Component id="caseLabel" alignment="0" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -711,6 +709,7 @@
             <Component class="javax.swing.JButton" name="exportMergeButton">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Export/Merge"/>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="exportMergeButtonActionPerformed"/>

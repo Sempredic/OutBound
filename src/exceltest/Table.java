@@ -37,7 +37,7 @@ public class Table{
     HashMap<String,String>techAvgList;
     ArrayList<String> newAreaList;
     LinkedHashMap<String,String> databaseEntryInfo;
-
+    boolean offline;
 
     public Table(HashMap<String,String> roster,ArrayList<String> areaList,LinkedHashMap<String,String> databaseEntryInfo,boolean dbExist){
         
@@ -51,7 +51,8 @@ public class Table{
         newAreaList = areaList;
         saveTable = table;
         this.databaseEntryInfo = databaseEntryInfo;
-
+        offline = dbExist;
+        
         if(dbExist){
         
             initExistingDBTable();
@@ -70,6 +71,7 @@ public class Table{
         this.roster = roster;
         dataTableID= " ";
         this.databaseEntryInfo = databaseEntryInfo;
+        offline = true;
 
        
         tRosterNames = new ArrayList<String>();
@@ -121,6 +123,10 @@ public class Table{
         }
         
         return Integer.parseInt(databaseEntryInfo.get("EntryID"));
+    }
+    
+    public String getEntryDate(){
+        return databaseEntryInfo.get("Date");
     }
     
     public String getShiftInfo(){

@@ -168,6 +168,36 @@ public class ExcelFrame extends javax.swing.JFrame {
             excelColumn.add(dev);
         }
         excelColumn.add("TechTotal");
+        
+        buildTableSaves();
+    }
+    
+    private void buildTableSaves(){
+        
+        if(curTable.getEntryID()!=0){
+            File fileFolder = new File("Production\\"+curTable.getAreaName());
+            String fileLocation = null;
+            
+            if(fileFolder.exists()){
+            
+                for(File file:fileFolder.listFiles()){
+                    String[] fileName = file.getAbsolutePath().split("_");
+
+                    if(fileName[0].contains(String.valueOf(curTable.getEntryID()))){
+                        fileLocation = file.getAbsolutePath();
+                    }     
+                }
+
+                if(fileLocation !=null){
+                    File file = new File(fileLocation);
+                    readFileMerge(file);
+                }else{
+                    System.out.println("Doesn't Exist");
+                }
+            }
+
+            
+        }
     }
     
     ////////////////////////////////////////////////////////////////////////////DATABASE/////////////////
@@ -184,11 +214,6 @@ public class ExcelFrame extends javax.swing.JFrame {
                 break;
         }
     }
-    
-    private void createDBtechProdEntries(){
-        
-    }
-    
 
     private void initMultiTable(){
         multiColumn = new String [] {
@@ -578,12 +603,11 @@ public class ExcelFrame extends javax.swing.JFrame {
                     .addGap(19, 19, 19)
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(caseTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(techFieldName)
-                            .addComponent(techField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(devFieldName)
-                            .addComponent(deviceField, javax.swing.GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE)
-                            .addComponent(caseLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                        .addComponent(techFieldName, javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(techField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(devFieldName, javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(deviceField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE)
+                        .addComponent(caseLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
     );
     jPanel3Layout.setVerticalGroup(
@@ -622,6 +646,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     dTableList.setMultipleMode(true);
 
     exportMergeButton.setText("Export/Merge");
+    exportMergeButton.setEnabled(false);
     exportMergeButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
             exportMergeButtonActionPerformed(evt);
@@ -1152,9 +1177,9 @@ public class ExcelFrame extends javax.swing.JFrame {
             File areaFolder = new File("Production\\"+curTable.getAreaName());
             
             if(areaFolder.exists()){
-                location.append("Production\\"+curTable.getAreaName()+"\\"+"OutBoundProd_");   
+                location.append("Production\\"+curTable.getAreaName()+"\\"+curTable.getEntryID()+"_"+"OutBoundProd_");   
             }else{
-                location.append("Production\\Offline\\"+"OutBoundProd_");
+                location.append("Production\\Offline\\"+curTable.getEntryID()+"_"+"OutBoundProd_");
             }
             
             location.append("S"+curTable.getShiftInfo()+"_");
