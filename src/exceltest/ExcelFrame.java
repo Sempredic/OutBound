@@ -111,6 +111,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     FileNameExtensionFilter filter;
     static String databaseConn;
     ArrayList<String> excelColumn;
+    CellStyle lockedStyle;
     
     
     public ExcelFrame(Table table){
@@ -1455,20 +1456,23 @@ public class ExcelFrame extends javax.swing.JFrame {
                     tableID.add(dataTables.get(i).get(0).toString().substring(5));
                     dataTables.remove(i);
                 }
+                
+                if(dataTables.get(i).get(0).toString().startsWith("Tech#")){
+                    dataTables.remove(i);
+                }
+                
                 rowCounter++;
             }
             
             int columns = dataTables.get(0).size();
             int entries = (dataTables.size()/rowCounter);
-            
-            int row = 0;
-            int col = 0;
             int counter =0;
             
             for(int i=0;i<entries;i++){
                 String[][] tempTable = new String[rowCounter][columns];
-                for(row=0;row<rowCounter;row++){
-                    for(col=0;col<columns;col++){
+                for(int row=0;row<rowCounter;row++){
+                    for(int col=0;col<columns;col++){
+                        
                         tempTable[row][col] = (String)dataTables.get(counter+row).get(col);
                     }  
                 }
@@ -1507,6 +1511,8 @@ public class ExcelFrame extends javax.swing.JFrame {
         style = workbook.createCellStyle();
         headStyle = workbook.createCellStyle();
         titleStyle = workbook.createCellStyle();
+        lockedStyle = workbook.createCellStyle();
+        lockedStyle.setLocked(true);
         //String hr = String.valueOf(hour.format(tableDate));
         int counter = 0;
         int colNum = 1;
@@ -1596,6 +1602,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     
     public void makeProdTable(DefaultTableModel curModel){
         sheet2 = workbook.createSheet("Outbound Prod");
+        
         int colNum = 1;
         int rowNum = 1;
         int curCell = 0;

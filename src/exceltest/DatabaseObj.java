@@ -261,7 +261,7 @@ public class DatabaseObj {
         StringBuilder builder = new StringBuilder();
         
         for(Object dev:devices){
-            builder.append(",techProdEntries." + dev);
+            builder.append(",techProdEntries.[" + dev + "]");
         }
         
         String SQL = "SELECT employees.TechID" + builder + ", techProdEntries.prodID\n" +
