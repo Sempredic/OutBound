@@ -19,7 +19,9 @@ public class DatabaseObj {
     
     
     static Connection conn;
+    static Connection skuConn;
     static boolean status;
+    static boolean skuStatus;
     static Statement stmt;
     static PreparedStatement preparedStatement;
     static ArrayList<String> areasList;
@@ -27,6 +29,7 @@ public class DatabaseObj {
     static ArrayList<String> employeesList;
     static ArrayList<Object> curRosterList;
     static String dbLocation;
+    static String skuLocation;
     
     public DatabaseObj(){
         
@@ -37,22 +40,10 @@ public class DatabaseObj {
         employeesList = new ArrayList<String>();
         curRosterList = new ArrayList<Object>();
         dbLocation = readLocSave();
+        skuLocation = readSKULocSave();
         
-        try{
-          ///////////////////////////CONNECTION////////////////////////////////
-            //STEP 2: Register JDBC driver
-          Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-            //STEP 3: Open a connection
-          System.out.println("Connecting to database: " + dbLocation + "...");
-          conn = DriverManager.getConnection("jdbc:ucanaccess://" + dbLocation);
-          
-          status = true;
-       } catch(Exception e){
-          //////////////////////////NO CONNECTION/////////////////////////////////
-          status = false;
-          System.out.println(e.toString());
-          errorLogger.writeToLogger(e.toString());
-       }
+        connectToDatabase();
+        connectToSKUDatabase();
         
        if(status){             
           readFileSave();
@@ -62,6 +53,42 @@ public class DatabaseObj {
           writeToFileSave();
        }else{
            readFileSave();
+       }
+    }
+    
+    static void connectToDatabase(){
+        try{
+          ///////////////////////////CONNECTION////////////////////////////////
+            //STEP 2: Register JDBC driver
+          Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+            //STEP 3: Open a connection
+          System.out.println("Connecting to database: " + dbLocation + "...");
+          conn = DriverManager.getConnection("jdbc:ucanaccess://" + dbLocation);
+          status = true;
+ 
+       } catch(Exception e){
+          //////////////////////////NO CONNECTION/////////////////////////////////
+          status = false;
+          System.out.println(e.toString());
+          errorLogger.writeToLogger(e.toString());
+       }
+    }
+    
+    static void connectToSKUDatabase(){
+        try{
+          ///////////////////////////CONNECTION////////////////////////////////
+            //STEP 2: Register JDBC driver
+          Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+            //STEP 3: Open a connection
+          System.out.println("Connecting to database: " + skuLocation + "...");
+  
+          skuConn = DriverManager.getConnection("jdbc:ucanaccess://" + skuLocation);
+          skuStatus = true;
+       } catch(Exception e){
+          //////////////////////////NO CONNECTION/////////////////////////////////
+          skuStatus = false;
+          System.out.println(e.toString());
+          errorLogger.writeToLogger(e.toString());
        }
     }
     
@@ -81,6 +108,27 @@ public class DatabaseObj {
        } catch(Exception e){
           //////////////////////////NO CONNECTION/////////////////////////////////
           status = false;
+          System.out.println(e.toString());
+          errorLogger.writeToLogger(e.toString());
+       }
+    }
+    
+    static void reEstablishSKUConnection(){
+        
+        skuLocation = readLocSave();
+        
+        try{
+          ///////////////////////////CONNECTION////////////////////////////////
+            //STEP 2: Register JDBC driver
+          Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+            //STEP 3: Open a connection
+          System.out.println("Connecting to database: " + skuLocation + "...");
+          skuConn = DriverManager.getConnection("jdbc:ucanaccess://" + skuLocation);
+          
+          skuStatus = true;
+       } catch(Exception e){
+          //////////////////////////NO CONNECTION/////////////////////////////////
+          skuStatus = false;
           System.out.println(e.toString());
           errorLogger.writeToLogger(e.toString());
        }
@@ -119,6 +167,30 @@ public class DatabaseObj {
        temp = getStatusBoolean();
 
        return temp?"Connected":"Disconnected"; 
+    }
+    
+    static String getSKUStatus(){
+       boolean temp;
+       temp = getSKUStatusBoolean();
+
+       return temp?"Connected":"Disconnected"; 
+    }
+    
+    static boolean getSKUStatusBoolean(){
+        
+        int timeout =0;
+        
+        try{
+ 
+            timeout = skuConn.getNetworkTimeout();
+          
+            skuStatus = true;
+        } catch(Exception e){
+            
+            skuStatus = false;
+        }
+        
+        return skuStatus;
     }
     
     static boolean getStatusBoolean(){
@@ -773,6 +845,30 @@ public class DatabaseObj {
         }
         
                     
+        return location;
+    }
+    
+    static public String readSKULocSave(){
+        
+        String location = " ";
+        
+        try{
+            
+            File tmpDir = new File("Data\\skuLocation.txt");
+            boolean exists = tmpDir.exists();
+
+            if(exists){
+                for(String loc:Files.readAllLines(Paths.get("Data\\skuLocation.txt"))){
+                    location = loc;
+                }
+            }else{
+                tmpDir.createNewFile();
+            }
+        }catch(Exception e){
+            System.out.println(e.toString());
+            errorLogger.writeToLogger(e.toString());
+        }
+              
         return location;
     }
     

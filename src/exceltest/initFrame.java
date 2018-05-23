@@ -24,17 +24,21 @@ public class initFrame extends javax.swing.JFrame {
     JFileChooser fileChooser;
     FileNameExtensionFilter filter;
     String databaseLocation;
+    String skuLocation;
         
     public initFrame() {
         initComponents();
         
         fileChooser = new JFileChooser();
         databaseLocation = null;
+        skuLocation = null;
         
         filter = new FileNameExtensionFilter(
                 "Microsoft Access Database (.accdb)","accdb");
             
         statusLabel.setText(DatabaseObj.getStatus());
+        skuLabel.setText(DatabaseObj.getSKUStatus());
+        
         for(String item:options){
             appList.add(item);
         }
@@ -50,23 +54,23 @@ public class initFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        browseButton = new javax.swing.JButton();
         selectLabel = new javax.swing.JLabel();
         appList = new java.awt.List();
         okButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
         statusLabel = new javax.swing.JLabel();
+        dbConnectionLabel = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        skuLabel = new javax.swing.JLabel();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        dbConnectMenuItem = new javax.swing.JMenuItem();
+        skuDBMenuItem = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Outbound Selector");
         setResizable(false);
-
-        browseButton.setText("Browse");
-        browseButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                browseButtonActionPerformed(evt);
-            }
-        });
 
         selectLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         selectLabel.setText("Select Application");
@@ -85,41 +89,89 @@ public class initFrame extends javax.swing.JFrame {
             }
         });
 
+        statusLabel.setForeground(new java.awt.Color(102, 102, 102));
         statusLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         statusLabel.setText(" ");
+
+        dbConnectionLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        dbConnectionLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        dbConnectionLabel.setText("Database Connection");
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("SKU Connection");
+
+        skuLabel.setForeground(new java.awt.Color(102, 102, 102));
+        skuLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        skuLabel.setText(" ");
+
+        jMenu1.setText("File");
+        jMenu1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu1ActionPerformed(evt);
+            }
+        });
+
+        dbConnectMenuItem.setText("Connect To DB");
+        dbConnectMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dbConnectMenuItemActionPerformed(evt);
+            }
+        });
+        jMenu1.add(dbConnectMenuItem);
+
+        skuDBMenuItem.setText("Connect To SKUdB");
+        skuDBMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                skuDBMenuItemActionPerformed(evt);
+            }
+        });
+        jMenu1.add(skuDBMenuItem);
+
+        jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Edit");
+        jMenuBar1.add(jMenu2);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(28, 28, 28)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(selectLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(appList, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(statusLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(107, 107, 107)
-                        .addComponent(browseButton))
-                    .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGap(65, 65, 65)
                         .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(cancelButton)))
-                .addContainerGap(29, Short.MAX_VALUE))
+                        .addComponent(cancelButton)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGap(28, 28, 28)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(dbConnectionLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(selectLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE)
+                            .addComponent(appList, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE)
+                            .addComponent(statusLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE)
+                            .addComponent(skuLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addGap(29, 29, 29))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addComponent(browseButton)
-                .addGap(18, 18, 18)
-                .addComponent(statusLabel)
-                .addGap(18, 18, 18)
-                .addComponent(selectLabel)
+                .addContainerGap()
+                .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(skuLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(dbConnectionLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(statusLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(selectLabel)
+                .addGap(6, 6, 6)
                 .addComponent(appList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -140,6 +192,8 @@ public class initFrame extends javax.swing.JFrame {
             
             if(!DatabaseObj.getStatusBoolean()){
                 choice = JOptionPane.showConfirmDialog(this, "Database Not Connected or Offline, Continue?","Status Offline",JOptionPane.YES_NO_OPTION);
+            }else if(!DatabaseObj.getSKUStatusBoolean()){
+                choice = JOptionPane.showConfirmDialog(this, "SKU Database Not Connected or Offline, Continue?","Status Offline",JOptionPane.YES_NO_OPTION);
             }
             
             if(choice == 0){
@@ -171,7 +225,12 @@ public class initFrame extends javax.swing.JFrame {
         
     }//GEN-LAST:event_okButtonActionPerformed
 
-    private void browseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseButtonActionPerformed
+    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
+        // TODO add your handling code here:
+        System.exit(0);
+    }//GEN-LAST:event_cancelButtonActionPerformed
+
+    private void dbConnectMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dbConnectMenuItemActionPerformed
         // TODO add your handling code here:
         File file;
         
@@ -190,12 +249,32 @@ public class initFrame extends javax.swing.JFrame {
         }else {
           System.out.println("No Selection ");
         }
-    }//GEN-LAST:event_browseButtonActionPerformed
+    }//GEN-LAST:event_dbConnectMenuItemActionPerformed
 
-    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
+    private void skuDBMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_skuDBMenuItemActionPerformed
         // TODO add your handling code here:
-        System.exit(0);
-    }//GEN-LAST:event_cancelButtonActionPerformed
+        File file;
+        
+        fileChooser.setCurrentDirectory(new java.io.File("."));
+        fileChooser.setDialogTitle("Select File");
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        fileChooser.setAcceptAllFileFilterUsed(false);
+        fileChooser.setFileFilter(filter);
+        
+        if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) { 
+          file = fileChooser.getSelectedFile();
+          skuLocation = file.getAbsolutePath();
+          writeSKUToFileSave();
+          DatabaseObj.reEstablishSKUConnection();
+          skuLabel.setText(DatabaseObj.getSKUStatus());
+        }else {
+          System.out.println("No Selection ");
+        }
+    }//GEN-LAST:event_skuDBMenuItemActionPerformed
+
+    private void jMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenu1ActionPerformed
 
     private void writeToFileSave(){
         
@@ -203,8 +282,24 @@ public class initFrame extends javax.swing.JFrame {
             PrintWriter writer = new PrintWriter("Data\\dbLocation.txt", "UTF-8");
             
             writer.println(databaseLocation);
-            
+
             writer.close();
+
+        }catch(Exception e){
+            System.out.println("WriteToFileSave");
+            errorLogger.writeToLogger(e.toString());
+        }
+   
+    }
+    
+    private void writeSKUToFileSave(){
+        
+        try{
+            PrintWriter skuWriter = new PrintWriter("Data\\skuLocation.txt", "UTF-8");
+
+            skuWriter.println(skuLocation);
+
+            skuWriter.close();
             
         }catch(Exception e){
             System.out.println("WriteToFileSave");
@@ -254,10 +349,17 @@ public class initFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private java.awt.List appList;
-    private javax.swing.JButton browseButton;
     private javax.swing.JButton cancelButton;
+    private javax.swing.JMenuItem dbConnectMenuItem;
+    private javax.swing.JLabel dbConnectionLabel;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JButton okButton;
     private javax.swing.JLabel selectLabel;
+    private javax.swing.JMenuItem skuDBMenuItem;
+    private javax.swing.JLabel skuLabel;
     private javax.swing.JLabel statusLabel;
     // End of variables declaration//GEN-END:variables
 }
