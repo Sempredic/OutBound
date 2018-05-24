@@ -935,6 +935,13 @@ public class ExcelFrame extends javax.swing.JFrame {
                     }
                 }
             }else if(tableModel.findColumn(devFieldName.getText())!=-1){
+                ///////////////////////////////////DATABASE////////////////////////////////
+                try{
+                    System.out.println(DatabaseObj.getDeviceNameFromSKUQ(devFieldName.getText()));
+                }catch(Exception e){
+                    System.out.println(e.toString());
+                }
+                
                 toMulti();
             }else if(devFieldName.getText().toUpperCase().equals("CLEAR")){
                 

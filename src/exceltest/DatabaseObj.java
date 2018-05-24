@@ -23,6 +23,7 @@ public class DatabaseObj {
     static boolean status;
     static boolean skuStatus;
     static Statement stmt;
+    static Statement skuStmt;
     static PreparedStatement preparedStatement;
     static ArrayList<String> areasList;
     static ArrayList<String> devicesList;
@@ -34,6 +35,7 @@ public class DatabaseObj {
     public DatabaseObj(){
         
         stmt = null;
+        skuStmt = null;
         preparedStatement = null;
         areasList = new ArrayList<String>();
         devicesList = new ArrayList<String>();
@@ -237,6 +239,30 @@ public class DatabaseObj {
         
         while(rs.next()){
             name = rs.getString("Name");
+        }
+        
+        return name;
+    }
+    
+    static String getDeviceNameFromSKUQ(String SKU)throws Exception{
+        String name = " ";
+        String value = null;
+        String SQL = "SELECT IIf([Prod Tables].[F1]=\"HOUR 06:50 PM\" Or [Prod Tables].[F2]=\"Names\",\"phone\",\n" +
+                        "IIf([Prod Tables].[F1]=\"Total Devs\" Or [Prod Tables].[F2]=\"VincentEs.\",\"pad\",Null))\n" +
+                     "AS [Value]\n" +
+                     "FROM [Prod Tables]";
+
+        skuStmt = skuConn.createStatement();
+        
+        ResultSet rs = skuStmt.executeQuery(SQL);
+        
+        while(rs.next()){
+            
+            value = rs.getString("Value");
+            
+            if(value!=null){
+                name = value;
+            }   
         }
         
         return name;
