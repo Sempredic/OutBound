@@ -317,8 +317,7 @@ public class DatabaseObj {
         
         SQL = "INSERT INTO caseProdEntries(CasePID"+builder+")\n" +
               "VALUES("+generatedKey+stmtBuilder+")";
-        
-        System.out.println(SQL);
+
         preparedStatement = conn.prepareStatement(SQL);
         
         for(int count=1;count<=devValues.size();count++){
@@ -583,6 +582,62 @@ public class DatabaseObj {
         preparedStatement.setInt(1, entryID);
         
         preparedStatement.executeUpdate();
+    }
+    
+    static ArrayList executeGetCaseInfoQ(int caseID)throws Exception{
+        
+        ArrayList list = new ArrayList();
+        int employeeID;
+        
+        String SQL = "SELECT caseEntries.EmployeeID, caseProdEntries.*\n" +
+                     "FROM caseEntries LEFT JOIN caseProdEntries ON caseEntries.ID = caseProdEntries.CasePID\n" +
+                     "WHERE (((caseEntries.ID)=?))";
+        
+        preparedStatement = conn.prepareStatement(SQL);
+
+        preparedStatement.setInt(1, caseID);
+
+        ResultSet rs = preparedStatement.executeQuery();
+        
+        while(rs.next()){
+            
+            list.add(rs.getInt("EmployeeID"));
+            
+            for(String item:devicesList){
+                list.add(rs.getInt(item));
+            } 
+        }
+        
+        return list;
+    }
+    
+    static ArrayList executeDeleteCaseEntryQ(String caseID)throws Exception{
+        
+        int ID= Integer.valueOf(caseID);
+        ArrayList rsList = executeGetCaseInfoQ(ID);
+        ArrayList theList = new ArrayList();
+        LinkedHashMap queryMap = new LinkedHashMap<String,Integer>();
+        int techID = (int)rsList.get(0);
+        
+        for(int i=0;i<devicesList.size();i++){
+            queryMap.put(devicesList.get(i), rsList.get(i+1));
+        }
+        
+        theList.add(techID);
+        theList.add(queryMap);
+
+        String SQL = "DELETE *\n" +
+                     "FROM caseEntries\n" +
+                     "WHERE (((caseEntries.ID)=?))";
+
+        preparedStatement = conn.prepareStatement(SQL);
+
+        preparedStatement.setInt(1, ID);
+
+        preparedStatement.executeUpdate();
+        
+        return theList;
+
     }
     
     static void executeFailEntriesAppendQ(int entryID,String tech,String device,String failType)throws Exception{
@@ -909,6 +964,33 @@ public class DatabaseObj {
         }catch(Exception e){
             errorLogger.writeToLogger(e.toString());
         }
+    }
+    
+    static String getTechIDQ(int EmployeeID){
+        
+        String techID = new String();
+        
+        try{
+            
+            String SQL = "SELECT employees.TechID\n" +
+                         "FROM employees\n" +
+                         "WHERE employees.ID = ?";
+
+            preparedStatement = conn.prepareStatement(SQL);
+
+            preparedStatement.setInt(1, EmployeeID);
+
+            ResultSet rs = preparedStatement.executeQuery();
+            
+            while(rs.next()){
+                techID = rs.getString("TechID");
+            }
+     
+        }catch(Exception e){
+            System.out.println(e.toString());
+            errorLogger.writeToLogger(e.toString());
+        }
+        return techID;
     }
     
     static void getEmployeesQuery(){

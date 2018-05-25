@@ -932,10 +932,14 @@ public class ExcelFrame extends javax.swing.JFrame {
             if(devFieldName.getText().equals("")&&!multiMap.isEmpty()){
                 //toMulti();
                 try{
-                    System.out.println(DatabaseObj.executeCaseEntryAppendQ(
+                    if(DatabaseObj.getStatusBoolean()){
+                        System.out.println(DatabaseObj.executeCaseEntryAppendQ(
                         curTable.getDBEntryInfo(),techFieldName.getText(),caseTextField.getText(),multiMap));
+                    }
+                    
                 }catch(Exception e){
                     System.out.println(e.toString());
+                    errorLogger.writeToLogger(e.toString());
                 }
                 
                 commitMTable();
@@ -958,6 +962,7 @@ public class ExcelFrame extends javax.swing.JFrame {
                     System.out.println(DatabaseObj.getDeviceNameFromSKUQ(devFieldName.getText()));
                 }catch(Exception e){
                     System.out.println(e.toString());
+                    errorLogger.writeToLogger(e.toString());
                 }
                 
                 toMulti();
@@ -1434,10 +1439,13 @@ public class ExcelFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         int keyCode = evt.getKeyCode();
         String caseID = new String();
+        boolean error=false;
+        ArrayList deletedList = new ArrayList();
         
         if(keyCode == KeyEvent.VK_ENTER){
             
             caseTextField.setText(caseTextField.getText().trim());
+            
             try{
                 if(DatabaseObj.getStatusBoolean()){
                     caseID =DatabaseObj.executeCaseEntryExistsQ(
@@ -1448,6 +1456,7 @@ public class ExcelFrame extends javax.swing.JFrame {
                 
             }catch(Exception e){
                 System.out.println(e.toString());
+                errorLogger.writeToLogger(e.toString());
             }
             
             if(caseID==null){
@@ -1457,17 +1466,53 @@ public class ExcelFrame extends javax.swing.JFrame {
                 manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
                 manager.focusNextComponent();
             }else{
-                
-                
-                
+
                 int option = JOptionPane.showConfirmDialog(
                         this,"Case Entry Already Exists, Overwrite?","Case Warning",JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE);
+                
                 if(option==0){
-                    devFieldName.setEnabled(true);
-                    caseTextField.setEnabled(false);
-                    manager.focusNextComponent(techFieldName);
-                    manager.focusNextComponent();
+                    ///////////////////////////////Database//////////////////////////////
+                    try{
+                        
+                        lastActionStack.clear();
+                        lastScanDetailArea.setText("");
+                        deletedList=DatabaseObj.executeDeleteCaseEntryQ(caseID);
+                        int techID = (int)deletedList.get(0);
+                        LinkedHashMap<String,Integer> devList = (LinkedHashMap)deletedList.get(1);
+                              
+                        for(Map.Entry<String,Integer>entry:devList.entrySet()){
+                            if(entry.getValue()>0){
+                                int c = getCol(tableModel, entry.getKey());
+                                int r = getRow(tableModel, DatabaseObj.getTechIDQ(techID));
 
+                                int newV = (Integer) tableModel.getValueAt(r, c) - entry.getValue();
+                                setTableValues(newV, r, c);
+                            }
+                        }
+                                            
+                    }catch(Exception e){
+                        
+                        System.out.println(e.toString());
+                        errorLogger.writeToLogger(e.toString());
+                        error = true;
+                    }
+ 
+                    if(error){
+                        techFieldName.setEditable(true);
+                        techFieldName.setText("");
+                        caseTextField.setEnabled(false);
+                        caseTextField.setText("");
+
+                        manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+                        manager.focusPreviousComponent(caseTextField);
+                    }else{
+                        devFieldName.setEnabled(true);
+                        caseTextField.setEnabled(false);
+
+                        manager.focusNextComponent(techFieldName);
+                        manager.focusNextComponent();
+                    }
+                    
                 }
                 else if(option==1){
                     techFieldName.setEditable(true);
@@ -1476,12 +1521,9 @@ public class ExcelFrame extends javax.swing.JFrame {
                     caseTextField.setText("");
 
                     manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
-                 
                     manager.focusPreviousComponent(caseTextField);
                 }
-
             }
-
         }
     }//GEN-LAST:event_caseTextFieldKeyPressed
     
