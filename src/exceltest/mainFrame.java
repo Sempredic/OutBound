@@ -441,7 +441,7 @@ public class mainFrame extends javax.swing.JFrame {
         });
         jMenu1.add(mAreaOption);
 
-        autoSaveMenuItem.setText("Load Auto Save");
+        autoSaveMenuItem.setText("Load Offline Save");
         autoSaveMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 autoSaveMenuItemActionPerformed(evt);

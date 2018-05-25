@@ -6,8 +6,10 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.*;
-import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -251,7 +253,7 @@ public class DatabaseObj {
                         "IIf([Prod Tables].[F1]=\"Total Devs\" Or [Prod Tables].[F2]=\"VincentEs.\",\"pad\",Null))\n" +
                      "AS [Value]\n" +
                      "FROM [Prod Tables]";
-
+        
         skuStmt = skuConn.createStatement();
         
         ResultSet rs = skuStmt.executeQuery(SQL);
@@ -266,6 +268,91 @@ public class DatabaseObj {
         }
         
         return name;
+    }
+    
+    static int executeCaseEntryAppendQ(LinkedHashMap<String,String> entryMap,String techID,String caseID,HashMap<String,Integer>multiMap)throws Exception{
+       
+        int cellEntryID = Integer.valueOf(entryMap.get("EntryID"));
+        String Date = entryMap.get("Date");
+        String SQL = " ";
+        StringBuilder builder = new StringBuilder();
+        StringBuilder stmtBuilder = new StringBuilder();
+        ArrayList<Integer> devValues = new ArrayList<Integer>();
+        int builderCount = 0;
+        int generatedKey = 0;
+        int employeeID = getEmployeeID(techID);
+        int totalUnits = 0;
+        
+        for(Map.Entry<String,Integer>entry:multiMap.entrySet()){
+            totalUnits+=entry.getValue();
+            
+            if(entry.getValue()>0){
+                builder.append(","+entry.getKey());
+                builderCount++;
+                devValues.add(entry.getValue());
+            }  
+        }
+        
+        for(int i=0;i<builderCount;i++){
+            stmtBuilder.append(",?");
+        }
+       
+        SQL = "INSERT INTO caseEntries (CellPID,DateOfEntry,EmployeeID,CaseID,TotalUnits )\n" +
+              "VALUES(?,#"+Date+"#,?,?,?)";
+
+        preparedStatement = conn.prepareStatement(SQL);
+        
+        preparedStatement.setInt(1, cellEntryID);
+        preparedStatement.setInt(2, employeeID);
+        preparedStatement.setString(3, caseID);
+        preparedStatement.setInt(4, totalUnits);
+
+        preparedStatement.executeUpdate();
+
+        ResultSet rs = preparedStatement.getGeneratedKeys();
+        
+        while(rs.next()){
+            generatedKey = rs.getInt(1);
+        }
+        
+        SQL = "INSERT INTO caseProdEntries(CasePID"+builder+")\n" +
+              "VALUES("+generatedKey+stmtBuilder+")";
+        
+        System.out.println(SQL);
+        preparedStatement = conn.prepareStatement(SQL);
+        
+        for(int count=1;count<=devValues.size();count++){
+            preparedStatement.setInt(count, devValues.get(count-1));
+        }
+
+        preparedStatement.executeUpdate();
+        
+        return generatedKey;
+        
+    }
+    
+    static String executeCaseEntryExistsQ(LinkedHashMap<String,String> entryMap,String caseID)throws Exception{
+        
+        String cellEntryID = entryMap.get("EntryID");
+        String SQL="";
+        String entryKey=null;
+        
+        SQL = "SELECT caseEntries.ID\n" +
+              "FROM caseEntries\n" +
+              "WHERE caseEntries.CaseID = ?";
+        
+        preparedStatement = conn.prepareStatement(SQL);
+        
+        preparedStatement.setString(1, caseID);
+        
+        ResultSet rs = preparedStatement.executeQuery();
+        
+        while(rs.next()){
+            entryKey = rs.getString("ID");
+        }
+        
+        return entryKey;
+        
     }
     
     static void executeUpdateTechProdQ(String tech, String device, int total, int entryID)throws Exception{

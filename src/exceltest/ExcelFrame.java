@@ -171,6 +171,15 @@ public class ExcelFrame extends javax.swing.JFrame {
         excelColumn.add("TechTotal");
         
         buildTableSaves();
+        
+        abstractButton = (AbstractButton) multiScanButton;
+        multiSelected = abstractButton.getModel().isSelected();
+        
+        if(multiSelected){
+            multiLable.setText("ON");         
+        }else{
+            multiLable.setText("OFF");
+        }
     }
     
     private void buildTableSaves(){
@@ -349,7 +358,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         snapShotButton = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
-        jToggleButton1 = new javax.swing.JToggleButton();
+        multiScanButton = new javax.swing.JToggleButton();
         techField = new javax.swing.JLabel();
         multiLable = new javax.swing.JLabel();
         techFieldName = new javax.swing.JTextField();
@@ -520,21 +529,23 @@ public class ExcelFrame extends javax.swing.JFrame {
     jPanel3.setBackground(new java.awt.Color(204, 204, 204));
     jPanel3.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
 
-    jToggleButton1.setText("Multi Scan");
-    jToggleButton1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-    jToggleButton1.addChangeListener(new javax.swing.event.ChangeListener() {
+    multiScanButton.setSelected(true);
+    multiScanButton.setText("Multi Scan");
+    multiScanButton.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+    multiScanButton.setEnabled(false);
+    multiScanButton.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent evt) {
-            jToggleButton1StateChanged(evt);
+            multiScanButtonStateChanged(evt);
         }
     });
-    jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
+    multiScanButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jToggleButton1ActionPerformed(evt);
+            multiScanButtonActionPerformed(evt);
         }
     });
-    jToggleButton1.addKeyListener(new java.awt.event.KeyAdapter() {
+    multiScanButton.addKeyListener(new java.awt.event.KeyAdapter() {
         public void keyPressed(java.awt.event.KeyEvent evt) {
-            jToggleButton1KeyPressed(evt);
+            multiScanButtonKeyPressed(evt);
         }
     });
 
@@ -597,7 +608,7 @@ public class ExcelFrame extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel3Layout.createSequentialGroup()
                     .addContainerGap()
-                    .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(multiScanButton, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(multiLable, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(jPanel3Layout.createSequentialGroup()
@@ -628,7 +639,7 @@ public class ExcelFrame extends javax.swing.JFrame {
             .addComponent(devFieldName, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(multiScanButton, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addComponent(multiLable, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addContainerGap())
     );
@@ -920,6 +931,13 @@ public class ExcelFrame extends javax.swing.JFrame {
             
             if(devFieldName.getText().equals("")&&!multiMap.isEmpty()){
                 //toMulti();
+                try{
+                    System.out.println(DatabaseObj.executeCaseEntryAppendQ(
+                        curTable.getDBEntryInfo(),techFieldName.getText(),caseTextField.getText(),multiMap));
+                }catch(Exception e){
+                    System.out.println(e.toString());
+                }
+                
                 commitMTable();
                 techFieldName.setEditable(true);
                 manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
@@ -930,7 +948,7 @@ public class ExcelFrame extends javax.swing.JFrame {
                 if(oFrame.getCheckBoxStatus()){
                     if(multiSelected){
                         multiSelected = false;
-                        jToggleButton1.setSelected(false);
+                        multiScanButton.setSelected(false);
                         multiLable.setText("OFF");
                     }
                 }
@@ -961,7 +979,7 @@ public class ExcelFrame extends javax.swing.JFrame {
                 //custom title, no icon
                 System.out.println(multiMap.isEmpty());
                 JOptionPane.showMessageDialog(this,
-                    "Device Type Not Found",
+                    new JLabel("Device Type Not Found",JLabel.CENTER),
                     "Error",
                     JOptionPane.PLAIN_MESSAGE);
                 devFieldName.setText("");
@@ -1049,7 +1067,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         
     }
     
-    private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
+    private void multiScanButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_multiScanButtonActionPerformed
         // TODO add your handling code here:
         abstractButton = (AbstractButton) evt.getSource();
         multiSelected = abstractButton.getModel().isSelected();
@@ -1062,12 +1080,12 @@ public class ExcelFrame extends javax.swing.JFrame {
         
         manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
         manager.focusPreviousComponent();
-    }//GEN-LAST:event_jToggleButton1ActionPerformed
+    }//GEN-LAST:event_multiScanButtonActionPerformed
 
-    private void jToggleButton1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jToggleButton1StateChanged
+    private void multiScanButtonStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_multiScanButtonStateChanged
         // TODO add your handling code here:
         
-    }//GEN-LAST:event_jToggleButton1StateChanged
+    }//GEN-LAST:event_multiScanButtonStateChanged
 
     private void devFieldNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_devFieldNameFocusGained
         // TODO add your handling code here:
@@ -1354,9 +1372,9 @@ public class ExcelFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_addExistingTechMenuItemActionPerformed
 
-    private void jToggleButton1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jToggleButton1KeyPressed
+    private void multiScanButtonKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_multiScanButtonKeyPressed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jToggleButton1KeyPressed
+    }//GEN-LAST:event_multiScanButtonKeyPressed
 
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
         // TODO add your handling code here:
@@ -1415,16 +1433,55 @@ public class ExcelFrame extends javax.swing.JFrame {
     private void caseTextFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_caseTextFieldKeyPressed
         // TODO add your handling code here:
         int keyCode = evt.getKeyCode();
+        String caseID = new String();
+        
         if(keyCode == KeyEvent.VK_ENTER){
             
             caseTextField.setText(caseTextField.getText().trim());
+            try{
+                if(DatabaseObj.getStatusBoolean()){
+                    caseID =DatabaseObj.executeCaseEntryExistsQ(
+                        curTable.getDBEntryInfo(),caseTextField.getText());
+                }else{
+                    caseID = null;
+                }
+                
+            }catch(Exception e){
+                System.out.println(e.toString());
+            }
+            
+            if(caseID==null){
+                devFieldName.setEnabled(true);
+                caseTextField.setEnabled(false);
 
-            devFieldName.setEnabled(true);
-            caseTextField.setEnabled(false);
+                manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+                manager.focusNextComponent();
+            }else{
+                
+                
+                
+                int option = JOptionPane.showConfirmDialog(
+                        this,"Case Entry Already Exists, Overwrite?","Case Warning",JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE);
+                if(option==0){
+                    devFieldName.setEnabled(true);
+                    caseTextField.setEnabled(false);
+                    manager.focusNextComponent(techFieldName);
+                    manager.focusNextComponent();
 
-            manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
-            manager.focusNextComponent();
-           
+                }
+                else if(option==1){
+                    techFieldName.setEditable(true);
+                    techFieldName.setText("");
+                    caseTextField.setEnabled(false);
+                    caseTextField.setText("");
+
+                    manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+                 
+                    manager.focusPreviousComponent(caseTextField);
+                }
+
+            }
+
         }
     }//GEN-LAST:event_caseTextFieldKeyPressed
     
@@ -2061,10 +2118,10 @@ public class ExcelFrame extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JTextArea lastScanDetailArea;
     private javax.swing.JTable mTable;
     private javax.swing.JLabel multiLable;
+    private javax.swing.JToggleButton multiScanButton;
     private javax.swing.JLabel multiScanLabel;
     private javax.swing.JMenuItem optionsMenuItem;
     private javax.swing.JProgressBar progressBar;

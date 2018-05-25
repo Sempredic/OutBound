@@ -66,7 +66,7 @@ public class optionsFrame extends javax.swing.JFrame {
 
         jLabel1.setText("MultiScan Auto-Off After Commit");
 
-        multiScanCheckBox.setSelected(true);
+        multiScanCheckBox.setEnabled(false);
 
         locationLabel.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
         locationLabel.setText(" ");
