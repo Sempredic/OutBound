@@ -1305,22 +1305,46 @@ public class ExcelFrame extends javax.swing.JFrame {
                 if(lastActionStack.size()>0){
                     lastScanDetailArea.setText("Last Scan Details: \n" + "\n" +
                                     "Tech: " +lastActionStack.peek().getTechID()+"\n"
+                                    + "Case: " +lastActionStack.peek().getCaseID()+"\n"
                                     + "Count: " + lastActionStack.peek().getDeviceCount());
                 }else{
                     lastScanDetailArea.setText(" ");
                 }
                 
-                
-                for(String dev:curTech.getDevices()){
-                    c = getCol(tableModel, dev);
-                    r = getRow(tableModel, curTech.getTechID());
+                if(DatabaseObj.getStatusBoolean()){
+                    //////////////////////////////////DATABASE/////////////////////////////
+                    try{
+                        String caseID =DatabaseObj.executeCaseEntryExistsQ(
+                            curTable.getDBEntryInfo(),curTech.getCaseID());
+                        ArrayList deletedList = DatabaseObj.executeDeleteCaseEntryQ(caseID);
+                        int techID = (int)deletedList.get(0);
+                        LinkedHashMap<String,Integer> devList = (LinkedHashMap)deletedList.get(1);
+
+                        for(Map.Entry<String,Integer>entry:devList.entrySet()){
+                            if(entry.getValue()>0){
+                                int col = getCol(tableModel, entry.getKey());
+                                int row = getRow(tableModel, DatabaseObj.getTechIDQ(techID));
+
+                                int newVal = (Integer) tableModel.getValueAt(row, col) - entry.getValue();
+                                setTableValues(newVal, row, col);
+                            }
+                        }
+                    }catch(Exception e){
+                        System.out.println(e.toString());
+                        errorLogger.writeToLogger(e.toString());
+                    }
                     
-                    if((Integer)tableModel.getValueAt(r, c)>0){
-                        newV = (Integer) tableModel.getValueAt(r, c) - 1;
-                        setTableValues(newV, r, c);
-                    } 
-                }
-               
+                }else{
+                    for(String dev:curTech.getDevices()){
+                        c = getCol(tableModel, dev);
+                        r = getRow(tableModel, curTech.getTechID());
+
+                        if((Integer)tableModel.getValueAt(r, c)>0){
+                            newV = (Integer) tableModel.getValueAt(r, c) - 1;
+                            setTableValues(newV, r, c);
+                        } 
+                    }
+                }               
             }
         }else{
             lastScanDetailArea.setText(" ");
@@ -1827,10 +1851,13 @@ public class ExcelFrame extends javax.swing.JFrame {
                 }
             }
             
+            tech.setCaseID(caseTextField.getText());
+            
             lastActionStack.push(tech);
             
             lastScanDetailArea.setText("Last Scan Details: \n" + "\n" +
                                     "Tech: " +lastActionStack.peek().getTechID()+"\n"
+                                    + "Case: "+lastActionStack.peek().getCaseID()+ "\n"
                                     + "Devices: Many \n"
                                     + "Count: " + lastActionStack.peek().getDeviceCount());
 
@@ -1863,6 +1890,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         ////////////////////////////////////////////////////////UNDO//////////////////////////////// 
         techObject tech = new techObject();
         tech.setTechID(techFieldName.getText());
+        tech.setCaseID(caseTextField.getText());
         
         for(int i=0;i<6;i++){
             tech.addTechDevice(device);
@@ -1871,6 +1899,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         
         lastScanDetailArea.setText("Last Scan Details: \n" + "\n" +
                                     "Tech: " +lastActionStack.peek().getTechID()+"\n"
+                                    + "Case: " + lastActionStack.peek().getCaseID() + "\n"
                                     + "Device: " + device + "\n"
                                     + "Count: " + lastActionStack.peek().getDeviceCount());
        

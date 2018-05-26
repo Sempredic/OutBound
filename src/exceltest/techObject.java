@@ -17,16 +17,22 @@ public class techObject {
     ArrayList<String> devType_s;
     int prodRow;
     int prodCol;
+    String caseID;
     
     public techObject(){
         techID = null;
         devType_s = new ArrayList<String>();
         prodRow = 0;
         prodCol =0;
+        caseID = null;
     }
     
     public void setTechID(String techID){
         this.techID = techID;
+    }
+    
+    public void setCaseID(String caseID){
+        this.caseID=caseID;
     }
     
     public void addTechDevice(String device){
@@ -41,6 +47,10 @@ public class techObject {
     public void setTechRC(int row, int col){
         prodRow = row;
         prodCol = col;
+    }
+    
+    public String getCaseID(){
+        return this.caseID;
     }
     
     public int getDeviceCount(){
