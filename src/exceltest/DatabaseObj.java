@@ -386,8 +386,9 @@ public class DatabaseObj {
     
     static void executeUpdateAreaGoalQ(int EntryID,int Goal)throws Exception{
    
-        String SQL = "UPDATE areas SET areas.[Net Goal Total] = ?\n" +
-                     "WHERE (((areas.ID)=?))";
+        String SQL = "UPDATE cellEntries\n" +
+                     "SET cellEntries.AreaGoal = ?\n" +
+                     "WHERE cellEntries.ID = ?";
 
         preparedStatement = conn.prepareStatement(SQL);
         preparedStatement.setInt(1,Goal);
@@ -861,23 +862,58 @@ public class DatabaseObj {
         return employeeList;
     }
     
-    static ArrayList executeGetAreasQ()throws Exception{
+    static ArrayList getAreaInfoFromIDQ(int areaID){
+        
+        ArrayList infoArray = new ArrayList();
+        String SQL = "SELECT areas.AreaName, areas.Shift\n" +
+                     "FROM areas\n" +
+                     "WHERE areas.ID = ?";
+        ResultSet rs;
+        try{
+            
+            preparedStatement = conn.prepareStatement(SQL);
+            preparedStatement.setInt(1, areaID);
+            
+            rs = preparedStatement.executeQuery();
+            
+            while(rs.next()){
+                infoArray.add(rs.getString("AreaName"));
+                infoArray.add(rs.getInt("Shift"));
+            }
+            
+        }catch(Exception e){
+            System.out.println("Area "+e.toString());
+        }
+
+        return infoArray;
+    }
+    static ArrayList executeGetAreasQ(String fromDate,String toDate)throws Exception{
         
         ArrayList<ArrayList> areasList = new ArrayList<ArrayList>();
+        StringBuilder startBuilder = new StringBuilder();
+        StringBuilder endBuilder = new StringBuilder();
+        
+        startBuilder.append("#"+fromDate+"#");
+        endBuilder.append("#"+toDate+"#");
    
-        String SQL = "SELECT areas.ID, areas.AreaName, areas.Shift, areas.[Net Goal Total]\n" +
-                     "FROM areas;";
+        String SQL = "SELECT cellEntries.ID, cellEntries.CellID, cellEntries.AreaGoal\n" +
+                     "FROM cellEntries\n" +
+                     "WHERE ((([cellEntries].[DateOfEntry]) Between "+startBuilder+" And "+endBuilder+"))";
+
+        stmt = conn.createStatement();
         
         ResultSet rs = stmt.executeQuery(SQL);
         
         while(rs.next()){
             
             ArrayList row = new ArrayList();
+            ArrayList info = new ArrayList();
             
             row.add(rs.getInt("ID"));
-            row.add(rs.getString("AreaName"));
-            row.add(rs.getString("Shift"));
-            row.add(rs.getString("Net Goal Total"));
+            info = getAreaInfoFromIDQ(rs.getInt("CellID"));
+            row.add(info.get(0));
+            row.add(info.get(1));
+            row.add(rs.getInt("AreaGoal"));
             
             areasList.add(row);
         }

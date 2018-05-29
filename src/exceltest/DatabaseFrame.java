@@ -6,8 +6,10 @@
 package exceltest;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -56,6 +58,9 @@ public class DatabaseFrame extends javax.swing.JFrame {
     private int employeesCellID;
     private int areasCellID;
     private String year;
+    private SimpleDateFormat formatter;
+    private Date date;
+    
     /**
      * Creates new form DatabaseFrame
      */
@@ -84,6 +89,8 @@ public class DatabaseFrame extends javax.swing.JFrame {
         employeesCellID =0;
         areasCellID =0;
         year = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+        formatter = new SimpleDateFormat("M/d/yyyy");  
+        date = new Date();
 
         if(!areaListArray.contains("All")){
             areaListArray.add("All");
@@ -185,6 +192,13 @@ public class DatabaseFrame extends javax.swing.JFrame {
         jScrollPane6 = new javax.swing.JScrollPane();
         areasTable = new javax.swing.JTable();
         areasQueryButton = new javax.swing.JButton();
+        dateRangeLabel = new javax.swing.JLabel();
+        startLabel = new javax.swing.JLabel();
+        endLabel = new javax.swing.JLabel();
+        startDateTextField = new javax.swing.JFormattedTextField();
+        endDateTextField = new javax.swing.JFormattedTextField();
+        jLabel17 = new javax.swing.JLabel();
+        toLabel = new javax.swing.JLabel();
         jPanel8 = new javax.swing.JPanel();
         statusLabel = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -812,6 +826,30 @@ public class DatabaseFrame extends javax.swing.JFrame {
             }
         });
 
+        dateRangeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        dateRangeLabel.setText("Date Range");
+
+        startLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        startLabel.setText("Start");
+
+        endLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        endLabel.setText("End");
+
+        startDateTextField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("M/d/yyyy"))));
+        startDateTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                startDateTextFieldActionPerformed(evt);
+            }
+        });
+
+        endDateTextField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("M/d/yyyy"))));
+
+        jLabel17.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel17.setText("or");
+
+        toLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        toLabel.setText("to");
+
         javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
         jPanel14.setLayout(jPanel14Layout);
         jPanel14Layout.setHorizontalGroup(
@@ -820,28 +858,56 @@ public class DatabaseFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(areaUpdateButton, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
+                .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(dateRangeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(areaGoalField)
-                    .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(areasQueryButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel14Layout.createSequentialGroup()
+                        .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(startLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel14Layout.createSequentialGroup()
+                                .addComponent(startDateTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(toLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(endDateTextField)
+                            .addComponent(endLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(areasQueryButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(areaUpdateButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel14Layout.setVerticalGroup(
             jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel14Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel14Layout.createSequentialGroup()
+                        .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(21, 21, 21))
                     .addGroup(jPanel14Layout.createSequentialGroup()
                         .addComponent(jLabel13)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(areaGoalField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(areaUpdateButton)
+                        .addComponent(dateRangeLabel)
+                        .addGap(21, 21, 21)
+                        .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(startLabel)
+                            .addComponent(endLabel))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(startDateTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(endDateTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(toLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(areasQueryButton)))
-                .addGap(21, 21, 21))
+                        .addComponent(areasQueryButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel17)
+                        .addGap(9, 9, 9)
+                        .addComponent(areaUpdateButton)
+                        .addGap(39, 39, 39))))
         );
 
         javax.swing.GroupLayout jPanel15Layout = new javax.swing.GroupLayout(jPanel15);
@@ -849,16 +915,16 @@ public class DatabaseFrame extends javax.swing.JFrame {
         jPanel15Layout.setHorizontalGroup(
             jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel15Layout.createSequentialGroup()
-                .addGap(188, 188, 188)
+                .addGap(199, 199, 199)
                 .addComponent(jPanel14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(288, Short.MAX_VALUE))
+                .addContainerGap(204, Short.MAX_VALUE))
         );
         jPanel15Layout.setVerticalGroup(
             jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel15Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel15Layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(jPanel14, javax.swing.GroupLayout.PREFERRED_SIZE, 353, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
@@ -1079,6 +1145,8 @@ public class DatabaseFrame extends javax.swing.JFrame {
         
         yearTextField.setText(year);
         failYearTextField.setText(year);
+        startDateTextField.setText(formatter.format(date));
+        endDateTextField.setText(formatter.format(date));
         
     }
     
@@ -1371,9 +1439,12 @@ public class DatabaseFrame extends javax.swing.JFrame {
 
     private void areasQueryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_areasQueryButtonActionPerformed
         // TODO add your handling code here:
+        String startDate = startDateTextField.getText().trim();
+        String toDate = endDateTextField.getText().trim();
+        
         try{
             
-            Object[][] ob = makeEntryObjectFromArray(DatabaseObj.executeGetAreasQ(),areasTableColumn);
+            Object[][] ob = makeEntryObjectFromArray(DatabaseObj.executeGetAreasQ(startDate,toDate),areasTableColumn);
             areasEntriesModel = new DefaultTableModel(ob,areasTableColumn);
             areasTable.setModel(areasEntriesModel); 
             initTableStyle(areasTable);
@@ -1440,13 +1511,15 @@ public class DatabaseFrame extends javax.swing.JFrame {
     private void areaUpdateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_areaUpdateButtonActionPerformed
         // TODO add your handling code here:
         String goal = areaGoalField.getText();
+        String startDate = startDateTextField.getText();
+        String toDate = endDateTextField.getText();
         
         if(isInteger(goal)){
             if(goal.length()>0){
                 try{
                     DatabaseObj.executeUpdateAreaGoalQ(areasCellID, Integer.parseInt(goal));
                     areaGoalField.setText("");
-                    Object[][] ob = makeEntryObjectFromArray(DatabaseObj.executeGetAreasQ(),areasTableColumn);
+                    Object[][] ob = makeEntryObjectFromArray(DatabaseObj.executeGetAreasQ(startDate,toDate),areasTableColumn);
                     areasEntriesModel = new DefaultTableModel(ob,areasTableColumn);
                     areasTable.setModel(areasEntriesModel); 
                     initTableStyle(areasTable);
@@ -1468,6 +1541,10 @@ public class DatabaseFrame extends javax.swing.JFrame {
         frame.run();
         dispose();
     }//GEN-LAST:event_selectorMenuItemActionPerformed
+
+    private void startDateTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startDateTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_startDateTextFieldActionPerformed
 
     public static boolean isInteger(String s) {
         try { 
@@ -1533,6 +1610,7 @@ public class DatabaseFrame extends javax.swing.JFrame {
     private javax.swing.JTable areasTable;
     private javax.swing.JLabel dateLabel;
     private javax.swing.JLabel dateLabel1;
+    private javax.swing.JLabel dateRangeLabel;
     private javax.swing.JComboBox<String> dayCB;
     private javax.swing.JTabbedPane dbTabbedPane;
     private javax.swing.JButton employeeAddButton;
@@ -1543,6 +1621,8 @@ public class DatabaseFrame extends javax.swing.JFrame {
     private javax.swing.JButton employeesDelButton;
     private javax.swing.JButton employeesQueryButton;
     private javax.swing.JTable employeesTable;
+    private javax.swing.JFormattedTextField endDateTextField;
+    private javax.swing.JLabel endLabel;
     private javax.swing.JTabbedPane entryProdTab;
     private javax.swing.JComboBox<String> failAreaCB;
     private javax.swing.JComboBox<String> failDayCB;
@@ -1562,6 +1642,7 @@ public class DatabaseFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1605,8 +1686,11 @@ public class DatabaseFrame extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> shiftComboBox;
     private javax.swing.JLabel shiftLabel;
     private javax.swing.JLabel shiftLabel1;
+    private javax.swing.JFormattedTextField startDateTextField;
+    private javax.swing.JLabel startLabel;
     private javax.swing.JLabel statusLabel;
     private javax.swing.JTable theTable;
+    private javax.swing.JLabel toLabel;
     private javax.swing.JComboBox<String> typeComboBox;
     private javax.swing.JLabel typeLabel;
     private javax.swing.JFormattedTextField yearTextField;
