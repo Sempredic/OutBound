@@ -800,7 +800,12 @@ public class DatabaseObj {
             builder.append("");
         }
         
-        String sql = "SELECT cellEntries.ID, cellEntries.DateOfEntry, areas.AreaName, areas.Shift, cellEntries.[Total Completed], areas.[Net Goal Total], failCountQuery.CountOfprodID\n" +
+//        String sql = "SELECT cellEntries.ID, cellEntries.DateOfEntry, areas.AreaName, areas.Shift, cellEntries.[Total Completed], areas.[Net Goal Total], failCountQuery.CountOfprodID\n" +
+//                     "FROM (areas RIGHT JOIN cellEntries ON areas.ID = cellEntries.CellID) LEFT JOIN failCountQuery ON cellEntries.ID = failCountQuery.ID\n" +
+//                     "WHERE "+ dateOfEntry + builder + "\n" +
+//                     "ORDER BY cellEntries.DateOfEntry";
+
+        String sql = "SELECT cellEntries.ID, cellEntries.DateOfEntry, areas.AreaName, areas.Shift, cellEntries.[Total Completed], cellEntries.AreaGoal, failCountQuery.CountOfprodID\n" +
                      "FROM (areas RIGHT JOIN cellEntries ON areas.ID = cellEntries.CellID) LEFT JOIN failCountQuery ON cellEntries.ID = failCountQuery.ID\n" +
                      "WHERE "+ dateOfEntry + builder + "\n" +
                      "ORDER BY cellEntries.DateOfEntry";
@@ -819,7 +824,7 @@ public class DatabaseObj {
             row.add(rs.getString("Shift"));
             
             totComp = rs.getInt("Total Completed");
-            netGoal = rs.getInt("Net Goal Total");
+            netGoal = rs.getInt("AreaGoal");
             failCount = rs.getInt("CountOfprodID");
             
             row.add(totComp);
@@ -890,15 +895,10 @@ public class DatabaseObj {
     static ArrayList executeGetAreasQ(String fromDate,String toDate)throws Exception{
         
         ArrayList<ArrayList> areasList = new ArrayList<ArrayList>();
-        StringBuilder startBuilder = new StringBuilder();
-        StringBuilder endBuilder = new StringBuilder();
-        
-        startBuilder.append("#"+fromDate+"#");
-        endBuilder.append("#"+toDate+"#");
-   
-        String SQL = "SELECT cellEntries.ID, cellEntries.CellID, cellEntries.AreaGoal\n" +
+
+        String SQL = "SELECT cellEntries.ID, cellEntries.DateOfEntry, cellEntries.CellID, cellEntries.AreaGoal\n" +
                      "FROM cellEntries\n" +
-                     "WHERE ((([cellEntries].[DateOfEntry]) Between "+startBuilder+" And "+endBuilder+"))";
+                     "WHERE ((([cellEntries].[DateOfEntry]) Between #"+fromDate+"# And #"+toDate+"#))";
 
         stmt = conn.createStatement();
         
@@ -910,6 +910,7 @@ public class DatabaseObj {
             ArrayList info = new ArrayList();
             
             row.add(rs.getInt("ID"));
+            row.add(rs.getDate("DateOfEntry"));
             info = getAreaInfoFromIDQ(rs.getInt("CellID"));
             row.add(info.get(0));
             row.add(info.get(1));
