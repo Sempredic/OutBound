@@ -931,6 +931,7 @@ public class ExcelFrame extends javax.swing.JFrame {
             
             if(devFieldName.getText().equals("")&&!multiMap.isEmpty()){
                 //toMulti();
+                //////////////////////////////////////////DATABASE////////////////
                 try{
                     if(DatabaseObj.getStatusBoolean()){
                         System.out.println(DatabaseObj.executeCaseEntryAppendQ(

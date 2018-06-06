@@ -27,6 +27,7 @@ public class DatabaseObj {
     static Statement stmt;
     static Statement skuStmt;
     static PreparedStatement preparedStatement;
+    static PreparedStatement skuPreparedStatement;
     static ArrayList<String> areasList;
     static ArrayList<String> devicesList;
     static ArrayList<String> employeesList;
@@ -38,6 +39,7 @@ public class DatabaseObj {
         
         stmt = null;
         skuStmt = null;
+        skuPreparedStatement = null;
         preparedStatement = null;
         areasList = new ArrayList<String>();
         devicesList = new ArrayList<String>();
@@ -249,14 +251,18 @@ public class DatabaseObj {
     static String getDeviceNameFromSKUQ(String SKU)throws Exception{
         String name = " ";
         String value = null;
-        String SQL = "SELECT IIf([Prod Tables].[F1]=\"HOUR 06:50 PM\" Or [Prod Tables].[F2]=\"Names\",\"phone\",\n" +
-                        "IIf([Prod Tables].[F1]=\"Total Devs\" Or [Prod Tables].[F2]=\"VincentEs.\",\"pad\",Null))\n" +
+        String SQL = "SELECT IIf([SmartphoneTable].[F5]=? Or [SmartphoneTable].[F6]=? Or [SmartphoneTable].[F8]=?,\"phone\",Null)\n"+
                      "AS [Value]\n" +
                      "FROM [Prod Tables]";
         
-        skuStmt = skuConn.createStatement();
+        //skuStmt = skuConn.createStatement();
+        skuPreparedStatement = skuConn.prepareStatement(SQL);
         
-        ResultSet rs = skuStmt.executeQuery(SQL);
+        skuPreparedStatement.setString(1, SKU);
+        skuPreparedStatement.setString(2, SKU);
+        skuPreparedStatement.setString(3, SKU);
+        
+        ResultSet rs = skuPreparedStatement.executeQuery();
         
         while(rs.next()){
             
