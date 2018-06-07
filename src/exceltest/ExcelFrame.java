@@ -933,7 +933,7 @@ public class ExcelFrame extends javax.swing.JFrame {
                 //toMulti();
                 //////////////////////////////////////////DATABASE////////////////
                 try{
-                    if(DatabaseObj.getStatusBoolean()){
+                    if(DatabaseObj.getStatusBoolean()&&curTable.getEntryID()!=0){
                         System.out.println(DatabaseObj.executeCaseEntryAppendQ(
                         curTable.getDBEntryInfo(),techFieldName.getText(),caseTextField.getText(),multiMap));
                     }
@@ -957,16 +957,6 @@ public class ExcelFrame extends javax.swing.JFrame {
                         multiLable.setText("OFF");
                     }
                 }
-            }else if(tableModel.findColumn(devFieldName.getText())!=-1){
-                ///////////////////////////////////DATABASE////////////////////////////////
-                try{
-                    System.out.println(DatabaseObj.getDeviceNameFromSKUQ(devFieldName.getText()));
-                }catch(Exception e){
-                    System.out.println(e.toString());
-                    errorLogger.writeToLogger(e.toString());
-                }
-                
-                toMulti();
             }else if(devFieldName.getText().toUpperCase().equals("CLEAR")){
                 
                 for(int i=0;i<multiDataTable.length;i++){
@@ -981,6 +971,38 @@ public class ExcelFrame extends javax.swing.JFrame {
                 caseTextField.setText("");
                 devFieldName.setEnabled(false);
                 devFieldName.setText("");    
+            }else if(DatabaseObj.getSKUStatusBoolean()){
+                ///////////////////////////////////DATABASE////////////////////////////////
+                try{
+                    String skuValue = DatabaseObj.getDeviceNameFromSKUQ(devFieldName.getText());
+  
+                    if(tableModel.findColumn(skuValue)!=-1){
+                        devFieldName.setText(skuValue);
+                        toMulti();
+                    }else{
+                        JOptionPane.showMessageDialog(this,
+                            new JLabel("Device Type Not Found",JLabel.CENTER),
+                            "Error",
+                            JOptionPane.PLAIN_MESSAGE);
+                        devFieldName.setText("");
+                    }
+                }catch(Exception e){
+                    System.out.println(e.toString());
+                    errorLogger.writeToLogger(e.toString());
+                }
+      
+            }else if(!DatabaseObj.getSKUStatusBoolean()){
+                    
+                if(tableModel.findColumn(devFieldName.getText())!=-1){
+                    toMulti();
+                }else{
+                    JOptionPane.showMessageDialog(this,
+                        new JLabel("Device Type Not Found",JLabel.CENTER),
+                        "Error",
+                        JOptionPane.PLAIN_MESSAGE);
+                    devFieldName.setText("");
+                }
+  
             }else{
                 //custom title, no icon
                 System.out.println(multiMap.isEmpty());
@@ -1312,7 +1334,7 @@ public class ExcelFrame extends javax.swing.JFrame {
                     lastScanDetailArea.setText(" ");
                 }
                 
-                if(DatabaseObj.getStatusBoolean()){
+                if(DatabaseObj.getStatusBoolean()&&curTable.getEntryID()!=0){
                     //////////////////////////////////DATABASE/////////////////////////////
                     try{
                         String caseID =DatabaseObj.executeCaseEntryExistsQ(

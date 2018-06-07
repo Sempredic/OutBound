@@ -248,29 +248,34 @@ public class DatabaseObj {
         return name;
     }
     
-    static String getDeviceNameFromSKUQ(String SKU)throws Exception{
+    static String getDeviceNameFromSKUQ(String SKU){
         String name = " ";
         String value = null;
         String SQL = "SELECT IIf([SmartphoneTable].[F5]=? Or [SmartphoneTable].[F6]=? Or [SmartphoneTable].[F8]=?,\"phone\",Null)\n"+
                      "AS [Value]\n" +
-                     "FROM [Prod Tables]";
+                     "FROM [SmartphoneTable]";
         
-        //skuStmt = skuConn.createStatement();
-        skuPreparedStatement = skuConn.prepareStatement(SQL);
+        try{
+            skuPreparedStatement = skuConn.prepareStatement(SQL);
+
+            skuPreparedStatement.setString(1, SKU);
+            skuPreparedStatement.setString(2, SKU);
+            skuPreparedStatement.setString(3, SKU);
+
+            ResultSet rs = skuPreparedStatement.executeQuery();
+
+            while(rs.next()){
+
+                value = rs.getString("Value");
+
+                if(value!=null){
+                    name = value;
+                }   
+            }
         
-        skuPreparedStatement.setString(1, SKU);
-        skuPreparedStatement.setString(2, SKU);
-        skuPreparedStatement.setString(3, SKU);
-        
-        ResultSet rs = skuPreparedStatement.executeQuery();
-        
-        while(rs.next()){
-            
-            value = rs.getString("Value");
-            
-            if(value!=null){
-                name = value;
-            }   
+        }catch(Exception e){
+            System.out.println(e.toString());
+            errorLogger.writeToLogger(e.toString());
         }
         
         return name;
