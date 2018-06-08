@@ -251,9 +251,14 @@ public class DatabaseObj {
     static String getDeviceNameFromSKUQ(String SKU){
         String name = " ";
         String value = null;
-        String SQL = "SELECT IIf([SmartphoneTable].[F5]=? Or [SmartphoneTable].[F6]=? Or [SmartphoneTable].[F8]=?,\"phone\",Null)\n"+
+        int skuNumber = 0;
+        String SQL = "SELECT IIf([SmartphoneTable].[F5]=? Or [SmartphoneTable].[F6]=? Or [SmartphoneTable].[F8]=? Or [SmartphoneTable].[F9]=? Or [SmartphoneTable].[F10]=? Or [SmartphoneTable].[F11]=?,\"phone\",Null)\n"+
                      "AS [Value]\n" +
                      "FROM [SmartphoneTable]";
+        
+        if(isInteger(SKU)){
+            skuNumber = Integer.parseInt(SKU);
+        }
         
         try{
             skuPreparedStatement = skuConn.prepareStatement(SQL);
@@ -261,6 +266,9 @@ public class DatabaseObj {
             skuPreparedStatement.setString(1, SKU);
             skuPreparedStatement.setString(2, SKU);
             skuPreparedStatement.setString(3, SKU);
+            skuPreparedStatement.setInt(4, skuNumber);
+            skuPreparedStatement.setInt(5, skuNumber);
+            skuPreparedStatement.setInt(6, skuNumber);
 
             ResultSet rs = skuPreparedStatement.executeQuery();
 
@@ -279,6 +287,17 @@ public class DatabaseObj {
         }
         
         return name;
+    }
+    
+    static boolean isInteger(String string){
+        boolean result = false;
+        
+        try{
+            int value = Integer.parseInt(string);
+            return true;
+        }catch(Exception e){
+            return false;
+        }
     }
     
     static int executeCaseEntryAppendQ(LinkedHashMap<String,String> entryMap,String techID,String caseID,HashMap<String,Integer>multiMap)throws Exception{
