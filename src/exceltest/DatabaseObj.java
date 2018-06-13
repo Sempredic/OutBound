@@ -247,19 +247,28 @@ public class DatabaseObj {
         
         return name;
     }
-    
+
     static String getDeviceNameFromSKUQ(String SKU){
         String name = " ";
         String value = null;
         int skuNumber = 0;
-        String SQL = "SELECT IIf([SmartphoneTable].[F5]=? Or [SmartphoneTable].[F6]=? Or [SmartphoneTable].[F8]=? Or [SmartphoneTable].[F9]=? Or [SmartphoneTable].[F10]=? Or [SmartphoneTable].[F11]=?,\"phone\",Null)\n"+
+        String SQL = "SELECT DISTINCT IIf([SmartphoneTable].[F5]=? Or [SmartphoneTable].[F6]=? Or [SmartphoneTable].[F8]=? Or [SmartphoneTable].[F9]=? Or [SmartphoneTable].[F10]=? Or [SmartphoneTable].[F11]=?,\"phone\","
+                   + " IIf(TabletsTable.F4=? Or TabletsTable.F5=? Or TabletsTable.F7=? Or TabletsTable.F8=? Or TabletsTable.F9=? Or TabletsTable.F10=?,\"pad\",Null))\n"+
                      "AS [Value]\n" +
-                     "FROM [SmartphoneTable]";
+                     "FROM [SmartphoneTable],TabletsTable";
         
+        String MP3SQL = "SELECT DISTINCT IIf([MP3Table].[F4]=? Or [MP3Table].[F5]=? Or [MP3Table].[F8]=? Or [MP3Table].[F9]=? Or [MP3Table].[F10]=? Or [MP3Table].[F12]=? Or [MP3Table].[F13]=? Or [MP3Table].[F14]=? Or [MP3Table].[F15]=? Or [MP3Table].[F16]=? Or [MP3Table].[F17]=? Or [MP3Table].[F18]=? Or [MP3Table].[F19]=? Or [MP3Table].[F20]=? Or [MP3Table].[F21]=? Or [MP3Table].[F22]=? Or [MP3Table].[F23]=? Or [MP3Table].[F24]=? Or [MP3Table].[F25]=? Or [MP3Table].[F26]=?,"
+                      + "IIf([MP3Table].[F2] Like '*Touch*',\"touch\","
+                            + "IIf([MP3Table].[F2] Like '*Classic*',\"classic\","
+                                + "IIf([MP3Table].[F2] Like '*Shuffle*',\"shuffle\","
+                                    + "IIf([MP3Table].[F2] Like '*Nano*',\"nano\",Null)))),Null)\n" +
+                        "AS [Value]\n" +
+                        "FROM [MP3Table]";
+
         if(isInteger(SKU)){
             skuNumber = Integer.parseInt(SKU);
         }
-        
+        System.out.println(MP3SQL);
         try{
             skuPreparedStatement = skuConn.prepareStatement(SQL);
 
@@ -269,7 +278,14 @@ public class DatabaseObj {
             skuPreparedStatement.setInt(4, skuNumber);
             skuPreparedStatement.setInt(5, skuNumber);
             skuPreparedStatement.setInt(6, skuNumber);
-
+            
+            skuPreparedStatement.setString(7, SKU);
+            skuPreparedStatement.setString(8, SKU);
+            skuPreparedStatement.setString(9, SKU);
+            skuPreparedStatement.setInt(10, skuNumber);
+            skuPreparedStatement.setInt(11, skuNumber);
+            skuPreparedStatement.setInt(12, skuNumber);
+            
             ResultSet rs = skuPreparedStatement.executeQuery();
 
             while(rs.next()){
@@ -279,6 +295,35 @@ public class DatabaseObj {
                 if(value!=null){
                     name = value;
                 }   
+            }
+            
+            if(value==null){
+                skuPreparedStatement = skuConn.prepareStatement(MP3SQL);
+
+                skuPreparedStatement.setInt(1, skuNumber);
+                skuPreparedStatement.setString(2, SKU);
+                skuPreparedStatement.setInt(3, skuNumber);
+                skuPreparedStatement.setInt(4, skuNumber);
+                skuPreparedStatement.setInt(5, skuNumber);
+                
+                for(int i=6;i<21;i++){
+                    if(i!=19){
+                        skuPreparedStatement.setString(i, SKU);
+                    }else{
+                        skuPreparedStatement.setInt(i, skuNumber);
+                    }
+                }
+                
+                ResultSet rs2 = skuPreparedStatement.executeQuery();
+
+                while(rs2.next()){
+
+                    value = rs2.getString("Value");
+
+                    if(value!=null){
+                        name = value;
+                    }   
+                }
             }
         
         }catch(Exception e){
