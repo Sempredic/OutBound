@@ -252,8 +252,11 @@ public class DatabaseObj {
         String name = " ";
         String value = null;
         int skuNumber = 0;
-        String SQL = "SELECT DISTINCT IIf([SmartphoneTable].[F5]=? Or [SmartphoneTable].[F6]=? Or [SmartphoneTable].[F8]=? Or [SmartphoneTable].[F9]=? Or [SmartphoneTable].[F10]=? Or [SmartphoneTable].[F11]=?,\"phone\","
-                   + " IIf(TabletsTable.F4=? Or TabletsTable.F5=? Or TabletsTable.F7=? Or TabletsTable.F8=? Or TabletsTable.F9=? Or TabletsTable.F10=?,\"pad\",Null))\n"+
+        String SQL = "SELECT DISTINCT IIf([SmartphoneTable].[F5]=? Or [SmartphoneTable].[F6]=? Or [SmartphoneTable].[F8]=? Or [SmartphoneTable].[F9]=? Or [SmartphoneTable].[F10]=? Or [SmartphoneTable].[F11]=?,\"phone\",Null)\n"+
+                     "AS [Value]\n" +
+                     "FROM [SmartphoneTable]";
+        
+        String TabletsSQL = "SELECT DISTINCT IIf(TabletsTable.F4=? Or TabletsTable.F5=? Or TabletsTable.F7=? Or TabletsTable.F8=? Or TabletsTable.F9=? Or TabletsTable.F10=?,\"pad\",Null)\n"+
                      "AS [Value]\n" +
                      "FROM [SmartphoneTable],TabletsTable";
         
@@ -268,7 +271,7 @@ public class DatabaseObj {
         if(isInteger(SKU)){
             skuNumber = Integer.parseInt(SKU);
         }
-        System.out.println(MP3SQL);
+
         try{
             skuPreparedStatement = skuConn.prepareStatement(SQL);
 
@@ -278,14 +281,7 @@ public class DatabaseObj {
             skuPreparedStatement.setInt(4, skuNumber);
             skuPreparedStatement.setInt(5, skuNumber);
             skuPreparedStatement.setInt(6, skuNumber);
-            
-            skuPreparedStatement.setString(7, SKU);
-            skuPreparedStatement.setString(8, SKU);
-            skuPreparedStatement.setString(9, SKU);
-            skuPreparedStatement.setInt(10, skuNumber);
-            skuPreparedStatement.setInt(11, skuNumber);
-            skuPreparedStatement.setInt(12, skuNumber);
-            
+
             ResultSet rs = skuPreparedStatement.executeQuery();
 
             while(rs.next()){
@@ -295,6 +291,28 @@ public class DatabaseObj {
                 if(value!=null){
                     name = value;
                 }   
+            }
+            
+            if(value==null){
+                skuPreparedStatement = skuConn.prepareStatement(TabletsSQL);
+
+                skuPreparedStatement.setString(1, SKU);
+                skuPreparedStatement.setString(2, SKU);
+                skuPreparedStatement.setString(3, SKU);
+                skuPreparedStatement.setInt(4, skuNumber);
+                skuPreparedStatement.setInt(5, skuNumber);
+                skuPreparedStatement.setInt(6, skuNumber);
+
+                ResultSet rs2 = skuPreparedStatement.executeQuery();
+
+                while(rs2.next()){
+
+                    value = rs2.getString("Value");
+
+                    if(value!=null){
+                        name = value;
+                    }   
+                }
             }
             
             if(value==null){
@@ -314,11 +332,11 @@ public class DatabaseObj {
                     }
                 }
                 
-                ResultSet rs2 = skuPreparedStatement.executeQuery();
+                ResultSet rs3 = skuPreparedStatement.executeQuery();
 
-                while(rs2.next()){
+                while(rs3.next()){
 
-                    value = rs2.getString("Value");
+                    value = rs3.getString("Value");
 
                     if(value!=null){
                         name = value;
