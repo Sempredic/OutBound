@@ -247,6 +247,27 @@ public class DatabaseObj {
         
         return name;
     }
+    
+    static void executeAppendToSKUTable(String SKU,String deviceName,String deviceType){
+        
+        try{
+            String skuSQL = "INSERT INTO skuTable(SKU,DeviceName,DeviceType)\n"+
+                        "VALUES ?,?,?";
+            
+            preparedStatement = conn.prepareStatement(skuSQL);
+
+            preparedStatement.setString(1, SKU);
+            preparedStatement.setString(2, deviceName);
+            preparedStatement.setString(3, deviceType);
+
+            preparedStatement.executeUpdate();
+            
+        }catch(Exception e){
+            System.out.println(e.toString());
+            errorLogger.writeToLogger(e.toString());
+        }
+        
+    }
 
     static String getDeviceNameFromSKUQ(String SKU){
         String name = " ";
@@ -262,20 +283,13 @@ public class DatabaseObj {
                      "FROM SmartphoneTable\n" +
                      "WHERE [SmartphoneTable].[F5]=? Or [SmartphoneTable].[F6]=? Or [SmartphoneTable].[F8] =? Or [SmartphoneTable].[F9]=? Or [SmartphoneTable].[F10]=? Or [SmartphoneTable].[F11]=?";
         
-        String TabletsSQL = "SELECT DISTINCT IIf(TabletsTable.F4=? Or TabletsTable.F5=? Or TabletsTable.F7=? Or TabletsTable.F8=? Or TabletsTable.F9=? Or TabletsTable.F10=?,\"pad\",Null)\n"+
-                     "AS [Value]\n" +
-                     "FROM [SmartphoneTable],TabletsTable";
+        String TabletsSQL = "SELECT *\n"+
+                            "FROM TabletsTable\n" +
+                            "WHERE TabletsTable.F4=? Or TabletsTable.F5=? Or TabletsTable.F7=? Or TabletsTable.F8=? Or TabletsTable.F9=? Or TabletsTable.F10=?";
         
-        String MP3SQL = "SELECT DISTINCT IIf([MP3Table].[F4]=? Or [MP3Table].[F5]=? Or [MP3Table].[F8]=? Or [MP3Table].[F9]=? Or [MP3Table].[F10]=? Or [MP3Table].[F12]=? Or [MP3Table].[F13]=? Or [MP3Table].[F14]=? Or [MP3Table].[F15]=? Or [MP3Table].[F16]=? Or [MP3Table].[F17]=? Or [MP3Table].[F18]=? Or [MP3Table].[F19]=? Or [MP3Table].[F20]=? Or [MP3Table].[F21]=? Or [MP3Table].[F22]=? Or [MP3Table].[F23]=? Or [MP3Table].[F24]=? Or [MP3Table].[F25]=? Or [MP3Table].[F26]=?,"
-                      + "IIf([MP3Table].[F2] Like '*Touch*',\"touch\","
-                            + "IIf([MP3Table].[F2] Like '*Classic*',\"classic\","
-                                + "IIf([MP3Table].[F2] Like '*Shuffle*',\"shuffle\","
-                                    + "IIf([MP3Table].[F2] Like '*Nano*',\"nano\",Null)))),Null)\n" +
-                        "AS [Value]\n" +
-                        "FROM [MP3Table]";
-        
-        String skuSQL = "INSERT INTO skuTable(SKU,DeviceName,DeviceType)\n"+
-                        "VALUES ?,?,?";
+        String MP3SQL = "SELECT *\n"+
+                        "FROM MP3Table\n"+
+                        "WHERE [MP3Table].[F4]=? Or [MP3Table].[F5]=? Or [MP3Table].[F8]=? Or [MP3Table].[F9]=? Or [MP3Table].[F10]=? Or [MP3Table].[F12]=? Or [MP3Table].[F13]=? Or [MP3Table].[F14]=? Or [MP3Table].[F15]=? Or [MP3Table].[F16]=? Or [MP3Table].[F17]=? Or [MP3Table].[F18]=? Or [MP3Table].[F19]=? Or [MP3Table].[F20]=? Or [MP3Table].[F21]=? Or [MP3Table].[F22]=? Or [MP3Table].[F23]=? Or [MP3Table].[F24]=? Or [MP3Table].[F25]=? Or [MP3Table].[F26]=?";
 
         if(isInteger(SKU)){
             skuNumber = Integer.parseInt(SKU);
@@ -317,13 +331,7 @@ public class DatabaseObj {
                         name = "phone";
                         deviceName = value;
 
-                        preparedStatement = conn.prepareStatement(skuSQL);
-
-                        preparedStatement.setString(1, SKU);
-                        preparedStatement.setString(2, deviceName);
-                        preparedStatement.setString(3, name);
-
-                        preparedStatement.executeUpdate();
+                        executeAppendToSKUTable(SKU,deviceName,name);
                     }   
                 }
 
@@ -341,10 +349,14 @@ public class DatabaseObj {
 
                     while(rs2.next()){
 
-                        value = rs2.getString("Value");
+                        value = rs2.getString("F2");
 
                         if(value!=null){
-                            name = value;
+
+                            name = "pad";
+                            deviceName = value;
+
+                            executeAppendToSKUTable(SKU,deviceName,name);
                         }   
                     }
                 }
@@ -370,10 +382,23 @@ public class DatabaseObj {
 
                     while(rs3.next()){
 
-                        value = rs3.getString("Value");
+                        value = rs3.getString("F2");
 
                         if(value!=null){
-                            name = value;
+
+                            if(value.contains("touch")){
+                                name = "touch";
+                            }else if(value.contains("nano")){
+                                name = "nano";
+                            }else if(value.contains("classic")){
+                                name = "classic";
+                            }else if(value.contains("shuffle")){
+                                name = "shuffle";
+                            }
+               
+                            deviceName = value;
+
+                            executeAppendToSKUTable(SKU,deviceName,name);
                         }   
                     }
                 }
