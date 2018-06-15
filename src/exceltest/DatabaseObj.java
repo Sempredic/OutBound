@@ -248,7 +248,7 @@ public class DatabaseObj {
         return name;
     }
     
-    static void executeAppendToSKUTable(String SKU,String deviceName,String deviceType){
+    static void executeAppendToSKUTableQ(String SKU,String deviceName,String deviceType){
         
         try{
             String skuSQL = "INSERT INTO skuTable(SKU,DeviceName,DeviceType)\n"+
@@ -331,7 +331,7 @@ public class DatabaseObj {
                         name = "phone";
                         deviceName = value;
 
-                        executeAppendToSKUTable(SKU,deviceName,name);
+                        executeAppendToSKUTableQ(SKU,deviceName,name);
                     }   
                 }
 
@@ -356,7 +356,7 @@ public class DatabaseObj {
                             name = "pad";
                             deviceName = value;
 
-                            executeAppendToSKUTable(SKU,deviceName,name);
+                            executeAppendToSKUTableQ(SKU,deviceName,name);
                         }   
                     }
                 }
@@ -386,19 +386,19 @@ public class DatabaseObj {
 
                         if(value!=null){
 
-                            if(value.contains("touch")){
+                            if(value.toLowerCase().contains("touch")){
                                 name = "touch";
-                            }else if(value.contains("nano")){
+                            }else if(value.toLowerCase().contains("nano")){
                                 name = "nano";
-                            }else if(value.contains("classic")){
+                            }else if(value.toLowerCase().contains("classic")){
                                 name = "classic";
-                            }else if(value.contains("shuffle")){
+                            }else if(value.toLowerCase().contains("shuffle")){
                                 name = "shuffle";
                             }
                
                             deviceName = value;
 
-                            executeAppendToSKUTable(SKU,deviceName,name);
+                            executeAppendToSKUTableQ(SKU,deviceName,name);
                         }   
                     }
                 }
