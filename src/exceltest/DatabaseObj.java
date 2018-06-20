@@ -1048,6 +1048,51 @@ public class DatabaseObj {
 
         return infoArray;
     }
+    
+    static ArrayList executeGetCasesQ(String field, String condition, String value)throws Exception{
+        
+        ArrayList<ArrayList> casesList = new ArrayList<ArrayList>();
+        StringBuilder conditionBuilder = new StringBuilder();
+        
+        switch(field){
+            case "DateOfEntry":
+                value = "#"+value+"#";
+                break;
+            case "CaseID":
+                value = "\""+value+"\"";
+                break;
+            case "UserID":
+                value = "\""+value+"\"";
+                break;
+        }
+        
+        conditionBuilder.append(field + " " + condition + " =" + value);
+
+        String SQL = "SELECT *\n" +
+                     "FROM caseEntries\n" +
+                     "WHERE caseEntries." + conditionBuilder;
+
+        stmt = conn.createStatement();
+        
+        ResultSet rs = stmt.executeQuery(SQL);
+        
+        while(rs.next()){
+            
+            ArrayList row = new ArrayList();
+            
+            row.add(rs.getInt("ID"));
+            row.add(rs.getDate("DateOfEntry"));
+            row.add(rs.getInt("EmployeeID"));
+            row.add(rs.getInt("CaseID"));
+            row.add(rs.getInt("TotalUnits"));
+            row.add(rs.getInt("UserID"));
+            
+            casesList.add(row);
+        }
+        
+        return casesList;
+    }
+    
     static ArrayList executeGetAreasQ(String fromDate,String toDate)throws Exception{
         
         ArrayList<ArrayList> areasList = new ArrayList<ArrayList>();
