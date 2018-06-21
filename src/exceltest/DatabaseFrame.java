@@ -1253,7 +1253,7 @@ public class DatabaseFrame extends javax.swing.JFrame {
         failEntriesColumn = new Object[]{"ID","Date","Area","Shift"};
         employeeTableColumn = new Object[]{"ID","TechID","FName","LName"};
         areasTableColumn = new Object[]{"ID","Date","Area","Shift","Goal"};
-        caseTableColumn = new Object[]{"ID","Date","Employee","CaseID","Units","UserID"};
+        caseTableColumn = new Object[]{"ID","Date","Time","Employee","CaseID","Units","UserID"};
         
         tbModel = new DefaultTableModel(tbColumn,0);
         theTable.setModel(tbModel);
@@ -1688,11 +1688,14 @@ public class DatabaseFrame extends javax.swing.JFrame {
     private void casesQueryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_casesQueryButtonActionPerformed
         // TODO add your handling code here:
        try{
-            Object[][] ob = makeEntryObjectFromArray(DatabaseObj.executeGetCasesQ(
-                (String)casesFieldCB.getSelectedItem(),(String)casesConditionCB.getSelectedItem(),casesValueField.getText()),caseTableColumn);
-           
-            caseEntriesModel = new DefaultTableModel(ob,caseTableColumn);
-            casesTable.setModel(caseEntriesModel); 
+           if(casesValueField.getText().length()>0){
+               Object[][] ob = makeEntryObjectFromArray(DatabaseObj.executeGetCasesQ(
+                    (String)casesFieldCB.getSelectedItem(),(String)casesConditionCB.getSelectedItem(),casesValueField.getText()),caseTableColumn);
+
+                caseEntriesModel = new DefaultTableModel(ob,caseTableColumn);
+                casesTable.setModel(caseEntriesModel); 
+           }
+            
        }catch(Exception e){
            System.out.println(e.toString());
        }

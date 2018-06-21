@@ -6,9 +6,10 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.*;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -34,6 +35,8 @@ public class DatabaseObj {
     static ArrayList<Object> curRosterList;
     static String dbLocation;
     static String skuLocation;
+    static DateFormat dateFormat;
+    static Date theDate;
     
     public DatabaseObj(){
         
@@ -47,6 +50,8 @@ public class DatabaseObj {
         curRosterList = new ArrayList<Object>();
         dbLocation = readLocSave();
         skuLocation = readSKULocSave();
+        dateFormat = new SimpleDateFormat("hh:mm a");
+	theDate = new Date();
         
         connectToDatabase();
         connectToSKUDatabase();
@@ -453,17 +458,18 @@ public class DatabaseObj {
             stmtBuilder.append(",?");
         }
        
-        SQL = "INSERT INTO caseEntries (CellPID,DateOfEntry,EmployeeID,CaseID,TotalUnits,UserID)\n" +
-              "VALUES(?,#"+Date+"#,?,?,?,?)";
+        SQL = "INSERT INTO caseEntries (CellPID,DateOfEntry,Time,EmployeeID,CaseID,TotalUnits,UserID)\n" +
+              "VALUES(?,#"+Date+"#,?,?,?,?,?)";
 
         preparedStatement = conn.prepareStatement(SQL);
         
         preparedStatement.setInt(1, cellEntryID);
-        preparedStatement.setInt(2, employeeID);
-        preparedStatement.setString(3, caseID);
-        preparedStatement.setInt(4, totalUnits);
-        preparedStatement.setString(5,System.getProperty("user.name"));
-
+        preparedStatement.setString(2, dateFormat.format(theDate));
+        preparedStatement.setInt(3, employeeID);
+        preparedStatement.setString(4, caseID);
+        preparedStatement.setInt(5, totalUnits);
+        preparedStatement.setString(6,System.getProperty("user.name"));
+       
         preparedStatement.executeUpdate();
 
         ResultSet rs = preparedStatement.getGeneratedKeys();
@@ -1083,6 +1089,7 @@ public class DatabaseObj {
             
             row.add(rs.getInt("ID"));
             row.add(rs.getDate("DateOfEntry"));
+            row.add(rs.getString("Time"));
             row.add(rs.getInt("EmployeeID"));
             row.add(rs.getInt("CaseID"));
             row.add(rs.getInt("TotalUnits"));
