@@ -1090,7 +1090,7 @@ public class DatabaseObj {
             row.add(rs.getInt("ID"));
             row.add(rs.getDate("DateOfEntry"));
             row.add(rs.getString("Time"));
-            row.add(rs.getInt("EmployeeID"));
+            row.add(getTechIDQ(rs.getInt("EmployeeID")));
             row.add(rs.getInt("CaseID"));
             row.add(rs.getInt("TotalUnits"));
             row.add(rs.getInt("UserID"));
