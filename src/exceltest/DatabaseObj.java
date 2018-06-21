@@ -453,8 +453,8 @@ public class DatabaseObj {
             stmtBuilder.append(",?");
         }
        
-        SQL = "INSERT INTO caseEntries (CellPID,DateOfEntry,EmployeeID,CaseID,TotalUnits )\n" +
-              "VALUES(?,#"+Date+"#,?,?,?)";
+        SQL = "INSERT INTO caseEntries (CellPID,DateOfEntry,EmployeeID,CaseID,TotalUnits,UserID)\n" +
+              "VALUES(?,#"+Date+"#,?,?,?,?)";
 
         preparedStatement = conn.prepareStatement(SQL);
         
@@ -462,6 +462,7 @@ public class DatabaseObj {
         preparedStatement.setInt(2, employeeID);
         preparedStatement.setString(3, caseID);
         preparedStatement.setInt(4, totalUnits);
+        preparedStatement.setString(5,System.getProperty("user.name"));
 
         preparedStatement.executeUpdate();
 
