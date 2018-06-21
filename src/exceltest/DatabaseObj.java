@@ -1071,6 +1071,9 @@ public class DatabaseObj {
             case "UserID":
                 value = "\""+value+"\"";
                 break;
+            case "EmployeeID":
+                value = String.valueOf(getEmployeeID(value));
+                break;
         }
         
         conditionBuilder.append(field + " " + condition + " " + value);
