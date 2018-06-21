@@ -1066,12 +1066,12 @@ public class DatabaseObj {
                 break;
         }
         
-        conditionBuilder.append(field + " " + condition + " =" + value);
+        conditionBuilder.append(field + " " + condition + " " + value);
 
         String SQL = "SELECT *\n" +
                      "FROM caseEntries\n" +
                      "WHERE caseEntries." + conditionBuilder;
-
+        
         stmt = conn.createStatement();
         
         ResultSet rs = stmt.executeQuery(SQL);

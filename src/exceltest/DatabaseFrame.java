@@ -1253,7 +1253,7 @@ public class DatabaseFrame extends javax.swing.JFrame {
         failEntriesColumn = new Object[]{"ID","Date","Area","Shift"};
         employeeTableColumn = new Object[]{"ID","TechID","FName","LName"};
         areasTableColumn = new Object[]{"ID","Date","Area","Shift","Goal"};
-        caseTableColumn = new Object[]{"ID","Date","Area","Shift","CaseID","Units","UserID"};
+        caseTableColumn = new Object[]{"ID","Date","Employee","CaseID","Units","UserID"};
         
         tbModel = new DefaultTableModel(tbColumn,0);
         theTable.setModel(tbModel);
@@ -1687,18 +1687,55 @@ public class DatabaseFrame extends javax.swing.JFrame {
 
     private void casesQueryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_casesQueryButtonActionPerformed
         // TODO add your handling code here:
-       
-        //Object[][] ob = makeEntryObjectFromArray(DatabaseObj.executeGetAreasQ(startDate,toDate),areasTableColumn);
-//        areasEntriesModel = new DefaultTableModel(ob,areasTableColumn);
-//        areasTable.setModel(areasEntriesModel); 
+       try{
+            Object[][] ob = makeEntryObjectFromArray(DatabaseObj.executeGetCasesQ(
+                (String)casesFieldCB.getSelectedItem(),(String)casesConditionCB.getSelectedItem(),casesValueField.getText()),caseTableColumn);
+           
+            caseEntriesModel = new DefaultTableModel(ob,caseTableColumn);
+            casesTable.setModel(caseEntriesModel); 
+       }catch(Exception e){
+           System.out.println(e.toString());
+       }
+        
+        
 //        initTableStyle(areasTable);
     }//GEN-LAST:event_casesQueryButtonActionPerformed
 
     private void casesFieldCBItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_casesFieldCBItemStateChanged
         // TODO add your handling code here:
+        casesConditionCB.removeAllItems();
+        casesConditionCB.setEnabled(false);
+        casesValueField.setEnabled(false);
+        
         switch((String)casesFieldCB.getSelectedItem()){
             case "DateOfEntry":
                 System.out.println("DateOfEntry");
+                casesConditionCB.addItem("=");
+                casesConditionCB.setEnabled(true);
+                casesValueField.setEnabled(true);
+                break;
+            case "EmployeeID":
+                System.out.println("EmployeeID");
+                casesConditionCB.addItem("=");
+                casesConditionCB.setEnabled(true);
+                casesValueField.setEnabled(true);
+                break;
+            case "CaseID":
+                System.out.println("CaseID");
+                casesConditionCB.addItem("=");
+                casesConditionCB.setEnabled(true);
+                casesValueField.setEnabled(true);
+                break;
+            case "TotalUnits":
+                System.out.println("TotalUnits");
+                casesConditionCB.addItem("<");
+                casesConditionCB.addItem(">");
+                casesConditionCB.addItem("=");
+                casesConditionCB.setEnabled(true);
+                casesValueField.setEnabled(true);
+                break;
+            case "UserID":
+                System.out.println("UserID");
                 casesConditionCB.addItem("=");
                 casesConditionCB.setEnabled(true);
                 casesValueField.setEnabled(true);
