@@ -208,6 +208,11 @@ public class DatabaseFrame extends javax.swing.JFrame {
         infoLabel = new javax.swing.JLabel();
         jPanel8 = new javax.swing.JPanel();
         devicePanel = new javax.swing.JPanel();
+        devicesList = new java.awt.List();
+        devicesTextField = new javax.swing.JTextField();
+        devicesAddButton = new javax.swing.JButton();
+        devicesRemoveButton = new javax.swing.JButton();
+        devicesApplyButton = new javax.swing.JButton();
         jPanel17 = new javax.swing.JPanel();
         jPanel18 = new javax.swing.JPanel();
         jScrollPane8 = new javax.swing.JScrollPane();
@@ -974,36 +979,59 @@ public class DatabaseFrame extends javax.swing.JFrame {
 
         devicePanel.setBackground(new java.awt.Color(204, 204, 204));
 
+        devicesAddButton.setText("<--Add");
+
+        devicesRemoveButton.setText("Remove-->");
+
+        devicesApplyButton.setText("Apply");
+
         javax.swing.GroupLayout devicePanelLayout = new javax.swing.GroupLayout(devicePanel);
         devicePanel.setLayout(devicePanelLayout);
         devicePanelLayout.setHorizontalGroup(
             devicePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 832, Short.MAX_VALUE)
+            .addGroup(devicePanelLayout.createSequentialGroup()
+                .addGap(251, 251, 251)
+                .addComponent(devicesList, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(devicePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(devicesTextField)
+                    .addComponent(devicesAddButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(devicesRemoveButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(devicesApplyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(314, Short.MAX_VALUE))
         );
         devicePanelLayout.setVerticalGroup(
             devicePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 374, Short.MAX_VALUE)
+            .addGroup(devicePanelLayout.createSequentialGroup()
+                .addGap(114, 114, 114)
+                .addGroup(devicePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(devicesList, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(devicePanelLayout.createSequentialGroup()
+                        .addComponent(devicesTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(48, 48, 48)
+                        .addComponent(devicesAddButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(devicesRemoveButton)
+                        .addGap(68, 68, 68)
+                        .addComponent(devicesApplyButton)))
+                .addContainerGap(44, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 852, Short.MAX_VALUE)
-            .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel8Layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(devicePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addContainerGap()))
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(devicePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 396, Short.MAX_VALUE)
-            .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel8Layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(devicePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addContainerGap()))
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(devicePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         dbTabbedPane.addTab("Devices", jPanel8);
@@ -1011,6 +1039,8 @@ public class DatabaseFrame extends javax.swing.JFrame {
         jPanel18.setBackground(new java.awt.Color(204, 204, 204));
 
         casesTable.setModel(caseEntriesModel);
+        casesTable.setEnabled(false);
+        casesTable.setRowSelectionAllowed(false);
         jScrollPane8.setViewportView(casesTable);
 
         casesQueryButton.setText("Query");
@@ -1820,6 +1850,11 @@ public class DatabaseFrame extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> dayCB;
     private javax.swing.JTabbedPane dbTabbedPane;
     private javax.swing.JPanel devicePanel;
+    private javax.swing.JButton devicesAddButton;
+    private javax.swing.JButton devicesApplyButton;
+    private java.awt.List devicesList;
+    private javax.swing.JButton devicesRemoveButton;
+    private javax.swing.JTextField devicesTextField;
     private javax.swing.JButton employeeAddButton;
     private javax.swing.JTextField employeeFNameField;
     private javax.swing.JTextField employeeIDField;
