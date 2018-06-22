@@ -5,6 +5,8 @@
  */
 package exceltest;
 
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -13,8 +15,11 @@ import java.util.Date;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -43,6 +48,7 @@ public class DatabaseFrame extends javax.swing.JFrame {
     private String failShift;
     private ArrayList<String> areaListArray;
     private ArrayList<String> failAreaListArray;
+    private ArrayList<String> devicesListArray;
     private TableModel tbModel; 
     private TableModel prodModel; 
     private TableModel failModel;
@@ -90,6 +96,7 @@ public class DatabaseFrame extends javax.swing.JFrame {
         failShift = new String();
         areaListArray = new ArrayList<String>(DatabaseObj.getAreaList());
         failAreaListArray = new ArrayList<String>(DatabaseObj.getAreaList());
+        devicesListArray = new ArrayList<String>(DatabaseObj.getDevicesList());
         failCellID = 0;
         employeesCellID =0;
         areasCellID =0;
@@ -209,10 +216,10 @@ public class DatabaseFrame extends javax.swing.JFrame {
         jPanel8 = new javax.swing.JPanel();
         devicePanel = new javax.swing.JPanel();
         devicesList = new java.awt.List();
-        devicesTextField = new javax.swing.JTextField();
         devicesAddButton = new javax.swing.JButton();
         devicesRemoveButton = new javax.swing.JButton();
         devicesApplyButton = new javax.swing.JButton();
+        devicesQueryButton = new javax.swing.JButton();
         jPanel17 = new javax.swing.JPanel();
         jPanel18 = new javax.swing.JPanel();
         jScrollPane8 = new javax.swing.JScrollPane();
@@ -426,6 +433,11 @@ public class DatabaseFrame extends javax.swing.JFrame {
         mainPanel.addTab("Query", jPanel1);
 
         dbTabbedPane.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        dbTabbedPane.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                dbTabbedPaneFocusGained(evt);
+            }
+        });
 
         jPanel9.setBackground(new java.awt.Color(204, 204, 204));
         jPanel9.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
@@ -979,11 +991,28 @@ public class DatabaseFrame extends javax.swing.JFrame {
 
         devicePanel.setBackground(new java.awt.Color(204, 204, 204));
 
-        devicesAddButton.setText("<--Add");
+        for(String item:DatabaseObj.getDevicesList()){
+            devicesList.add(item);
+            devicesListArray.add(item);
+        }
+
+        devicesAddButton.setText("<--Add Device");
+        devicesAddButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                devicesAddButtonActionPerformed(evt);
+            }
+        });
 
         devicesRemoveButton.setText("Remove-->");
 
         devicesApplyButton.setText("Apply");
+
+        devicesQueryButton.setText("Query");
+        devicesQueryButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                devicesQueryButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout devicePanelLayout = new javax.swing.GroupLayout(devicePanel);
         devicePanel.setLayout(devicePanelLayout);
@@ -993,12 +1022,12 @@ public class DatabaseFrame extends javax.swing.JFrame {
                 .addGap(251, 251, 251)
                 .addComponent(devicesList, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(devicePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(devicesTextField)
-                    .addComponent(devicesAddButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(devicePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(devicesAddButton, javax.swing.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE)
                     .addComponent(devicesRemoveButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(devicesApplyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(314, Short.MAX_VALUE))
+                    .addComponent(devicesQueryButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(devicesApplyButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(302, 302, 302))
         );
         devicePanelLayout.setVerticalGroup(
             devicePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1007,12 +1036,12 @@ public class DatabaseFrame extends javax.swing.JFrame {
                 .addGroup(devicePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(devicesList, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(devicePanelLayout.createSequentialGroup()
-                        .addComponent(devicesTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(48, 48, 48)
                         .addComponent(devicesAddButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(devicesRemoveButton)
-                        .addGap(68, 68, 68)
+                        .addGap(107, 107, 107)
+                        .addComponent(devicesQueryButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(devicesApplyButton)))
                 .addContainerGap(44, Short.MAX_VALUE))
         );
@@ -1778,6 +1807,43 @@ public class DatabaseFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_casesFieldCBItemStateChanged
 
+    private void dbTabbedPaneFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_dbTabbedPaneFocusGained
+        // TODO add your handling code here:
+    }//GEN-LAST:event_dbTabbedPaneFocusGained
+
+    private void devicesQueryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_devicesQueryButtonActionPerformed
+        // TODO add your handling code here:
+        
+        for(String item:DatabaseObj.getDevicesList()){
+            
+            if(!devicesListArray.contains(item)){
+                devicesList.add(item);
+                devicesListArray.add(item);
+            }
+        }
+    }//GEN-LAST:event_devicesQueryButtonActionPerformed
+
+    private void devicesAddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_devicesAddButtonActionPerformed
+        // TODO add your handling code here:
+ 
+        JPanel labels = new JPanel(new GridLayout(0,1,2,2));
+        labels.add(new JLabel("Enter New Device Name", SwingConstants.CENTER));
+        labels.add(new JTextField());
+
+        String option = JOptionPane.showInputDialog(labels, "Enter New Device Name");
+        
+        if(option != null){
+            if(!option.isEmpty()){
+                if(!option.contains(" ")){
+                    option = option.toLowerCase();
+                    System.out.println(option);
+                }
+                
+            }
+        }
+
+    }//GEN-LAST:event_devicesAddButtonActionPerformed
+
     public static boolean isInteger(String s) {
         try { 
             Integer.parseInt(s); 
@@ -1854,8 +1920,8 @@ public class DatabaseFrame extends javax.swing.JFrame {
     private javax.swing.JButton devicesAddButton;
     private javax.swing.JButton devicesApplyButton;
     private java.awt.List devicesList;
+    private javax.swing.JButton devicesQueryButton;
     private javax.swing.JButton devicesRemoveButton;
-    private javax.swing.JTextField devicesTextField;
     private javax.swing.JButton employeeAddButton;
     private javax.swing.JTextField employeeFNameField;
     private javax.swing.JTextField employeeIDField;

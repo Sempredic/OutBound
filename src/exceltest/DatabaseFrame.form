@@ -529,6 +529,9 @@
                   </Border>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="dbTabbedPaneFocusGained"/>
+              </Events>
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
               <SubComponents>
@@ -1503,13 +1506,13 @@
                                   <EmptySpace min="-2" pref="251" max="-2" attributes="0"/>
                                   <Component id="devicesList" min="-2" pref="158" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="devicesTextField" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="devicesAddButton" alignment="0" max="32767" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="devicesAddButton" pref="111" max="32767" attributes="0"/>
                                       <Component id="devicesRemoveButton" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="devicesApplyButton" alignment="0" min="-2" pref="99" max="-2" attributes="0"/>
+                                      <Component id="devicesQueryButton" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="devicesApplyButton" alignment="0" max="32767" attributes="0"/>
                                   </Group>
-                                  <EmptySpace pref="314" max="32767" attributes="0"/>
+                                  <EmptySpace min="-2" pref="302" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -1520,12 +1523,12 @@
                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                       <Component id="devicesList" max="32767" attributes="0"/>
                                       <Group type="102" attributes="0">
-                                          <Component id="devicesTextField" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace min="-2" pref="48" max="-2" attributes="0"/>
                                           <Component id="devicesAddButton" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                           <Component id="devicesRemoveButton" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace min="-2" pref="68" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="107" max="-2" attributes="0"/>
+                                          <Component id="devicesQueryButton" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace max="-2" attributes="0"/>
                                           <Component id="devicesApplyButton" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
@@ -1536,13 +1539,18 @@
                       </Layout>
                       <SubComponents>
                         <Component class="java.awt.List" name="devicesList">
-                        </Component>
-                        <Component class="javax.swing.JTextField" name="devicesTextField">
+                          <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new java.awt.List()"/>
+                            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="for(String item:DatabaseObj.getDevicesList()){&#xa;    devicesList.add(item);&#xa;    devicesListArray.add(item);&#xa;}"/>
+                          </AuxValues>
                         </Component>
                         <Component class="javax.swing.JButton" name="devicesAddButton">
                           <Properties>
-                            <Property name="text" type="java.lang.String" value="&lt;--Add"/>
+                            <Property name="text" type="java.lang.String" value="&lt;--Add Device"/>
                           </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="devicesAddButtonActionPerformed"/>
+                          </Events>
                         </Component>
                         <Component class="javax.swing.JButton" name="devicesRemoveButton">
                           <Properties>
@@ -1553,6 +1561,14 @@
                           <Properties>
                             <Property name="text" type="java.lang.String" value="Apply"/>
                           </Properties>
+                        </Component>
+                        <Component class="javax.swing.JButton" name="devicesQueryButton">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="Query"/>
+                          </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="devicesQueryButtonActionPerformed"/>
+                          </Events>
                         </Component>
                       </SubComponents>
                     </Container>
