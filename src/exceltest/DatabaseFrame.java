@@ -1041,6 +1041,7 @@ public class DatabaseFrame extends javax.swing.JFrame {
         casesTable.setModel(caseEntriesModel);
         casesTable.setEnabled(false);
         casesTable.setRowSelectionAllowed(false);
+        casesTable.setShowVerticalLines(false);
         jScrollPane8.setViewportView(casesTable);
 
         casesQueryButton.setText("Query");
