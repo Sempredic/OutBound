@@ -1003,6 +1003,11 @@ public class DatabaseFrame extends javax.swing.JFrame {
         });
 
         devicesRemoveButton.setText("Remove-->");
+        devicesRemoveButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                devicesRemoveButtonActionPerformed(evt);
+            }
+        });
 
         devicesApplyButton.setText("Apply");
 
@@ -1832,6 +1837,28 @@ public class DatabaseFrame extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_devicesAddButtonActionPerformed
+
+    private void devicesRemoveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_devicesRemoveButtonActionPerformed
+        // TODO add your handling code here:
+        if(devicesList.getSelectedIndexes().length>0){
+            if(devicesList.getSelectedItem()!=null){
+                try{
+                    DatabaseObj.executeRemoveDeviceColumnQ(devicesList.getSelectedItem());
+                    
+                    DatabaseObj.getDevicesQuery();
+        
+                    for(String item:DatabaseObj.getDevicesList()){
+                        if(!devicesListArray.contains(item)){
+                            devicesList.add(item);
+                            devicesListArray.add(item);
+                        }
+                    }
+                }catch(Exception e){
+                    System.out.println(e.toString());
+                }
+            }
+        }
+    }//GEN-LAST:event_devicesRemoveButtonActionPerformed
 
     public static boolean isInteger(String s) {
         try { 

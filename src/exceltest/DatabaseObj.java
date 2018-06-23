@@ -700,7 +700,16 @@ public class DatabaseObj {
         stmt.executeUpdate(techUpdate);
         stmt.executeUpdate(caseEntries);
         stmt.executeUpdate(caseUpdate);
-
+   
+    }
+    
+    static void executeRemoveDeviceColumnQ(String device)throws Exception{
+        
+        String caseEntries = "ALTER TABLE caseProdEntries DROP " +device+ "";
+        String techEntries = "ALTER TABLE techProdEntries DROP " +device+ "";
+        
+        stmt.executeQuery(techEntries);
+        stmt.executeQuery(caseEntries);
         
     }
     
