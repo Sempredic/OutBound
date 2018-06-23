@@ -1509,7 +1509,6 @@
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="devicesAddButton" pref="111" max="32767" attributes="0"/>
                                       <Component id="devicesRemoveButton" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="devicesQueryButton" alignment="0" max="32767" attributes="0"/>
                                       <Component id="devicesApplyButton" alignment="0" max="32767" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="302" max="-2" attributes="0"/>
@@ -1526,9 +1525,7 @@
                                           <Component id="devicesAddButton" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                           <Component id="devicesRemoveButton" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace min="-2" pref="107" max="-2" attributes="0"/>
-                                          <Component id="devicesQueryButton" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="136" max="-2" attributes="0"/>
                                           <Component id="devicesApplyButton" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
@@ -1561,14 +1558,6 @@
                           <Properties>
                             <Property name="text" type="java.lang.String" value="Apply"/>
                           </Properties>
-                        </Component>
-                        <Component class="javax.swing.JButton" name="devicesQueryButton">
-                          <Properties>
-                            <Property name="text" type="java.lang.String" value="Query"/>
-                          </Properties>
-                          <Events>
-                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="devicesQueryButtonActionPerformed"/>
-                          </Events>
                         </Component>
                       </SubComponents>
                     </Container>

@@ -502,12 +502,14 @@ public class mainFrame extends javax.swing.JFrame {
            
             if(!prodFolder.mkdir()){
                 System.out.println("Prod Folder Could Not Be Created");
+                errorLogger.writeToLogger("Prod Folder Could Not Be Created");
             }
         }
         
         if(!offlineFolder.exists()){
             if(!offlineFolder.mkdir()){
                 System.out.println("Offline Folder Could Not Be Created");
+                errorLogger.writeToLogger("Offline Folder Could Not Be Created");
             }
         }
         
@@ -517,6 +519,7 @@ public class mainFrame extends javax.swing.JFrame {
             if(!areaFolder.exists()){
                 if(!areaFolder.mkdir()){
                     System.out.println("Area Folder Could Not Be Created");
+                    errorLogger.writeToLogger("Area Folder Could Not Be Created");
                 }
             }
         }

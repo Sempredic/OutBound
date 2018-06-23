@@ -219,7 +219,6 @@ public class DatabaseFrame extends javax.swing.JFrame {
         devicesAddButton = new javax.swing.JButton();
         devicesRemoveButton = new javax.swing.JButton();
         devicesApplyButton = new javax.swing.JButton();
-        devicesQueryButton = new javax.swing.JButton();
         jPanel17 = new javax.swing.JPanel();
         jPanel18 = new javax.swing.JPanel();
         jScrollPane8 = new javax.swing.JScrollPane();
@@ -1007,13 +1006,6 @@ public class DatabaseFrame extends javax.swing.JFrame {
 
         devicesApplyButton.setText("Apply");
 
-        devicesQueryButton.setText("Query");
-        devicesQueryButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                devicesQueryButtonActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout devicePanelLayout = new javax.swing.GroupLayout(devicePanel);
         devicePanel.setLayout(devicePanelLayout);
         devicePanelLayout.setHorizontalGroup(
@@ -1025,7 +1017,6 @@ public class DatabaseFrame extends javax.swing.JFrame {
                 .addGroup(devicePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(devicesAddButton, javax.swing.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE)
                     .addComponent(devicesRemoveButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(devicesQueryButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(devicesApplyButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(302, 302, 302))
         );
@@ -1039,9 +1030,7 @@ public class DatabaseFrame extends javax.swing.JFrame {
                         .addComponent(devicesAddButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(devicesRemoveButton)
-                        .addGap(107, 107, 107)
-                        .addComponent(devicesQueryButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(136, 136, 136)
                         .addComponent(devicesApplyButton)))
                 .addContainerGap(44, Short.MAX_VALUE))
         );
@@ -1811,18 +1800,6 @@ public class DatabaseFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_dbTabbedPaneFocusGained
 
-    private void devicesQueryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_devicesQueryButtonActionPerformed
-        // TODO add your handling code here:
-        
-        for(String item:DatabaseObj.getDevicesList()){
-            
-            if(!devicesListArray.contains(item)){
-                devicesList.add(item);
-                devicesListArray.add(item);
-            }
-        }
-    }//GEN-LAST:event_devicesQueryButtonActionPerformed
-
     private void devicesAddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_devicesAddButtonActionPerformed
         // TODO add your handling code here:
  
@@ -1834,17 +1811,23 @@ public class DatabaseFrame extends javax.swing.JFrame {
         
         if(option != null){
             if(!option.isEmpty()){
-                if(!option.contains(" ")){
+
                     option = option.toLowerCase();
                     System.out.println(option);
                     try{
                         DatabaseObj.executeAddDeviceColumnQ(option);
+                        
+                        DatabaseObj.getDevicesQuery();
+        
+                        for(String item:DatabaseObj.getDevicesList()){
+                            if(!devicesListArray.contains(item)){
+                                devicesList.add(item);
+                                devicesListArray.add(item);
+                            }
+                        }
                     }catch(Exception e){
                         System.out.println(e.toString());
                     }
-                    
-                }
-                
             }
         }
 
@@ -1926,7 +1909,6 @@ public class DatabaseFrame extends javax.swing.JFrame {
     private javax.swing.JButton devicesAddButton;
     private javax.swing.JButton devicesApplyButton;
     private java.awt.List devicesList;
-    private javax.swing.JButton devicesQueryButton;
     private javax.swing.JButton devicesRemoveButton;
     private javax.swing.JButton employeeAddButton;
     private javax.swing.JTextField employeeFNameField;
