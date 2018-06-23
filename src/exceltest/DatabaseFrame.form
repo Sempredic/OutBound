@@ -1380,7 +1380,7 @@
                               <SubComponents>
                                 <Component class="javax.swing.JTable" name="areasTable">
                                   <Properties>
-                                    <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor" postCode="areasTable.setRowSelectionAllowed(true);&#xa;areasTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);">
+                                    <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor" postCode="//areasTable.setRowSelectionAllowed(true);&#xa;//areasTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);">
                                       <Connection code="areasEntriesModel" type="code"/>
                                     </Property>
                                     <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
@@ -1390,6 +1390,9 @@
                                       <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
                                     </Property>
                                   </Properties>
+                                  <AuxValues>
+                                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JTable()"/>
+                                  </AuxValues>
                                 </Component>
                               </SubComponents>
                             </Container>
@@ -1509,7 +1512,6 @@
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="devicesAddButton" pref="111" max="32767" attributes="0"/>
                                       <Component id="devicesRemoveButton" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="devicesApplyButton" alignment="0" max="32767" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="302" max="-2" attributes="0"/>
                               </Group>
@@ -1519,14 +1521,12 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace min="-2" pref="114" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="devicesList" max="32767" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="devicesList" min="-2" pref="216" max="-2" attributes="0"/>
                                       <Group type="102" attributes="0">
                                           <Component id="devicesAddButton" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                           <Component id="devicesRemoveButton" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace min="-2" pref="136" max="-2" attributes="0"/>
-                                          <Component id="devicesApplyButton" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                                   <EmptySpace pref="44" max="32767" attributes="0"/>
@@ -1552,15 +1552,11 @@
                         <Component class="javax.swing.JButton" name="devicesRemoveButton">
                           <Properties>
                             <Property name="text" type="java.lang.String" value="Remove--&gt;"/>
+                            <Property name="enabled" type="boolean" value="false"/>
                           </Properties>
                           <Events>
                             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="devicesRemoveButtonActionPerformed"/>
                           </Events>
-                        </Component>
-                        <Component class="javax.swing.JButton" name="devicesApplyButton">
-                          <Properties>
-                            <Property name="text" type="java.lang.String" value="Apply"/>
-                          </Properties>
                         </Component>
                       </SubComponents>
                     </Container>

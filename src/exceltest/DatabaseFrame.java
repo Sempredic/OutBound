@@ -5,7 +5,6 @@
  */
 package exceltest;
 
-import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -24,6 +23,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableModel;
 
 
@@ -108,6 +108,9 @@ public class DatabaseFrame extends javax.swing.JFrame {
         if(!areaListArray.contains("All")){
             areaListArray.add("All");
         }
+        
+        
+        
 
         initComponents();
         initialize();
@@ -218,7 +221,6 @@ public class DatabaseFrame extends javax.swing.JFrame {
         devicesList = new java.awt.List();
         devicesAddButton = new javax.swing.JButton();
         devicesRemoveButton = new javax.swing.JButton();
-        devicesApplyButton = new javax.swing.JButton();
         jPanel17 = new javax.swing.JPanel();
         jPanel18 = new javax.swing.JPanel();
         jScrollPane8 = new javax.swing.JScrollPane();
@@ -849,8 +851,8 @@ public class DatabaseFrame extends javax.swing.JFrame {
         });
 
         areasTable.setModel(areasEntriesModel);
-        areasTable.setRowSelectionAllowed(true);
-        areasTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        //areasTable.setRowSelectionAllowed(true);
+        //areasTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         jScrollPane6.setViewportView(areasTable);
 
         areasQueryButton.setText("Query");
@@ -1003,13 +1005,12 @@ public class DatabaseFrame extends javax.swing.JFrame {
         });
 
         devicesRemoveButton.setText("Remove-->");
+        devicesRemoveButton.setEnabled(false);
         devicesRemoveButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 devicesRemoveButtonActionPerformed(evt);
             }
         });
-
-        devicesApplyButton.setText("Apply");
 
         javax.swing.GroupLayout devicePanelLayout = new javax.swing.GroupLayout(devicePanel);
         devicePanel.setLayout(devicePanelLayout);
@@ -1021,22 +1022,19 @@ public class DatabaseFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(devicePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(devicesAddButton, javax.swing.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE)
-                    .addComponent(devicesRemoveButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(devicesApplyButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(devicesRemoveButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(302, 302, 302))
         );
         devicePanelLayout.setVerticalGroup(
             devicePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(devicePanelLayout.createSequentialGroup()
                 .addGap(114, 114, 114)
-                .addGroup(devicePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(devicesList, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(devicePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(devicesList, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(devicePanelLayout.createSequentialGroup()
                         .addComponent(devicesAddButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(devicesRemoveButton)
-                        .addGap(136, 136, 136)
-                        .addComponent(devicesApplyButton)))
+                        .addComponent(devicesRemoveButton)))
                 .addContainerGap(44, Short.MAX_VALUE))
         );
 
@@ -1494,7 +1492,11 @@ public class DatabaseFrame extends javax.swing.JFrame {
                     if(!dateYear.equals("")){
                         
                         Object[][] ob = makeObjectFromArray(DatabaseObj.executeGetCellRecordsQ(dateMonth,dateDay,dateYear, area, shift));
-                        tbModel = new DefaultTableModel(ob,tbColumn);
+                        tbModel = new DefaultTableModel(ob,tbColumn){
+                          public boolean isCellEditable(int rowIndex, int mColIndex) {
+                            return false;
+                          }
+                        };
                         theTable.setModel(tbModel); 
                         initTableStyle(theTable);
                         
@@ -1558,7 +1560,11 @@ public class DatabaseFrame extends javax.swing.JFrame {
             if(!failDateYear.equals("")){
                         
                 Object[][] ob = makeFailEntryObjectFromArray(DatabaseObj.executeGetCellRecordsQ(failDateMonth,failDateDay,failDateYear, failArea, failShift));
-                failEntriesModel = new DefaultTableModel(ob,failEntriesColumn);
+                failEntriesModel = new DefaultTableModel(ob,failEntriesColumn){
+                  public boolean isCellEditable(int rowIndex, int mColIndex) {
+                    return false;
+                  }
+                };
                 failEntriesTable.setModel(failEntriesModel); 
                 initTableStyle(failEntriesTable);
 
@@ -1614,7 +1620,11 @@ public class DatabaseFrame extends javax.swing.JFrame {
         try{
             
             Object[][] ob = makeEntryObjectFromArray(DatabaseObj.executeGetEmployeesQ(),employeeTableColumn);
-            employeeEntriesModel = new DefaultTableModel(ob,employeeTableColumn);
+            employeeEntriesModel = new DefaultTableModel(ob,employeeTableColumn){
+              public boolean isCellEditable(int rowIndex, int mColIndex) {
+                return false;
+              }
+            };
             employeesTable.setModel(employeeEntriesModel); 
             initTableStyle(employeesTable);
         }catch(Exception e){
@@ -1632,7 +1642,11 @@ public class DatabaseFrame extends javax.swing.JFrame {
         try{
             
             Object[][] ob = makeEntryObjectFromArray(DatabaseObj.executeGetAreasQ(startDate,toDate),areasTableColumn);
-            areasEntriesModel = new DefaultTableModel(ob,areasTableColumn);
+            areasEntriesModel = new DefaultTableModel(ob,areasTableColumn){
+              public boolean isCellEditable(int rowIndex, int mColIndex) {
+                return false;
+              }
+            };
             areasTable.setModel(areasEntriesModel); 
             initTableStyle(areasTable);
         }catch(Exception e){
@@ -1816,7 +1830,7 @@ public class DatabaseFrame extends javax.swing.JFrame {
         
         if(option != null){
             if(!option.isEmpty()){
-
+                
                     option = option.toLowerCase();
                     System.out.println(option);
                     try{
@@ -1833,6 +1847,8 @@ public class DatabaseFrame extends javax.swing.JFrame {
                     }catch(Exception e){
                         System.out.println(e.toString());
                     }
+            }else{
+                JOptionPane.showMessageDialog(this, "Enter Device Name");
             }
         }
 
@@ -1843,6 +1859,7 @@ public class DatabaseFrame extends javax.swing.JFrame {
         if(devicesList.getSelectedIndexes().length>0){
             if(devicesList.getSelectedItem()!=null){
                 try{
+                    
                     DatabaseObj.executeRemoveDeviceColumnQ(devicesList.getSelectedItem());
                     
                     DatabaseObj.getDevicesQuery();
@@ -1934,7 +1951,6 @@ public class DatabaseFrame extends javax.swing.JFrame {
     private javax.swing.JTabbedPane dbTabbedPane;
     private javax.swing.JPanel devicePanel;
     private javax.swing.JButton devicesAddButton;
-    private javax.swing.JButton devicesApplyButton;
     private java.awt.List devicesList;
     private javax.swing.JButton devicesRemoveButton;
     private javax.swing.JButton employeeAddButton;

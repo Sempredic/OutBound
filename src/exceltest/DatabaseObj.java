@@ -705,11 +705,11 @@ public class DatabaseObj {
     
     static void executeRemoveDeviceColumnQ(String device)throws Exception{
         
-        String caseEntries = "ALTER TABLE caseProdEntries DROP " +device+ "";
-        String techEntries = "ALTER TABLE techProdEntries DROP " +device+ "";
+        String caseEntries = "ALTER TABLE caseProdEntries DROP COLUMN " + device;   
+        String techEntries = "ALTER TABLE techProdEntries DROP COLUMN " + device;
         
-        stmt.executeQuery(techEntries);
-        stmt.executeQuery(caseEntries);
+        stmt.executeUpdate(caseEntries);
+        stmt.executeUpdate(techEntries);
         
     }
     
