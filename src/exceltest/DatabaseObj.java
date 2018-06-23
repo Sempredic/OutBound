@@ -689,6 +689,21 @@ public class DatabaseObj {
 
     }
     
+    static void executeAddDeviceColumnQ(String device)throws Exception{
+        
+        String techEntries = "ALTER TABLE techProdEntries ADD COLUMN ["+device+ "] INTEGER";
+        String techUpdate =" UPDATE techProdEntries SET techProdEntries.["+device+"] = 0";
+        String caseEntries = "ALTER TABLE caseProdEntries ADD COLUMN ["+device+ "] INTEGER";
+        String caseUpdate =" UPDATE caseProdEntries SET caseProdEntries.["+device+"] = 0";
+        
+        stmt.executeUpdate(techEntries);
+        stmt.executeUpdate(techUpdate);
+        stmt.executeUpdate(caseEntries);
+        stmt.executeUpdate(caseUpdate);
+
+        
+    }
+    
     static ArrayList<Integer> executeTechProdEntriesAppendQ(LinkedHashMap<String,String> entryMap,ArrayList<Object> techIDList)throws Exception{
        
         String prodID = entryMap.get("EntryID");

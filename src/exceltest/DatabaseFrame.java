@@ -1837,6 +1837,12 @@ public class DatabaseFrame extends javax.swing.JFrame {
                 if(!option.contains(" ")){
                     option = option.toLowerCase();
                     System.out.println(option);
+                    try{
+                        DatabaseObj.executeAddDeviceColumnQ(option);
+                    }catch(Exception e){
+                        System.out.println(e.toString());
+                    }
+                    
                 }
                 
             }
