@@ -286,7 +286,10 @@ public class DatabaseObj {
         
         String SQL = "SELECT *\n" +
                      "FROM SmartphoneTable\n" +
-                     "WHERE [SmartphoneTable].[F5]=? Or [SmartphoneTable].[F6]=? Or [SmartphoneTable].[F8] =? Or [SmartphoneTable].[F9]=? Or [SmartphoneTable].[F10]=? Or [SmartphoneTable].[F11]=?";
+                     "WHERE [SmartphoneTable].[F5]=? Or [SmartphoneTable].[F6]=? Or [SmartphoneTable].[F8] =? Or [SmartphoneTable].[F9]=? Or [SmartphoneTable].[F10]=? "
+                      + "Or [SmartphoneTable].[F11]=? Or [SmartphoneTable].[F13]=? Or [SmartphoneTable].[F14]=? Or [SmartphoneTable].[F15]=? Or [SmartphoneTable].[F16]=? "+
+                        "Or [SmartphoneTable].[F17]=? Or [SmartphoneTable].[F18]=? Or [SmartphoneTable].[F19]=? Or [SmartphoneTable].[F20]=? Or [SmartphoneTable].[F21]=? "+
+                        "Or [SmartphoneTable].[F22]=? Or [SmartphoneTable].[F23]=? Or [SmartphoneTable].[F24]=?";
         
         String TabletsSQL = "SELECT *\n"+
                             "FROM TabletsTable\n" +
@@ -299,6 +302,8 @@ public class DatabaseObj {
         if(isInteger(SKU)){
             skuNumber = Integer.parseInt(SKU);
         }
+        
+        System.out.println(SQL);
 
         try{
             
@@ -324,6 +329,17 @@ public class DatabaseObj {
                 skuPreparedStatement.setInt(4, skuNumber);
                 skuPreparedStatement.setInt(5, skuNumber);
                 skuPreparedStatement.setInt(6, skuNumber);
+                for(int i=7;i<19;i++){
+                    if(i==13){
+                        skuPreparedStatement.setInt(i, skuNumber);
+                    }else if(i==24){
+                        skuPreparedStatement.setInt(i, skuNumber);
+                    }else{
+                        skuPreparedStatement.setString(i, SKU);
+                    }
+                            
+                }
+                
 
                 ResultSet rs = skuPreparedStatement.executeQuery();
 
