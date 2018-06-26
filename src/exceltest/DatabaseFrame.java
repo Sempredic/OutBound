@@ -6,6 +6,10 @@
 package exceltest;
 
 import java.awt.GridLayout;
+import java.io.File;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,13 +21,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableModel;
 
 
@@ -1300,12 +1302,13 @@ public class DatabaseFrame extends javax.swing.JFrame {
         });
         
         tbColumn = new Object[]{"ID","Date","Area","Shift","Total Comp","Net Goal Total","% of Goal","% of Fails"};
-        prodColumn = new Object[]{"TechID","FName","LName","iPhone","iPad","iTouch","Classic","Shuffle","Nano","A.Phone","A.Tab","Wearables","Total"};
+        //prodColumn = new Object[]{"TechID","FName","LName","iPhone","iPad","iTouch","Classic","Shuffle","Nano","A.Phone","A.Tab","Wearables","Total"};
         failColumn = new Object[]{"FName","LName","Device","Type"};
         failEntriesColumn = new Object[]{"ID","Date","Area","Shift"};
         employeeTableColumn = new Object[]{"ID","TechID","FName","LName"};
         areasTableColumn = new Object[]{"ID","Date","Area","Shift","Goal"};
         caseTableColumn = new Object[]{"ID","Date","Time","Employee","CaseID","Units","UserID"};
+        initProdCol();
         
         tbModel = new DefaultTableModel(tbColumn,0);
         theTable.setModel(tbModel);
@@ -1800,8 +1803,8 @@ public class DatabaseFrame extends javax.swing.JFrame {
                 break;
             case "TotalUnits":
                 System.out.println("TotalUnits");
-                casesConditionCB.addItem("<");
                 casesConditionCB.addItem(">");
+                casesConditionCB.addItem("<");
                 casesConditionCB.addItem("=");
                 casesConditionCB.setEnabled(true);
                 casesValueField.setEnabled(true);
@@ -1877,6 +1880,35 @@ public class DatabaseFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_devicesRemoveButtonActionPerformed
 
+    public void initProdCol(){
+        
+        ArrayList<Object> objList = new ArrayList<Object>();
+        objList.add("TechID");
+        objList.add("FName");
+        objList.add("LName");
+        
+        try{
+            if(DatabaseObj.getStatusBoolean()){
+                for(String device:Files.readAllLines(Paths.get("Data\\devicesList.txt"))){
+                    objList.add(device);
+                }
+            }else{
+                
+                for(Object device:DatabaseObj.getDevicesList()){
+                    objList.add(device);
+                }
+            }
+            
+        }catch(Exception e){
+            System.out.println(e.toString());
+        }
+        
+        objList.add("Total");
+        
+        prodColumn = objList.toArray();
+        
+    }
+    
     public static boolean isInteger(String s) {
         try { 
             Integer.parseInt(s); 
