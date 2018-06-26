@@ -495,17 +495,22 @@ public class DatabaseObj {
     
     static String executeCaseEntryExistsQ(LinkedHashMap<String,String> entryMap,String caseID)throws Exception{
         
-        String cellEntryID = entryMap.get("EntryID");
+        int cellEntryID = (isInteger(entryMap.get("EntryID")))?Integer.valueOf(entryMap.get("EntryID")):0;
         String SQL="";
         String entryKey=null;
         
+        System.out.println("EntryID: " + cellEntryID);
+        
         SQL = "SELECT caseEntries.ID\n" +
               "FROM caseEntries\n" +
-              "WHERE caseEntries.CaseID = ?";
+              "WHERE caseEntries.CaseID = ? AND caseEntries.CellPID = ?";
+        
+        System.out.println(SQL);
         
         preparedStatement = conn.prepareStatement(SQL);
         
         preparedStatement.setString(1, caseID);
+        preparedStatement.setInt(2,cellEntryID);
         
         ResultSet rs = preparedStatement.executeQuery();
         
