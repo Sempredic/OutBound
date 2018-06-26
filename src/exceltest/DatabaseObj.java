@@ -302,8 +302,6 @@ public class DatabaseObj {
         if(isInteger(SKU)){
             skuNumber = Integer.parseInt(SKU);
         }
-        
-        System.out.println(SQL);
 
         try{
             
