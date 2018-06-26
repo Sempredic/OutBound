@@ -1612,14 +1612,21 @@
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="jScrollPane8" pref="528" max="32767" attributes="0"/>
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Component id="casesFieldCB" min="-2" pref="94" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                      <Component id="casesFieldCB" pref="94" max="32767" attributes="0"/>
+                                      <Component id="casesFieldLabel" max="32767" attributes="0"/>
+                                  </Group>
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                       <Component id="casesQueryButton" max="32767" attributes="0"/>
-                                      <Component id="casesConditionCB" min="-2" pref="63" max="-2" attributes="0"/>
+                                      <Component id="casesConditionCB" max="32767" attributes="0"/>
+                                      <Component id="casesConditionLabel" max="32767" attributes="0"/>
                                   </Group>
-                                  <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
-                                  <Component id="casesValueField" min="-2" pref="80" max="-2" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="1" attributes="0">
+                                      <Component id="casesValueField" min="-2" pref="80" max="-2" attributes="0"/>
+                                      <Component id="casesValueLabel" min="-2" pref="81" max="-2" attributes="0"/>
+                                  </Group>
                                   <EmptySpace max="-2" attributes="0"/>
                               </Group>
                           </Group>
@@ -1633,7 +1640,13 @@
                                           <Component id="jScrollPane8" min="-2" pref="294" max="-2" attributes="0"/>
                                       </Group>
                                       <Group type="102" alignment="0" attributes="0">
-                                          <EmptySpace min="-2" pref="86" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="66" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="3" attributes="0">
+                                              <Component id="casesFieldLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                              <Component id="casesConditionLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                              <Component id="casesValueLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                          <EmptySpace max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="3" attributes="0">
                                               <Component id="casesValueField" alignment="3" min="-2" max="-2" attributes="0"/>
                                               <Component id="casesConditionCB" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -1719,6 +1732,33 @@
                           <AuxValues>
                             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
                           </AuxValues>
+                        </Component>
+                        <Component class="javax.swing.JLabel" name="casesFieldLabel">
+                          <Properties>
+                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                              <Font name="Segoe UI" size="12" style="0"/>
+                            </Property>
+                            <Property name="horizontalAlignment" type="int" value="0"/>
+                            <Property name="text" type="java.lang.String" value="Field:"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JLabel" name="casesConditionLabel">
+                          <Properties>
+                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                              <Font name="Segoe UI" size="12" style="0"/>
+                            </Property>
+                            <Property name="horizontalAlignment" type="int" value="0"/>
+                            <Property name="text" type="java.lang.String" value="Condition:"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JLabel" name="casesValueLabel">
+                          <Properties>
+                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                              <Font name="Segoe UI" size="12" style="0"/>
+                            </Property>
+                            <Property name="horizontalAlignment" type="int" value="0"/>
+                            <Property name="text" type="java.lang.String" value="Value:"/>
+                          </Properties>
                         </Component>
                       </SubComponents>
                     </Container>

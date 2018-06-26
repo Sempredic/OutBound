@@ -231,6 +231,9 @@ public class DatabaseFrame extends javax.swing.JFrame {
         casesValueField = new javax.swing.JTextField();
         casesConditionCB = new javax.swing.JComboBox<>();
         casesFieldCB = new javax.swing.JComboBox<>();
+        casesFieldLabel = new javax.swing.JLabel();
+        casesConditionLabel = new javax.swing.JLabel();
+        casesValueLabel = new javax.swing.JLabel();
         statusLabel = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
@@ -1086,6 +1089,18 @@ public class DatabaseFrame extends javax.swing.JFrame {
             }
         });
 
+        casesFieldLabel.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        casesFieldLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        casesFieldLabel.setText("Field:");
+
+        casesConditionLabel.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        casesConditionLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        casesConditionLabel.setText("Condition:");
+
+        casesValueLabel.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        casesValueLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        casesValueLabel.setText("Value:");
+
         javax.swing.GroupLayout jPanel18Layout = new javax.swing.GroupLayout(jPanel18);
         jPanel18.setLayout(jPanel18Layout);
         jPanel18Layout.setHorizontalGroup(
@@ -1094,13 +1109,18 @@ public class DatabaseFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 528, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
-                .addComponent(casesFieldCB, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(casesFieldCB, 0, 94, Short.MAX_VALUE)
+                    .addComponent(casesFieldLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(casesQueryButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(casesConditionCB, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(11, 11, 11)
-                .addComponent(casesValueField, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(casesConditionCB, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(casesConditionLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(casesValueField, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(casesValueLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
         jPanel18Layout.setVerticalGroup(
@@ -1111,7 +1131,12 @@ public class DatabaseFrame extends javax.swing.JFrame {
                         .addContainerGap()
                         .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel18Layout.createSequentialGroup()
-                        .addGap(86, 86, 86)
+                        .addGap(66, 66, 66)
+                        .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(casesFieldLabel)
+                            .addComponent(casesConditionLabel)
+                            .addComponent(casesValueLabel))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(casesValueField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(casesConditionCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1972,10 +1997,13 @@ public class DatabaseFrame extends javax.swing.JFrame {
     private javax.swing.JButton areasQueryButton;
     private javax.swing.JTable areasTable;
     private javax.swing.JComboBox<String> casesConditionCB;
+    private javax.swing.JLabel casesConditionLabel;
     private javax.swing.JComboBox<String> casesFieldCB;
+    private javax.swing.JLabel casesFieldLabel;
     private javax.swing.JButton casesQueryButton;
     private javax.swing.JTable casesTable;
     private javax.swing.JTextField casesValueField;
+    private javax.swing.JLabel casesValueLabel;
     private javax.swing.JLabel dateLabel;
     private javax.swing.JLabel dateLabel1;
     private javax.swing.JLabel dateRangeLabel;
