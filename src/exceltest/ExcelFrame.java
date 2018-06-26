@@ -929,7 +929,7 @@ public class ExcelFrame extends javax.swing.JFrame {
             
             devFieldName.setText(devFieldName.getText().toLowerCase().trim());
             
-            if(devFieldName.getText().equals("")&&!multiMap.isEmpty()){
+            if((devFieldName.getText().equals("") &&!multiMap.isEmpty())||(devFieldName.getText().equals("validate") &&!multiMap.isEmpty())){
                 //toMulti();
                 //////////////////////////////////////////DATABASE////////////////
                 try{
@@ -949,6 +949,7 @@ public class ExcelFrame extends javax.swing.JFrame {
                 manager.focusPreviousComponent();
                 techFieldName.setText("");
                 caseTextField.setText("");
+                devFieldName.setText("");
                 devFieldName.setEnabled(false);
                 if(oFrame.getCheckBoxStatus()){
                     if(multiSelected){
@@ -957,6 +958,11 @@ public class ExcelFrame extends javax.swing.JFrame {
                         multiLable.setText("OFF");
                     }
                 }
+                
+                JOptionPane.showMessageDialog(this,
+                        new JLabel("Case Added Successfully!",JLabel.CENTER),
+                        "Success",
+                        JOptionPane.PLAIN_MESSAGE);
             }else if(devFieldName.getText().toUpperCase().equals("CLEAR")){
                 
                 for(int i=0;i<multiDataTable.length;i++){
