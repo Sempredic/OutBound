@@ -2124,7 +2124,6 @@ public class ExcelFrame extends javax.swing.JFrame {
     public static void cellFillBlack(CellStyle style) {
         style.setFillForegroundColor(IndexedColors.BLACK.getIndex());
         style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-   
 
     }
     
@@ -2132,7 +2131,6 @@ public class ExcelFrame extends javax.swing.JFrame {
         style.setFillForegroundColor(IndexedColors.WHITE.getIndex());
         style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
    
-
     }
     
      public static void cellFillHGrey(CellStyle style) {

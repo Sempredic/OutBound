@@ -618,6 +618,62 @@ public class DatabaseObj {
         return exists;
     }
     
+    static String executeGetCellEntryInfoQ(String entryName)throws Exception{
+        
+        StringBuilder builder = new StringBuilder();
+        
+        String SQL = "SELECT cellEntries.*,areas.*\n" +
+                     "FROM areas RIGHT JOIN cellEntries ON areas.ID = cellEntries.CellID\n" +
+                     "WHERE cellEntries.EntryName = ?";
+        preparedStatement = conn.prepareStatement(SQL);
+        
+        preparedStatement.setString(1, entryName);
+        
+        ResultSet rs = preparedStatement.executeQuery();
+        
+        while(rs.next()){
+            builder.append("Entry Name: " + rs.getString("EntryName") + "\n");
+            builder.append("\n");
+            builder.append("Entry Date: " + rs.getDate("DateOfEntry") + "\n");
+            builder.append("\n");
+            builder.append("Area Name: " + rs.getString("AreaName") + "\n");
+            builder.append("\n");
+            builder.append("Shift: " + rs.getInt("Shift") + "\n");
+            builder.append("\n");
+            builder.append("Total Completed: " + rs.getInt("Total Completed") + "\n");
+        }
+        
+        return builder.toString();
+        
+    }
+    
+    static ArrayList<ArrayList> executeCellEntriesQ(String Date,String CellArea,String Shift)throws Exception{
+        
+        boolean exists = false;
+        ArrayList<ArrayList> theList = new ArrayList<ArrayList>();
+        
+        String SQL = "SELECT cellEntries.*,areas.*\n" +
+                     "FROM areas RIGHT JOIN cellEntries ON areas.ID = cellEntries.CellID\n" +
+                     "WHERE cellEntries.DateOfEntry = #"+Date+"# AND areas.AreaName=\"" + CellArea + "\" AND areas.Shift=" + Shift;
+     
+        stmt = conn.createStatement();
+    
+        ResultSet rs = stmt.executeQuery(SQL);
+        
+        while(rs.next()){
+            ArrayList list = new ArrayList();
+            list.add(rs.getInt("cellEntries.ID"));
+            list.add(rs.getString("EntryName"));
+            list.add(rs.getDate("DateOfEntry"));
+            list.add(rs.getString("AreaName"));
+            list.add(rs.getInt("Shift"));
+            list.add(rs.getInt("Total Completed"));
+            theList.add(list);
+        }
+        
+        return theList;
+    }
+    
     static ArrayList executeGetTechProdEntries(ArrayList devices,int entryID)throws Exception{
         ArrayList<ArrayList> tableList = new ArrayList();
         

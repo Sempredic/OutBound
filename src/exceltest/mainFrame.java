@@ -6,6 +6,7 @@
 package exceltest;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -24,6 +25,7 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
@@ -51,6 +53,7 @@ public class mainFrame extends javax.swing.JFrame {
     String curDate;
     boolean dbExist;
     List theList;
+    List entriesList;
     
     public mainFrame() {
         
@@ -68,8 +71,9 @@ public class mainFrame extends javax.swing.JFrame {
         date = new Date();
         curDate = formatter.format(date);
         dbExist = false;
-        theList = new List();
+        theList = new List(); 
         theList.setEnabled(false);
+        entriesList = new List();
         
         initExistingTechList();
         initDatabaseStatus();
@@ -650,6 +654,17 @@ public class mainFrame extends javax.swing.JFrame {
         }
     }
     
+    private void entriesListStateChanged(java.awt.event.ItemEvent evt,JTextArea entriesTextArea){
+        
+        try{
+            entriesTextArea.removeAll();
+            entriesTextArea.setText(DatabaseObj.executeGetCellEntryInfoQ(entriesList.getSelectedItem()));
+        }catch(Exception e){
+            System.out.println(e.toString());
+        }
+        
+    }
+    
     private void doneButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_doneButtonActionPerformed
         // TODO add your handling code here:
         loadTechIDList();
@@ -663,6 +678,14 @@ public class mainFrame extends javax.swing.JFrame {
         JLabel theDateLabel = new JLabel("Entry Date:",JLabel.CENTER);
         JLabel theArea = new JLabel("Select Area", JLabel.CENTER);
         JLabel theShift = new JLabel("Select Shift", JLabel.CENTER);
+        
+        JPanel entriesPanel = new JPanel(new GridBagLayout());
+        JLabel entryListLabel = new JLabel("Existing Entries:",JLabel.CENTER);
+        JTextArea entriesTextArea = new JTextArea(10,15);
+        entriesTextArea.setEditable(false);
+        entriesTextArea.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        GridBagConstraints entriesGBC = new GridBagConstraints();
+        
 
         int exists = 0;
         String areaName = " ";
@@ -683,6 +706,12 @@ public class mainFrame extends javax.swing.JFrame {
         areaOB.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 areaOBItemStateChanged(evt);
+            }
+        });
+        
+        entriesList.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                entriesListStateChanged(evt,entriesTextArea);
             }
         });
         
@@ -738,6 +767,8 @@ public class mainFrame extends javax.swing.JFrame {
         gbc.insets = new Insets(0,50,0,20);
         gbc.fill = GridBagConstraints.VERTICAL;
         panel.add(theList,gbc);
+        
+        
 
         int option = JOptionPane.showConfirmDialog(this, panel,"Confirm Area",JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE);
 
@@ -748,12 +779,40 @@ public class mainFrame extends javax.swing.JFrame {
             
             if(areaName != null){
                 try{
+                    
+                        for(ArrayList list:DatabaseObj.executeCellEntriesQ(theDate.getText(),(String)areaOB.getSelectedItem(),
+                                (String)shiftOB.getSelectedItem())){
+                            entriesList.add((String)list.get(1));
+                        }
+                    
+                        entriesGBC.gridx=0;
+                        entriesGBC.gridy=0;
+                        entriesGBC.fill = GridBagConstraints.HORIZONTAL;
+                        
+                        entriesGBC.insets = new Insets(5,0,10,0);
+                        entriesPanel.add(entryListLabel,entriesGBC);
+                        
+                        entriesGBC.gridx=0;
+                        entriesGBC.gridy=1;
+                        entriesGBC.fill = GridBagConstraints.HORIZONTAL;
+                        entriesPanel.add(entriesList,entriesGBC);
+                        
+                        entriesGBC.gridx=2;
+                        entriesGBC.gridy=0;
+                        entriesGBC.gridheight = 7;
+                        entriesGBC.insets = new Insets(0,50,0,20);
+                        entriesGBC.fill = GridBagConstraints.VERTICAL;
+                        entriesPanel.add(entriesTextArea,entriesGBC);
+                        
+                        int listFrame = JOptionPane.showConfirmDialog(this, entriesPanel,"Confirm Area",JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE);
+                    
                     int online = JOptionPane.showConfirmDialog(this, "Start An Online Session?","Warning",JOptionPane.YES_NO_OPTION);
                     
                     if(online == 0){
 
                         if(DatabaseObj.executeCellEntryExistsQ(theDate.getText(),(String)areaOB.getSelectedItem(),
                                 (String)shiftOB.getSelectedItem())){
+                            
                             exists = JOptionPane.showConfirmDialog(this, "Entry Already Exists, Continue?","Warning",JOptionPane.YES_NO_OPTION);
                             if(exists == 0){
                                 if(checkEntryDevices(DatabaseObj.executeGetEntryIDQ(theDate.getText(),DatabaseObj.executeGetCellIDQ(theDate.getText(),areaName,shift)),areaName)){
