@@ -625,6 +625,7 @@ public class DatabaseObj {
         String SQL = "SELECT cellEntries.*,areas.*\n" +
                      "FROM areas RIGHT JOIN cellEntries ON areas.ID = cellEntries.CellID\n" +
                      "WHERE cellEntries.EntryName = ?";
+        
         preparedStatement = conn.prepareStatement(SQL);
         
         preparedStatement.setString(1, entryName);
@@ -632,6 +633,9 @@ public class DatabaseObj {
         ResultSet rs = preparedStatement.executeQuery();
         
         while(rs.next()){
+            
+            builder.append("=== Selected Entry Info ===\n");
+             builder.append("\n");
             builder.append("Entry Name: " + rs.getString("EntryName") + "\n");
             builder.append("\n");
             builder.append("Entry Date: " + rs.getDate("DateOfEntry") + "\n");
@@ -644,6 +648,28 @@ public class DatabaseObj {
         }
         
         return builder.toString();
+        
+    }
+    
+    static int executeGetCellEntryIDQ(String entryName)throws Exception{
+        
+        int ID = 0;
+        
+        String SQL = "SELECT cellEntries.ID\n" +
+                     "FROM cellEntries\n" +
+                     "WHERE cellEntries.EntryName = ?";
+        
+        preparedStatement = conn.prepareStatement(SQL);
+        
+        preparedStatement.setString(1, entryName);
+        
+        ResultSet rs = preparedStatement.executeQuery();
+        
+        while(rs.next()){
+            ID = rs.getInt("ID");
+        }
+        
+        return ID;
         
     }
     
@@ -933,7 +959,7 @@ public class DatabaseObj {
 
     }
     
-    static LinkedHashMap<String,String> executeCellEntryAppendQ(String Date,String CellArea,String Shift)throws Exception{
+    static LinkedHashMap<String,String> executeCellEntryAppendQ(String Date,String CellArea,String Shift,String EntryName)throws Exception{
         LinkedHashMap<String,String> cellEntryInfo = new LinkedHashMap<String,String>();
         int areaID = 0;
         int cellEntryID = 0;
@@ -944,9 +970,10 @@ public class DatabaseObj {
         cellEntryInfo.put("AreaID", String.valueOf(areaID));
         cellEntryInfo.put("AreaName",CellArea);
         cellEntryInfo.put("Shift",Shift);
+        cellEntryInfo.put("EntryName",EntryName);
         
-        String appendSQL = "INSERT INTO cellEntries ( DateOfEntry, CellID )\n" +
-                           "VALUES (#" + Date + "#," + areaID + ")";
+        String appendSQL = "INSERT INTO cellEntries ( DateOfEntry, CellID, EntryName )\n" +
+                           "VALUES (#" + Date + "#," + areaID + ",\""+EntryName+"\")";
         
         stmt.executeUpdate(appendSQL);
         

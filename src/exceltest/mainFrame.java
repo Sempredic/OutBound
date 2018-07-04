@@ -9,9 +9,13 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.KeyboardFocusManager;
 import java.awt.List;
+import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.PrintWriter;
 import java.nio.file.Files;
@@ -20,8 +24,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -54,6 +61,26 @@ public class mainFrame extends javax.swing.JFrame {
     boolean dbExist;
     List theList;
     List entriesList;
+    LinkedHashMap<String,String> entryMap;
+    Object[] options;
+    String[] shifts;
+    JFormattedTextField theDate; 
+    JLabel theDateLabel;
+    JLabel theArea;
+    JLabel theShift;
+    ArrayList<String> entriesArray;
+    JFrame entriesFrame;
+    JPanel entriesPanel;
+    JLabel entryListLabel;
+    JTextArea entriesTextArea;
+    JButton addEntryButton;
+    JButton entryOKButton;
+    GridBagConstraints entriesGBC;
+    int exists;
+    String areaName;
+    String shift;
+    JComboBox<String> shiftOB;
+    JComboBox<Object> areaOB;
     
     public mainFrame() {
         
@@ -74,10 +101,14 @@ public class mainFrame extends javax.swing.JFrame {
         theList = new List(); 
         theList.setEnabled(false);
         entriesList = new List();
+        shifts = new String[]{"1","2"};
+        entriesArray = new ArrayList<String>();
         
         initExistingTechList();
         initDatabaseStatus();
         initFolders();
+        
+        
     }
 
     /**
@@ -665,34 +696,117 @@ public class mainFrame extends javax.swing.JFrame {
         
     }
     
+    private void addEntryButtonPressed(ActionEvent ae){
+        
+        int online = JOptionPane.showConfirmDialog(this, "Start An Online Session?","Warning",JOptionPane.YES_NO_OPTION);
+        
+        if(online==0){
+            
+            JPanel labels = new JPanel(new GridLayout(0,1,2,2));
+            labels.add(new JLabel("Enter New Device Name", SwingConstants.CENTER));
+            labels.add(new JTextField());
+
+            String option = JOptionPane.showInputDialog(labels, "Enter Entry Name");
+            
+            if(option != null){
+                if(!option.isEmpty()){
+
+                    if(!entriesArray.contains(option)){
+                        try{
+                            if(!areaFrame.getAreaByName(areaName).getDeviceTypes().isEmpty()){
+                                dbExist = false;
+                                entryMap = DatabaseObj.executeCellEntryAppendQ(theDate.getText(),areaName,shift,option);
+                                DatabaseObj.executeTechProdEntriesAppendQ(entryMap, techIDList);
+                                writeToFileSave();
+                                writeToFileSave2();
+                                setRoster(rosterList);
+                                prepExcelFrame(entryMap);
+                                dispose();
+                            }else{
+                                JOptionPane.showMessageDialog(this,"Cell Area Has No Assigned Devices","Try Again", JOptionPane.WARNING_MESSAGE);
+                            }
+                        }catch(Exception e){
+                            System.out.println(e.toString());
+                        }
+                    }else{
+                        JOptionPane.showMessageDialog(this,"Name Already Exists","Try Again", JOptionPane.WARNING_MESSAGE);
+                    }  
+                }
+            }   
+        }else if(online==1){
+            dbExist = false;
+            entryMap.put("EntryID", " ");
+            entryMap.put("Date",theDate.getText());
+            entryMap.put("AreaID","0");
+            entryMap.put("AreaName",areaName);
+            entryMap.put("Shift",shift);
+            writeToFileSave();
+            writeToFileSave2();
+            setRoster(rosterList);
+            prepExcelFrame(entryMap);
+            dispose();
+            System.out.print(curDate);
+        }
+
+    }
+    
+    private void entryOKButtonPressed(ActionEvent ae){
+        
+        int cellEntryID;
+        
+        try{
+            
+            cellEntryID = DatabaseObj.executeGetCellEntryIDQ(entriesList.getSelectedItem());
+            
+            if(checkEntryDevices(cellEntryID,areaName)){
+                dbExist = true;
+                entryMap.put("EntryID",String.valueOf(cellEntryID));
+                entryMap.put("Date",theDate.getText());
+                entryMap.put("AreaID", String.valueOf(DatabaseObj.executeGetCellIDQ(theDate.getText(),areaName,shift)));
+                entryMap.put("AreaName",areaName);
+                entryMap.put("Shift",shift);
+                writeToFileSave();
+                writeToFileSave2();
+                setRoster(rosterList);
+                prepExcelFrame(entryMap);
+                dispose();
+            }
+        }catch(Exception e){
+            System.out.println(e.toString());
+        }
+        
+    }
+    
     private void doneButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_doneButtonActionPerformed
         // TODO add your handling code here:
         loadTechIDList();
-        LinkedHashMap<String,String> entryMap = new LinkedHashMap<String,String>();
-        Object[] options = areaFrame.getAreaMapNames().toArray();
-        Object[] stuff = {"1","2","1","2","1","2","1","2"};
-        String[] shifts = {"1","2"};
-        JFormattedTextField theDate = new JFormattedTextField(formatter);
+        entryMap = new LinkedHashMap<String,String>();
+        options = areaFrame.getAreaMapNames().toArray();
+        theDate = new JFormattedTextField(formatter);
         theDate.setHorizontalAlignment(JTextField.CENTER);
         theDate.setText(curDate);
-        JLabel theDateLabel = new JLabel("Entry Date:",JLabel.CENTER);
-        JLabel theArea = new JLabel("Select Area", JLabel.CENTER);
-        JLabel theShift = new JLabel("Select Shift", JLabel.CENTER);
+        theDateLabel = new JLabel("Entry Date:",JLabel.CENTER);
+        theArea = new JLabel("Select Area", JLabel.CENTER);
+        theShift = new JLabel("Select Shift", JLabel.CENTER);
         
+        JFrame entriesFrame = new JFrame();
         JPanel entriesPanel = new JPanel(new GridBagLayout());
         JLabel entryListLabel = new JLabel("Existing Entries:",JLabel.CENTER);
-        JTextArea entriesTextArea = new JTextArea(10,15);
+        JTextArea entriesTextArea = new JTextArea(13,16);
         entriesTextArea.setEditable(false);
         entriesTextArea.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        entriesTextArea.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        JButton addEntryButton = new JButton("Add New Entry");
+        JButton entryOKButton = new JButton("OK");
         GridBagConstraints entriesGBC = new GridBagConstraints();
         
 
-        int exists = 0;
-        String areaName = " ";
-        String shift = " ";
+        exists = 0;
+        areaName = " ";
+        shift = " ";
         
-        JComboBox<String> shiftOB = new JComboBox<String>(shifts);
-        JComboBox<Object> areaOB = new JComboBox<Object>(options);
+        shiftOB = new JComboBox<String>(shifts);
+        areaOB = new JComboBox<Object>(options);
         
         if((String)areaOB.getSelectedItem()!=null){
             theList.removeAll();
@@ -702,16 +816,40 @@ public class mainFrame extends javax.swing.JFrame {
         }else{
             theList.removeAll();
         }
-
+        
+        entriesList.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                entriesListStateChanged(evt,entriesTextArea);
+            }
+        });
+        
         areaOB.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 areaOBItemStateChanged(evt);
             }
         });
         
-        entriesList.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                entriesListStateChanged(evt,entriesTextArea);
+        entryOKButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent ae) {
+                if(entriesList.getSelectedItems().length >0){
+                    entryOKButtonPressed(ae);
+                } 
+            }
+        });
+        
+        addEntryButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent ae) {         
+                addEntryButtonPressed(ae);
+            }
+        });
+        
+        entriesFrame.addWindowListener(new WindowAdapter()
+        {
+            @Override
+            public void windowClosing(WindowEvent e)
+            {
+                entriesList.removeAll();
+                entriesArray.clear();
             }
         });
         
@@ -783,6 +921,7 @@ public class mainFrame extends javax.swing.JFrame {
                         for(ArrayList list:DatabaseObj.executeCellEntriesQ(theDate.getText(),(String)areaOB.getSelectedItem(),
                                 (String)shiftOB.getSelectedItem())){
                             entriesList.add((String)list.get(1));
+                            entriesArray.add((String)list.get(1));
                         }
                     
                         entriesGBC.gridx=0;
@@ -794,8 +933,15 @@ public class mainFrame extends javax.swing.JFrame {
                         
                         entriesGBC.gridx=0;
                         entriesGBC.gridy=1;
-                        entriesGBC.fill = GridBagConstraints.HORIZONTAL;
                         entriesPanel.add(entriesList,entriesGBC);
+                        
+                        entriesGBC.gridx=0;
+                        entriesGBC.gridy=2;
+                        entriesPanel.add(addEntryButton,entriesGBC);
+                        
+                        entriesGBC.gridx=0;
+                        entriesGBC.gridy=3;
+                        entriesPanel.add(entryOKButton,entriesGBC);
                         
                         entriesGBC.gridx=2;
                         entriesGBC.gridy=0;
@@ -803,77 +949,81 @@ public class mainFrame extends javax.swing.JFrame {
                         entriesGBC.insets = new Insets(0,50,0,20);
                         entriesGBC.fill = GridBagConstraints.VERTICAL;
                         entriesPanel.add(entriesTextArea,entriesGBC);
-                        
-                        int listFrame = JOptionPane.showConfirmDialog(this, entriesPanel,"Confirm Area",JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE);
-                    
-                    int online = JOptionPane.showConfirmDialog(this, "Start An Online Session?","Warning",JOptionPane.YES_NO_OPTION);
-                    
-                    if(online == 0){
+                        entriesFrame.add(entriesPanel);
+                        entriesFrame.setSize(430,300);
+                        entriesFrame.setResizable(false);
+                        entriesFrame.setLocationRelativeTo(this);
+                        entriesFrame.setVisible(true);
 
-                        if(DatabaseObj.executeCellEntryExistsQ(theDate.getText(),(String)areaOB.getSelectedItem(),
-                                (String)shiftOB.getSelectedItem())){
-                            
-                            exists = JOptionPane.showConfirmDialog(this, "Entry Already Exists, Continue?","Warning",JOptionPane.YES_NO_OPTION);
-                            if(exists == 0){
-                                if(checkEntryDevices(DatabaseObj.executeGetEntryIDQ(theDate.getText(),DatabaseObj.executeGetCellIDQ(theDate.getText(),areaName,shift)),areaName)){
-                                    dbExist = true;
-                                    entryMap.put("EntryID",String.valueOf(DatabaseObj.executeGetEntryIDQ(theDate.getText(),DatabaseObj.executeGetCellIDQ(theDate.getText(),areaName,shift))));
-                                    entryMap.put("Date",theDate.getText());
-                                    entryMap.put("AreaID", String.valueOf(DatabaseObj.executeGetCellIDQ(theDate.getText(),areaName,shift)));
-                                    entryMap.put("AreaName",areaName);
-                                    entryMap.put("Shift",shift);
-                                    writeToFileSave();
-                                    writeToFileSave2();
-                                    setRoster(rosterList);
-                                    prepExcelFrame(entryMap);
-                                    dispose();
-                                } 
-                            }
-                        }else{
-                            exists = JOptionPane.showConfirmDialog(this, "Create New Entry?","Entry Doesn't Exist",JOptionPane.YES_NO_CANCEL_OPTION);
-                            if(exists == 0){
-                                if(!areaFrame.getAreaByName(areaName).getDeviceTypes().isEmpty()){
-                                    dbExist = false;
-                                    entryMap = DatabaseObj.executeCellEntryAppendQ(theDate.getText(),areaName,shift);
-                                    DatabaseObj.executeTechProdEntriesAppendQ(entryMap, techIDList);
-                                    writeToFileSave();
-                                    writeToFileSave2();
-                                    setRoster(rosterList);
-                                    prepExcelFrame(entryMap);
-                                    dispose();
-                                }else{
-                                    JOptionPane.showMessageDialog(this,"Cell Area Has No Assigned Devices","Try Again", JOptionPane.WARNING_MESSAGE);
-                                }
-                                
-                            }else if(exists == 1){
-                                dbExist = false;
-                                entryMap.put("EntryID", " ");
-                                entryMap.put("Date",theDate.getText());
-                                entryMap.put("AreaID","0");
-                                entryMap.put("AreaName",areaName);
-                                entryMap.put("Shift",shift);
-                                writeToFileSave();
-                                writeToFileSave2();
-                                setRoster(rosterList);
-                                prepExcelFrame(entryMap);
-                                dispose();
-                                System.out.print(curDate);
-                            }
-
-                        }
-                    }else if(online ==1){
-                        dbExist = false;
-                        entryMap.put("EntryID", " ");
-                        entryMap.put("Date",theDate.getText());
-                        entryMap.put("AreaID","0");
-                        entryMap.put("AreaName",areaName);
-                        entryMap.put("Shift",shift);
-                        writeToFileSave();
-                        writeToFileSave2();
-                        setRoster(rosterList);
-                        prepExcelFrame(entryMap);
-                        dispose();
-                    }
+//                    int online = JOptionPane.showConfirmDialog(this, "Start An Online Session?","Warning",JOptionPane.YES_NO_OPTION);
+//                    
+//                    if(online == 0){
+//                        
+//                        //int listFrame = JOptionPane.showConfirmDialog(this, entriesPanel,"Confirm Area",JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE);
+//                        if(DatabaseObj.executeCellEntryExistsQ(theDate.getText(),(String)areaOB.getSelectedItem(),
+//                                (String)shiftOB.getSelectedItem())){
+//                            
+//                            exists = JOptionPane.showConfirmDialog(this, "Entry Already Exists, Continue?","Warning",JOptionPane.YES_NO_OPTION);
+//                            if(exists == 0){
+//                                if(checkEntryDevices(DatabaseObj.executeGetEntryIDQ(theDate.getText(),DatabaseObj.executeGetCellIDQ(theDate.getText(),areaName,shift)),areaName)){
+//                                    dbExist = true;
+//                                    entryMap.put("EntryID",String.valueOf(DatabaseObj.executeGetEntryIDQ(theDate.getText(),DatabaseObj.executeGetCellIDQ(theDate.getText(),areaName,shift))));
+//                                    entryMap.put("Date",theDate.getText());
+//                                    entryMap.put("AreaID", String.valueOf(DatabaseObj.executeGetCellIDQ(theDate.getText(),areaName,shift)));
+//                                    entryMap.put("AreaName",areaName);
+//                                    entryMap.put("Shift",shift);
+//                                    writeToFileSave();
+//                                    writeToFileSave2();
+//                                    setRoster(rosterList);
+//                                    prepExcelFrame(entryMap);
+//                                    dispose();
+//                                } 
+//                            }
+//                        }else{
+//                            exists = JOptionPane.showConfirmDialog(this, "Create New Entry?","Entry Doesn't Exist",JOptionPane.YES_NO_CANCEL_OPTION);
+//                            if(exists == 0){
+//                                if(!areaFrame.getAreaByName(areaName).getDeviceTypes().isEmpty()){
+//                                    dbExist = false;
+//                                    entryMap = DatabaseObj.executeCellEntryAppendQ(theDate.getText(),areaName,shift);
+//                                    DatabaseObj.executeTechProdEntriesAppendQ(entryMap, techIDList);
+//                                    writeToFileSave();
+//                                    writeToFileSave2();
+//                                    setRoster(rosterList);
+//                                    prepExcelFrame(entryMap);
+//                                    dispose();
+//                                }else{
+//                                    JOptionPane.showMessageDialog(this,"Cell Area Has No Assigned Devices","Try Again", JOptionPane.WARNING_MESSAGE);
+//                                }
+//                                
+//                            }else if(exists == 1){
+//                                dbExist = false;
+//                                entryMap.put("EntryID", " ");
+//                                entryMap.put("Date",theDate.getText());
+//                                entryMap.put("AreaID","0");
+//                                entryMap.put("AreaName",areaName);
+//                                entryMap.put("Shift",shift);
+//                                writeToFileSave();
+//                                writeToFileSave2();
+//                                setRoster(rosterList);
+//                                prepExcelFrame(entryMap);
+//                                dispose();
+//                                System.out.print(curDate);
+//                            }
+//
+//                        }
+//                    }else if(online ==1){
+//                        dbExist = false;
+//                        entryMap.put("EntryID", " ");
+//                        entryMap.put("Date",theDate.getText());
+//                        entryMap.put("AreaID","0");
+//                        entryMap.put("AreaName",areaName);
+//                        entryMap.put("Shift",shift);
+//                        writeToFileSave();
+//                        writeToFileSave2();
+//                        setRoster(rosterList);
+//                        prepExcelFrame(entryMap);
+//                        dispose();
+//                    }
                 }catch(Exception e){
                     ///////////////////////////OFFLINE MODE//////////////////////////////
                     JOptionPane.showMessageDialog(this,"Error With Database, Check Connection","Try Again", JOptionPane.WARNING_MESSAGE);
