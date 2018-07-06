@@ -634,17 +634,19 @@ public class DatabaseObj {
         
         while(rs.next()){
             
-            builder.append("=== Selected Entry Info ===\n");
+            builder.append("  === Selected Entry Info ===\n");
              builder.append("\n");
-            builder.append("Entry Name: " + rs.getString("EntryName") + "\n");
+            builder.append("  Entry Name: " + rs.getString("EntryName") + "\n");
             builder.append("\n");
-            builder.append("Entry Date: " + rs.getDate("DateOfEntry") + "\n");
+            builder.append("  Entry Date: " + rs.getDate("DateOfEntry") + "\n");
             builder.append("\n");
-            builder.append("Area Name: " + rs.getString("AreaName") + "\n");
+            builder.append("  Area Name: " + rs.getString("AreaName") + "\n");
             builder.append("\n");
-            builder.append("Shift: " + rs.getInt("Shift") + "\n");
+            builder.append("  Shift: " + rs.getInt("Shift") + "\n");
             builder.append("\n");
-            builder.append("Total Completed: " + rs.getInt("Total Completed") + "\n");
+            builder.append("  Total Completed: " + rs.getInt("Total Completed") + "\n");
+            builder.append("\n");
+            builder.append("  Created By: " + rs.getString("UserID") + "\n");
         }
         
         return builder.toString();
@@ -963,6 +965,7 @@ public class DatabaseObj {
         LinkedHashMap<String,String> cellEntryInfo = new LinkedHashMap<String,String>();
         int areaID = 0;
         int cellEntryID = 0;
+        String userID = System.getProperty("user.name");
         
         areaID = executeGetCellIDQ(Date,CellArea,Shift);
         
@@ -972,11 +975,11 @@ public class DatabaseObj {
         cellEntryInfo.put("Shift",Shift);
         cellEntryInfo.put("EntryName",EntryName);
         
-        String appendSQL = "INSERT INTO cellEntries ( DateOfEntry, CellID, EntryName )\n" +
-                           "VALUES (#" + Date + "#," + areaID + ",\""+EntryName+"\")";
+        String appendSQL = "INSERT INTO cellEntries ( UserID, DateOfEntry, CellID, EntryName )\n" +
+                           "VALUES ( \""+userID+"\", #" + Date + "#," + areaID + ",\""+EntryName+"\")";
         
         stmt.executeUpdate(appendSQL);
-        
+    
         ResultSet rs = stmt.getGeneratedKeys();
             
         while(rs.next()){

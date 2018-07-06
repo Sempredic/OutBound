@@ -792,7 +792,7 @@ public class mainFrame extends javax.swing.JFrame {
         JFrame entriesFrame = new JFrame();
         JPanel entriesPanel = new JPanel(new GridBagLayout());
         JLabel entryListLabel = new JLabel("Existing Entries:",JLabel.CENTER);
-        JTextArea entriesTextArea = new JTextArea(13,16);
+        JTextArea entriesTextArea = new JTextArea(15,16);
         entriesTextArea.setEditable(false);
         entriesTextArea.setFont(new Font("Segoe UI", Font.BOLD, 12));
         entriesTextArea.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
