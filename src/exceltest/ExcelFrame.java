@@ -978,25 +978,34 @@ public class ExcelFrame extends javax.swing.JFrame {
                 devFieldName.setEnabled(false);
                 devFieldName.setText("");    
             }else if(DatabaseObj.getSKUStatusBoolean()){
-                ///////////////////////////////////DATABASE////////////////////////////////
-                try{
-                    String skuValue = DatabaseObj.getDeviceNameFromSKUQ(devFieldName.getText());
-  
-                    if(tableModel.findColumn(skuValue)!=-1){
-                        devFieldName.setText(skuValue);
-                        toMulti();
-                    }else{
-                        JOptionPane.showMessageDialog(this,
+                if(tableModel.findColumn(devFieldName.getText())!=-1){
+                    toMulti();
+                }else{                   
+                        ///////////////////////////////////DATABASE////////////////////////////////
+                    try{
+                        String skuValue = DatabaseObj.getDeviceNameFromSKUQ(devFieldName.getText());
+
+                        if(tableModel.findColumn(skuValue)!=-1){
+                            devFieldName.setText(skuValue);
+                            toMulti();
+                        }else if(curTable.getAreaDevices().contains(devFieldName.getText().trim())){
+                            if(tableModel.findColumn(devFieldName.getText().trim())!=-1){
+                                devFieldName.setText(devFieldName.getText().trim());
+                                toMulti();
+                            }
+                        }else{
+                            JOptionPane.showMessageDialog(this,
                             new JLabel("Device Type Not Found",JLabel.CENTER),
                             "Error",
                             JOptionPane.PLAIN_MESSAGE);
-                        devFieldName.setText("");
+                            devFieldName.setText("");
+
+                        }
+                    }catch(Exception e){
+                        System.out.println(e.toString());
+                        errorLogger.writeToLogger(e.toString());
                     }
-                }catch(Exception e){
-                    System.out.println(e.toString());
-                    errorLogger.writeToLogger(e.toString());
                 }
-      
             }else if(!DatabaseObj.getSKUStatusBoolean()){
                     
                 if(tableModel.findColumn(devFieldName.getText())!=-1){
