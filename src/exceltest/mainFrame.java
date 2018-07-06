@@ -696,7 +696,7 @@ public class mainFrame extends javax.swing.JFrame {
         
     }
     
-    private void addEntryButtonPressed(ActionEvent ae){
+    private void addEntryButtonPressed(ActionEvent ae,JFrame frame){
         
         int online = JOptionPane.showConfirmDialog(this, "Start An Online Session?","Warning",JOptionPane.YES_NO_OPTION);
         
@@ -721,6 +721,7 @@ public class mainFrame extends javax.swing.JFrame {
                                 writeToFileSave2();
                                 setRoster(rosterList);
                                 prepExcelFrame(entryMap);
+                                frame.dispose();
                                 dispose();
                             }else{
                                 JOptionPane.showMessageDialog(this,"Cell Area Has No Assigned Devices","Try Again", JOptionPane.WARNING_MESSAGE);
@@ -731,6 +732,8 @@ public class mainFrame extends javax.swing.JFrame {
                     }else{
                         JOptionPane.showMessageDialog(this,"Name Already Exists","Try Again", JOptionPane.WARNING_MESSAGE);
                     }  
+                }else{
+                    JOptionPane.showMessageDialog(this,"Enter An Entry Name","Try Again", JOptionPane.WARNING_MESSAGE);
                 }
             }   
         }else if(online==1){
@@ -750,7 +753,7 @@ public class mainFrame extends javax.swing.JFrame {
 
     }
     
-    private void entryOKButtonPressed(ActionEvent ae){
+    private void entryOKButtonPressed(ActionEvent ae,JFrame frame){
         
         int cellEntryID;
         
@@ -769,6 +772,7 @@ public class mainFrame extends javax.swing.JFrame {
                 writeToFileSave2();
                 setRoster(rosterList);
                 prepExcelFrame(entryMap);
+                frame.dispose();
                 dispose();
             }
         }catch(Exception e){
@@ -832,14 +836,16 @@ public class mainFrame extends javax.swing.JFrame {
         entryOKButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent ae) {
                 if(entriesList.getSelectedItems().length >0){
-                    entryOKButtonPressed(ae);
+                    entryOKButtonPressed(ae,entriesFrame);
+                }else{
+                    JOptionPane.showMessageDialog(null,"Select Existing Entry or Create New","Try Again", JOptionPane.WARNING_MESSAGE);
                 } 
             }
         });
         
         addEntryButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent ae) {         
-                addEntryButtonPressed(ae);
+                addEntryButtonPressed(ae,entriesFrame);
             }
         });
         
