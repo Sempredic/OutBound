@@ -716,6 +716,7 @@ public class mainFrame extends javax.swing.JFrame {
                             if(!areaFrame.getAreaByName(areaName).getDeviceTypes().isEmpty()){
                                 dbExist = false;
                                 entryMap = DatabaseObj.executeCellEntryAppendQ(theDate.getText(),areaName,shift,option);
+                                entryMap.put("TableName",option);
                                 DatabaseObj.executeTechProdEntriesAppendQ(entryMap, techIDList);
                                 writeToFileSave();
                                 writeToFileSave2();
@@ -743,6 +744,7 @@ public class mainFrame extends javax.swing.JFrame {
             entryMap.put("AreaID","0");
             entryMap.put("AreaName",areaName);
             entryMap.put("Shift",shift);
+            entryMap.put("TableName","OFFLINE");
             writeToFileSave();
             writeToFileSave2();
             setRoster(rosterList);
@@ -768,6 +770,7 @@ public class mainFrame extends javax.swing.JFrame {
                 entryMap.put("AreaID", String.valueOf(DatabaseObj.executeGetCellIDQ(theDate.getText(),areaName,shift)));
                 entryMap.put("AreaName",areaName);
                 entryMap.put("Shift",shift);
+                entryMap.put("TableName","OFFLINE");
                 writeToFileSave();
                 writeToFileSave2();
                 setRoster(rosterList);
@@ -1043,6 +1046,7 @@ public class mainFrame extends javax.swing.JFrame {
                         entryMap.put("AreaID","0");
                         entryMap.put("AreaName",areaName);
                         entryMap.put("Shift",shift);
+                        entryMap.put("TableName","OFFLINE");
                         writeToFileSave();
                         writeToFileSave2();
                         setRoster(rosterList);
@@ -1284,6 +1288,7 @@ public class mainFrame extends javax.swing.JFrame {
                     entryMap.put("AreaID","0");
                     entryMap.put("AreaName","CellA");
                     entryMap.put("Shift","2");
+                    entryMap.put("TableName","OFFLINE");
 
                     setRoster(tempRoster);
                     Table newTable = new Table(rosterList,entryMap,saveTable);
