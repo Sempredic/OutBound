@@ -181,7 +181,7 @@ public class ExcelFrame extends javax.swing.JFrame {
             multiLable.setText("OFF");
         }
         
-        titleLabel.setText("Temp");
+        titleLabel.setText(curTable.getTableName());
     }
     
     private void buildTableSaves(){

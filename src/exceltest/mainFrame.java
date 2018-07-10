@@ -770,7 +770,7 @@ public class mainFrame extends javax.swing.JFrame {
                 entryMap.put("AreaID", String.valueOf(DatabaseObj.executeGetCellIDQ(theDate.getText(),areaName,shift)));
                 entryMap.put("AreaName",areaName);
                 entryMap.put("Shift",shift);
-                entryMap.put("TableName","OFFLINE");
+                entryMap.put("TableName",entriesList.getSelectedItem());
                 writeToFileSave();
                 writeToFileSave2();
                 setRoster(rosterList);

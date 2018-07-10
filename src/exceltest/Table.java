@@ -129,6 +129,10 @@ public class Table{
         return databaseEntryInfo.get("Date");
     }
     
+    public String getTableName(){
+        return databaseEntryInfo.get("TableName");
+    }
+    
     public String getShiftInfo(){
       
         return databaseEntryInfo.get("Shift");
