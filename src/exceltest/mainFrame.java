@@ -689,7 +689,7 @@ public class mainFrame extends javax.swing.JFrame {
         
         try{
             entriesTextArea.removeAll();
-            entriesTextArea.setText(DatabaseObj.executeGetCellEntryInfoQ(entriesList.getSelectedItem()));
+            entriesTextArea.setText(DatabaseObj.executeGetCellEntryInfoQ(entriesList.getSelectedItem(),theDate.getText()));
         }catch(Exception e){
             System.out.println(e.toString());
         }

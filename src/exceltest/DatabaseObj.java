@@ -618,13 +618,13 @@ public class DatabaseObj {
         return exists;
     }
     
-    static String executeGetCellEntryInfoQ(String entryName)throws Exception{
+    static String executeGetCellEntryInfoQ(String entryName,String Date)throws Exception{
         
         StringBuilder builder = new StringBuilder();
         
         String SQL = "SELECT cellEntries.*,areas.*\n" +
                      "FROM areas RIGHT JOIN cellEntries ON areas.ID = cellEntries.CellID\n" +
-                     "WHERE cellEntries.EntryName = ?";
+                     "WHERE cellEntries.EntryName = ? AND cellEntries.DateOfEntry = #"+Date+"#";
         
         preparedStatement = conn.prepareStatement(SQL);
         

@@ -318,7 +318,10 @@ public class ExcelFrame extends javax.swing.JFrame {
                 }
             }
         }catch(Exception e){
-            System.out.println(e.getMessage());
+            
+            System.out.println(e.toString());
+            dbStatusLabel.setText("");
+            dbStatusLabel.setText(e.toString());
             errorLogger.writeToLogger(e.toString());
         }
     }
@@ -940,10 +943,13 @@ public class ExcelFrame extends javax.swing.JFrame {
                     if(DatabaseObj.getStatusBoolean()&&curTable.getEntryID()!=0){
                         System.out.println(DatabaseObj.executeCaseEntryAppendQ(
                         curTable.getDBEntryInfo(),techFieldName.getText(),caseTextField.getText(),multiMap));
+                        dbStatusLabel.setText("");
                     }
                     
                 }catch(Exception e){
                     System.out.println(e.toString());
+                    dbStatusLabel.setText("");
+                    dbStatusLabel.setText(e.toString());
                     errorLogger.writeToLogger(e.toString());
                 }
                 
@@ -992,10 +998,12 @@ public class ExcelFrame extends javax.swing.JFrame {
                         if(tableModel.findColumn(skuValue)!=-1){
                             devFieldName.setText(skuValue);
                             toMulti();
+                            dbStatusLabel.setText("");
                         }else if(curTable.getAreaDevices().contains(devFieldName.getText().trim())){
                             if(tableModel.findColumn(devFieldName.getText().trim())!=-1){
                                 devFieldName.setText(devFieldName.getText().trim());
                                 toMulti();
+                                dbStatusLabel.setText("");
                             }
                         }else{
                             JOptionPane.showMessageDialog(this,
@@ -1003,10 +1011,13 @@ public class ExcelFrame extends javax.swing.JFrame {
                             "Error",
                             JOptionPane.PLAIN_MESSAGE);
                             devFieldName.setText("");
+                            dbStatusLabel.setText("");
 
                         }
                     }catch(Exception e){
                         System.out.println(e.toString());
+                        dbStatusLabel.setText("");
+                        dbStatusLabel.setText(e.toString());
                         errorLogger.writeToLogger(e.toString());
                     }
                 }
@@ -1369,10 +1380,13 @@ public class ExcelFrame extends javax.swing.JFrame {
 
                                 int newVal = (Integer) tableModel.getValueAt(row, col) - entry.getValue();
                                 setTableValues(newVal, row, col);
+                                dbStatusLabel.setText("");
                             }
                         }
                     }catch(Exception e){
                         System.out.println(e.toString());
+                        dbStatusLabel.setText("");
+                        dbStatusLabel.setText(e.toString());
                         errorLogger.writeToLogger(e.toString());
                     }
                     
@@ -1522,6 +1536,8 @@ public class ExcelFrame extends javax.swing.JFrame {
                 
             }catch(Exception e){
                 System.out.println(e.toString());
+                dbStatusLabel.setText("");
+                dbStatusLabel.setText(e.toString());
                 errorLogger.writeToLogger(e.toString());
             }
             
@@ -1555,10 +1571,14 @@ public class ExcelFrame extends javax.swing.JFrame {
                                 setTableValues(newV, r, c);
                             }
                         }
+                        
+                        dbStatusLabel.setText("");
                                             
                     }catch(Exception e){
                         
                         System.out.println(e.toString());
+                        dbStatusLabel.setText("");
+                        dbStatusLabel.setText(e.toString());
                         errorLogger.writeToLogger(e.toString());
                         error = true;
                     }
@@ -2026,10 +2046,14 @@ public class ExcelFrame extends javax.swing.JFrame {
                                     tech,dev,value,curTable.getEntryID());
                             }else{
                                 DatabaseObj.executeTechProdEntriesAppendQ(curTable.getDBEntryInfo(), tech);
-                            }          
+                            }         
+                            
+                            dbStatusLabel.setText("");
                         }catch(Exception e){
                             
                             System.out.println(e.toString());
+                            dbStatusLabel.setText("");
+                            dbStatusLabel.setText(e.toString());
                             errorLogger.writeToLogger(e.toString());
                         }
                     }
@@ -2066,6 +2090,7 @@ public class ExcelFrame extends javax.swing.JFrame {
                 dbStatusLabel.setText(" ");
             }catch(Exception e){
 
+                dbStatusLabel.setText("");
                 dbStatusLabel.setText(e.toString());
                 errorLogger.writeToLogger(e.toString());
             }
