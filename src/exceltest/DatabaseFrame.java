@@ -1706,7 +1706,8 @@ public class DatabaseFrame extends javax.swing.JFrame {
     private void employeeAddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_employeeAddButtonActionPerformed
         // TODO add your handling code here:
         int employeeIDLength = employeeIDField.getText().length();
-        if(employeeIDLength >0 && employeeIDLength <5){
+        
+        if(employeeIDLength >0){
             if(employeeFNameField.getText().length()>0){
                 if(employeeLNameField.getText().length()>0){
                     if(employeePosField.getText().length()>0){

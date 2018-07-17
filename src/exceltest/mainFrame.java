@@ -619,10 +619,16 @@ public class mainFrame extends javax.swing.JFrame {
 
         if(employee!=null){
             
-            employeeArray = employee.split(" ");
-            employeeNumber = employeeArray[0];
-            employeeName = employeeArray[1];
-            
+            if(employee.contains("BD")){
+                employeeArray = employee.split(" ");
+                employeeNumber = employeeArray[0] + " BD";
+                employeeName = employeeArray[2]; 
+            }else{
+                employeeArray = employee.split(" ");
+                employeeNumber = employeeArray[0];
+                employeeName = employeeArray[1]; 
+            }
+
             if(!existingRosterList.containsKey(employeeNumber)){
                 
                 if(existingList.isShowing()){

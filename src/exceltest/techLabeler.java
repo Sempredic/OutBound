@@ -319,7 +319,7 @@ public class techLabeler extends javax.swing.JFrame {
         
         try{
             if(labelGeneratorTab.getSelectedIndex()==0){
-                if(techNumberField.getText().length()>0 && techNumberField.getText().contains(" ")==false){
+                if(techNumberField.getText().length()>0){
                     
                     if(techNumberField.getText().length()<10){
                         if(techYearField.getText().length()<5){
