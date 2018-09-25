@@ -1326,7 +1326,7 @@ public class DatabaseFrame extends javax.swing.JFrame {
             }
         });
         
-        tbColumn = new Object[]{"ID","Date","Area","Shift","Total Comp","Net Goal Total","% of Goal","% of Fails"};
+        tbColumn = new Object[]{"ID","UID","Date","Area","Shift","Total Comp","Net Goal Total","% of Goal","% of Fails"};
         //prodColumn = new Object[]{"TechID","FName","LName","iPhone","iPad","iTouch","Classic","Shuffle","Nano","A.Phone","A.Tab","Wearables","Total"};
         failColumn = new Object[]{"FName","LName","Device","Type"};
         failEntriesColumn = new Object[]{"ID","Date","Area","Shift"};

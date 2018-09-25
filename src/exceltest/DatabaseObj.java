@@ -1093,7 +1093,7 @@ public class DatabaseObj {
 //                     "WHERE "+ dateOfEntry + builder + "\n" +
 //                     "ORDER BY cellEntries.DateOfEntry";
 
-        String sql = "SELECT cellEntries.ID, cellEntries.DateOfEntry, areas.AreaName, areas.Shift, cellEntries.[Total Completed], cellEntries.AreaGoal, failCountQuery.CountOfprodID\n" +
+        String sql = "SELECT cellEntries.ID, cellEntries.UserID, cellEntries.DateOfEntry, areas.AreaName, areas.Shift, cellEntries.[Total Completed], cellEntries.AreaGoal, failCountQuery.CountOfprodID\n" +
                      "FROM (areas RIGHT JOIN cellEntries ON areas.ID = cellEntries.CellID) LEFT JOIN failCountQuery ON cellEntries.ID = failCountQuery.ID\n" +
                      "WHERE "+ dateOfEntry + builder + "\n" +
                      "ORDER BY cellEntries.DateOfEntry";
@@ -1107,6 +1107,7 @@ public class DatabaseObj {
             ArrayList row = new ArrayList();
             
             row.add(rs.getInt("ID"));
+            row.add(rs.getString("UserID"));
             row.add(rs.getDate("DateOfEntry"));
             row.add(rs.getString("AreaName"));
             row.add(rs.getString("Shift"));
