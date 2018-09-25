@@ -1322,6 +1322,10 @@ public class mainFrame extends javax.swing.JFrame {
     
     private void initExistingTechList(){
         
+        String employeeNumber = " ";
+        String employeeName = " ";
+        String[] employeeArray = new String[2];
+        
         try{
             File tmpDir = new File("Data\\roster.txt");
             File tmpDir2 = new File("Data\\roster2.txt");
@@ -1337,25 +1341,41 @@ public class mainFrame extends javax.swing.JFrame {
                 writeToFileSave2();
             }
             
+            
             for(String name:Files.readAllLines(Paths.get("Data\\roster.txt"))){
-                String[] li = {" "," "};
-                li = name.split(" ");
-                
-                if(!existingRosterList.containsKey(li[0])){
-                   existingRosterList.put(li[0],li[1]);
-                   existingList.add(li[0]);
-                   nameList.add(li[1]);
+
+                if(name.contains("BD")){
+                    employeeArray = name.split(" ");
+                    employeeNumber = employeeArray[0] + " BD";
+                    employeeName = employeeArray[2]; 
+                }else{
+                    employeeArray = name.split(" ");
+                    employeeNumber = employeeArray[0];
+                    employeeName = employeeArray[1]; 
+                }
+
+                if(!existingRosterList.containsKey(employeeName)){
+                   existingRosterList.put(employeeNumber,employeeName);
+                   existingList.add(employeeNumber);
+                   nameList.add(employeeName);
                 }
             }
             
             for(String names:Files.readAllLines(Paths.get("Data\\roster2.txt"))){
-                String[] li = {" "," "};
-                li = names.split(" ");
+                if(names.contains("BD")){
+                    employeeArray = names.split(" ");
+                    employeeNumber = employeeArray[0] + " BD";
+                    employeeName = employeeArray[2]; 
+                }else{
+                    employeeArray = names.split(" ");
+                    employeeNumber = employeeArray[0];
+                    employeeName = employeeArray[1]; 
+                }
                 
-                if(!existingRosterList.containsKey(li[0])){
-                   existingRosterList.put(li[0],li[1]);
-                   existingList2.add(li[0]);
-                   nameList2.add(li[1]);
+                if(!existingRosterList.containsKey(employeeName)){
+                   existingRosterList.put(employeeNumber,employeeName);
+                   existingList2.add(employeeNumber);
+                   nameList2.add(employeeName);
                 }
             }
         }catch(Exception e){
