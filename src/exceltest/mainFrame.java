@@ -1270,17 +1270,37 @@ public class mainFrame extends javax.swing.JFrame {
                     String name="";
 
                     for(int i=0;i<rows;i++){
-                        String[] theRow = saveList.get(i).trim().split(" ");
+                        //String[] theRow = saveList.get(i).trim().split(" ");
+                        //String techNum = " ";
+                        ArrayList<String> theRow = new ArrayList<String>();
+                        String[] saveListArray = saveList.get(i).trim().split(" ");
+                        
+                        if(saveList.get(i).trim().contains("BD")){
+                            saveListArray[0] = saveListArray[0] + " BD";
+                        }else{
+                            saveListArray[0] = saveListArray[0];
+                        }
+                        
+                        for(String word:saveListArray){
+                            theRow.add(word);
+                        }
+                        
+                        if(theRow.contains("BD")){
+                            theRow.remove("BD");
+                        }
+
                         for(int j=0;j<cols;j++){
                             if(j==0){
-                                tech = theRow[j];
+                                
+                                tech = theRow.get(j);
 
                             }else if(j==1){
-                                name = theRow[j];
+ 
+                                name = theRow.get(j);
 
                             }
 
-                            saveTable[i][j] = theRow[j];
+                            saveTable[i][j] = theRow.get(j);
 
                         }
                         if(i>0 && i<rows-1){
