@@ -755,6 +755,7 @@ public class mainFrame extends javax.swing.JFrame {
             writeToFileSave2();
             setRoster(rosterList);
             prepExcelFrame(entryMap);
+            frame.dispose();
             dispose();
             System.out.print(curDate);
         }
@@ -793,6 +794,7 @@ public class mainFrame extends javax.swing.JFrame {
     private void doneButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_doneButtonActionPerformed
         // TODO add your handling code here:
         loadTechIDList();
+        
         entryMap = new LinkedHashMap<String,String>();
         options = areaFrame.getAreaMapNames().toArray();
         theDate = new JFormattedTextField(formatter);
