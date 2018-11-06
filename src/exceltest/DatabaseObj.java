@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -74,7 +76,7 @@ public class DatabaseObj {
           Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
             //STEP 3: Open a connection
           System.out.println("Connecting to database: " + dbLocation + "...");
-          conn = DriverManager.getConnection("jdbc:ucanaccess://" + dbLocation);
+          conn = DriverManager.getConnection("jdbc:ucanaccess://" + dbLocation+";immediatelyReleaseResources=true");
           status = true;
  
        } catch(Exception e){
@@ -169,8 +171,20 @@ public class DatabaseObj {
         return devicesList;
     }
     
-    static void closeConnection() throws Exception{
-        conn.close();
+    static void closeConnection(){
+   
+        try {
+            if(!conn.isClosed()){
+                conn.close();
+                System.out.println("Connection Closing");
+            }else{
+                System.out.println("Already Closed");
+            }
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
+ 
+        
     }
     
     static String getStatus(){
@@ -211,16 +225,21 @@ public class DatabaseObj {
         try{
  
             timeout = conn.getNetworkTimeout();
-          
+            
             status = true;
         } catch(Exception e){
             
             status = false;
+            System.out.println("Status False");
         }
         
         return status;
     }
     
+    static Connection getConnectionObj(){
+        
+        return conn;
+    }
     static int getEmployeeID(String tech)throws Exception{
         int ID = 0;
         String SQL = "SELECT employees.ID\n" +

@@ -17,6 +17,7 @@ import javax.swing.table.*;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import static java.lang.Thread.sleep;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.DateFormat;
@@ -182,6 +183,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         }
         
         titleLabel.setText(curTable.getTableName());
+        
     }
     
     private void buildTableSaves(){
@@ -193,7 +195,7 @@ public class ExcelFrame extends javax.swing.JFrame {
             if(fileFolder.exists()){
             
                 for(File file:fileFolder.listFiles()){
-                    String[] fileName = file.getAbsolutePath().split("_");
+                    String[] fileName = file.getName().split("_");
 
                     if(fileName[0].contains(String.valueOf(curTable.getEntryID()))){
                         fileLocation = file.getAbsolutePath();
@@ -941,16 +943,27 @@ public class ExcelFrame extends javax.swing.JFrame {
                 //////////////////////////////////////////DATABASE////////////////
                 try{
                     if(DatabaseObj.getStatusBoolean()&&curTable.getEntryID()!=0){
-                        System.out.println(DatabaseObj.executeCaseEntryAppendQ(
-                        curTable.getDBEntryInfo(),techFieldName.getText(),caseTextField.getText(),multiMap));
-                        dbStatusLabel.setText("");
+                        File dbFile = new File(DatabaseObj.getDatabaseLocation());
+                        
+                        if(dbFile.exists()){
+                            
+                            System.out.println(DatabaseObj.executeCaseEntryAppendQ(
+                            curTable.getDBEntryInfo(),techFieldName.getText(),caseTextField.getText(),multiMap));
+                            dbStatusLabel.setText("");  
+                            //DatabaseObj.getConnectionObj().rollback();
+                        }else{
+                            System.out.println("FUCK SHIT");
+                        }
+                        
                     }
                     
                 }catch(Exception e){
+
                     System.out.println(e.toString());
                     dbStatusLabel.setText("");
                     dbStatusLabel.setText(e.toString());
                     errorLogger.writeToLogger(e.toString());
+                    
                 }
                 
                 commitMTable();
@@ -1043,6 +1056,8 @@ public class ExcelFrame extends javax.swing.JFrame {
                 devFieldName.setText("");
             }
         }   
+        
+     
     }//GEN-LAST:event_devFieldNameKeyPressed
 
     private void snapShotButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_snapShotButtonActionPerformed
@@ -1555,7 +1570,7 @@ public class ExcelFrame extends javax.swing.JFrame {
                 if(option==0){
                     ///////////////////////////////Database//////////////////////////////
                     try{
-                        
+
                         lastActionStack.clear();
                         lastScanDetailArea.setText("");
                         deletedList=DatabaseObj.executeDeleteCaseEntryQ(caseID);
