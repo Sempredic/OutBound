@@ -1521,7 +1521,7 @@ public class DatabaseFrame extends javax.swing.JFrame {
         Object[][] ob = new Object[ar.size()][failColumn.length];
         
         if(ar.size()==0){
-            JOptionPane.showMessageDialog(this,"No Fails For This Entry","Fails", JOptionPane.WARNING_MESSAGE);
+            //JOptionPane.showMessageDialog(this,"No Fails For This Entry","Fails", JOptionPane.WARNING_MESSAGE);
         }else{
             for(int row = 0;row<ar.size();row++){
                 for(int col =0;col<failColumn.length;col++){
@@ -1539,7 +1539,7 @@ public class DatabaseFrame extends javax.swing.JFrame {
         Object[][] ob = new Object[ar.size()][labelerColumn.length];
         
         if(ar.size()==0){
-            JOptionPane.showMessageDialog(this,"No Fails For This Entry","Fails", JOptionPane.WARNING_MESSAGE);
+            //JOptionPane.showMessageDialog(this,"No Fails For This Entry","Fails", JOptionPane.WARNING_MESSAGE);
         }else{
             for(int row = 0;row<ar.size();row++){
                 for(int col =0;col<labelerColumn.length;col++){
