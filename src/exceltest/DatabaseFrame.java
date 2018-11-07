@@ -55,12 +55,15 @@ public class DatabaseFrame extends javax.swing.JFrame {
     private TableModel prodModel; 
     private TableModel failModel;
     private TableModel failEntriesModel;
+    private TableModel labelerModel;
+    private TableModel labelerEntriesModel;
     private TableModel employeeEntriesModel;
     private TableModel areasEntriesModel;
     private TableModel caseEntriesModel;
     private Object[] tbColumn;
     private Object[] prodColumn;
     private Object[] failColumn;
+    private Object[] labelerColumn;
     private Object[] failEntriesColumn;
     private Object[] employeeTableColumn;
     private Object[] areasTableColumn;
@@ -82,6 +85,8 @@ public class DatabaseFrame extends javax.swing.JFrame {
         prodModel = new DefaultTableModel();
         failModel = new DefaultTableModel();
         failEntriesModel = new DefaultTableModel();
+        labelerModel = new DefaultTableModel();
+        labelerEntriesModel = new DefaultTableModel();
         employeeEntriesModel = new DefaultTableModel();
         areasEntriesModel = new DefaultTableModel();
         caseEntriesModel = new DefaultTableModel();
@@ -139,6 +144,9 @@ public class DatabaseFrame extends javax.swing.JFrame {
         prodTable = new javax.swing.JTable();
         jScrollPane3 = new javax.swing.JScrollPane();
         failTable = new javax.swing.JTable();
+        jPanel19 = new javax.swing.JPanel();
+        jScrollPane9 = new javax.swing.JScrollPane();
+        labelerTable = new javax.swing.JTable();
         typeLabel = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
@@ -244,7 +252,7 @@ public class DatabaseFrame extends javax.swing.JFrame {
         setTitle("Database Tool");
         setResizable(false);
 
-        typeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cell Records" }));
+        typeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cell Records","Labeler Records"}));
         typeComboBox.setSelectedItem(" ");
         typeComboBox.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -273,6 +281,22 @@ public class DatabaseFrame extends javax.swing.JFrame {
         jScrollPane3.setViewportView(failTable);
 
         entryProdTab.addTab("Entry Fails", jScrollPane3);
+
+        labelerTable.setModel(labelerModel);
+        jScrollPane9.setViewportView(labelerTable);
+
+        javax.swing.GroupLayout jPanel19Layout = new javax.swing.GroupLayout(jPanel19);
+        jPanel19.setLayout(jPanel19Layout);
+        jPanel19Layout.setHorizontalGroup(
+            jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane9, javax.swing.GroupLayout.DEFAULT_SIZE, 737, Short.MAX_VALUE)
+        );
+        jPanel19Layout.setVerticalGroup(
+            jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane9, javax.swing.GroupLayout.DEFAULT_SIZE, 397, Short.MAX_VALUE)
+        );
+
+        entryProdTab.addTab("Labeler Prod", jPanel19);
 
         typeLabel.setText("Type");
 
@@ -382,24 +406,22 @@ public class DatabaseFrame extends javax.swing.JFrame {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(71, 71, 71)
-                        .addComponent(queryButton)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap()
+                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(75, 75, 75)
+                .addComponent(queryButton)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 129, Short.MAX_VALUE)
                 .addComponent(queryButton)
-                .addContainerGap())
+                .addGap(26, 26, 26))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -413,11 +435,10 @@ public class DatabaseFrame extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(typeLabel)
                             .addComponent(typeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
                 .addComponent(entryProdTab, javax.swing.GroupLayout.PREFERRED_SIZE, 744, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -426,14 +447,14 @@ public class DatabaseFrame extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(entryProdTab, javax.swing.GroupLayout.DEFAULT_SIZE, 405, Short.MAX_VALUE)
+                    .addComponent(entryProdTab, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(typeLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(typeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(64, 64, 64))
         );
 
         mainPanel.addTab("Query", jPanel1);
@@ -1259,13 +1280,21 @@ public class DatabaseFrame extends javax.swing.JFrame {
                                 failModel = new DefaultTableModel(fOb,failColumn);
                                 failTable.setModel(failModel);
                                 initTableStyle(failTable);
+                                
+                                Object[][] lOb = makeLabelerObjectFromArray(DatabaseObj.executeGetLabelerRecordsQ((int)theTable.getValueAt(theTable.getSelectedRow(), 0)));
+                                labelerModel = new DefaultTableModel(lOb,labelerColumn);
+                                labelerTable.setModel(labelerModel);
+                                initTableStyle(labelerTable);
+                                
                             }catch(Exception e){
                                 errorLogger.writeToLogger(e.toString());
                                 System.out.println(e.toString());
                             }
                         }
                     }
-                }      
+                }else if(selectionType == "Labeler Records"){
+                    
+                }    
             }
         });
         failEntriesTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
@@ -1329,6 +1358,7 @@ public class DatabaseFrame extends javax.swing.JFrame {
         tbColumn = new Object[]{"ID","UID","Date","Area","Shift","Total Comp","Net Goal Total","% of Goal","% of Fails"};
         //prodColumn = new Object[]{"TechID","FName","LName","iPhone","iPad","iTouch","Classic","Shuffle","Nano","A.Phone","A.Tab","Wearables","Total"};
         failColumn = new Object[]{"FName","LName","Device","Type"};
+        labelerColumn = new Object[]{"LabelerID","FName","LName","Units"};
         failEntriesColumn = new Object[]{"ID","Date","Area","Shift"};
         employeeTableColumn = new Object[]{"ID","TechID","FName","LName"};
         areasTableColumn = new Object[]{"ID","Date","Area","Shift","Goal"};
@@ -1495,6 +1525,24 @@ public class DatabaseFrame extends javax.swing.JFrame {
         }else{
             for(int row = 0;row<ar.size();row++){
                 for(int col =0;col<failColumn.length;col++){
+
+                    ob[row][col] = ar.get(row).get(col);     
+                }
+            }
+        }
+        
+        return ob;
+    }
+    
+    private Object[][] makeLabelerObjectFromArray(ArrayList<ArrayList> ar){
+        
+        Object[][] ob = new Object[ar.size()][labelerColumn.length];
+        
+        if(ar.size()==0){
+            JOptionPane.showMessageDialog(this,"No Fails For This Entry","Fails", JOptionPane.WARNING_MESSAGE);
+        }else{
+            for(int row = 0;row<ar.size();row++){
+                for(int col =0;col<labelerColumn.length;col++){
 
                     ob[row][col] = ar.get(row).get(col);     
                 }
@@ -2066,6 +2114,7 @@ public class DatabaseFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel16;
     private javax.swing.JPanel jPanel17;
     private javax.swing.JPanel jPanel18;
+    private javax.swing.JPanel jPanel19;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -2082,6 +2131,8 @@ public class DatabaseFrame extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
+    private javax.swing.JScrollPane jScrollPane9;
+    private javax.swing.JTable labelerTable;
     private javax.swing.JTabbedPane mainPanel;
     private javax.swing.JComboBox<String> monthCB;
     private javax.swing.JLabel positionLabel;

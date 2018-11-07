@@ -113,6 +113,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     static String databaseConn;
     ArrayList<String> excelColumn;
     CellStyle lockedStyle;
+    boolean lablerEnabled;
     
     
     public ExcelFrame(Table table){
@@ -145,6 +146,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         existingTechList = new ArrayList();
         deviceNames = curTable.getAreaDevices();
         excelColumn = new ArrayList<String>();
+        lablerEnabled = false;
         
         initTableStyle();
         initExistingTechs();
@@ -373,6 +375,8 @@ public class ExcelFrame extends javax.swing.JFrame {
         deviceField = new javax.swing.JLabel();
         caseLabel = new javax.swing.JLabel();
         caseTextField = new javax.swing.JTextField();
+        labelerTextField = new javax.swing.JTextField();
+        labelerLabel = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         hourLabel = new javax.swing.JLabel();
         progressBar = new javax.swing.JProgressBar();
@@ -391,8 +395,9 @@ public class ExcelFrame extends javax.swing.JFrame {
         undoMenuItem = new javax.swing.JMenuItem();
         editModeMenuItem = new javax.swing.JCheckBoxMenuItem();
         addDeviceMenuItem = new javax.swing.JMenuItem();
-        jMenu3 = new javax.swing.JMenu();
+        labelerMenuItem = new javax.swing.JMenu();
         addExistingTechMenuItem = new javax.swing.JMenuItem();
+        labelerCheckMenuItem = new javax.swing.JCheckBoxMenuItem();
         optionsMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -609,6 +614,17 @@ public class ExcelFrame extends javax.swing.JFrame {
         }
     });
 
+    labelerTextField.setEnabled(false);
+    labelerTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+        public void keyPressed(java.awt.event.KeyEvent evt) {
+            labelerTextFieldKeyPressed(evt);
+        }
+    });
+
+    labelerLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+    labelerLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+    labelerLabel.setText("Labeler");
+
     javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
     jPanel3.setLayout(jPanel3Layout);
     jPanel3Layout.setHorizontalGroup(
@@ -628,7 +644,9 @@ public class ExcelFrame extends javax.swing.JFrame {
                         .addComponent(techField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(devFieldName, javax.swing.GroupLayout.Alignment.TRAILING)
                         .addComponent(deviceField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE)
-                        .addComponent(caseLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(caseLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(labelerTextField)
+                        .addComponent(labelerLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
     );
     jPanel3Layout.setVerticalGroup(
@@ -642,11 +660,15 @@ public class ExcelFrame extends javax.swing.JFrame {
             .addComponent(caseLabel)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
             .addComponent(caseTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(labelerLabel)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addComponent(labelerTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(deviceField)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(devFieldName, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+            .addGap(29, 29, 29)
             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                 .addComponent(multiScanButton, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addComponent(multiLable, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -782,7 +804,12 @@ public class ExcelFrame extends javax.swing.JFrame {
 
     jMenuBar1.add(editMenu);
 
-    jMenu3.setText("Tools");
+    labelerMenuItem.setText("Tools");
+    labelerMenuItem.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            labelerMenuItemActionPerformed(evt);
+        }
+    });
 
     addExistingTechMenuItem.setText("Add Existing Tech");
     addExistingTechMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -790,7 +817,11 @@ public class ExcelFrame extends javax.swing.JFrame {
             addExistingTechMenuItemActionPerformed(evt);
         }
     });
-    jMenu3.add(addExistingTechMenuItem);
+    labelerMenuItem.add(addExistingTechMenuItem);
+
+    labelerCheckMenuItem.setSelected(true);
+    labelerCheckMenuItem.setText("Toggle Labeler");
+    labelerMenuItem.add(labelerCheckMenuItem);
 
     optionsMenuItem.setText("Options...");
     optionsMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -798,9 +829,9 @@ public class ExcelFrame extends javax.swing.JFrame {
             optionsMenuItemActionPerformed(evt);
         }
     });
-    jMenu3.add(optionsMenuItem);
+    labelerMenuItem.add(optionsMenuItem);
 
-    jMenuBar1.add(jMenu3);
+    jMenuBar1.add(labelerMenuItem);
 
     setJMenuBar(jMenuBar1);
 
@@ -841,7 +872,7 @@ public class ExcelFrame extends javax.swing.JFrame {
                         .addGroup(layout.createSequentialGroup()
                             .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(18, 18, 18)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addComponent(jTabbedPane1)
                         .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -896,6 +927,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     private void devFieldNameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_devFieldNameKeyPressed
         // TODO add your handling code here:
         int keyCode = evt.getKeyCode();
+        String labelerID = labelerTextField.getText();
         
         if(keyCode == KeyEvent.VK_ENTER && !multiSelected){
             
@@ -911,6 +943,7 @@ public class ExcelFrame extends javax.swing.JFrame {
                 manager.focusPreviousComponent();
                 techFieldName.setText("");
                 caseTextField.setText("");
+                labelerTextField.setText("");
                 devFieldName.setEnabled(false);
             }else if(devFieldName.getText().toUpperCase().equals("CLEAR")){
                 if(!multiMap.isEmpty()){
@@ -923,6 +956,7 @@ public class ExcelFrame extends javax.swing.JFrame {
                 caseTextField.setText("");
                 devFieldName.setEnabled(false);
                 devFieldName.setText("");
+                labelerTextField.setText("");
             }else{
                 //custom title, no icon
                 JLabel center = new JLabel("Device Type Not Found",JLabel.CENTER);
@@ -943,12 +977,14 @@ public class ExcelFrame extends javax.swing.JFrame {
                 //////////////////////////////////////////DATABASE////////////////
                 try{
                     if(DatabaseObj.getStatusBoolean()&&curTable.getEntryID()!=0){
+                        
                         File dbFile = new File(DatabaseObj.getDatabaseLocation());
                         
                         if(dbFile.exists()){
                             
                             System.out.println(DatabaseObj.executeCaseEntryAppendQ(
-                            curTable.getDBEntryInfo(),techFieldName.getText(),caseTextField.getText(),multiMap));
+                                curTable.getDBEntryInfo(),techFieldName.getText(),caseTextField.getText(),multiMap,labelerID));
+                            DatabaseObj.executeLabelerProdEntriesAppendQ();
                             dbStatusLabel.setText("");  
                             //DatabaseObj.getConnectionObj().rollback();
                         }else{
@@ -973,6 +1009,7 @@ public class ExcelFrame extends javax.swing.JFrame {
                 techFieldName.setText("");
                 caseTextField.setText("");
                 devFieldName.setText("");
+                labelerTextField.setText("");
                 devFieldName.setEnabled(false);
                 if(oFrame.getCheckBoxStatus()){
                     if(multiSelected){
@@ -1000,6 +1037,7 @@ public class ExcelFrame extends javax.swing.JFrame {
                 caseTextField.setText("");
                 devFieldName.setEnabled(false);
                 devFieldName.setText("");    
+                labelerTextField.setText("");
             }else if(DatabaseObj.getSKUStatusBoolean()){
                 if(tableModel.findColumn(devFieldName.getText())!=-1){
                     toMulti();
@@ -1557,11 +1595,21 @@ public class ExcelFrame extends javax.swing.JFrame {
             }
             
             if(caseID==null){
-                devFieldName.setEnabled(true);
-                caseTextField.setEnabled(false);
+                
+                if(labelerCheckMenuItem.getState()){
+                    labelerTextField.setEnabled(true);
+                    caseTextField.setEnabled(false);
 
-                manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
-                manager.focusNextComponent();
+                    manager.focusNextComponent(labelerTextField);
+                    manager.focusNextComponent();
+                }else{
+                    devFieldName.setEnabled(true);
+                    caseTextField.setEnabled(false);
+
+                    manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+                    manager.focusNextComponent();
+                }
+                
             }else{
 
                 int option = JOptionPane.showConfirmDialog(
@@ -1607,11 +1655,13 @@ public class ExcelFrame extends javax.swing.JFrame {
                         manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
                         manager.focusPreviousComponent(caseTextField);
                     }else{
+                        
                         devFieldName.setEnabled(true);
                         caseTextField.setEnabled(false);
 
                         manager.focusNextComponent(techFieldName);
                         manager.focusNextComponent();
+      
                     }
                     
                 }
@@ -1627,6 +1677,25 @@ public class ExcelFrame extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_caseTextFieldKeyPressed
+
+    private void labelerTextFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_labelerTextFieldKeyPressed
+        // TODO add your handling code here:
+        int keyCode = evt.getKeyCode();
+    
+        if(keyCode == KeyEvent.VK_ENTER){
+            
+            labelerTextField.setEnabled(false);
+            devFieldName.setEnabled(true);
+
+            manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+            manager.focusNextComponent();
+        }
+    }//GEN-LAST:event_labelerTextFieldKeyPressed
+
+    private void labelerMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_labelerMenuItemActionPerformed
+        // TODO add your handling code here:
+        labelerTextField.setText("");
+    }//GEN-LAST:event_labelerMenuItemActionPerformed
     
     private void readFileMerge(File file){
         try {
@@ -2258,7 +2327,6 @@ public class ExcelFrame extends javax.swing.JFrame {
     public javax.swing.JTable infoTable;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -2269,6 +2337,10 @@ public class ExcelFrame extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JCheckBoxMenuItem labelerCheckMenuItem;
+    private javax.swing.JLabel labelerLabel;
+    private javax.swing.JMenu labelerMenuItem;
+    private javax.swing.JTextField labelerTextField;
     private javax.swing.JTextArea lastScanDetailArea;
     private javax.swing.JTable mTable;
     private javax.swing.JLabel multiLable;

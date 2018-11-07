@@ -464,7 +464,7 @@ public class DatabaseObj {
         }
     }
     
-    static int executeCaseEntryAppendQ(LinkedHashMap<String,String> entryMap,String techID,String caseID,HashMap<String,Integer>multiMap)throws Exception{
+    static int executeCaseEntryAppendQ(LinkedHashMap<String,String> entryMap,String techID,String caseID,HashMap<String,Integer>multiMap,String labelerID)throws Exception{
        
         int cellEntryID = Integer.valueOf(entryMap.get("EntryID"));
         String Date = entryMap.get("Date");
@@ -476,6 +476,7 @@ public class DatabaseObj {
         int generatedKey = 0;
         int employeeID = getEmployeeID(techID);
         int totalUnits = 0;
+        int labelID = getEmployeeID(labelerID);
         
         for(Map.Entry<String,Integer>entry:multiMap.entrySet()){
             totalUnits+=entry.getValue();
@@ -491,8 +492,8 @@ public class DatabaseObj {
             stmtBuilder.append(",?");
         }
        
-        SQL = "INSERT INTO caseEntries (CellPID,DateOfEntry,Time,EmployeeID,CaseID,TotalUnits,UserID)\n" +
-              "VALUES(?,#"+Date+"#,?,?,?,?,?)";
+        SQL = "INSERT INTO caseEntries (CellPID,DateOfEntry,Time,EmployeeID,CaseID,TotalUnits,UserID,LabelerID)\n" +
+              "VALUES(?,#"+Date+"#,?,?,?,?,?,?)";
 
         preparedStatement = conn.prepareStatement(SQL);
         
@@ -502,6 +503,7 @@ public class DatabaseObj {
         preparedStatement.setString(4, caseID);
         preparedStatement.setInt(5, totalUnits);
         preparedStatement.setString(6,System.getProperty("user.name"));
+        preparedStatement.setInt(7,labelID);
        
         preparedStatement.executeUpdate();
 
@@ -854,6 +856,10 @@ public class DatabaseObj {
         
     }
     
+    static void executeLabelerProdEntriesAppendQ()throws Exception{
+        
+    }
+    
     static int executeTechProdEntriesAppendQ(LinkedHashMap<String,String> entryMap,String tech)throws Exception{
        
         String prodID = entryMap.get("EntryID");
@@ -1008,6 +1014,32 @@ public class DatabaseObj {
         cellEntryInfo.put("EntryID",String.valueOf(cellEntryID));
   
         return cellEntryInfo;
+    }
+    
+    static ArrayList executeGetLabelerRecordsQ(int entryID)throws Exception{
+        ArrayList<ArrayList> tableList = new ArrayList();
+        
+        String SQL = "SELECT employees.TechID, employees.[First Name], employees.[Last Name], Sum(caseEntries.TotalUnits) AS SumOfTotalUnits\n" +
+                    "FROM caseEntries INNER JOIN employees ON caseEntries.LabelerID = employees.ID\n" +
+                    "GROUP BY employees.TechID, employees.[First Name], employees.[Last Name], caseEntries.CellPID\n" +
+                    "HAVING (((caseEntries.CellPID)="+entryID+"))";
+        
+        stmt = conn.createStatement();
+
+        ResultSet rs = stmt.executeQuery(SQL);
+        
+        while(rs.next()){
+            ArrayList row = new ArrayList();
+            
+            row.add(rs.getString("TechID"));
+            row.add(rs.getString("First Name"));
+            row.add(rs.getString("Last Name"));
+            row.add(rs.getString("SumOfTotalUnits"));
+            
+            tableList.add(row);
+        }
+        
+        return tableList;
     }
     
     static ArrayList executeGetFailRecordsQ(int entryID)throws Exception{
