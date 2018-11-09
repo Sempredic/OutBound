@@ -313,18 +313,39 @@ public class ExcelFrame extends javax.swing.JFrame {
     }
     
     private void initExistingTechs(){
+        
+        String employeeNumber = " ";
+        String employeeName = " ";
+        String[] employeeArray = new String[2];
+        
          try{
              File tmpDir = new File("Data\\employeesList.txt");
              boolean exists = tmpDir.exists();
              
              if(exists){
                 for(String name:Files.readAllLines(Paths.get("Data\\employeesList.txt"))){
-                    String[] li = {" "," "};
-                    li = name.split(" ");
-                
-                    if(!existingRosterList.containsKey(li[0])){
-                        existingRosterList.put(li[0],li[1]);
-                        existingTechList.add(li[0]); 
+                    
+                    if(name.contains("BD")){
+                        employeeArray = name.split(" ");
+                        employeeNumber = employeeArray[0] + " BD";
+                        employeeName = employeeArray[2]; 
+                    }else{
+                        employeeArray = name.split(" ");
+                        employeeNumber = employeeArray[0];
+                        employeeName = employeeArray[1]; 
+                    }
+                    
+//                    String[] li = {" "," "};
+//                    li = name.split(" ");
+//                
+//                    if(!existingRosterList.containsKey(li[0])){
+//                        existingRosterList.put(li[0],li[1]);
+//                        existingTechList.add(li[0]); 
+//                    }
+                    
+                    if(!existingRosterList.containsKey(employeeName)){
+                       existingRosterList.put(employeeNumber,employeeName);
+                       existingTechList.add(employeeNumber);
                     }
                 }
             }
