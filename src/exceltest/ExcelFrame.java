@@ -31,6 +31,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -119,6 +120,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     boolean lablerEnabled;
     JTable lTable;
     ArrayList lTableRoster;
+    JScrollPane labelerScrollPane;
     
     
     public ExcelFrame(Table table){
@@ -1721,11 +1723,30 @@ public class ExcelFrame extends javax.swing.JFrame {
     
         if(keyCode == KeyEvent.VK_ENTER){
             
-            labelerTextField.setEnabled(false);
-            devFieldName.setEnabled(true);
+            if(lTableRoster.contains(labelerTextField.getText().trim())){
+                labelerTextField.setEnabled(false);
+                devFieldName.setEnabled(true);
 
-            manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
-            manager.focusNextComponent();
+                manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+                manager.focusNextComponent();
+            }else if(labelerTextField.getText().toUpperCase().trim().equals("CLEAR")){
+
+                manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+                manager.focusPreviousComponent();
+                techFieldName.setEditable(true);
+                techFieldName.setText("");
+                caseTextField.setText("");
+                devFieldName.setEnabled(false);
+                devFieldName.setText("");
+                labelerTextField.setEnabled(false);
+                labelerTextField.setText("");
+                
+            }else{
+                JOptionPane.showMessageDialog(this,"Labeler Doesn't Exist","Try Again", JOptionPane.WARNING_MESSAGE);
+                labelerTextField.setText("");
+            }
+            
+            
         }
     }//GEN-LAST:event_labelerTextFieldKeyPressed
 
@@ -1745,9 +1766,12 @@ public class ExcelFrame extends javax.swing.JFrame {
         }
         
         if(!found){
+            
             initLabelerTable();
             lTable.setModel(new DefaultTableModel(labelerTable,labelerColumn));
-            jTabbedPane1.addTab("Labeler", lTable);
+
+            jTabbedPane1.addTab("Labeler",new JScrollPane(lTable));
+
         }
         
         String[] newInfoRow = new String[lTable.getModel().getColumnCount()];
@@ -1800,6 +1824,12 @@ public class ExcelFrame extends javax.swing.JFrame {
         labelerColumn = new String [] {
                 "Tech#","Name","Units"};
         labelerTable = new Object[0][3];
+        
+        lTable.setEnabled(false);
+
+        lTable.setRowHeight(20);
+        
+        
 
     }
     
