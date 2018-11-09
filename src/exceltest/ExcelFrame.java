@@ -2135,13 +2135,17 @@ public class ExcelFrame extends javax.swing.JFrame {
                 
                 ////////////////////////////////////LABELER///////////////////////////////////////////
                 
-                int lRow = getRow(getLabelerModel(),labelerTextField.getText().trim());
-                int lValue = entry.getValue();   
-                int lCol = getCol(getLabelerModel(),"Units");
-                int oldLValue = Integer.parseInt(getLabelerModel().getValueAt(lRow, lCol).toString());
-                int newLValue = oldLValue + lValue;
-                     
-                setLabelerTableValues(newLValue,lRow,lCol);
+                if(!labelerTextField.getText().trim().equals("")){
+                    
+                    int lRow = getRow(getLabelerModel(),labelerTextField.getText().trim());
+                    int lValue = entry.getValue();   
+                    int lCol = getCol(getLabelerModel(),"Units");
+                    int oldLValue = Integer.parseInt(getLabelerModel().getValueAt(lRow, lCol).toString());
+                    int newLValue = oldLValue + lValue;
+
+                    setLabelerTableValues(newLValue,lRow,lCol);  
+                }
+                
                 
                 /////////////////////////////////////UNDO/////////////////////////////////////////////
                 for(int i=0;i<value;i++){
