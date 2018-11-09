@@ -1027,7 +1027,7 @@ public class ExcelFrame extends javax.swing.JFrame {
                             dbStatusLabel.setText("");  
                             //DatabaseObj.getConnectionObj().rollback();
                         }else{
-                            System.out.println("FUCK SHIT");
+                            System.out.println("devFieldNamePressed");
                         }
                         
                     }
@@ -2133,6 +2133,16 @@ public class ExcelFrame extends javax.swing.JFrame {
                 
                 setTableValues(newValue,row,col);  
                 
+                ////////////////////////////////////LABELER///////////////////////////////////////////
+                
+                int lRow = getRow(getLabelerModel(),labelerTextField.getText().trim());
+                int lValue = entry.getValue();   
+                int lCol = getCol(getLabelerModel(),"Units");
+                int oldLValue = Integer.parseInt(getLabelerModel().getValueAt(lRow, lCol).toString());
+                int newLValue = oldLValue + lValue;
+                     
+                setLabelerTableValues(newLValue,lRow,lCol);
+                
                 /////////////////////////////////////UNDO/////////////////////////////////////////////
                 for(int i=0;i<value;i++){
                     tech.addTechDevice(device);
@@ -2221,6 +2231,10 @@ public class ExcelFrame extends javax.swing.JFrame {
         
         mTableModel.setValueAt(val, row, col);    
    
+    }
+    
+    private void setLabelerTableValues(int val, int row, int col){
+        getLabelerModel().setValueAt(val, row, col);
     }
     
     public static void updateTotalDev(DefaultTableModel model){
