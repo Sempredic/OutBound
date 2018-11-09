@@ -17,7 +17,6 @@ import javax.swing.table.*;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import static java.lang.Thread.sleep;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.DateFormat;
@@ -32,6 +31,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -77,12 +77,15 @@ public class ExcelFrame extends javax.swing.JFrame {
     DefaultTableModel mTableModel;
     DefaultTableModel infoTableModel;
     DefaultTableModel blankModel;
+    DefaultTableModel labelerTableModel;
     HashMap<String,Integer> multiMap;
     static int multiCounter;
     String[] multiColumn;
     Object[][] multiDataTable;
     String[] infoColumn;
+    String[] labelerColumn;
     Object[][] infoDataTable;
+    Object[][] labelerTable;
     static XSSFWorkbook workbook;
     static CellStyle style;
     static CellStyle headStyle;
@@ -114,6 +117,8 @@ public class ExcelFrame extends javax.swing.JFrame {
     ArrayList<String> excelColumn;
     CellStyle lockedStyle;
     boolean lablerEnabled;
+    JTable lTable;
+    ArrayList lTableRoster;
     
     
     public ExcelFrame(Table table){
@@ -147,6 +152,8 @@ public class ExcelFrame extends javax.swing.JFrame {
         deviceNames = curTable.getAreaDevices();
         excelColumn = new ArrayList<String>();
         lablerEnabled = false;
+        lTable = new JTable();
+        lTableRoster = new ArrayList();
         
         initTableStyle();
         initExistingTechs();
@@ -395,6 +402,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         undoMenuItem = new javax.swing.JMenuItem();
         editModeMenuItem = new javax.swing.JCheckBoxMenuItem();
         addDeviceMenuItem = new javax.swing.JMenuItem();
+        addLabelerMenuItem = new javax.swing.JMenuItem();
         labelerMenuItem = new javax.swing.JMenu();
         addExistingTechMenuItem = new javax.swing.JMenuItem();
         labelerCheckMenuItem = new javax.swing.JCheckBoxMenuItem();
@@ -801,6 +809,14 @@ public class ExcelFrame extends javax.swing.JFrame {
         }
     });
     editMenu.add(addDeviceMenuItem);
+
+    addLabelerMenuItem.setText("Add Labeler");
+    addLabelerMenuItem.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            addLabelerMenuItemActionPerformed(evt);
+        }
+    });
+    editMenu.add(addLabelerMenuItem);
 
     jMenuBar1.add(editMenu);
 
@@ -1696,6 +1712,75 @@ public class ExcelFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         labelerTextField.setText("");
     }//GEN-LAST:event_labelerMenuItemActionPerformed
+
+    private void addLabelerMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addLabelerMenuItemActionPerformed
+        // TODO add your handling code here:
+        boolean found = false;
+        
+        for(int index=0;index<jTabbedPane1.getTabCount();index++){
+           if(jTabbedPane1.getTitleAt(index)=="Labeler"){
+               found = true;
+           } 
+        }
+        
+        if(!found){
+            initLabelerTable();
+            lTable.setModel(new DefaultTableModel(labelerTable,labelerColumn));
+            jTabbedPane1.addTab("Labeler", lTable);
+        }
+        
+        String[] newInfoRow = new String[lTable.getModel().getColumnCount()];
+        
+        Object[] options = existingTechList.toArray();
+        
+        String tech = (String)JOptionPane.showInputDialog(
+                            this,
+                            new JLabel("Select Existing Tech", SwingConstants.CENTER),
+                            "Add Tech",
+                            JOptionPane.PLAIN_MESSAGE,
+                            null,
+                            options,
+                            null);
+
+        //If a string was returned, say so.
+        if ((tech != null) && (tech.length() > 0)) {
+            if(!lTableRoster.contains(tech)){
+
+                for(int i=0;i<newInfoRow.length;i++){
+                    newInfoRow[i] = "0";
+                }
+
+                newInfoRow[0] = tech;
+
+                if(existingRosterList.containsKey(tech)){
+                  
+                    lTableRoster.add(tech);
+
+                    newInfoRow[1] = existingRosterList.get(tech);
+                }else{
+                    
+                    JOptionPane.showMessageDialog(this,"Unknown Error","Try Again", JOptionPane.WARNING_MESSAGE);
+                }
+                
+                getLabelerModel().insertRow(0, newInfoRow);
+    
+            }else{
+                
+                JOptionPane.showMessageDialog(this,"Tech Already Exists","Try Again", JOptionPane.WARNING_MESSAGE);
+            }
+        }
+
+    }//GEN-LAST:event_addLabelerMenuItemActionPerformed
+    
+    private void initLabelerTable(){
+        
+        //int rosterSize = curTable.getRosterNum().size();
+
+        labelerColumn = new String [] {
+                "Tech#","Name","Units"};
+        labelerTable = new Object[0][3];
+
+    }
     
     private void readFileMerge(File file){
         try {
@@ -1777,9 +1862,15 @@ public class ExcelFrame extends javax.swing.JFrame {
         // only got here if we didn't return false
         return true;
     }
+    
     private DefaultTableModel getInfoModel(){
         return (DefaultTableModel)infoTable.getModel();
     }
+    
+    private DefaultTableModel getLabelerModel(){
+        return (DefaultTableModel)lTable.getModel();
+    }
+    
     public void makeTables(String[] selectedList){
         
         workbook = new XSSFWorkbook();
@@ -2311,6 +2402,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem addDeviceMenuItem;
     private javax.swing.JMenuItem addExistingTechMenuItem;
+    private javax.swing.JMenuItem addLabelerMenuItem;
     private javax.swing.JLabel caseLabel;
     private javax.swing.JTextField caseTextField;
     private java.awt.List dTableList;
