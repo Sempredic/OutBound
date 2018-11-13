@@ -14,6 +14,7 @@ import java.util.ArrayList;
 public class techObject {
     
     String techID;
+    String labelerID;
     ArrayList<String> devType_s;
     int prodRow;
     int prodCol;
@@ -21,6 +22,7 @@ public class techObject {
     
     public techObject(){
         techID = null;
+        labelerID = null;
         devType_s = new ArrayList<String>();
         prodRow = 0;
         prodCol =0;
@@ -29,6 +31,10 @@ public class techObject {
     
     public void setTechID(String techID){
         this.techID = techID;
+    }
+    
+    public void setLabelerID(String labelerID){
+        this.labelerID = labelerID;
     }
     
     public void setCaseID(String caseID){
@@ -63,6 +69,10 @@ public class techObject {
     
     public String getTechID(){
         return this.techID;
+    }
+    
+    public String getLabelerID(){
+        return this.labelerID;
     }
    
     

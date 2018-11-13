@@ -1439,7 +1439,10 @@ public class ExcelFrame extends javax.swing.JFrame {
         
         int c=0;
         int r=0;
+        int lc=0;
+        int lr=0;
         int newV=0;
+        int newLV=0;
         
         if(lastActionStack.size()>0){
             
@@ -1451,7 +1454,8 @@ public class ExcelFrame extends javax.swing.JFrame {
                     lastScanDetailArea.setText("Last Scan Details: \n" + "\n" +
                                     "Tech: " +lastActionStack.peek().getTechID()+"\n"
                                     + "Case: " +lastActionStack.peek().getCaseID()+"\n"
-                                    + "Count: " + lastActionStack.peek().getDeviceCount());
+                                    + "Count: " + lastActionStack.peek().getDeviceCount() + "\n"
+                                    + "Labeled By: " + lastActionStack.peek().getLabelerID());
                 }else{
                     lastScanDetailArea.setText(" ");
                 }
@@ -1486,11 +1490,19 @@ public class ExcelFrame extends javax.swing.JFrame {
                     for(String dev:curTech.getDevices()){
                         c = getCol(tableModel, dev);
                         r = getRow(tableModel, curTech.getTechID());
+                        //////LABELER//////////////////////////////////////////
+                        lc = getCol(getLabelerModel(), "Units");
+                        lr = getRow(getLabelerModel(), curTech.getLabelerID());
 
                         if((Integer)tableModel.getValueAt(r, c)>0){
                             newV = (Integer) tableModel.getValueAt(r, c) - 1;
                             setTableValues(newV, r, c);
                         } 
+                        ///////////LABELER/////////////////////////////////////
+                        if((Integer)getLabelerModel().getValueAt(lr, lc)>0){
+                            newLV = (Integer) getLabelerModel().getValueAt(lr, lc) - 1;
+                            setLabelerTableValues(newLV, lr, lc);
+                        }
                     }
                 }               
             }
@@ -2143,7 +2155,8 @@ public class ExcelFrame extends javax.swing.JFrame {
                     int oldLValue = Integer.parseInt(getLabelerModel().getValueAt(lRow, lCol).toString());
                     int newLValue = oldLValue + lValue;
 
-                    setLabelerTableValues(newLValue,lRow,lCol);  
+                    setLabelerTableValues(newLValue,lRow,lCol); 
+                    tech.setLabelerID(labelerTextField.getText().trim());
                 }
                 
                 
@@ -2161,7 +2174,8 @@ public class ExcelFrame extends javax.swing.JFrame {
                                     "Tech: " +lastActionStack.peek().getTechID()+"\n"
                                     + "Case: "+lastActionStack.peek().getCaseID()+ "\n"
                                     + "Devices: Many \n"
-                                    + "Count: " + lastActionStack.peek().getDeviceCount());
+                                    + "Count: " + lastActionStack.peek().getDeviceCount() + "\n"
+                                    + "Labeled By: " + lastActionStack.peek().getLabelerID());
 
             if(lastActionStack.size()>5){
                 lastActionStack.remove(0);    
@@ -2203,7 +2217,8 @@ public class ExcelFrame extends javax.swing.JFrame {
                                     "Tech: " +lastActionStack.peek().getTechID()+"\n"
                                     + "Case: " + lastActionStack.peek().getCaseID() + "\n"
                                     + "Device: " + device + "\n"
-                                    + "Count: " + lastActionStack.peek().getDeviceCount());
+                                    + "Count: " + lastActionStack.peek().getDeviceCount()  + "\n"
+                                    + "Labeled By: " + lastActionStack.peek().getLabelerID());
        
         if(lastActionStack.size()>3){
             lastActionStack.remove(0);
