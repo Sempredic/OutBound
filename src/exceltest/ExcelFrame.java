@@ -93,6 +93,7 @@ public class ExcelFrame extends javax.swing.JFrame {
     static CellStyle titleStyle;
     static XSSFSheet sheet;
     static XSSFSheet sheet2;
+    static XSSFSheet LabelerSheet;
     private DateFormat sdf;
     Date date;
     boolean done;
@@ -1327,6 +1328,7 @@ public class ExcelFrame extends javax.swing.JFrame {
             
             makeTables(dTableList.getSelectedItems());
             makeProdTable(getModel());
+            makeLabelerTable(getLabelerModel());
             notify();
             
         }
@@ -2030,7 +2032,84 @@ public class ExcelFrame extends javax.swing.JFrame {
 
     }
     
+    public void makeLabelerTable(DefaultTableModel curModel){
+        
+        if(getLabelerModel().getRowCount() >0){
+            LabelerSheet = workbook.createSheet("Labeler Prod");
+        
+            int colNum = 1;
+            int rowNum = 1;
+            int curCell = 0;
+
+            Object[][] labelTable = new Object[getLabelerModel().getRowCount()+1][getLabelerModel().getColumnCount()];
+
+            System.out.println();
+
+
+            for(int col = 0; col <getLabelerModel().getColumnCount();col++){
+                labelTable[0][col] = labelerColumn[col];
+
+            }
+
+
+            for(int row = 0; row <getLabelerModel().getRowCount();row++){
+                for(int col = 0; col <getLabelerModel().getColumnCount();col++){
+                    labelTable[row+1][col] =getLabelerModel().getValueAt(row, col);
+
+                }
+            }
+
+    //        for(int rows = 0; rows <labelTable.length;rows++){
+    //            for(int cols = 0; cols <labelTable[0].length;cols++){
+    //                System.out.print(labelTable[rows][cols] +  " ");  
+    //            }
+    //            System.out.println();
+    //        }
+
+            CellRangeAddress range = new CellRangeAddress(
+                        rowNum,rowNum,colNum,getLabelerModel().getColumnCount());
+
+            LabelerSheet.addMergedRegion(range);
+
+            //Creates the cell
+            Row title = LabelerSheet.createRow(rowNum);
+            Cell titleCell = title.createCell(colNum);
+            titleCell.setCellValue("LABELER PRODUCTION");
+            setStyleFontWhite(titleStyle);
+            cellFillBlack(titleStyle);
+
+            titleCell.setCellStyle(titleStyle);
+
+            CellUtil.setAlignment(titleCell,HorizontalAlignment.CENTER);
+
+            rowNum++;
+
+            for(Object[] tableRow:labelTable){
+
+                Row row = LabelerSheet.createRow(rowNum++);
+
+                for(Object tCell:tableRow){
+                    curCell++;
+                    Cell cell = row.createCell(colNum++);
+                    cell.setCellValue(tCell.toString());
+
+
+                    cellBorderBlack(style);
+                    cellFillLGrey(style);
+                    setStyleFontBold(style);
+                    cell.setCellStyle(style); 
+
+
+                }
+                colNum=1;   
+                curCell=0;
+            }
+        }
+
+    }
+    
     public void makeProdTable(DefaultTableModel curModel){
+        
         sheet2 = workbook.createSheet("Outbound Prod");
         
         int colNum = 1;
