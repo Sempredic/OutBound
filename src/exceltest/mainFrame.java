@@ -1373,7 +1373,7 @@ public class mainFrame extends javax.swing.JFrame {
             
             
             for(String name:Files.readAllLines(Paths.get("Data\\roster.txt"))){
-
+                name = name.trim();
                 if(name.contains("BD")){
                     employeeArray = name.split(" ");
                     employeeNumber = employeeArray[0] + " BD";
