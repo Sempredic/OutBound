@@ -1780,7 +1780,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         }
         
         if(!found){
-            
+            System.out.println("Labeler Table Not Found");
             initLabelerTable();
             lTable.setModel(new DefaultTableModel(labelerTable,labelerColumn));
 
@@ -1852,14 +1852,62 @@ public class ExcelFrame extends javax.swing.JFrame {
            
             Workbook workbook = WorkbookFactory.create(file);
             ArrayList<ArrayList> dataTables = new ArrayList<ArrayList>();
+
             // Getting the Sheet at index one
             Sheet sheet = workbook.getSheetAt(0);
+            Sheet labelerSheet = null;
+            
+            for(int sheets = 0;sheets<workbook.getNumberOfSheets();sheets++){
+                
+                if(workbook.getSheetName(sheets).equals("Labeler Prod")){
+                    labelerSheet = workbook.getSheetAt(sheets);
+                    DataFormatter dataFormatter = new DataFormatter();
+                    ArrayList<ArrayList> labelerData = new ArrayList<ArrayList>();
+
+                    for (Row row: labelerSheet) {
+                        ArrayList<String> arrayRow = new ArrayList<String>();
+                        for(Cell cell: row) {
+
+                            String cellValue = dataFormatter.formatCellValue(cell);
+                            arrayRow.add(cellValue);
+
+                        }
+                        labelerData.add(arrayRow);
+                    }
+                    
+                    ///FILL labelerTable HERE
+                    labelerData.remove(0);
+
+                    labelerColumn = new String [labelerData.get(0).size()];
+                    labelerTable = new Object[labelerData.size()-1][labelerData.get(0).size()];
+   
+                    for(int lc = 0;lc < labelerData.get(0).size();lc++){
+                        labelerColumn[lc] = (String)labelerData.get(0).get(lc);
+                    }
+                    
+                    labelerData.remove(0);
+                    
+                    for(int row = 0;row < labelerData.size();row++){
+                        for(int col = 0;col < labelerData.get(0).size();col++){
+                            labelerTable[row][col] = labelerData.get(row).get(col);
+                            if(col == 0){
+                                lTableRoster.add(labelerData.get(row).get(col));
+                            }  
+                        }
+                    }
+
+                    lTable.setEnabled(false);
+
+                    lTable.setRowHeight(20);
+                    lTable.setModel(new DefaultTableModel(labelerTable,labelerColumn));
+
+                    jTabbedPane1.addTab("Labeler",new JScrollPane(lTable));
+                }
+            }
 
             // Create a DataFormatter to format and get each cell's value as String
             DataFormatter dataFormatter = new DataFormatter();
-            
-            //System.out.println(workbook.getNumberOfSheets());
-            
+
             for (Row row: sheet) {
                 ArrayList<String> arrayRow = new ArrayList<String>();
                 for(Cell cell: row) {
