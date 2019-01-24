@@ -374,25 +374,23 @@ public class ExcelFrame extends javax.swing.JFrame {
              
              if(exists){
                 for(String name:Files.readAllLines(Paths.get("Data\\employeesList.txt"))){
-                    
+
                     if(name.contains("BD")){
                         employeeArray = name.split(" ");
-                        employeeNumber = employeeArray[0] + " BD";
-                        employeeName = employeeArray[2]; 
+
+                        if(employeeArray.length == 2){
+                            employeeNumber = employeeArray[0];
+                            employeeName = employeeArray[1]; 
+                        }else{
+                            employeeNumber = employeeArray[0] + " BD";
+                            employeeName = employeeArray[2];   
+                        }
+
                     }else{
                         employeeArray = name.split(" ");
                         employeeNumber = employeeArray[0];
                         employeeName = employeeArray[1]; 
                     }
-                    
-//                    String[] li = {" "," "};
-//                    li = name.split(" ");
-//                
-//                    if(!existingRosterList.containsKey(li[0])){
-//                        existingRosterList.put(li[0],li[1]);
-//                        existingTechList.add(li[0]); 
-//                    }
-                    
                     if(!existingRosterList.containsKey(employeeName)){
                        existingRosterList.put(employeeNumber,employeeName);
                        existingTechList.add(employeeNumber);
@@ -400,7 +398,7 @@ public class ExcelFrame extends javax.swing.JFrame {
                 }
             }
         }catch(Exception e){
-            
+            System.out.println("ExcelFrame InitExistingTechList");
             System.out.println(e.toString());
             dbStatusLabel.setText("");
             dbStatusLabel.setText(e.toString());

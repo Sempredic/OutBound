@@ -1437,6 +1437,7 @@ public class DatabaseObj {
 
                 if(!employeesList.contains(techID + " " + name)){
                     employeesList.add(techID + " " + name);
+                    //System.out.println(employeesList);
                 }
             }
         }catch(Exception e){
@@ -1545,6 +1546,7 @@ public class DatabaseObj {
     private void writeToFileSave(){
   
         try{
+            //System.out.println(employeesList);
             PrintWriter writer = new PrintWriter("Data\\areasList.txt", "UTF-8");
             PrintWriter writer2 = new PrintWriter("Data\\devicesList.txt", "UTF-8");
             PrintWriter writer3 = new PrintWriter("Data\\employeesList.txt", "UTF-8");

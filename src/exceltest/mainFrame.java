@@ -1392,6 +1392,7 @@ public class mainFrame extends javax.swing.JFrame {
             }
             
             for(String names:Files.readAllLines(Paths.get("Data\\roster2.txt"))){
+                names = names.trim();
                 if(names.contains("BD")){
                     employeeArray = names.split(" ");
                     employeeNumber = employeeArray[0] + " BD";
@@ -1409,7 +1410,7 @@ public class mainFrame extends javax.swing.JFrame {
                 }
             }
         }catch(Exception e){
-            System.out.println("InitExistingTechList");
+            System.out.println("Main Frame InitExistingTechList");
             errorLogger.writeToLogger(e.toString());
         }
     }
