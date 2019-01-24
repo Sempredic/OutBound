@@ -1111,6 +1111,8 @@ public class mainFrame extends javax.swing.JFrame {
             for(String tNumber:existingList2.getItems()){
                 if(existingRosterList.containsKey(tNumber)){
                     tName2 = existingRosterList.get(tNumber);
+                }else{
+                    System.out.println("DOESNT EXIST");
                 }
                 writer2.println(tNumber + " " + tName2);
             }
@@ -1376,8 +1378,15 @@ public class mainFrame extends javax.swing.JFrame {
                 name = name.trim();
                 if(name.contains("BD")){
                     employeeArray = name.split(" ");
-                    employeeNumber = employeeArray[0] + " BD";
-                    employeeName = employeeArray[2]; 
+
+                    if(employeeArray.length == 2){
+                        employeeNumber = employeeArray[0];
+                        employeeName = employeeArray[1]; 
+                    }else{
+                        employeeNumber = employeeArray[0] + " BD";
+                        employeeName = employeeArray[2];   
+                    }
+
                 }else{
                     employeeArray = name.split(" ");
                     employeeNumber = employeeArray[0];
@@ -1395,8 +1404,15 @@ public class mainFrame extends javax.swing.JFrame {
                 names = names.trim();
                 if(names.contains("BD")){
                     employeeArray = names.split(" ");
-                    employeeNumber = employeeArray[0] + " BD";
-                    employeeName = employeeArray[2]; 
+
+                    if(employeeArray.length == 2){
+                        employeeNumber = employeeArray[0];
+                        employeeName = employeeArray[1]; 
+                    }else{
+                        employeeNumber = employeeArray[0] + " BD";
+                        employeeName = employeeArray[2];   
+                    }
+
                 }else{
                     employeeArray = names.split(" ");
                     employeeNumber = employeeArray[0];
