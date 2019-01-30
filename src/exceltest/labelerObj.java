@@ -106,6 +106,7 @@ public class labelerObj {
             out, "image/x-png", dpi, BufferedImage.TYPE_BYTE_BINARY, false, 0);
 
         //Generate the barcode
+        label.setFontSize(3);
         label.generateBarcode(canvas,this.label);
 
         //Signal end of generation
