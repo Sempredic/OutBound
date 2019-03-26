@@ -6,6 +6,7 @@
 package exceltest;
 
 import java.awt.GridLayout;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.PrintWriter;
 import java.nio.file.Files;
@@ -1099,6 +1100,11 @@ public class DatabaseFrame extends javax.swing.JFrame {
         });
 
         casesValueField.setEnabled(false);
+        casesValueField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                casesValueFieldKeyPressed(evt);
+            }
+        });
 
         casesConditionCB.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         casesConditionCB.setEnabled(false);
@@ -1953,6 +1959,27 @@ public class DatabaseFrame extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_devicesRemoveButtonActionPerformed
+
+    private void casesValueFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_casesValueFieldKeyPressed
+        // TODO add your handling code here:
+        int keyCode = evt.getKeyCode();
+        
+        if(keyCode == KeyEvent.VK_ENTER){
+            try{
+               if(casesValueField.getText().length()>0){
+                   Object[][] ob = makeEntryObjectFromArray(DatabaseObj.executeGetCasesQ(
+                        (String)casesFieldCB.getSelectedItem(),(String)casesConditionCB.getSelectedItem(),casesValueField.getText()),caseTableColumn);
+
+                    caseEntriesModel = new DefaultTableModel(ob,caseTableColumn);
+                    casesTable.setModel(caseEntriesModel); 
+                    initTableStyle(casesTable);
+               }
+
+           }catch(Exception e){
+               System.out.println(e.toString());
+           }
+        }
+    }//GEN-LAST:event_casesValueFieldKeyPressed
 
     public void initProdCol(){
         
