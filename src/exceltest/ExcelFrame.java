@@ -1709,9 +1709,48 @@ public class ExcelFrame extends javax.swing.JFrame {
                 }
                 
             }else{
+                
+                ArrayList<ArrayList> caseInfo = new ArrayList<ArrayList>();
+                StringBuilder info = new StringBuilder();
+                
+                try{
+                    caseInfo = DatabaseObj.executeGetCasesQ("CaseID","=",caseTextField.getText());
+                    if(!caseInfo.isEmpty()){
+                        caseInfo.get(0).remove(0);
+                        caseInfo.get(0).remove(2);
+                        caseInfo.get(0).remove(2);
+                    }
+                    
+                    info.append("\n");
+                    info.append("   Case Details:\n");
+                    
+                    for(int i = 0;i<caseInfo.get(0).size();i++){
+                        switch(i){
+                            case 0:
+                                info.append("           Date: "+caseInfo.get(0).get(0)+"\n");
+                                break;
+                            case 1:
+                                info.append("           Time: "+caseInfo.get(0).get(1)+"\n");
+                                break;
+                            case 2:
+                                info.append("           Units: "+caseInfo.get(0).get(2)+"\n");
+                                break;
+                            case 3:
+                                info.append("           User: "+caseInfo.get(0).get(3)+"\n");
+                                break;
+                            default:
+                                break;
+                        }
+                    }
 
+                }catch(Exception e){
+                    System.out.println(e.toString());
+                    errorLogger.writeToLogger(e.toString());
+                }
+                
                 int option = JOptionPane.showConfirmDialog(
-                        this,"Case Entry Already Exists, Overwrite?","Case Warning",JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE);
+                        this,"Case Entry Already Exists, Overwrite? \n"
+                                + info,"Case Warning",JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE);
                 
                 if(option==0){
                     ///////////////////////////////Database//////////////////////////////
