@@ -1793,11 +1793,25 @@ public class ExcelFrame extends javax.swing.JFrame {
                         manager.focusPreviousComponent(caseTextField);
                     }else{
                         
-                        devFieldName.setEnabled(true);
-                        caseTextField.setEnabled(false);
+                        
 
-                        manager.focusNextComponent(techFieldName);
-                        manager.focusNextComponent();
+                        //manager.focusNextComponent(techFieldName);
+                        
+                        
+                        
+                        if(labelerCheckMenuItem.getState()){
+                            labelerTextField.setEnabled(true);
+                            caseTextField.setEnabled(false);
+
+                            manager.focusNextComponent(labelerTextField);
+                            manager.focusNextComponent();
+                            labelerTextField.requestFocus();
+                        }else{
+                            devFieldName.setEnabled(true);
+                            caseTextField.setEnabled(false);
+                            manager.focusNextComponent();
+                        }
+                        
       
                     }
                     
