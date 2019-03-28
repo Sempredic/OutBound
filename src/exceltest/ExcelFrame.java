@@ -231,7 +231,18 @@ public class ExcelFrame extends javax.swing.JFrame {
                         lTable.setRowHeight(20);
                         lTable.setModel(new DefaultTableModel(labelerTable,labelerColumn));
 
-                        jTabbedPane1.addTab("Labeler",new JScrollPane(lTable));
+                        boolean labels = false;
+                        
+                        for(int tab = 0;tab <jTabbedPane1.getTabCount();tab++){
+                            if(jTabbedPane1.getTitleAt(tab)=="Labeler"){
+                                labels = true;
+                            }
+                        }
+                        
+                        if(!labels){
+                           jTabbedPane1.addTab("Labeler",new JScrollPane(lTable)); 
+                        }
+                        
 
                         //System.out.println(labelerData);
                     }else{
