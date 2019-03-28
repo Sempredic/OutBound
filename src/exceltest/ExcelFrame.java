@@ -1129,7 +1129,12 @@ public class ExcelFrame extends javax.swing.JFrame {
                 }else{                   
                         ///////////////////////////////////DATABASE////////////////////////////////
                     try{
-                        String skuValue = DatabaseObj.getDeviceNameFromSKUQ(devFieldName.getText());
+                        String skuValue = " ";
+                        
+                        if(!devFieldName.getText().contains(" ")){
+                            skuValue = DatabaseObj.getDeviceNameFromSKUQ(devFieldName.getText());
+                        }
+                        
 
                         if(tableModel.findColumn(skuValue)!=-1){
                             devFieldName.setText(skuValue);
@@ -1141,6 +1146,27 @@ public class ExcelFrame extends javax.swing.JFrame {
                                 toMulti();
                                 dbStatusLabel.setText("");
                             }
+                        }else if(curTable.getAreaDevices().contains(devFieldName.getText().split(" ")[0].trim())){
+                            String[] stAr = devFieldName.getText().split(" ");
+
+                            if(tableModel.findColumn(stAr[0].trim())!=-1){
+                                if(isInteger(stAr[1].trim())){
+                                    
+                                    devFieldName.setText(stAr[0].trim());
+                                    toMulti(Integer.parseInt(stAr[1].trim()));
+                                    
+                                    dbStatusLabel.setText("");
+
+                                }
+                            }else{
+                                JOptionPane.showMessageDialog(this,
+                                new JLabel("Device Type Not Found",JLabel.CENTER),
+                                "Error",
+                                JOptionPane.PLAIN_MESSAGE);
+                                devFieldName.setText("");
+                                dbStatusLabel.setText("");
+                            }  
+                            
                         }else{
                             JOptionPane.showMessageDialog(this,
                             new JLabel("Device Type Not Found",JLabel.CENTER),
@@ -2377,6 +2403,32 @@ public class ExcelFrame extends javax.swing.JFrame {
         }else{
             int currentVal = multiMap.get(device);
             multiMap.replace(device, currentVal+1);
+        } 
+        
+        if(!multiMap.isEmpty()){
+            for(Map.Entry<String,Integer> entry:multiMap.entrySet()){
+
+                String dev = entry.getKey();          
+                int value = entry.getValue();   
+                int col = 1;
+                int row = getRow(mTableModel,dev);
+
+                setMultiTableValues(value,row,col);
+            }
+        }
+        
+    }
+    
+    private void toMulti(int num){
+
+        String device = devFieldName.getText();
+        devFieldName.setText("");
+        
+        if(!multiMap.containsKey(device)){
+            multiMap.put(device, num);
+        }else{
+            int currentVal = multiMap.get(device);
+            multiMap.replace(device, currentVal+num);
         } 
         
         if(!multiMap.isEmpty()){
