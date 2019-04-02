@@ -81,7 +81,7 @@ public class labelerObj {
                         p.setAlignment(ParagraphAlignment.CENTER);
                        
                         XWPFRun run = p.createRun();
-                        run.setFontSize(10);
+                        run.setFontSize(8);
                         
                         for(String txt:text){
                             
