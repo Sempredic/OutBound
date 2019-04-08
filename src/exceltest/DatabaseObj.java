@@ -59,7 +59,11 @@ public class DatabaseObj {
         connectToDatabase();
         connectToSKUDatabase();
         
-       if(status){             
+        initDB();
+    }
+    
+    static void initDB(){
+        if(status){             
           readFileSave();
           getCellAreasQuery();
           getDevicesQuery();
@@ -1498,7 +1502,7 @@ public class DatabaseObj {
         return location;
     }
     
-    private void readFileSave(){
+    private static void readFileSave(){
 
         try{
             File tmpDir = new File("Data\\areasList.txt");
@@ -1547,7 +1551,7 @@ public class DatabaseObj {
         
     }
     
-    private void writeToFileSave(){
+    private static void writeToFileSave(){
   
         try{
             //System.out.println(employeesList);

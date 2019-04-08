@@ -1772,6 +1772,7 @@ public class DatabaseFrame extends javax.swing.JFrame {
                             employeeFNameField.setText("");
                             employeeLNameField.setText("");
                             employeePosField.setText("");
+                            DatabaseObj.initDB();
                         }catch(Exception e){
                             System.out.println(e.toString());
                             errorLogger.writeToLogger(e.toString());
