@@ -8,13 +8,13 @@ import java.nio.file.Paths;
 import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -38,6 +38,7 @@ public class DatabaseObj {
     static String dbLocation;
     static String skuLocation;
     static DateFormat dateFormat;
+    static DateTimeFormatter dtf;
     static Date theDate;
     
     public DatabaseObj(){
@@ -478,6 +479,9 @@ public class DatabaseObj {
         int totalUnits = 0;
         int labelID = getEmployeeID(labelerID);
         
+        LocalDateTime now = LocalDateTime.now();
+        dtf = DateTimeFormatter.ofPattern("hh:mm a");  
+
         for(Map.Entry<String,Integer>entry:multiMap.entrySet()){
             totalUnits+=entry.getValue();
             
@@ -498,7 +502,7 @@ public class DatabaseObj {
         preparedStatement = conn.prepareStatement(SQL);
         
         preparedStatement.setInt(1, cellEntryID);
-        preparedStatement.setString(2, dateFormat.format(theDate));
+        preparedStatement.setString(2, dtf.format(now));
         preparedStatement.setInt(3, employeeID);
         preparedStatement.setString(4, caseID);
         preparedStatement.setInt(5, totalUnits);
