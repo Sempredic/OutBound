@@ -378,6 +378,7 @@ public class ExcelFrame extends javax.swing.JFrame {
         String employeeNumber = " ";
         String employeeName = " ";
         String[] employeeArray = new String[2];
+        existingTechList.clear();
         
          try{
              File tmpDir = new File("Data\\employeesList.txt");
@@ -402,6 +403,9 @@ public class ExcelFrame extends javax.swing.JFrame {
                         employeeNumber = employeeArray[0];
                         employeeName = employeeArray[1]; 
                     }
+                    
+                    System.out.println(existingRosterList);
+                    
                     if(!existingRosterList.containsKey(employeeName)){
                        existingRosterList.put(employeeNumber,employeeName);
                        existingTechList.add(employeeNumber);
@@ -1907,6 +1911,8 @@ public class ExcelFrame extends javax.swing.JFrame {
     private void addLabelerMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addLabelerMenuItemActionPerformed
         // TODO add your handling code here:
         boolean found = false;
+        
+        initExistingTechs();
         
         for(int index=0;index<jTabbedPane1.getTabCount();index++){
            if(jTabbedPane1.getTitleAt(index)=="Labeler"){
