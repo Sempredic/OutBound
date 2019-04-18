@@ -206,6 +206,7 @@ public class Table{
             
             for(int i=0;i<dataTableList.size();i++){
                 this.roster.put((String)dataTableList.get(i).get(0),DatabaseObj.getEmployeeNameQ((String)dataTableList.get(i).get(0)));
+                System.out.println("List: " + dataTableList.get(i));
             }
             setRosterNames();
             setRosterTechNum();
@@ -442,6 +443,7 @@ public class Table{
    
     
     public String[][] getDataTableFromList(String dataTableID){
+        System.out.println(dataTableID);
         return dataTableList.get(dataTableID);
     }
     

@@ -1996,6 +1996,7 @@ public class ExcelFrame extends javax.swing.JFrame {
             // Getting the Sheet at index one
             Sheet sheet = workbook.getSheetAt(0);
             Sheet labelerSheet = null;
+            ArrayList<ArrayList> arrayDataTable = new ArrayList<ArrayList>();
             
             if(DatabaseObj.getStatusBoolean() && curTable.getEntryID() != 0){
                 try{
@@ -2105,28 +2106,72 @@ public class ExcelFrame extends javax.swing.JFrame {
 
             int rowCounter = 0;
             ArrayList<String>tableID = new ArrayList<String>();
-     
+            ArrayList<ArrayList> tempTab = new ArrayList<ArrayList>();
+           
+            ArrayList<ArrayList> newArrayList = new ArrayList<ArrayList>();
+            
             for(int i=0;i<dataTables.size();i++){
                 
                 if(dataTables.get(i).get(0).toString().startsWith("HOUR")){
+                    
                     rowCounter =0;
+                    
                     dTableList.add(dataTables.get(i).get(0).toString().substring(5));
                     tableID.add(dataTables.get(i).get(0).toString().substring(5));
                     dataTables.remove(i);
+                    if(i != 0){
+                        tempTab.add(newArrayList);
+                        newArrayList = new ArrayList<ArrayList>();
+                    
+                         
+                    }
+                    
+                    
                 }
                 
                 if(dataTables.get(i).get(0).toString().startsWith("Tech#")){
                     dataTables.remove(i);
                 }
                 
+                newArrayList.add(dataTables.get(i));
+                
+                if(i == dataTables.size()-1){
+                    tempTab.add(newArrayList);
+                }
+                
                 rowCounter++;
+                
             }
             
-            int columns = dataTables.get(0).size();
-            int entries = (dataTables.size()/rowCounter);
-            int counter =0;
+            //int columns = dataTables.get(0).size();
+            //int entries = (dataTables.size()/rowCounter);
+            int entries = tempTab.size();
+            int columns = 0;
+            int counter = 0;
+            int rows = 0;
+            int inc = 0;
             
+            for(ArrayList list:tempTab){
+                
+                columns = list.get(0).toString().split(",").length;
+                rows = list.size();
+                String[][] tempTable = new String[rows][columns];
+                
+                for(int row=0;row<rows;row++){
+                    for(int col=0;col<columns;col++){
+                        
+                        tempTable[row][col] = (String)dataTables.get(counter+row).get(col);
+                    }  
+                }
+                
+                curTable.addToDataTableList(tempTable, tableID.get(inc));
+                counter+=rows;
+                inc++;
+            }
+
+             /*
             for(int i=0;i<entries;i++){
+               
                 String[][] tempTable = new String[rowCounter][columns];
                 for(int row=0;row<rowCounter;row++){
                     for(int col=0;col<columns;col++){
@@ -2136,8 +2181,10 @@ public class ExcelFrame extends javax.swing.JFrame {
                 }
                 curTable.addToDataTableList(tempTable, tableID.get(i));
                 counter+=rowCounter;
+              
+                
             }
-            
+              */
                         
         } catch (IOException ex) {
             Logger.getLogger(ExcelFrame.class.getName()).log(Level.SEVERE, null, ex);
