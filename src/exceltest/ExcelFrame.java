@@ -1604,6 +1604,8 @@ public class ExcelFrame extends javax.swing.JFrame {
         String[] newTechRow = new String [9];
         String[] newInfoRow = new String[getInfoModel().getColumnCount()];
         
+        initExistingTechs();
+        
         Object[] options = existingTechList.toArray();
         String tech = (String)JOptionPane.showInputDialog(
                             this,
