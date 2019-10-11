@@ -1,0 +1,9 @@
+8,7
+Tech# Name phone pad touch classic TechTotal 
+2887BD RakeshS. 108 0 0 0 108 
+2815BD TuanT. 198 0 0 0 198 
+2352BD PratimaK. 297 0 0 0 297 
+LABL TempT. 444 0 0 0 444 
+2580BD JoannJ. 169 0 0 0 169 
+2487BD PaulineP. 108 0 0 0 108 
+TotalDev  1324 0 0 0 1324 

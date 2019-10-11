@@ -1,0 +1,13 @@
+phone
+pad
+touch
+classic
+shuffle
+nano
+android phone
+android tablet
+wearables
+tv
+apple watch
+test
+test2
