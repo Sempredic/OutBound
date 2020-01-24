@@ -129,7 +129,7 @@ public class labelerObj {
         
         ConvertTransparent(outputFile.getPath());
 
-        fis = new FileInputStream("Data\\Barcode.jpg.copy.png");
+        fis = new FileInputStream("Data\\Barcode.png.copy.png");
 
         XWPFDocument doc = new XWPFDocument(OPCPackage.open("Data\\labelLayout.docx"));
 

@@ -1,0 +1,6 @@
+net.ucanaccess.jdbc.UcanaccessSQLException: UCAExc:::4.0.4 given file does not exist: C:\Users\Vince\Downloads\DB.accdb     Jan 24, 2020 1:47:22 AM
+net.ucanaccess.jdbc.UcanaccessSQLException: UCAExc:::4.0.4 given file does not exist: C:\Users\Vince\Downloads\DB.accdb     Jan 24, 2020 1:51:06 AM
+net.ucanaccess.jdbc.UcanaccessSQLException: UCAExc:::4.0.4 given file does not exist: C:\Users\Vince\Downloads\DB.accdb     Jan 24, 2020 1:54:29 AM
+net.ucanaccess.jdbc.UcanaccessSQLException: UCAExc:::4.0.4 given file does not exist: C:\Users\Vince\Downloads\DB.accdb     Jan 24, 2020 1:55:18 AM
+net.ucanaccess.jdbc.UcanaccessSQLException: UCAExc:::4.0.4 user lacks privilege or object not found: LABELERID     Jan 24, 2020 2:16:32 AM
+net.ucanaccess.jdbc.UcanaccessSQLException: UCAExc:::4.0.4 given file does not exist: C:\Users\Vince\Documents\Projects\Project1\Code\OutBound\LIBS\Pre-OwnedDB.accdb     Jan 24, 2020 2:24:55 AM

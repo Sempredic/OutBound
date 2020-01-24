@@ -1,7 +1,0 @@
-1
-5
-CellA
-phone
-pad
-touch
-classic

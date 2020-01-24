@@ -1,9 +1,0 @@
-iPhone
-iPad
-iTouch
-Classic
-Shuffle
-Nano
-Android Phone
-Android Tablet
-Wearables

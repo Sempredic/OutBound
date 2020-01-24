@@ -1,0 +1,5 @@
+4,6
+Tech# Name phone pad touch TechTotal 
+LABL TempT. 0 1 0 1 
+2273 VincentE. 5 0 0 5 
+TotalDev  5 1 0 6 

@@ -310,10 +310,7 @@ public class DatabaseObj {
         
         String SQL = "SELECT *\n" +
                      "FROM SmartphoneTable\n" +
-                     "WHERE [SmartphoneTable].[F5]=? Or [SmartphoneTable].[F6]=? Or [SmartphoneTable].[F8] =? Or [SmartphoneTable].[F9]=? Or [SmartphoneTable].[F10]=? "
-                      + "Or [SmartphoneTable].[F11]=? Or [SmartphoneTable].[F13]=? Or [SmartphoneTable].[F14]=? Or [SmartphoneTable].[F15]=? Or [SmartphoneTable].[F16]=? "+
-                        "Or [SmartphoneTable].[F17]=? Or [SmartphoneTable].[F18]=? Or [SmartphoneTable].[F19]=? Or [SmartphoneTable].[F20]=? Or [SmartphoneTable].[F21]=? "+
-                        "Or [SmartphoneTable].[F22]=? Or [SmartphoneTable].[F23]=? Or [SmartphoneTable].[F24]=?";
+                     "WHERE [SmartphoneTable].[SKU]=?";
         
         String TabletsSQL = "SELECT *\n"+
                             "FROM TabletsTable\n" +
@@ -346,28 +343,12 @@ public class DatabaseObj {
                 skuPreparedStatement = skuConn.prepareStatement(SQL);
 
                 skuPreparedStatement.setString(1, SKU);
-                skuPreparedStatement.setString(2, SKU);
-                skuPreparedStatement.setString(3, SKU);
-                skuPreparedStatement.setInt(4, skuNumber);
-                skuPreparedStatement.setInt(5, skuNumber);
-                skuPreparedStatement.setInt(6, skuNumber);
-                for(int i=7;i<19;i++){
-                    if(i==13){
-                        skuPreparedStatement.setInt(i, skuNumber);
-                    }else if(i==24){
-                        skuPreparedStatement.setInt(i, skuNumber);
-                    }else{
-                        skuPreparedStatement.setString(i, SKU);
-                    }
-                            
-                }
                 
-
                 ResultSet rs = skuPreparedStatement.executeQuery();
 
                 while(rs.next()){
 
-                    value = rs.getString("F3");
+                    value = rs.getString("DeviceName");
 
                     if(value!=null){
 
